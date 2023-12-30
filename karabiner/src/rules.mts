@@ -1,5 +1,5 @@
 import { writeFile } from "node:fs/promises";
-import { KarabinerRules } from "./types.mjs";
+import type { KarabinerRules } from "./types.mjs";
 import { createHyperSubLayers, app } from "./utils.mjs";
 
 const rules: KarabinerRules[] = [
@@ -153,35 +153,33 @@ const rules: KarabinerRules[] = [
             },
         },
 
-        // r = "Raycast"
-        r: {
-            c: {
-                description: "Clipboard History",
-                to: [
-                    {
-                        key_code: "c",
-                        modifiers: ["right_option", "right_command", "right_shift"],
-                    },
-                ],
-            },
-            s: {
-                description: "Capture Area",
-                to: [
-                    {
-                        key_code: "4",
-                        modifiers: ["right_option", "right_command", "right_shift"],
-                    },
-                ],
-            },
-            g: {
-                description: "AI Chat",
-                to: [
-                    {
-                        key_code: "g",
-                        modifiers: ["right_option", "right_command", "right_shift"],
-                    },
-                ],
-            },
+        // shortcuts
+        c: {
+            description: "Clipboard History",
+            to: [
+                {
+                    key_code: "c",
+                    modifiers: ["right_option", "right_command", "right_shift"],
+                },
+            ],
+        },
+        g: {
+            description: "AI Chat",
+            to: [
+                {
+                    key_code: "g",
+                    modifiers: ["right_option", "right_command", "right_shift"],
+                },
+            ],
+        },
+        s: {
+            description: "Capture Area",
+            to: [
+                {
+                    key_code: "4",
+                    modifiers: ["right_option", "right_command", "right_shift"],
+                },
+            ],
         },
     }),
 ];
