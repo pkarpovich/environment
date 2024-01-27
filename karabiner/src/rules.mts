@@ -27,6 +27,26 @@ const rules: KarabinerRules[] = [
             },
         ],
     },
+    // https://github.com/pqrs-org/Karabiner-Elements/issues/2880#issuecomment-1774847928
+    {
+        description: "Temporary Fix for sleep issue",
+        manipulators: [
+            {
+                type: "basic",
+                from: {
+                    key_code: "q",
+                    modifiers: {
+                        mandatory: ["left_command", "left_control"],
+                    },
+                },
+                to: [
+                    {
+                        shell_command: "sleep 0.1 ; pmset sleepnow",
+                    },
+                ],
+            },
+        ],
+    },
     ...createHyperSubLayers({
         // o = "Open" applications
         o: {
@@ -183,7 +203,6 @@ const rules: KarabinerRules[] = [
         },
     }),
 ];
-
 const fileContent = JSON.stringify(
     {
         global: {
