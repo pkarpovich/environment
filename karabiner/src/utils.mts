@@ -90,14 +90,16 @@ export function createHyperSubLayer(
     ];
 }
 
+type SubLayers = {
+    [key_code in KeyCode]?: HyperKeySublayer | LayerCommand;
+};
+
 /**
  * Create all hyper sublayers. This needs to be a single function, as well need to
  * have all the hyper variable names in order to filter them and make sure only one
  * activates at a time
  */
-export function createHyperSubLayers(subLayers: {
-    [key_code in KeyCode]?: HyperKeySublayer | LayerCommand;
-}): KarabinerRules[] {
+export function createHyperSubLayers(subLayers: SubLayers): KarabinerRules[] {
     const allSubLayerVariables = (Object.keys(subLayers) as (keyof typeof subLayers)[]).map((sublayer_key) =>
         generateSubLayerVariableName(sublayer_key),
     );
@@ -125,6 +127,31 @@ export function createHyperSubLayers(subLayers: {
                   manipulators: createHyperSubLayer(key as KeyCode, value, allSubLayerVariables),
               },
     );
+}
+
+/**
+ * Create a sublayer
+ * @param layer_key
+ * @param description
+ * @param subLayers
+ */
+export function createSubLayer(layer_key: string, description: string, subLayers: SubLayers): KarabinerRules {
+    return {
+        description: description,
+        manipulators: Object.entries(subLayers).map(
+            ([key, value]) =>
+                ({
+                    type: "basic",
+                    from: {
+                        key_code: key as KeyCode,
+                        modifiers: {
+                            mandatory: [layer_key],
+                        },
+                    },
+                    ...value,
+                }) as Manipulator,
+        ),
+    };
 }
 
 function generateSubLayerVariableName(key: KeyCode) {

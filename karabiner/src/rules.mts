@@ -1,6 +1,6 @@
 import { writeFile } from "node:fs/promises";
 import type { KarabinerRules } from "./types.mjs";
-import { createHyperSubLayers, app } from "./utils.mjs";
+import { createHyperSubLayers, app, createSubLayer } from "./utils.mjs";
 
 const rules: KarabinerRules[] = [
     // Define the Hyper key itself
@@ -34,19 +34,42 @@ const rules: KarabinerRules[] = [
             {
                 type: "basic",
                 from: {
-                    key_code: "q",
-                    modifiers: {
-                        mandatory: ["left_command", "left_control"],
-                    },
+                    key_code: "escape",
                 },
-                to: [
+                to_if_alone: [
                     {
-                        shell_command: "sleep 0.1 ; pmset sleepnow",
+                        key_code: "escape",
                     },
                 ],
             },
         ],
     },
+    createSubLayer("right_option", "Media Commands Sublayer", {
+        s: {
+            description: "Play/Pause",
+            to: [
+                {
+                    key_code: "play_or_pause",
+                },
+            ],
+        },
+        d: {
+            description: "Next",
+            to: [
+                {
+                    key_code: "fastforward",
+                },
+            ],
+        },
+        a: {
+            description: "Previous",
+            to: [
+                {
+                    key_code: "rewind",
+                },
+            ],
+        },
+    }),
     ...createHyperSubLayers({
         // o = "Open" applications
         o: {
