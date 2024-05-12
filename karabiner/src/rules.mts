@@ -224,6 +224,35 @@ const rules: KarabinerRules[] = [
                 },
             ],
         },
+        a: {
+            e: {
+                description: "Improve English Text",
+                to: [
+                    {
+                        key_code: "e",
+                        modifiers: ["right_option", "right_command", "right_shift"],
+                    },
+                ],
+            },
+            r: {
+                description: "Improve Russian Text",
+                to: [
+                    {
+                        key_code: "r",
+                        modifiers: ["right_option", "right_command", "right_shift"],
+                    },
+                ],
+            },
+            n: {
+                description: "Continue Conversation",
+                to: [
+                    {
+                        key_code: "n",
+                        modifiers: ["right_option", "right_command", "right_shift"],
+                    },
+                ],
+            },
+        },
     }),
 ];
 const fileContent = JSON.stringify(
