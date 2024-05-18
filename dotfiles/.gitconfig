@@ -1,0 +1,54 @@
+[user]
+    name = Pavel Karpovich
+    email = pavel.karpovich@outlook.com
+    signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKRJAFlkMadKkPSUtlasIPVCLHTh9UGGmhsjW/7vvGWz
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[gpg]
+    format = ssh
+
+[gpg "ssh"]
+    program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+
+[commit]
+    gpgsign = true
+
+[pull]
+    rebase = false
+
+[core]
+    excludesfile = /Users/pavel.karpovich/.gitignore_global
+
+[alias]
+    s = status --short --branch
+    ls = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(blue)<%an>%Creset' --abbrev-commit
+    l  = "!git pull origin $(git current-branch) --rebase"
+    h  = "!git push origin $(git current-branch)"
+    lh = "!git l && git h"
+    current-branch = "!git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \\(.*\\)/\\1/'"
+    fame = shortlog -sn --all --no-merges
+
+[diff]
+    tool = difftastic
+    external = difft
+
+[difftool]
+    prompt = false
+
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+    difftool = true
+
+[merge]
+    tool = smerge
+
+[mergetool "smerge"]
+    cmd = smerge mergetool "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"
+    trustExitCode = true
