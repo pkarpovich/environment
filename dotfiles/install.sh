@@ -4,5 +4,6 @@ ln -sf "/Applications/Sublime Merge.app/Contents/SharedSupport/bin/smerge" ~/.lo
 
 ln -sf ~/Projects/environment/dotfiles/.gitignore_global ~/.gitignore_global
 ln -sf ~/Projects/environment/dotfiles/.gitconfig ~/.gitconfig
+ln -sf ~/Projects/environment/dotfiles/mise.config.toml ~/.config/mise/config.toml
 ln -sf ~/Projects/environment/dotfiles/config.fish ~/.config/fish/config.fish
 ln -sf ~/Projects/environment/dotfiles/starship.toml ~/.config/starship.toml
