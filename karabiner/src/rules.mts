@@ -71,17 +71,35 @@ const rules: KarabinerRules[] = [
         },
     }),
     ...createHyperSubLayers({
-        // o = "Open" applications
+        // search via
         o: {
-            a: app("Arc"),
-            s: app("Spotify"),
-            w: app("WebStorm"),
-            p: app("PyCharm Professional Edition"),
-            g: app("GoLand"),
-            n: app("Notion"),
-            c: app("Warp"),
-            t: app("Telegram"),
-            m: app("Sublime Merge"),
+            g: {
+                description: "Github Repository Search",
+                to: [
+                    {
+                        key_code: "1",
+                        modifiers: ["right_option", "right_command", "right_shift"],
+                    },
+                ],
+            },
+            a: {
+                description: "Arc History Search",
+                to: [
+                    {
+                        key_code: "2",
+                        modifiers: ["right_option", "right_command", "right_shift"],
+                    },
+                ],
+            },
+            k: {
+                description: "Kagi Search",
+                to: [
+                    {
+                        key_code: "3",
+                        modifiers: ["right_option", "right_command", "right_shift"],
+                    },
+                ],
+            },
         },
 
         // w = "Window" via rectangle.app
