@@ -1,3 +1,5 @@
+set -gx WARP_THEMES_DIR ~/.warp/themes
+
 # add pnpm via mise
 set -gx PNPM_HOME "$(mise where pnpm)/bin"
 fish_add_path $PNPM_HOME
