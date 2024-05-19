@@ -4,6 +4,9 @@ set -gx WARP_THEMES_DIR ~/.warp/themes
 set -gx PNPM_HOME "$(mise where pnpm)/bin"
 fish_add_path $PNPM_HOME
 
+# add GOROOT
+set -gx GOROOT (mise where go)
+
 # Load PATH
 fish_add_path ~/.local/bin
 fish_add_path ~/.local/share/mise/shims
