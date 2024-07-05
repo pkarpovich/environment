@@ -4,12 +4,13 @@
   "version": "1.0.0",
   "author": "Pavel Karpovich <pavel.karpovich@outlook.com>",
   "devDependencies": {
-    "@types/node": "^20.10.5",
-    "prettier": "^3.1.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "@types/node": "^20.14.9",
+    "prettier": "^3.3.2",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3"
   },
   "scripts": {
-    "build": "node --loader ts-node/esm ./src/rules.mts"
+    "build": "tsc --noEmit && tsx ./src/rules.ts",
+    "watch": "tsx --watch ./src/rules.ts"
   }
 }

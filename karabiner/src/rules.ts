@@ -1,6 +1,6 @@
-import { writeFile } from "node:fs/promises";
-import type { KarabinerRules } from "./types.mjs";
-import { createHyperSubLayers, app, createSubLayer } from "./utils.mjs";
+import { writeFile, mkdir } from "node:fs/promises";
+import type { KarabinerRules } from "./types";
+import { createHyperSubLayers, app, createSubLayer } from "./utils";
 
 const rules: KarabinerRules[] = [
     // Define the Hyper key itself
@@ -291,4 +291,10 @@ const fileContent = JSON.stringify(
     2,
 );
 
-await writeFile("./dist/karabiner.json", fileContent, "utf8");
+const outputFolder = "./dist";
+const outputFile = `${outputFolder}/karabiner.json`;
+
+await mkdir(outputFolder, { recursive: true });
+await writeFile(outputFile, fileContent, "utf8");
+
+console.log(`Generated Karabiner rules in ${outputFile}`);

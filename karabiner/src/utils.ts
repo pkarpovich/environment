@@ -1,4 +1,4 @@
-import type { To, KeyCode, Manipulator, KarabinerRules } from "./types.mjs";
+import type { To, KeyCode, Manipulator, KarabinerRules } from "./types";
 
 /**
  * Custom way to describe a command in a layer
