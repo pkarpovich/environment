@@ -1,6 +1,6 @@
 import { writeFile, mkdir } from "node:fs/promises";
-import type { KarabinerRules } from "./types";
-import { createHyperSubLayers, app, createSubLayer } from "./utils";
+import type { KarabinerRules } from "./types.js";
+import { createHyperSubLayers, app, createSubLayer } from "./utils.js";
 
 const rules: KarabinerRules[] = [
     // Define the Hyper key itself
