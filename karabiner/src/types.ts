@@ -89,6 +89,27 @@ export interface SimultaneousOptions {
     detect_key_down_uninterruptedly?: boolean;
 }
 
+type ModifiersKeys =
+    | "caps_lock"
+    | "left_command"
+    | "left_control"
+    | "left_option"
+    | "left_shift"
+    | "right_command"
+    | "right_control"
+    | "right_option"
+    | "right_shift"
+    | "fn"
+    | "command"
+    | "control"
+    | "option"
+    | "shift"
+    | "left_alt"
+    | "left_gui"
+    | "right_alt"
+    | "right_gui"
+    | "any";
+
 export interface From {
     key_code?: KeyCode;
     simultaneous?: SimultaneousFrom[];
@@ -97,25 +118,38 @@ export interface From {
 }
 
 export interface Modifiers {
-    optional?: string[];
-    mandatory?: string[];
+    optional?: ModifiersKeys[];
+    mandatory?: ModifiersKeys[];
 }
 
 export interface To {
     key_code?: KeyCode;
-    modifiers?: string[];
+    modifiers?: ModifiersKeys[];
     shell_command?: string;
     set_variable?: {
         name: string;
         value: boolean | number | string;
     };
     mouse_key?: MouseKey;
+    pointing_button?: string;
+    /**
+     * Power Management plugin
+     * @example: sleep system
+     * @see: {@link https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/to/software_function/iokit_power_management_sleep_system/}
+     */
+    software_function?: SoftwareFunction;
 }
 
 export interface MouseKey {
     y?: number;
     x?: number;
     speed_multiplier?: number;
+    vertical_wheel?: number;
+    horizontal_wheel?: number;
+}
+
+export interface SoftwareFunction {
+    iokit_power_management_sleep_system?: {};
 }
 
 export type KeyCode =

@@ -1,6 +1,6 @@
 import { writeFile, mkdir } from "node:fs/promises";
 import type { KarabinerRules } from "./types.js";
-import { createHyperSubLayers, app, createSubLayer } from "./utils.js";
+import { createHyperSubLayers, app, createSubLayer, rectangle, open } from "./utils.js";
 
 const rules: KarabinerRules[] = [
     // Define the Hyper key itself
@@ -11,11 +11,24 @@ const rules: KarabinerRules[] = [
                 description: "Caps Lock -> Hyper Key",
                 from: {
                     key_code: "caps_lock",
+                    modifiers: {
+                        optional: ["any"],
+                    },
                 },
                 to: [
                     {
-                        key_code: "left_shift",
-                        modifiers: ["left_command", "left_control", "left_option"],
+                        set_variable: {
+                            name: "hyper",
+                            value: 1,
+                        },
+                    },
+                ],
+                to_after_key_up: [
+                    {
+                        set_variable: {
+                            name: "hyper",
+                            value: 0,
+                        },
                     },
                 ],
                 to_if_alone: [
@@ -73,91 +86,19 @@ const rules: KarabinerRules[] = [
     ...createHyperSubLayers({
         // search via
         o: {
-            g: {
-                description: "Github Repository Search",
-                to: [
-                    {
-                        key_code: "1",
-                        modifiers: ["right_option", "right_command", "right_shift"],
-                    },
-                ],
-            },
-            a: {
-                description: "Arc History Search",
-                to: [
-                    {
-                        key_code: "2",
-                        modifiers: ["right_option", "right_command", "right_shift"],
-                    },
-                ],
-            },
-            k: {
-                description: "Kagi Search",
-                to: [
-                    {
-                        key_code: "3",
-                        modifiers: ["right_option", "right_command", "right_shift"],
-                    },
-                ],
-            },
+            g: open("raycast://extensions/raycast/github/search-repositories"),
+            a: open("raycast://extensions/the-browser-company/arc/search-history"),
+            k: open("raycast://extensions/the-browser-company/arc/search"),
         },
 
         // w = "Window" via rectangle.app
         w: {
-            left_arrow: {
-                description: "Window: Left Half",
-                to: [
-                    {
-                        key_code: "left_arrow",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
-            right_arrow: {
-                description: "Window: Right Half",
-                to: [
-                    {
-                        key_code: "right_arrow",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
-            up_arrow: {
-                description: "Window: Top Half",
-                to: [
-                    {
-                        key_code: "up_arrow",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
-            down_arrow: {
-                description: "Window: Bottom Half",
-                to: [
-                    {
-                        key_code: "down_arrow",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
-            return_or_enter: {
-                description: "Window: Full Screen",
-                to: [
-                    {
-                        key_code: "return_or_enter",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
-            c: {
-                description: "Window: Center",
-                to: [
-                    {
-                        key_code: "c",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
+            left_arrow: rectangle("left-half"),
+            right_arrow: rectangle("right-half"),
+            down_arrow: rectangle("bottom-half"),
+            up_arrow: rectangle("top-half"),
+            return_or_enter: rectangle("maximize"),
+            c: rectangle("center"),
             h: {
                 description: "Window: Hide",
                 to: [
@@ -167,72 +108,16 @@ const rules: KarabinerRules[] = [
                     },
                 ],
             },
-            i: {
-                description: "Window: First Third",
-                to: [
-                    {
-                        key_code: "i",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
-            o: {
-                description: "Window: Center Third",
-                to: [
-                    {
-                        key_code: "o",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
-            p: {
-                description: "Window: Last Third",
-                to: [
-                    {
-                        key_code: "p",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
-            open_bracket: {
-                description: "Window: First Two Thirds",
-                to: [
-                    {
-                        key_code: "open_bracket",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
-            close_bracket: {
-                description: "Window: Last Two Thirds",
-                to: [
-                    {
-                        key_code: "close_bracket",
-                        modifiers: ["right_option", "right_command"],
-                    },
-                ],
-            },
+            i: rectangle("first-third"),
+            o: rectangle("center-third"),
+            p: rectangle("last-third"),
+            open_bracket: rectangle("first-two-thirds"),
+            close_bracket: rectangle("last-two-thirds"),
         },
 
         // shortcuts
-        c: {
-            description: "Clipboard History",
-            to: [
-                {
-                    key_code: "c",
-                    modifiers: ["right_option", "right_command", "right_shift"],
-                },
-            ],
-        },
-        g: {
-            description: "AI Chat",
-            to: [
-                {
-                    key_code: "g",
-                    modifiers: ["right_option", "right_command", "right_shift"],
-                },
-            ],
-        },
+        c: open("raycast://extensions/raycast/clipboard-history/clipboard-history"),
+        g: open("raycast://extensions/raycast/raycast-ai/ai-chat"),
         s: {
             description: "Capture Area",
             to: [
@@ -243,33 +128,9 @@ const rules: KarabinerRules[] = [
             ],
         },
         a: {
-            e: {
-                description: "Improve English Text",
-                to: [
-                    {
-                        key_code: "e",
-                        modifiers: ["right_option", "right_command", "right_shift"],
-                    },
-                ],
-            },
-            r: {
-                description: "Improve Russian Text",
-                to: [
-                    {
-                        key_code: "r",
-                        modifiers: ["right_option", "right_command", "right_shift"],
-                    },
-                ],
-            },
-            n: {
-                description: "Continue Conversation",
-                to: [
-                    {
-                        key_code: "n",
-                        modifiers: ["right_option", "right_command", "right_shift"],
-                    },
-                ],
-            },
+            e: open("raycast://ai-commands/improve-english-text"),
+            r: open("raycast://ai-commands/improve-russian-text"),
+            n: open("raycast://ai-commands/continue-conversation"),
         },
     }),
 ];
