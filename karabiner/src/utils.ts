@@ -1,10 +1,18 @@
-import type { To, KeyCode, Manipulator, KarabinerRules } from "./types.js";
+import type { To, KeyCode, Manipulator, KarabinerRules, Modifiers, ModifiersKeys, Conditions } from "./types.js";
 
 /**
  * Custom way to describe a command in a layer
  */
 export interface LayerCommand {
     to: To[];
+    to_if_alone?: To[];
+    to_after_key_up?: To[];
+    from?: {
+        key_code: KeyCode;
+        modifiers: {
+            optional: ["any"];
+        };
+    };
     description?: string;
 }
 
@@ -15,6 +23,12 @@ type HyperKeySublayer = {
 
 type SubLayers = {
     [key_code in KeyCode]?: HyperKeySublayer | LayerCommand;
+};
+
+export const HyperLayerCondition: Conditions = {
+    type: "variable_if",
+    name: "hyper",
+    value: 1,
 };
 
 /**
@@ -69,11 +83,7 @@ export function createHyperSubLayer(
                         name: subLayerVariable,
                         value: 0,
                     })),
-                {
-                    type: "variable_if",
-                    name: "hyper",
-                    value: 1,
-                },
+                HyperLayerCondition,
             ],
         },
         // Define the individual commands that are meant to trigger in the sublayer
@@ -174,13 +184,27 @@ export function createSubLayer(layer_key: string, description: string, subLayers
 /**
  * Shortcut for "open" shell command
  */
-export function open(...what: string[]): LayerCommand {
+export function open(what: string, options = { foreground: true, raw: false }): LayerCommand {
     return {
-        to: what.map((w) => ({
-            shell_command: `open ${w}`,
-        })),
-        description: `Open ${what.join(" & ")}`,
+        to: [openRaw(what, options)],
+        description: `Open ${what}`,
     };
+}
+
+export function openRaw(what: string, options = { foreground: true, raw: false }): To {
+    const command = options.foreground ? `open ${what}` : `open -g ${what}`;
+
+    return {
+        shell_command: command,
+    };
+}
+
+export function delegate(url: URL, options = { foreground: true, raw: false }): LayerCommand {
+    return open(url.toString(), options);
+}
+
+export function delegateRaw(url: URL, options = { foreground: true, raw: false }): To {
+    return openRaw(url.toString(), options);
 }
 
 /**
@@ -204,22 +228,35 @@ export function shell(strings: TemplateStringsArray, ...values: any[]): LayerCom
 }
 
 /**
- * Shortcut for managing window sizing with Rectangle
+ * Shortcut for managing window sizing
  */
-export function rectangle(name: string): LayerCommand {
-    return {
-        to: [
-            {
-                shell_command: `open -g rectangle://execute-action?name=${name}`,
-            },
-        ],
-        description: `Window: ${name}`,
-    };
+export function windowManagement(name: string): LayerCommand {
+    return delegate(new URL(`raycast://extensions/raycast/window-management/${name}?launchType=background`));
 }
 
 /**
  * Shortcut for "Open an app" command (of which there are a bunch)
  */
-export function app(name: string): LayerCommand {
+export function app(name: string): LayerCommand | To {
     return open(`-a '${name}.app'`);
+}
+
+type KeyCodeOptions = {
+    hyper?: boolean;
+    modifiers?: ModifiersKeys[];
+};
+
+export const Hyper: ModifiersKeys[] = ["left_command", "left_option", "left_control", "left_shift"];
+
+export function keyCode(keyCode: KeyCode, { modifiers = [], hyper = false }: KeyCodeOptions = {}): LayerCommand {
+    const keyModifiers: ModifiersKeys[] = hyper ? [...Hyper, ...modifiers] : modifiers;
+
+    return {
+        to: [
+            {
+                key_code: keyCode,
+                modifiers: keyModifiers,
+            },
+        ],
+    };
 }
