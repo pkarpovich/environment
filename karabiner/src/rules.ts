@@ -95,9 +95,9 @@ const rules: KarabinerRules[] = [
         g: delegate(new URL("raycast://extensions/raycast/raycast-ai/ai-chat")),
         s: keyCode("s", { hyper: true }),
         a: {
-            e: keyCode("f1", { hyper: true }),
-            r: keyCode("f2", { hyper: true }),
-            n: keyCode("f3", { hyper: true }),
+            e: keyCode("1", { hyper: true }),
+            r: keyCode("2", { hyper: true }),
+            n: keyCode("3", { hyper: true }),
         },
     }),
 ];
