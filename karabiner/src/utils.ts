@@ -1,12 +1,24 @@
-import type { To, KeyCode, Manipulator, KarabinerRules, Modifiers, ModifiersKeys, Conditions } from "./types.js";
+import {
+    To,
+    KeyCode,
+    Manipulator,
+    KarabinerRules,
+    Modifiers,
+    ModifiersKeys,
+    Conditions,
+    ToDelayedAction,
+    Parameters,
+} from "./types.js";
 
 /**
  * Custom way to describe a command in a layer
  */
 export interface LayerCommand {
-    to: To[];
+    to?: To[];
     to_if_alone?: To[];
     to_after_key_up?: To[];
+    to_if_held_down?: To[];
+    to_delayed_action?: ToDelayedAction;
     from?: {
         key_code: KeyCode;
         modifiers: {
@@ -14,6 +26,7 @@ export interface LayerCommand {
         };
     };
     description?: string;
+    parameters?: Parameters;
 }
 
 type HyperKeySublayer = {
@@ -153,7 +166,7 @@ export function createHyperSubLayers(subLayers: {
               }
             : {
                   description: `Hyper Key sublayer "${key}"`,
-                  manipulators: createHyperSubLayer(key as KeyCode, value, allSubLayerVariables),
+                  manipulators: createHyperSubLayer(key as KeyCode, value as HyperKeySublayer, allSubLayerVariables),
               },
     );
 }
@@ -181,6 +194,17 @@ export function createSubLayer(layer_key: string, description: string, subLayers
     };
 }
 
+export function createTapHoldAction(instantAction: To, holdAction: To, tapHoldThreshold: number = 1000): LayerCommand {
+    return {
+        to_if_alone: [instantAction],
+        to_if_held_down: [holdAction],
+        parameters: {
+            "basic.to_if_alone_timeout_milliseconds": tapHoldThreshold,
+            "basic.to_if_held_down_threshold_milliseconds": tapHoldThreshold,
+        },
+    };
+}
+
 /**
  * Shortcut for "open" shell command
  */
@@ -191,11 +215,40 @@ export function open(what: string, options = { foreground: true, raw: false }): 
     };
 }
 
-export function openRaw(what: string, options = { foreground: true, raw: false }): To {
+export function openRaw(what: string, options = { foreground: true }): To {
     const command = options.foreground ? `open ${what}` : `open -g ${what}`;
 
     return {
         shell_command: command,
+    };
+}
+
+export enum LaunchType {
+    UserInit = "userInitiated",
+    Background = "background",
+}
+
+export function executeCommand(
+    command: string,
+    args?: Record<string, any>,
+    launchType: LaunchType = LaunchType.Background,
+): To {
+    let extCommand = `raycast://extensions/${command}`;
+    const queryParams = new URLSearchParams();
+    if (launchType === LaunchType.Background) {
+        queryParams.append("launchType", "background");
+    }
+
+    if (args) {
+        queryParams.append("arguments", JSON.stringify(args));
+    }
+
+    if (queryParams.toString()) {
+        extCommand += "?" + queryParams.toString();
+    }
+
+    return {
+        shell_command: `open -g '${extCommand}'`,
     };
 }
 

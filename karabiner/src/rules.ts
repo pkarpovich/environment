@@ -1,10 +1,15 @@
-import { writeFile, mkdir } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import type { KarabinerRules, Manipulator } from "./types.js";
-import { createHyperSubLayers, createSubLayer, windowManagement, open, delegate, keyCode } from "./utils.js";
+import {
+    createTapHoldAction,
+    createHyperSubLayers,
+    createSubLayer,
+    delegate,
+    executeCommand,
+    keyCode,
+    open,
+} from "./utils.js";
 import { doubleCommandQ } from "./customRules/doubleCommandQ.js";
-import { languageSwitch } from "./customRules/languageSwitch.js";
-import { navigationKeys } from "./customRules/navigationKeys.js";
-import { deletionKeys } from "./customRules/deletionKeys.js";
 
 const hyperManipulator: Manipulator = {
     description: "Caps Lock -> Hyper Key",
@@ -98,6 +103,24 @@ const rules: KarabinerRules[] = [
             e: keyCode("1", { hyper: true }),
             r: keyCode("2", { hyper: true }),
             n: keyCode("3", { hyper: true }),
+        },
+        m: {
+            1: createTapHoldAction(
+                executeCommand("pk-workspace/memcell/get-mem-cell", { cellName: "mem-cell-1" }),
+                executeCommand("pk-workspace/memcell/save-mem-cell", { cellName: "mem-cell-1" }),
+            ),
+            2: createTapHoldAction(
+                executeCommand("pk-workspace/memcell/get-mem-cell", { cellName: "mem-cell-2" }),
+                executeCommand("pk-workspace/memcell/save-mem-cell", { cellName: "mem-cell-2" }),
+            ),
+            3: createTapHoldAction(
+                executeCommand("pk-workspace/memcell/get-mem-cell", { cellName: "mem-cell-3" }),
+                executeCommand("pk-workspace/memcell/save-mem-cell", { cellName: "mem-cell-3" }),
+            ),
+            p: createTapHoldAction(
+                executeCommand("pk-workspace/memcell/get-mem-cell", { cellName: "mock-pass" }),
+                executeCommand("pk-workspace/memcell/save-mem-cell", { cellName: "mock-pass" }),
+            ),
         },
     }),
 ];
