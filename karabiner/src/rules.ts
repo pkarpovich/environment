@@ -98,7 +98,11 @@ const rules: KarabinerRules[] = [
         // shortcuts
         c: delegate(new URL("raycast://extensions/raycast/clipboard-history/clipboard-history")),
         g: delegate(new URL("raycast://extensions/raycast/raycast-ai/ai-chat")),
-        s: keyCode("s", { hyper: true }),
+        s: {
+            a: keyCode("s", { hyper: true }),
+            t: keyCode("t", { hyper: true }),
+            m: keyCode("m", { hyper: true }),
+        },
         a: {
             e: keyCode("1", { hyper: true }),
             r: keyCode("2", { hyper: true }),
