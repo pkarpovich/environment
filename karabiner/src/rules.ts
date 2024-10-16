@@ -10,6 +10,7 @@ import {
     open,
 } from "./utils.js";
 import { doubleCommandQ } from "./customRules/doubleCommandQ.js";
+import { languageSwitch } from "./customRules/languageSwitch.js";
 
 const hyperManipulator: Manipulator = {
     description: "Caps Lock -> Hyper Key",
@@ -44,7 +45,7 @@ const rules: KarabinerRules[] = [
         manipulators: [hyperManipulator],
     },
     ...doubleCommandQ,
-    // ...languageSwitch,
+    ...languageSwitch,
     // ...navigationKeys,
     // ...deletionKeys,
     // https://github.com/pqrs-org/Karabiner-Elements/issues/2880#issuecomment-1774847928
