@@ -38,6 +38,8 @@ alias la 'eza --color=always --icons --group-directories-first --all'
 alias ll 'eza --color=always --icons --group-directories-first --all --long'
 alias cat 'bat -pp'
 alias tree 'eza --tree'
+alias pui 'pnpm update --interactive --latest -r --include-workspace-root'
+alias pu 'pnpm update -r --include-workspace-root'
 
 zoxide init fish | source
 starship init fish | source
