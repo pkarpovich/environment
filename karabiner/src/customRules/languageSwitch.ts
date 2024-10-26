@@ -1,65 +1,66 @@
-import { KarabinerRules } from "../types.js";
+import type { From, KarabinerRules, To } from "../types.js";
 
-export const languageSwitch: KarabinerRules[] = [
-    {
-        description: "Switch to English or Russian",
-        manipulators: [
-            {
-                type: "basic",
-                from: {
-                    key_code: "right_command",
-                },
-                conditions: [
-                    {
-                        input_sources: [
-                            {
-                                language: "en",
-                            },
-                        ],
-                        type: "input_source_if",
-                    },
-                ],
-                to_if_alone: [
-                    {
-                        select_input_source: {
-                            language: "ru",
+type Options = {
+    isLaptop: boolean;
+};
+
+const DefaultOptions: Options = {
+    isLaptop: true,
+};
+
+export const languageSwitch = ({ isLaptop }: Options = DefaultOptions): KarabinerRules[] => {
+    const from: From = isLaptop ? { apple_vendor_top_case_key_code: "keyboard_fn" } : { key_code: "left_control" };
+    const to: To[] = isLaptop ? [{ key_code: "vk_none" }] : [{ key_code: "left_control" }];
+
+    return [
+        {
+            description: "Switch to English or Russian",
+            manipulators: [
+                {
+                    type: "basic",
+                    from,
+                    conditions: [
+                        {
+                            input_sources: [
+                                {
+                                    language: "en",
+                                },
+                            ],
+                            type: "input_source_if",
                         },
-                    },
-                ],
-                to: [
-                    {
-                        key_code: "right_command",
-                    },
-                ],
-            },
-            {
-                type: "basic",
-                from: {
-                    key_code: "right_command",
-                },
-                conditions: [
-                    {
-                        input_sources: [
-                            {
+                    ],
+                    to_if_alone: [
+                        {
+                            select_input_source: {
                                 language: "ru",
                             },
-                        ],
-                        type: "input_source_if",
-                    },
-                ],
-                to_if_alone: [
-                    {
-                        select_input_source: {
-                            language: "en",
                         },
-                    },
-                ],
-                to: [
-                    {
-                        key_code: "right_command",
-                    },
-                ],
-            },
-        ],
-    },
-];
+                    ],
+                    to,
+                },
+                {
+                    type: "basic",
+                    from,
+                    conditions: [
+                        {
+                            input_sources: [
+                                {
+                                    language: "ru",
+                                },
+                            ],
+                            type: "input_source_if",
+                        },
+                    ],
+                    to_if_alone: [
+                        {
+                            select_input_source: {
+                                language: "en",
+                            },
+                        },
+                    ],
+                    to,
+                },
+            ],
+        },
+    ];
+};

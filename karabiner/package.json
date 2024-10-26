@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "tsc --noEmit && tsx ./src/rules.ts",
+    "build:laptop": "tsc --noEmit && tsx ./src/rules.ts --laptop",
     "watch": "tsx --watch ./src/rules.ts"
   }
 }

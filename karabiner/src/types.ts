@@ -117,6 +117,7 @@ export type ModifiersKeys =
 
 export interface From {
     key_code?: KeyCode;
+    apple_vendor_top_case_key_code?: KeyCode;
     simultaneous?: SimultaneousFrom[];
     simultaneous_options?: SimultaneousOptions;
     modifiers?: Modifiers;
@@ -176,6 +177,7 @@ export type KeyCode =
     | "right_option"
     | "right_command"
     | "fn"
+    | "keyboard_fn"
     | "return_or_enter"
     | "escape"
     | "delete_or_backspace"

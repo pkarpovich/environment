@@ -39,13 +39,17 @@ const hyperManipulator: Manipulator = {
     type: "basic",
 };
 
-const rules: KarabinerRules[] = [
+type RulesOptions = {
+    isLaptop: boolean;
+};
+
+const rules = ({ isLaptop }: RulesOptions) => [
     {
         description: "Hyper Key (⌃⌥⇧⌘)",
         manipulators: [hyperManipulator],
     },
     ...doubleCommandQ,
-    ...languageSwitch,
+    ...languageSwitch({ isLaptop }),
     // ...navigationKeys,
     // ...deletionKeys,
     // https://github.com/pqrs-org/Karabiner-Elements/issues/2880#issuecomment-1774847928
@@ -129,6 +133,9 @@ const rules: KarabinerRules[] = [
         },
     }),
 ];
+
+const isLaptop = process.argv.includes("--laptop");
+
 const fileContent = JSON.stringify(
     {
         global: {
@@ -138,7 +145,7 @@ const fileContent = JSON.stringify(
             {
                 name: "Default",
                 complex_modifications: {
-                    rules,
+                    rules: rules({ isLaptop }),
                 },
             },
         ],
