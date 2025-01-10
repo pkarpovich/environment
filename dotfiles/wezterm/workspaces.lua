@@ -12,6 +12,7 @@ end
 local function workspaces(config)
     resurrect.periodic_save({ interval_seconds = 15 * 60, save_workspaces = true, save_windows = true, save_tabs = true })
     resurrect.set_max_nlines(5000)
+    workspace_switcher.zoxide_path = "/opt/homebrew/bin/zoxide"
 
     wezterm.on("resurrect.error", function(err)
         wezterm.log_error("ERROR!")
