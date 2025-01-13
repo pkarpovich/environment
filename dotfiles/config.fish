@@ -33,13 +33,27 @@ function br --wraps=broot
     end
 end
 
+function fish_greeting
+    yafetch
+end
+
+alias cd 'z'
+alias cdi 'zi'
 alias ls 'eza --color=always --icons --group-directories-first'
 alias la 'eza --color=always --icons --group-directories-first --all'
 alias ll 'eza --color=always --icons --group-directories-first --all --long'
-alias cat 'bat -pp'
+alias l 'eza --group --header --group-directories-first --long --git --all --binary --all --icons always'
+alias cat 'moar --no-linenumbers --quit-if-one-screen'
 alias tree 'eza --tree'
 alias pui 'pnpm update --interactive --latest -r --include-workspace-root'
 alias pu 'pnpm update -r --include-workspace-root'
+alias cls 'clear'
+alias y 'yazi'
+alias cls 'clear'
+alias curl 'curlie'
+alias ping 'gping'
+alias dig 'doggo'
+alias htop 'glances'
 
 zoxide init fish | source
 starship init fish | source

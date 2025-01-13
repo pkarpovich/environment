@@ -1,0 +1,8 @@
+[
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-e": "tab_switcher::Toggle"
+    }
+  }
+]

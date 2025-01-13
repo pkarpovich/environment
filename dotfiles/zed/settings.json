@@ -1,0 +1,36 @@
+{
+  "ui_font_size": 16,
+  "buffer_font_size": 16,
+  "theme": {
+    "mode": "system",
+    "light": "Catppuccin Latte",
+    "dark": "Catppuccin Mocha"
+  },
+  "ui_font_family": "JetBrainsMono Nerd Font",
+  "ui_font_features": {
+    "liga": true,
+    "calt": true
+  },
+  "base_keymap": "JetBrains",
+  "preferred_line_length": 120,
+  "wrap_guides": [120],
+  "autosave": "on_focus_change",
+  "top_bar": {
+    "show": true,
+    "show_nav_history_buttons": false
+  },
+  "tabs": {
+    "file_icons": true,
+    "git_status": true
+  },
+  "project_panel": {
+    "indent_size": 16
+  },
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+  "auto_install_extensions": {
+    "catppuccin": true
+  }
+}
