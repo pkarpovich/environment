@@ -15,7 +15,8 @@
   "preferred_line_length": 120,
   "wrap_guides": [120],
   "autosave": "on_focus_change",
-  "top_bar": {
+  "restore_on_startup": "last_session",
+  "tab_bar": {
     "show": true,
     "show_nav_history_buttons": false
   },
@@ -24,13 +25,33 @@
     "git_status": true
   },
   "project_panel": {
-    "indent_size": 16
+    "button": true,
+    "default_width": 240,
+    "dock": "left",
+    "file_icons": true,
+    "folder_icons": true,
+    "git_status": true,
+    "indent_size": 20,
+    "auto_reveal_entries": true,
+    "auto_fold_dirs": true,
+    "scrollbar": {
+      "show": null
+    }
+  },
+  "collaboration_panel": {
+    "button": false
   },
   "telemetry": {
     "diagnostics": false,
     "metrics": false
   },
+  "current_line_highlight": "all",
   "auto_install_extensions": {
-    "catppuccin": true
+    "git-firefly": true,
+    "catppuccin": true,
+    "html": true,
+    "toml": true,
+    "lua": true,
+    "fish": true
   }
 }
