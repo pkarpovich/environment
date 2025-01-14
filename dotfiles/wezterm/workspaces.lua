@@ -68,8 +68,6 @@ local function workspaces(config)
     wezterm.on("smart_workspace_switcher.workspace_switcher.canceled", function(window, _)
         wezterm.log_info(window)
     end)
-
-    wezterm.on("gui-startup", resurrect.resurrect_on_gui_startup)
 end
 
 return workspaces

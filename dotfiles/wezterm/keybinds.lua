@@ -127,18 +127,18 @@ local keys = {
 }
 
 local function tab_switch_keys(key_table, modifier)
-	for i = 1, 9 do
-		table.insert(key_table, {
-			key = tostring(i),
-			mods = modifier,
-			action = act.ActivateTab(i - 1),
-		})
-	end
-	table.insert(key_table, {
-		key = "0",
-		mods = modifier,
-		action = act.ActivateTab(9),
-	})
+    for i = 1, 9 do
+        table.insert(key_table, {
+            key = tostring(i),
+            mods = modifier,
+            action = act.ActivateTab(i - 1),
+        })
+    end
+    table.insert(key_table, {
+        key = "0",
+        mods = modifier,
+        action = act.ActivateTab(9),
+    })
 end
 
 tab_switch_keys(keys, "LEADER")

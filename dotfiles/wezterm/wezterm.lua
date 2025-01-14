@@ -1,7 +1,10 @@
 local wezterm = require("wezterm")
+-- wezterm.plugin.update_all()
+
 local config = wezterm.config_builder()
 
 config.color_scheme = "Earthsong"
+config.default_workspace = "~"
 config.window_frame = {
     font_size = 12,
 }
@@ -11,7 +14,7 @@ config.hide_tab_bar_if_only_one_tab = false
 config.window_decorations = "RESIZE"
 config.font = wezterm.font_with_fallback({
     { family = "Iosevka Nerd Font", weight = "Light" },
-    { family = "Victor Mono", weight = "Regular" },
+    { family = "Victor Mono",       weight = "Regular" },
 })
 config.font_size = 18
 config.front_end = "OpenGL"
@@ -48,10 +51,13 @@ end
 
 require("workspaces")(config)
 
+local resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.wezterm")
+
 wezterm.on("gui-startup", function(cmd)
     wezterm.log_info("gui-startup")
     local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
     window:gui_window():maximize()
+    resurrect.resurrect_on_gui_startup()
 end)
 
 return config
