@@ -1,0 +1,19 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+      force: true
+      glob: true
+
+- link:
+    ~/.gitignore_global: .gitignore_global
+    ~/.gitconfig: .gitconfig
+
+    ~/.config/mise/config.toml: mise.config.toml
+
+    ~/.config/fish/config.fish: config.fish
+    ~/.config/fish/fish_plugins: fish_plugins
+    ~/.config/starship.toml: starship.toml
+
+    ~/.config/wezterm/: wezterm/**
+    ~/.config/zed/: zed/**

@@ -1,3 +1,9 @@
 [tools]
 node = "20"
 pnpm = "9"
+pipx = "latest"
+"pipx:dotbot" = "1.21.0"
+
+[tasks.link_dotfiles]
+description = "Link dotfiles"
+run = "dotbot -c ./dotfiles/install.conf.yaml"
