@@ -7,3 +7,17 @@ pipx = "latest"
 [tasks.link_dotfiles]
 description = "Link dotfiles"
 run = "dotbot -c ./dotfiles/install.conf.yaml"
+
+[tasks.setup_keyboard]
+description = "Setup keyboard via karabiner"
+run = [
+    "pnpm build",
+    "dotbot -c ../dotfiles/install.conf.yaml",
+    "launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server",
+]
+dir = "karabiner"
+
+[tasks.setup_env]
+alias = "init"
+description = "Setup environment"
+depends = ['setup_keyboard', 'link_dotfiles']

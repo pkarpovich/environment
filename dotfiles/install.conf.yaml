@@ -15,5 +15,7 @@
     ~/.config/fish/fish_plugins: fish_plugins
     ~/.config/starship.toml: starship.toml
 
+    ~/.config/karabinder.json: ../karabiner/dist/karabiner.json
+
     ~/.config/wezterm/: wezterm/**
     ~/.config/zed/: zed/**
