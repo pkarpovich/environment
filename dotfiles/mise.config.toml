@@ -1,8 +1,9 @@
 [tools]
-node = "20"
+node = "22"
 pnpm = "9"
-go = "1.22"
-python = "3.12"
+go = "1.23"
+python = "3.13"
+"npm:opencommit" = "3.2"
 
 [settings]
 experimental = true

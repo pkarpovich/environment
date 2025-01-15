@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "author": "Pavel Karpovich <pavel.karpovich@outlook.com>",
   "devDependencies": {
-    "@types/node": "^20.14.9",
-    "prettier": "^3.3.2",
-    "tsx": "^4.16.2",
-    "typescript": "^5.5.3"
+    "@types/node": "^22.10.6",
+    "prettier": "^3.4.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
   },
   "scripts": {
     "build": "tsc --noEmit && tsx ./src/rules.ts",
