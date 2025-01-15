@@ -4,8 +4,14 @@ pnpm = "9"
 pipx = "latest"
 "pipx:dotbot" = "1.21.0"
 
+[tasks.install_tools]
+description = "Install dev tools with brew"
+run = "brew bundle install"
+dir = "dotfiles"
+
 [tasks.link_dotfiles]
 description = "Link dotfiles"
+depends = ['install_tools', 'setup_keyboard']
 run = "dotbot -c ./dotfiles/install.conf.yaml"
 
 [tasks.setup_keyboard]
@@ -17,7 +23,12 @@ run = [
 ]
 dir = "karabiner"
 
+[tasks.apply_duti]
+description = "Apply duti settings"
+run = "duti defauts.duti"
+dir = "duti"
+
 [tasks.setup_env]
-alias = "init"
 description = "Setup environment"
-depends = ['setup_keyboard', 'link_dotfiles']
+alias = "init"
+depends = ['install_tools', 'setup_keyboard', 'link_dotfiles', 'apply_duti']

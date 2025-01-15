@@ -1,32 +1,28 @@
-# bundle id                UTI/Extension           role (all, viewer, editor, shell, none)
+# bundle id            UTI/Extension           role (all, viewer, editor, shell, none)
 
-# Text Files
-com.sublimetext.4          public.plain-text       all
-com.sublimetext.4          public.rtf              all
-com.sublimetext.4          md                      all
+dev.zed.Zed           public.plain-text       all
+dev.zed.Zed           public.rtf              all
+dev.zed.Zed           md                      all
 
-# Data Files
-com.sublimetext.4          csv                     all
-com.sublimetext.4          tsv                     all
-com.sublimetext.4          xml                     all
-com.sublimetext.4          log                     all
-com.sublimetext.4          sql                     all
+dev.zed.Zed           csv                     all
+dev.zed.Zed           tsv                     all
+dev.zed.Zed           xml                     all
+dev.zed.Zed           log                     all
+dev.zed.Zed           sql                     all
 
-# Configuration Files
-com.apple.dt.Xcode         plist                   all
-com.sublimetext.4          dhall                   all
-com.sublimetext.4          duti                    all
-com.sublimetext.4          json                    all
-com.sublimetext.4          yaml                    all
-com.sublimetext.4          public.shell-script     all
-com.sublimetext.4          Dockerfile              all
+com.apple.dt.Xcode    plist                   all
+dev.zed.Zed           dhall                   all
+dev.zed.Zed           duti                    all
+dev.zed.Zed           json                    all
+dev.zed.Zed           yaml                    all
+dev.zed.Zed           public.shell-script     all
+dev.zed.Zed           Dockerfile              all
 
-# Source Code
-com.sublimetext.4          go                      all
-com.sublimetext.4          public.ruby-script      all
-com.sublimetext.4          public.python-script    all
-com.sublimetext.4          js                      all
-com.sublimetext.4          jsx                     all
-com.sublimetext.4          ts                      all
-com.sublimetext.4          tsx                     all
-com.sublimetext.4          css                     all
+dev.zed.Zed           go                      all
+dev.zed.Zed           public.ruby-script      all
+dev.zed.Zed           public.python-script    all
+dev.zed.Zed           js                      all
+dev.zed.Zed           jsx                     all
+dev.zed.Zed           ts                      all
+dev.zed.Zed           tsx                     all
+dev.zed.Zed           css                     all
