@@ -23,6 +23,15 @@ run = [
 ]
 dir = "karabiner"
 
+[tasks.setup_keyboard_laptop]
+description = "Setup keyboard via karabiner for Macbook"
+run = [
+    "pnpm build:laptop",
+    "dotbot -c ../dotfiles/install.conf.yaml",
+    "launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server",
+]
+dir = "karabiner"
+
 [tasks.apply_duti]
 description = "Apply duti settings"
 run = "duti defauts.duti"

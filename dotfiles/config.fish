@@ -37,6 +37,15 @@ function fish_greeting
     yafetch
 end
 
+function y
+	set tmp (mktemp -t "yazi-cwd.XXXXXX")
+	yazi $argv --cwd-file="$tmp"
+	if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+		builtin cd -- "$cwd"
+	end
+	rm -f -- "$tmp"
+end
+
 alias cd 'z'
 alias cdi 'zi'
 alias ls 'eza --color=always --icons --group-directories-first'
@@ -48,7 +57,6 @@ alias tree 'eza --tree'
 alias pui 'pnpm update --interactive --latest -r --include-workspace-root'
 alias pu 'pnpm update -r --include-workspace-root'
 alias cls 'clear'
-alias y 'yazi'
 alias cls 'clear'
 alias curl 'curlie'
 alias ping 'gping'
