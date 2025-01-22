@@ -1,5 +1,3 @@
-set -gx WARP_THEMES_DIR ~/.warp/themes
-
 # add pnpm via mise
 set -gx PNPM_HOME "$(mise where pnpm)/bin"
 fish_add_path $PNPM_HOME
@@ -10,6 +8,12 @@ set -gx GOROOT (mise where go)
 # Load PATH
 fish_add_path ~/.local/bin
 fish_add_path ~/.local/share/mise/shims
+
+set --export EDITOR "zed"
+
+if test -f ~/.config/fish/local.fish
+    source ~/.config/fish/local.fish
+end
 
 if type -q mise
     mise activate fish | source
@@ -46,6 +50,31 @@ function y
 	rm -f -- "$tmp"
 end
 
+function gm
+    if test (count $argv) -eq 0
+        echo "Usage: gm <message>"
+        return 1
+    end
+
+    set message $argv[1]
+
+    set result (eval 'lumen draft --context "$message"')
+    echo $result | pbcopy
+
+    echo $result
+end
+
+function gmi
+    if test (count $argv) -eq 0
+        echo "Usage: gmi <message>"
+        return 1
+    end
+
+    set result (eval gm $argv[1])
+    git commit -m $result
+    lazygit
+end
+
 alias cd 'z'
 alias cdi 'zi'
 alias ls 'eza --color=always --icons --group-directories-first'
@@ -57,11 +86,11 @@ alias tree 'eza --tree'
 alias pui 'pnpm update --interactive --latest -r --include-workspace-root'
 alias pu 'pnpm update -r --include-workspace-root'
 alias cls 'clear'
-alias cls 'clear'
 alias curl 'curlie'
 alias ping 'gping'
 alias dig 'doggo'
 alias htop 'glances'
+alias lg 'lazygit'
 
 zoxide init fish | source
 starship init fish | source

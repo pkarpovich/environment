@@ -16,7 +16,7 @@ local function scheme_for_appearance(appearance)
         -- Codeschool (light) (terminal.sexy)
         -- Atelier Cave Light (base16)
         -- Atelier Cave Light (base16)
-        return "Atelier Cave Light (base16)"
+        return "Catppuccin Latte"
     end
 end
 

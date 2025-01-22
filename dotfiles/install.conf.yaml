@@ -14,6 +14,7 @@
     ~/.config/fish/config.fish: config.fish
     ~/.config/fish/fish_plugins: fish_plugins
     ~/.config/starship.toml: starship.toml
+    ~/.config/yazi/yazi.toml: yazi.toml
 
     ~/.config/karabinder.json: ../karabiner/dist/karabiner.json
 
