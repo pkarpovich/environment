@@ -22,6 +22,21 @@ local function configure_keys(resurrect, workspace_switcher)
         { key = "UpArrow",    mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Up" }) },
         { key = "DownArrow",  mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Down" }) },
         {
+            key = 'LeftArrow',
+            mods = 'CMD',
+            action = wezterm.action { SendString = "\x1bOH" },
+        },
+        {
+            key = 'RightArrow',
+            mods = 'CMD',
+            action = wezterm.action { SendString = "\x1bOF" },
+        },
+        {
+            key = 'Backspace',
+            mods = 'CMD',
+            action = wezterm.action { SendString = "\x15" },
+        },
+        {
             -- Delete a saved session using a fuzzy finder
             key = 'd',
             mods = 'LEADER',
