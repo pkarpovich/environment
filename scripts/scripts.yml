@@ -1,0 +1,9 @@
+settings:
+  log_dir: "./logs"
+
+scripts:
+  calendar:
+    command: "./calendar.sh"
+    restart_policy: "always"
+    max_restarts: 5
+    cron: "0 0 * * * * *"
