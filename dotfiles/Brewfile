@@ -28,8 +28,11 @@ brew "lazygit"
 brew "jnsahaj/lumen/lumen"
 brew "tabiew"
 brew "lnav"
+brew "goreleaser"
+brew "golangci-lint"
 
 brew "pkarpovich/apps/yafetch"
 brew "pkarpovich/apps/turtle-harbor"
 brew "pkarpovich/apps/shortcuts-remote-server"
 brew "pkarpovich/apps/commit-author-refresher"
+
