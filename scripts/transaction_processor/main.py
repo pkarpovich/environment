@@ -1,13 +1,25 @@
 import asyncio
 import json
+import logging
+import sys
+import time
 from collections import defaultdict
-from csv import DictReader
+from csv import DictReader, DictWriter
 from enum import Enum
 from typing import Annotated
 import httpx
 
 from openai import AsyncOpenAI
 from pydantic import BaseModel, Field, field_validator
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s | %(levelname)-8s | %(message)s',
+    datefmt='%H:%M:%S',
+    stream=sys.stdout
+)
+logger = logging.getLogger(__name__)
 
 OPENAI_API_KEY = ""
 OPENAI_MODEL = "gpt-4.1"
@@ -123,6 +135,7 @@ def read_transactions_from_csv(filepath: str) -> list[TransactionRow]:
             )
             transactions.append(transaction)
 
+    logger.debug(f"Loaded {len(transactions)} transactions from {filepath}")
     return transactions
 
 
@@ -148,6 +161,7 @@ def group_transactions_by_description(transactions: list[TransactionRow]) -> lis
 
         result.append(grouped_transaction)
 
+    logger.debug(f"Grouped {len(transactions)} transactions into {len(result)} unique groups")
     return result
 
 
@@ -158,15 +172,18 @@ async def get_exchange_rates(base_currency: str = "USD") -> dict[str, float]:
             response = await client.get(f"https://api.exchangerate-api.com/v4/latest/{base_currency}")
             response.raise_for_status()
             data = response.json()
-            return {currency: float(rate) for currency, rate in data["rates"].items()}
+            rates = {currency: float(rate) for currency, rate in data["rates"].items()}
+            logger.debug(f"Fetched exchange rates for {len(rates)} currencies")
+            return rates
     except Exception as e:
-        print(f"Error fetching exchange rates: {e}")
+        logger.error(f"Failed to fetch exchange rates: {e}")
         return {}
 
 
 async def categorize_transactions(grouped_transactions: list[GroupedTransaction]) -> list[GroupedTransaction]:
     """Categorize transactions using AI based on their descriptions."""
-    print("\n🏷️ Step 4: Categorizing transactions...")
+    logger.info("🏷️ Categorizing transactions...")
+    initial_count = len(grouped_transactions)
 
     # Simplify transactions for AI - only send description and category
     simplified_transactions = [
@@ -185,12 +202,31 @@ async def categorize_transactions(grouped_transactions: list[GroupedTransaction]
 
     categorized_results = response.output_parsed or []
     
+    # Validate response count
+    if len(categorized_results.transactions) != initial_count:
+        logger.warning(f"⚠️  Count mismatch: sent {initial_count} transactions, received {len(categorized_results.transactions)} categorized")
+    
     # Map categories back to original transactions
     category_map = {t.description: t.category for t in categorized_results.transactions}
-    for transaction in grouped_transactions:
-        transaction.category = category_map.get(transaction.description, "Miscellaneous")
+    missing_descriptions = []
     
-    print(f"✅ Categorized {len(grouped_transactions)} transactions")
+    for transaction in grouped_transactions:
+        if transaction.description in category_map:
+            transaction.category = category_map[transaction.description]
+        else:
+            transaction.category = "Miscellaneous"
+            missing_descriptions.append(transaction.description)
+    
+    if missing_descriptions:
+        logger.warning(f"⚠️  {len(missing_descriptions)} transactions not found in AI response, defaulted to 'Miscellaneous'")
+    
+    # Final validation
+    final_count = len(grouped_transactions)
+    if final_count != initial_count:
+        logger.error(f"❌ Transaction count changed during categorization: {initial_count} → {final_count}")
+    else:
+        logger.info(f"✅ Successfully categorized {len(grouped_transactions)} transactions")
+    
     return grouped_transactions
 
 
@@ -224,19 +260,104 @@ async def convert_currency_amounts(grouped_transactions: list[GroupedTransaction
     return grouped_transactions
 
 
+def export_to_csv(grouped_transactions: list[GroupedTransaction], output_path: str):
+    """Export grouped transactions to CSV with flattened structure."""
+    logger.info(f"💾 Exporting results to {output_path}...")
+    
+    # Prepare rows with flattened structure
+    rows = []
+    for transaction in grouped_transactions:
+        row = {
+            'description': transaction.description,
+            'category': transaction.category,
+            'occurrences': transaction.occurrences,
+            'comment': transaction.comment,
+        }
+        
+        # Add original amounts with currency suffix
+        for currency, amount in transaction.amounts.items():
+            row[f'amount_{currency}'] = round(amount, 2)
+        
+        # Add converted amounts with currency suffix
+        for currency, amount in transaction.converted_amounts.items():
+            row[f'converted_{currency}'] = round(amount, 2)
+        
+        rows.append(row)
+    
+    # Get all unique field names with specific ordering
+    if rows:
+        # Define the order of fields
+        base_fields = ['description', 'category', 'occurrences', 'comment']
+        
+        # Collect all unique amount and converted fields from ALL rows
+        all_amount_fields = set()
+        all_converted_fields = set()
+        
+        for row in rows:
+            all_amount_fields.update([k for k in row.keys() if k.startswith('amount_')])
+            all_converted_fields.update([k for k in row.keys() if k.startswith('converted_')])
+        
+        # Sort the fields
+        amount_fields = sorted(list(all_amount_fields))
+        converted_fields = sorted(list(all_converted_fields))
+        
+        # Combine in logical order
+        fieldnames = base_fields + amount_fields + converted_fields
+        
+        # Ensure all rows have all fields (fill missing with empty string)
+        for row in rows:
+            for field in fieldnames:
+                if field not in row:
+                    row[field] = ''
+        
+        # Write CSV
+        with open(output_path, 'w', newline='', encoding='utf-8') as f:
+            writer = DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(rows)
+        
+        logger.info(f"✅ Successfully exported {len(rows)} transactions to {output_path}")
+    else:
+        logger.warning("⚠️  No transactions to export")
+
+
 async def main():
-    print("\n📖 Step 1: Reading transactions from CSV...")
+    start_time = time.time()
+    
+    logger.info("📖 Reading transactions from CSV...")
     transactions = read_transactions_from_csv(TRANSACTIONS_PATH)
 
-    print("\n📊 Step 2: Grouping identical transactions...")
+    logger.info("📊 Grouping identical transactions...")
     grouped_transactions = group_transactions_by_description(transactions)
 
-    print("\n💱 Step 3: Converting currencies...")
+    logger.info("💱 Converting currencies...")
     target_currencies = ["USD", "EUR", "PLN", "BYN"]
     grouped_transactions = await convert_currency_amounts(grouped_transactions, target_currencies)
 
     # Step 4: Categorize transactions
     grouped_transactions = await categorize_transactions(grouped_transactions)
+    
+    # Log final summary
+    logger.info("=" * 50)
+    logger.info("✨ Transaction processing complete!")
+    logger.info(f"📊 Total unique transactions: {len(grouped_transactions)}")
+    
+    # Count by category
+    category_counts = defaultdict(int)
+    for transaction in grouped_transactions:
+        category_counts[transaction.category] += 1
+    
+    logger.info("📁 Categories breakdown:")
+    for category, count in sorted(category_counts.items()):
+        logger.info(f"   • {category}: {count}")
+    
+    # Export results to CSV
+    output_path = TRANSACTIONS_PATH.replace('.csv', '_processed.csv')
+    export_to_csv(grouped_transactions, output_path)
+    
+    elapsed_time = time.time() - start_time
+    logger.info(f"⏱️  Total processing time: {elapsed_time:.2f} seconds")
+    logger.info("=" * 50)
 
 
 
