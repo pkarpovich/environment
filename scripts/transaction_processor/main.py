@@ -1,7 +1,6 @@
 import json
 from collections import defaultdict
 from csv import DictReader
-from decimal import Decimal
 from enum import Enum
 from typing import Annotated
 import httpx
@@ -87,27 +86,19 @@ class TransactionRow(BaseModel):
     started_date: TransactionDate
     completed_date: TransactionDate
     description: str
-    amount: Annotated[Decimal, Field(description="Transaction amount")]
-    fee: Annotated[Decimal, Field(ge=0, description="Non-negative fee amount")]
+    amount: Annotated[float, Field(description="Transaction amount")]
+    fee: Annotated[float, Field(ge=0, description="Non-negative fee amount")]
     currency: Currency
     state: str
-    balance: Annotated[Decimal, Field(description="Account balance")]
+    balance: Annotated[float, Field(description="Account balance")]
     occurrences: Annotated[int, Field(ge=1, description="Number of occurrences")]
     
     @field_validator('amount', 'fee', 'balance', mode='before')
     @classmethod
-    def convert_to_decimal(cls, v):
-        if v is None or v == '':
-            return Decimal('0')
-        if isinstance(v, str):
-            v = v.strip()
-            if not v:
-                return Decimal('0')
-            try:
-                return Decimal(v)
-            except:
-                return Decimal('0')
-        return Decimal(str(v))
+    def empty_to_zero(cls, v):
+        if v == '' or v is None:
+            return 0.0
+        return v
 
 class Transactions(BaseModel):
     transactions: list[TransactionRow] = Field(..., description="List of transaction rows", default_factory=list)
@@ -115,8 +106,8 @@ class Transactions(BaseModel):
 
 class GroupedTransaction(BaseModel):
     description: str
-    amounts: dict[Currency, Decimal] = Field(default_factory=dict, description="Original currency amounts")
-    converted_amounts: dict[Currency, Decimal] = Field(default_factory=dict, description="Amounts converted to all currencies")
+    amounts: dict[Currency, float] = Field(default_factory=dict, description="Original currency amounts")
+    converted_amounts: dict[Currency, float] = Field(default_factory=dict, description="Amounts converted to all currencies")
     occurrences: Annotated[int, Field(ge=1, description="Number of grouped transactions")]
     category: str = Field(default="", description="Transaction category")
     comment: str = Field(default="", description="Additional comment")
@@ -133,11 +124,11 @@ def read_transactions_from_csv(filepath: str) -> list[TransactionRow]:
                 started_date=row.get('Started Date', ''),
                 completed_date=row.get('Completed Date', ''),
                 description=row.get('Description', ''),
-                amount=row.get('Amount', '0'),
-                fee=row.get('Fee', '0'),
+                amount=row.get('Amount', 0.0),
+                fee=row.get('Fee', 0.0),
                 currency=row.get('Currency', ''),
                 state=row.get('State', ''),
-                balance=row.get('Balance', '0'),
+                balance=row.get('Balance', 0.0),
                 occurrences=1
             )
             transactions.append(transaction)
@@ -153,7 +144,7 @@ def group_transactions_by_description(transactions: list[TransactionRow]) -> lis
 
     result = []
     for description, group in grouped.items():
-        amounts_by_currency = defaultdict(Decimal)
+        amounts_by_currency = defaultdict(float)
         for transaction in group:
             amounts_by_currency[transaction.currency] += transaction.amount
 
@@ -170,14 +161,14 @@ def group_transactions_by_description(transactions: list[TransactionRow]) -> lis
     return result
 
 
-def get_exchange_rates(base_currency: str = "USD") -> dict[str, Decimal]:
+def get_exchange_rates(base_currency: str = "USD") -> dict[str, float]:
     """Fetch current exchange rates from ExchangeRate-API."""
     try:
         with httpx.Client() as client:
             response = client.get(f"https://api.exchangerate-api.com/v4/latest/{base_currency}")
             response.raise_for_status()
             data = response.json()
-            return {currency: Decimal(str(rate)) for currency, rate in data["rates"].items()}
+            return {currency: float(rate) for currency, rate in data["rates"].items()}
     except Exception as e:
         print(f"Error fetching exchange rates: {e}")
         return {}
@@ -190,23 +181,23 @@ def convert_currency_amounts(grouped_transactions: list[GroupedTransaction], tar
     
     for transaction in grouped_transactions:
         # First convert everything to USD
-        total_usd = Decimal('0')
+        total_usd = 0.0
         for currency, amount in transaction.amounts.items():
             if currency == "USD":
                 total_usd += amount
             else:
                 # Convert to USD (1 / rate because we need USD per foreign currency)
-                rate_to_usd = Decimal('1') / usd_rates.get(currency, Decimal('1'))
+                rate_to_usd = 1.0 / usd_rates.get(currency, 1.0)
                 total_usd += amount * rate_to_usd
         
         # Then convert USD total to all target currencies
         converted_amounts = {}
         for target_currency in target_currencies:
             if target_currency == "USD":
-                converted_amounts[target_currency] = total_usd
+                converted_amounts[target_currency] = round(total_usd, 2)
             else:
-                rate = usd_rates.get(target_currency, Decimal('1'))
-                converted_amounts[target_currency] = total_usd * rate
+                rate = usd_rates.get(target_currency, 1.0)
+                converted_amounts[target_currency] = round(total_usd * rate, 2)
         
         transaction.converted_amounts = converted_amounts
     
@@ -225,14 +216,9 @@ def main():
     grouped_transactions = convert_currency_amounts(grouped_transactions, target_currencies)
 
     print("\n🏷️ Step 4: Categorizing transactions...")
-    # Convert to JSON for LLM - handle Decimal serialization
-    def decimal_encoder(obj):
-        if isinstance(obj, Decimal):
-            return float(obj)
-        raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
-    
-    transactions_json = json.dumps([t.model_dump() for t in grouped_transactions], ensure_ascii=False, default=decimal_encoder)
-    
+
+    transactions_json = json.dumps([t.model_dump() for t in grouped_transactions], ensure_ascii=False)
+
     response = client.responses.parse(
         model=OPENAI_MODEL,
         input=PROMPT_3_CATEGORIZE.format(transactions=transactions_json),
