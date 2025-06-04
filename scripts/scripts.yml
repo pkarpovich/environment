@@ -13,3 +13,9 @@ scripts:
     restart_policy: "always"
     max_restarts: 5
     cron: "0 0 * * * * *"
+
+  bulk_gitea_sync:
+    command: "./bulk_gitea_sync.sh"
+    restart_policy: "always"
+    max_restarts: 3
+    cron: "0 0 2 * * * *"

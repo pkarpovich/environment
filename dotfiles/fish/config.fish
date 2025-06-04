@@ -9,8 +9,6 @@ set -gx GOROOT (mise where go)
 fish_add_path ~/.local/bin
 fish_add_path ~/.local/share/mise/shims
 
-set --export EDITOR "zed"
-
 if type -q mise
     mise activate fish | source
 

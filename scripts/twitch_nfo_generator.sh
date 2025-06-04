@@ -3,7 +3,7 @@
 
 # Configuration
 TWITCH_DIR="/Volumes/media/twitch"
-PYTHON_SCRIPT="twitch_nfo_generator.py"
+PYTHON_SCRIPT="/Users/pavel.karpovich/Projects/environment/scripts/twitch_nfo_generator.py"
 
 # Set text colors for output
 RED='\033[0;31m'
