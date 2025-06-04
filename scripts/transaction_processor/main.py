@@ -1,3 +1,4 @@
+import asyncio
 import json
 from collections import defaultdict
 from csv import DictReader
@@ -5,14 +6,14 @@ from enum import Enum
 from typing import Annotated
 import httpx
 
-from openai import OpenAI
+from openai import AsyncOpenAI
 from pydantic import BaseModel, Field, field_validator
 
 OPENAI_API_KEY = ""
 OPENAI_MODEL = "gpt-4.1"
 TRANSACTIONS_PATH = "./transactions.csv"
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
 Currency = Annotated[str, Field(min_length=3, max_length=3, description="ISO currency code")]
 TransactionDate = Annotated[str, Field(description="Transaction date")]
@@ -43,8 +44,6 @@ Return a JSON array with only the valid external transactions, keeping all origi
 PROMPT_3_CATEGORIZE = """
 Categorize these transactions based on their descriptions:
 
-{transactions}
-
 Categories to use:
 - Electronic payments & donations (PaySend, DonationAlerts, PayPal, money transfers)
 - Food & delivery (Glovo, Uber Eats, food delivery services, restaurants)
@@ -60,24 +59,8 @@ Categories to use:
 - Shopping & retail (clothing, electronics, general retail)
 - Miscellaneous (anything that doesn't fit other categories)
 
-For each transaction, add a "category" field with the most appropriate category.
-Return a JSON array with all original fields plus the new category field.
-"""
-
-PROMPT_4_GROUP_AND_COUNT = """
-Group and aggregate these categorized transactions:
-
-{transactions}
-
-Tasks:
-1. Identify transactions with identical descriptions
-2. Group them together:
-   - Sum the amounts
-   - Keep the earliest date from the group
-   - Set "occurrences" field to the count of grouped transactions
-3. For transactions that appear only once, set "occurrences" to 1
-
-Return a JSON array with the grouped transactions.
+For each transaction, update the "category" field with the most appropriate category.
+Return a JSON array with the same structure but with filled category fields.
 """
 
 class TransactionRow(BaseModel):
@@ -102,6 +85,13 @@ class TransactionRow(BaseModel):
 
 class Transactions(BaseModel):
     transactions: list[TransactionRow] = Field(..., description="List of transaction rows", default_factory=list)
+
+class SimplifiedTransaction(BaseModel):
+    description: str
+    category: str
+
+class CategorizedTransactions(BaseModel):
+    transactions: list[SimplifiedTransaction] = Field(..., description="List of categorized transactions", default_factory=list)
 
 
 class GroupedTransaction(BaseModel):
@@ -161,11 +151,11 @@ def group_transactions_by_description(transactions: list[TransactionRow]) -> lis
     return result
 
 
-def get_exchange_rates(base_currency: str = "USD") -> dict[str, float]:
+async def get_exchange_rates(base_currency: str = "USD") -> dict[str, float]:
     """Fetch current exchange rates from ExchangeRate-API."""
     try:
-        with httpx.Client() as client:
-            response = client.get(f"https://api.exchangerate-api.com/v4/latest/{base_currency}")
+        async with httpx.AsyncClient() as client:
+            response = await client.get(f"https://api.exchangerate-api.com/v4/latest/{base_currency}")
             response.raise_for_status()
             data = response.json()
             return {currency: float(rate) for currency, rate in data["rates"].items()}
@@ -174,10 +164,40 @@ def get_exchange_rates(base_currency: str = "USD") -> dict[str, float]:
         return {}
 
 
-def convert_currency_amounts(grouped_transactions: list[GroupedTransaction], target_currencies: list[str]) -> list[GroupedTransaction]:
+async def categorize_transactions(grouped_transactions: list[GroupedTransaction]) -> list[GroupedTransaction]:
+    """Categorize transactions using AI based on their descriptions."""
+    print("\n🏷️ Step 4: Categorizing transactions...")
+
+    # Simplify transactions for AI - only send description and category
+    simplified_transactions = [
+        {"description": t.description, "category": ""} 
+        for t in grouped_transactions
+    ]
+    transactions_json = json.dumps(simplified_transactions, ensure_ascii=False)
+
+    response = await client.responses.parse(
+        model=OPENAI_MODEL,
+        instructions=PROMPT_3_CATEGORIZE,
+        input=transactions_json,
+        temperature=0.0,
+        text_format=CategorizedTransactions,
+    )
+
+    categorized_results = response.output_parsed or []
+    
+    # Map categories back to original transactions
+    category_map = {t.description: t.category for t in categorized_results.transactions}
+    for transaction in grouped_transactions:
+        transaction.category = category_map.get(transaction.description, "Miscellaneous")
+    
+    print(f"✅ Categorized {len(grouped_transactions)} transactions")
+    return grouped_transactions
+
+
+async def convert_currency_amounts(grouped_transactions: list[GroupedTransaction], target_currencies: list[str]) -> list[GroupedTransaction]:
     """Convert all transaction amounts to target currencies."""
     # Get USD exchange rates once
-    usd_rates = get_exchange_rates("USD")
+    usd_rates = await get_exchange_rates("USD")
     
     for transaction in grouped_transactions:
         # First convert everything to USD
@@ -204,7 +224,7 @@ def convert_currency_amounts(grouped_transactions: list[GroupedTransaction], tar
     return grouped_transactions
 
 
-def main():
+async def main():
     print("\n📖 Step 1: Reading transactions from CSV...")
     transactions = read_transactions_from_csv(TRANSACTIONS_PATH)
 
@@ -213,23 +233,12 @@ def main():
 
     print("\n💱 Step 3: Converting currencies...")
     target_currencies = ["USD", "EUR", "PLN", "BYN"]
-    grouped_transactions = convert_currency_amounts(grouped_transactions, target_currencies)
+    grouped_transactions = await convert_currency_amounts(grouped_transactions, target_currencies)
 
-    print("\n🏷️ Step 4: Categorizing transactions...")
-
-    transactions_json = json.dumps([t.model_dump() for t in grouped_transactions], ensure_ascii=False)
-
-    response = client.responses.parse(
-        model=OPENAI_MODEL,
-        input=PROMPT_3_CATEGORIZE.format(transactions=transactions_json),
-        temperature=0.0,
-        text_format=Transactions,
-    )
-    
-    categorized_transactions = response.parsed.transactions if response.parsed else []
-    print(f"✅ Categorized {len(categorized_transactions)} transactions")
+    # Step 4: Categorize transactions
+    grouped_transactions = await categorize_transactions(grouped_transactions)
 
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
