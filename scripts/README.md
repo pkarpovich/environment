@@ -14,6 +14,11 @@ set -gx GITEA_URL https://your-gitea-instance.com
 
 # Bulk sync projects (colon-separated list)
 set -gx GITEA_PROJECTS "~/Projects/repo1:~/Projects/repo2:~/Work/important-project"
+
+# Transaction processor configuration
+set -gx OPENAI_API_KEY your_openai_api_key_here
+set -gx GOOGLE_SHEETS_FILE_ID your_sheets_file_id_here
+set -gx GOOGLE_CREDENTIALS_PATH /path/to/google-credentials.json
 ```
 
 ## Functions & Scripts
@@ -80,3 +85,30 @@ stable-to-master feature/auth/stable feature/auth/master stable master
 #### Default Base Branches
 - **Base source branch**: `release/stable`
 - **Base target branch**: `master`
+
+---
+
+### 4. process-transactions
+
+**Function:** `process-transactions`
+**Script:** `transaction_processor/main.py`
+
+Process bank transactions with AI categorization and currency conversion, with export to CSV and Google Sheets.
+
+#### Usage
+```fish
+# Use default transactions.csv
+process-transactions --sheets-name "December 2024"
+
+# Use custom input file
+process-transactions my-transactions.csv --sheets-name "December 2024"
+
+# Skip AI categorization for testing
+process-transactions --skip-categorization --sheets-name "Test Sheet"
+
+# Custom currencies
+process-transactions --currencies "USD,EUR,GBP" --sheets-name "Multi Currency"
+
+# Override API key temporarily
+process-transactions --api-key="different-key" --sheets-name "Test"
+```

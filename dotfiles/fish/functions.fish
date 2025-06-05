@@ -102,7 +102,6 @@ function sync-to-gitea
     
     set -l args
     
-    # Add token if GITEA_TOKEN is set
     if set -q GITEA_TOKEN
         set args $args --token $GITEA_TOKEN
     else
@@ -110,7 +109,6 @@ function sync-to-gitea
         return 1
     end
     
-    # Add username if GITEA_USERNAME is set
     if set -q GITEA_USERNAME
         set args $args --username $GITEA_USERNAME
     else
@@ -118,7 +116,6 @@ function sync-to-gitea
         return 1
     end
     
-    # Add gitea URL if GITEA_URL is set
     if set -q GITEA_URL
         set args $args --gitea-url $GITEA_URL
     else
@@ -126,10 +123,7 @@ function sync-to-gitea
         return 1
     end
     
-    # Default projects directory
     set -l projects_dir .
-    
-    # Parse arguments
     set -l auto_yes false
     for arg in $argv
         if string match -q -- "--projects-dir=*" $arg
@@ -170,4 +164,66 @@ function stable-to-master
     end
     
     bash $script_path $argv
+end
+
+function process-transactions
+    set -l script_path ~/Projects/environment/scripts/transaction_processor
+    set -l venv_path $script_path/.venv
+    
+    if not test -f $script_path/main.py
+        echo "Error: transaction processor not found at $script_path"
+        return 1
+    end
+    
+    if not test -f $venv_path/bin/python
+        echo "Error: virtual environment not found. Run 'uv venv && uv sync' in $script_path"
+        return 1
+    end
+    
+    set -l args
+    
+    if test (count $argv) -gt 0; and not string match -q -- "--*" $argv[1]
+        set -l input_file $argv[1]
+        if not string match -q "^/" $input_file
+            set input_file (pwd)/$input_file
+        end
+        set args $args --input $input_file
+        set argv $argv[2..-1]
+    else
+        set args $args --input $script_path/transactions.csv
+    end
+    
+    if set -q OPENAI_API_KEY
+        set args $args --api-key $OPENAI_API_KEY
+    end
+    
+    if set -q GOOGLE_SHEETS_FILE_ID
+        set args $args --sheets-file-id $GOOGLE_SHEETS_FILE_ID
+    end
+    
+    if set -q GOOGLE_CREDENTIALS_PATH
+        set args $args --google-credentials $GOOGLE_CREDENTIALS_PATH
+    end
+    
+    for arg in $argv
+        if string match -q -- "--sheets-name=*" $arg
+            set args $args --sheets-name (string split --max 1 "=" $arg)[2]
+        else if string match -q -- "--currencies=*" $arg
+            set args $args --currencies (string split --max 1 "=" $arg)[2]
+        else if test "$arg" = "--skip-categorization"
+            set args $args --skip-categorization
+        else if string match -q -- "--output=*" $arg
+            set args $args --output (string split --max 1 "=" $arg)[2]
+        else if string match -q -- "--api-key=*" $arg
+            set args $args --api-key (string split --max 1 "=" $arg)[2]
+        else if string match -q -- "--model=*" $arg
+            set args $args --model (string split --max 1 "=" $arg)[2]
+        else if test "$arg" = "--debug"
+            set args $args --debug
+        else
+            set args $args $arg
+        end
+    end
+    
+    $venv_path/bin/python $script_path/main.py $args
 end
