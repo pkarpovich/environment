@@ -24,11 +24,12 @@ logger = logging.getLogger(__name__)
 
 OPENAI_API_KEY = ""
 OPENAI_MODEL = "gpt-4.1"
-TRANSACTIONS_PATH = "./transactions.csv"
+TRANSACTIONS_INPUT_PATH = "./transactions.csv"
+TRANSACTIONS_OUTPUT_SUFFIX = "_processed.csv"
 
 TARGET_CURRENCIES = ["USD", "EUR", "PLN", "BYN"]
 
-client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+openai_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
 Currency = Annotated[str, Field(min_length=3, max_length=3, description="ISO currency code")]
 TransactionDate = Annotated[str, Field(description="Transaction date")]
@@ -46,7 +47,7 @@ class TransactionState(str, Enum):
     FAILED = "FAILED"
     CANCELLED = "CANCELLED"
 
-PROMPT_3_CATEGORIZE = """
+CATEGORIZATION_PROMPT = """
 Categorize these transactions based on their descriptions:
 
 Categories to use:
@@ -254,9 +255,9 @@ async def categorize_transactions(grouped_transactions: list[GroupedTransaction]
     ]
     transactions_json = json.dumps(simplified_transactions, ensure_ascii=False)
 
-    response = await client.responses.parse(
+    response = await openai_client.responses.parse(
         model=OPENAI_MODEL,
-        instructions=PROMPT_3_CATEGORIZE,
+        instructions=CATEGORIZATION_PROMPT,
         input=transactions_json,
         temperature=0.0,
         text_format=CategorizedTransactions,
@@ -386,27 +387,31 @@ def export_to_csv(grouped_transactions: list[GroupedTransaction], output_path: s
 async def main():
     start_time = time.time()
     
+    # Step 1: Load transactions from CSV
     logger.info("📖 Reading transactions from CSV...")
-    transactions = read_transactions_from_csv(TRANSACTIONS_PATH)
+    transactions = read_transactions_from_csv(TRANSACTIONS_INPUT_PATH)
     
+    # Step 2: Filter out internal transfers
     logger.info("🔍 Filtering external transactions...")
     external_transactions = filter_external_transactions(transactions)
 
+    # Step 3: Group identical transactions
     logger.info("📊 Grouping identical transactions...")
     grouped_transactions = group_transactions_by_description(external_transactions)
 
+    # Step 4: Convert currencies
     logger.info("💱 Converting currencies...")
     grouped_transactions = await convert_currency_amounts(grouped_transactions, TARGET_CURRENCIES)
 
-    # Step 4: Categorize transactions
+    # Step 5: Categorize transactions
     grouped_transactions = await categorize_transactions(grouped_transactions)
     
-    # Log final summary
+    # Generate summary statistics
     logger.info("=" * 50)
     logger.info("✨ Transaction processing complete!")
     logger.info(f"📊 Total unique transactions: {len(grouped_transactions)}")
     
-    # Count by category
+    # Count transactions by category
     category_counts = defaultdict(int)
     for transaction in grouped_transactions:
         category_counts[transaction.category] += 1
@@ -416,7 +421,7 @@ async def main():
         logger.info(f"   • {category}: {count}")
     
     # Export results to CSV
-    output_path = TRANSACTIONS_PATH.replace('.csv', '_processed.csv')
+    output_path = TRANSACTIONS_INPUT_PATH.replace('.csv', TRANSACTIONS_OUTPUT_SUFFIX)
     export_to_csv(grouped_transactions, output_path)
     
     elapsed_time = time.time() - start_time
