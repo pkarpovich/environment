@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import re
 import sys
 import time
 from collections import defaultdict
@@ -25,6 +26,8 @@ OPENAI_API_KEY = ""
 OPENAI_MODEL = "gpt-4.1"
 TRANSACTIONS_PATH = "./transactions.csv"
 
+TARGET_CURRENCIES = ["USD", "EUR", "PLN", "BYN"]
+
 client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
 Currency = Annotated[str, Field(min_length=3, max_length=3, description="ISO currency code")]
@@ -42,16 +45,6 @@ class TransactionState(str, Enum):
     PENDING = "PENDING"
     FAILED = "FAILED"
     CANCELLED = "CANCELLED"
-
-PROMPT_1_FILTER = """
-You are processing bank transactions. Remove internal transfers from this data:
-
-{transactions}
-
-Remove any transaction where the description contains 'savings' or 'pockets' (these are internal transfers between accounts).
-
-Return a JSON array with only the valid external transactions, keeping all original fields.
-"""
 
 PROMPT_3_CATEGORIZE = """
 Categorize these transactions based on their descriptions:
@@ -114,6 +107,55 @@ class GroupedTransaction(BaseModel):
     category: str = Field(default="", description="Transaction category")
     comment: str = Field(default="", description="Additional comment")
 
+def is_internal_transfer(transaction: TransactionRow) -> bool:
+    """
+    Detect internal transfers using multiple signals instead of hardcoded text.
+    
+    Internal transfers have these characteristics:
+    1. Type is 'TRANSFER' or 'EXCHANGE'
+    2. Description follows patterns: 'To [CURRENCY] [Savings]', 'Exchange to [CURRENCY]'
+    3. Zero fee for transfers (internal transfers don't have fees)
+    4. Specific patterns in description
+    """
+    
+    # Rule 1: EXCHANGE operations are always internal
+    if transaction.type == "EXCHANGE":
+        return True
+    
+    # Rule 2: Must be a TRANSFER type for other internal operations
+    if transaction.type != "TRANSFER":
+        return False
+    
+    # Rule 3: Pattern matching for internal transfer descriptions
+    internal_patterns = [
+        r'^To\s+[A-Z]{3}(\s+Savings)?(\s+[A-Z]{3})?$',  # "To PLN", "To PLN Savings", "To EUR Savings EUR"
+        r'^Exchange\s+to\s+[A-Z]{3}$',  # "Exchange to PLN"
+    ]
+    
+    description = transaction.description.strip()
+    
+    for pattern in internal_patterns:
+        if re.match(pattern, description, re.IGNORECASE):
+            return True
+    
+    # Rule 4: Additional keywords that indicate internal transfers
+    internal_keywords = ['savings', 'pocket', 'vault', 'goals']
+    description_lower = description.lower()
+    if any(keyword in description_lower for keyword in internal_keywords):
+        return True
+    
+    # Rule 5: Check for transfers between user's own currency accounts
+    # Pattern: "To [CURRENCY]" without "Savings" might still be internal
+    if re.match(r'^To\s+[A-Z]{3}$', description):
+        return True
+    
+    # Rule 6: Transfers from/to other users are external
+    if 'Transfer from Revolut user' in description or 'Transfer to' in description:
+        return False
+    
+    return False
+
+
 def read_transactions_from_csv(filepath: str) -> list[TransactionRow]:
     transactions = []
 
@@ -137,6 +179,26 @@ def read_transactions_from_csv(filepath: str) -> list[TransactionRow]:
 
     logger.debug(f"Loaded {len(transactions)} transactions from {filepath}")
     return transactions
+
+
+def filter_external_transactions(transactions: list[TransactionRow]) -> list[TransactionRow]:
+    """Filter out internal transfers and keep only external transactions."""
+    external_transactions = []
+    internal_count = 0
+    
+    for transaction in transactions:
+        if transaction.state != "COMPLETED":
+            # Skip non-completed transactions
+            continue
+            
+        if is_internal_transfer(transaction):
+            internal_count += 1
+            logger.debug(f"Filtered internal transfer: {transaction.description} ({transaction.currency} {transaction.amount})")
+        else:
+            external_transactions.append(transaction)
+    
+    logger.info(f"Filtered {internal_count} internal transfers, kept {len(external_transactions)} external transactions")
+    return external_transactions
 
 
 def group_transactions_by_description(transactions: list[TransactionRow]) -> list[GroupedTransaction]:
@@ -326,13 +388,15 @@ async def main():
     
     logger.info("📖 Reading transactions from CSV...")
     transactions = read_transactions_from_csv(TRANSACTIONS_PATH)
+    
+    logger.info("🔍 Filtering external transactions...")
+    external_transactions = filter_external_transactions(transactions)
 
     logger.info("📊 Grouping identical transactions...")
-    grouped_transactions = group_transactions_by_description(transactions)
+    grouped_transactions = group_transactions_by_description(external_transactions)
 
     logger.info("💱 Converting currencies...")
-    target_currencies = ["USD", "EUR", "PLN", "BYN"]
-    grouped_transactions = await convert_currency_amounts(grouped_transactions, target_currencies)
+    grouped_transactions = await convert_currency_amounts(grouped_transactions, TARGET_CURRENCIES)
 
     # Step 4: Categorize transactions
     grouped_transactions = await categorize_transactions(grouped_transactions)
