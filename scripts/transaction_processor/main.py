@@ -1,3 +1,4 @@
+import argparse
 import asyncio
 import json
 import logging
@@ -13,7 +14,6 @@ import httpx
 from openai import AsyncOpenAI
 from pydantic import BaseModel, Field, field_validator
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s | %(levelname)-8s | %(message)s',
@@ -22,14 +22,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-OPENAI_API_KEY = ""
-OPENAI_MODEL = "gpt-4.1"
-TRANSACTIONS_INPUT_PATH = "./transactions.csv"
-TRANSACTIONS_OUTPUT_SUFFIX = "_processed.csv"
-
-TARGET_CURRENCIES = ["USD", "EUR", "PLN", "BYN"]
-
-openai_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+DEFAULT_MODEL = "gpt-4o-mini"
+DEFAULT_OUTPUT_SUFFIX = "_processed.csv"
+DEFAULT_CURRENCIES = ["USD", "EUR", "PLN", "BYN"]
 
 Currency = Annotated[str, Field(min_length=3, max_length=3, description="ISO currency code")]
 TransactionDate = Annotated[str, Field(description="Transaction date")]
@@ -243,7 +238,7 @@ async def get_exchange_rates(base_currency: str = "USD") -> dict[str, float]:
         return {}
 
 
-async def categorize_transactions(grouped_transactions: list[GroupedTransaction]) -> list[GroupedTransaction]:
+async def categorize_transactions(grouped_transactions: list[GroupedTransaction], openai_client: AsyncOpenAI, model: str) -> list[GroupedTransaction]:
     """Categorize transactions using AI based on their descriptions."""
     logger.info("🏷️ Categorizing transactions...")
     initial_count = len(grouped_transactions)
@@ -256,7 +251,7 @@ async def categorize_transactions(grouped_transactions: list[GroupedTransaction]
     transactions_json = json.dumps(simplified_transactions, ensure_ascii=False)
 
     response = await openai_client.responses.parse(
-        model=OPENAI_MODEL,
+        model=model,
         instructions=CATEGORIZATION_PROMPT,
         input=transactions_json,
         temperature=0.0,
@@ -384,12 +379,109 @@ def export_to_csv(grouped_transactions: list[GroupedTransaction], output_path: s
         logger.warning("⚠️  No transactions to export")
 
 
+def parse_arguments():
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser(
+        description="Process bank transactions with AI categorization and currency conversion",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  %(prog)s --input transactions.csv --api-key YOUR_API_KEY
+  %(prog)s --input data.csv --model gpt-4o --currencies USD,EUR,PLN
+  %(prog)s --input transactions.csv --api-key YOUR_API_KEY --output processed_transactions.csv
+        """
+    )
+    
+    parser.add_argument(
+        "--input",
+        type=str,
+        required=True,
+        help="Path to input CSV file with transactions"
+    )
+    
+    parser.add_argument(
+        "--output",
+        type=str,
+        help="Path to output CSV file (default: input file with '_processed' suffix)"
+    )
+    
+    parser.add_argument(
+        "--api-key",
+        type=str,
+        help="OpenAI API key for transaction categorization (required unless --skip-categorization is used)"
+    )
+    
+    parser.add_argument(
+        "--model",
+        type=str,
+        default=DEFAULT_MODEL,
+        help=f"OpenAI model to use for categorization (default: {DEFAULT_MODEL})"
+    )
+    
+    parser.add_argument(
+        "--currencies",
+        type=str,
+        default=",".join(DEFAULT_CURRENCIES),
+        help=f"Comma-separated list of target currencies (default: {','.join(DEFAULT_CURRENCIES)})"
+    )
+    
+    parser.add_argument(
+        "--skip-categorization",
+        action="store_true",
+        help="Skip AI categorization step (useful if API key is not available)"
+    )
+    
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable debug logging"
+    )
+    
+    return parser.parse_args()
+
+
 async def main():
+    args = parse_arguments()
+    
+    # Validate arguments
+    if not args.skip_categorization and not args.api_key:
+        logger.error("--api-key is required unless --skip-categorization is used")
+        sys.exit(1)
+    
+    # Configure logging level
+    if args.debug:
+        logging.getLogger().setLevel(logging.DEBUG)
+    
     start_time = time.time()
+    
+    # Determine output path
+    if args.output:
+        output_path = args.output
+    else:
+        output_path = args.input.replace('.csv', DEFAULT_OUTPUT_SUFFIX)
+    
+    # Parse target currencies
+    target_currencies = [currency.strip().upper() for currency in args.currencies.split(',')]
+    
+    # Initialize OpenAI client if categorization is enabled
+    openai_client = None
+    if not args.skip_categorization:
+        openai_client = AsyncOpenAI(api_key=args.api_key)
+    
+    logger.info("Transaction Processor")
+    logger.info("=" * 50)
+    logger.info(f"Input file: {args.input}")
+    logger.info(f"Output file: {output_path}")
+    logger.info(f"Target currencies: {', '.join(target_currencies)}")
+    if args.skip_categorization:
+        logger.info("AI categorization: DISABLED")
+    else:
+        logger.info(f"AI model: {args.model}")
+    logger.info("=" * 50)
     
     # Step 1: Load transactions from CSV
     logger.info("📖 Reading transactions from CSV...")
-    transactions = read_transactions_from_csv(TRANSACTIONS_INPUT_PATH)
+    transactions = read_transactions_from_csv(args.input)
     
     # Step 2: Filter out internal transfers
     logger.info("🔍 Filtering external transactions...")
@@ -401,10 +493,13 @@ async def main():
 
     # Step 4: Convert currencies
     logger.info("💱 Converting currencies...")
-    grouped_transactions = await convert_currency_amounts(grouped_transactions, TARGET_CURRENCIES)
+    grouped_transactions = await convert_currency_amounts(grouped_transactions, target_currencies)
 
-    # Step 5: Categorize transactions
-    grouped_transactions = await categorize_transactions(grouped_transactions)
+    # Step 5: Categorize transactions (optional)
+    if not args.skip_categorization:
+        grouped_transactions = await categorize_transactions(grouped_transactions, openai_client, args.model)
+    else:
+        logger.info("⏭️  Skipping AI categorization...")
     
     # Generate summary statistics
     logger.info("=" * 50)
@@ -412,22 +507,21 @@ async def main():
     logger.info(f"📊 Total unique transactions: {len(grouped_transactions)}")
     
     # Count transactions by category
-    category_counts = defaultdict(int)
-    for transaction in grouped_transactions:
-        category_counts[transaction.category] += 1
-    
-    logger.info("📁 Categories breakdown:")
-    for category, count in sorted(category_counts.items()):
-        logger.info(f"   • {category}: {count}")
+    if not args.skip_categorization:
+        category_counts = defaultdict(int)
+        for transaction in grouped_transactions:
+            category_counts[transaction.category] += 1
+        
+        logger.info("📁 Categories breakdown:")
+        for category, count in sorted(category_counts.items()):
+            logger.info(f"   • {category}: {count}")
     
     # Export results to CSV
-    output_path = TRANSACTIONS_INPUT_PATH.replace('.csv', TRANSACTIONS_OUTPUT_SUFFIX)
     export_to_csv(grouped_transactions, output_path)
     
     elapsed_time = time.time() - start_time
     logger.info(f"⏱️  Total processing time: {elapsed_time:.2f} seconds")
     logger.info("=" * 50)
-
 
 
 if __name__ == "__main__":
