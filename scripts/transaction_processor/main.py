@@ -13,6 +13,9 @@ import httpx
 
 from openai import AsyncOpenAI
 from pydantic import BaseModel, Field, field_validator
+from google.auth.transport.requests import Request
+from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
 
 logging.basicConfig(
     level=logging.INFO,
@@ -318,11 +321,8 @@ async def convert_currency_amounts(grouped_transactions: list[GroupedTransaction
     return grouped_transactions
 
 
-def export_to_csv(grouped_transactions: list[GroupedTransaction], output_path: str):
-    """Export grouped transactions to CSV with flattened structure."""
-    logger.info(f"💾 Exporting results to {output_path}...")
-    
-    # Prepare rows with flattened structure
+def _prepare_export_data(grouped_transactions: list[GroupedTransaction]) -> tuple[list[dict], list[str]]:
+    """Prepare export data with flattened structure for both CSV and Sheets export."""
     rows = []
     for transaction in grouped_transactions:
         row = {
@@ -343,6 +343,7 @@ def export_to_csv(grouped_transactions: list[GroupedTransaction], output_path: s
         rows.append(row)
     
     # Get all unique field names with specific ordering
+    fieldnames = []
     if rows:
         # Define the order of fields
         base_fields = ['description', 'category', 'occurrences', 'comment']
@@ -367,7 +368,17 @@ def export_to_csv(grouped_transactions: list[GroupedTransaction], output_path: s
             for field in fieldnames:
                 if field not in row:
                     row[field] = ''
-        
+    
+    return rows, fieldnames
+
+
+def export_to_csv(grouped_transactions: list[GroupedTransaction], output_path: str):
+    """Export grouped transactions to CSV with flattened structure."""
+    logger.info(f"💾 Exporting results to {output_path}...")
+    
+    rows, fieldnames = _prepare_export_data(grouped_transactions)
+    
+    if rows:
         # Write CSV
         with open(output_path, 'w', newline='', encoding='utf-8') as f:
             writer = DictWriter(f, fieldnames=fieldnames)
@@ -377,6 +388,77 @@ def export_to_csv(grouped_transactions: list[GroupedTransaction], output_path: s
         logger.info(f"✅ Successfully exported {len(rows)} transactions to {output_path}")
     else:
         logger.warning("⚠️  No transactions to export")
+
+
+def export_to_sheets(grouped_transactions: list[GroupedTransaction], file_id: str, sheet_name: str, credentials_path: str):
+    """Export grouped transactions to Google Sheets."""
+    logger.info(f"📊 Exporting results to Google Sheets: {sheet_name}...")
+    
+    try:
+        # Authenticate with Google Sheets API
+        creds = Credentials.from_service_account_file(
+            credentials_path,
+            scopes=['https://www.googleapis.com/auth/spreadsheets']
+        )
+        service = build('sheets', 'v4', credentials=creds, cache_discovery=False)
+        
+        # Prepare data
+        rows, fieldnames = _prepare_export_data(grouped_transactions)
+        
+        if not rows:
+            logger.warning("⚠️  No transactions to export to Sheets")
+            return
+        
+        # Convert data to list of lists for Sheets API
+        header_row = [fieldnames]
+        data_rows = [[row.get(field, '') for field in fieldnames] for row in rows]
+        values = header_row + data_rows
+        
+        # Check if sheet exists, create if it doesn't
+        spreadsheet = service.spreadsheets().get(spreadsheetId=file_id).execute()
+        sheet_exists = any(sheet['properties']['title'] == sheet_name for sheet in spreadsheet['sheets'])
+        
+        if not sheet_exists:
+            # Create new sheet
+            request_body = {
+                'requests': [{
+                    'addSheet': {
+                        'properties': {
+                            'title': sheet_name
+                        }
+                    }
+                }]
+            }
+            service.spreadsheets().batchUpdate(spreadsheetId=file_id, body=request_body).execute()
+            logger.info(f"📋 Created new sheet: {sheet_name}")
+        else:
+            # Clear existing data
+            range_name = f"{sheet_name}!A:ZZ"
+            service.spreadsheets().values().clear(
+                spreadsheetId=file_id,
+                range=range_name
+            ).execute()
+            logger.info(f"🧹 Cleared existing data in sheet: {sheet_name}")
+        
+        # Write data to sheet
+        range_name = f"{sheet_name}!A1"
+        body = {
+            'values': values,
+            'majorDimension': 'ROWS'
+        }
+        
+        service.spreadsheets().values().update(
+            spreadsheetId=file_id,
+            range=range_name,
+            valueInputOption='RAW',
+            body=body
+        ).execute()
+        
+        logger.info(f"✅ Successfully exported {len(rows)} transactions to Google Sheets: {sheet_name}")
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to export to Google Sheets: {e}")
+        raise
 
 
 def parse_arguments():
@@ -437,6 +519,24 @@ Examples:
         help="Enable debug logging"
     )
     
+    parser.add_argument(
+        "--sheets-file-id",
+        type=str,
+        help="Google Sheets file ID for export"
+    )
+    
+    parser.add_argument(
+        "--sheets-name",
+        type=str,
+        help="Name of the worksheet/tab to create or update"
+    )
+    
+    parser.add_argument(
+        "--google-credentials",
+        type=str,
+        help="Path to Google service account credentials JSON file"
+    )
+    
     return parser.parse_args()
 
 
@@ -446,6 +546,12 @@ async def main():
     # Validate arguments
     if not args.skip_categorization and not args.api_key:
         logger.error("--api-key is required unless --skip-categorization is used")
+        sys.exit(1)
+    
+    # Validate Google Sheets arguments
+    sheets_args = [args.sheets_file_id, args.sheets_name, args.google_credentials]
+    if any(sheets_args) and not all(sheets_args):
+        logger.error("All Google Sheets arguments (--sheets-file-id, --sheets-name, --google-credentials) are required when using Sheets export")
         sys.exit(1)
     
     # Configure logging level
@@ -518,6 +624,14 @@ async def main():
     
     # Export results to CSV
     export_to_csv(grouped_transactions, output_path)
+    
+    # Export results to Google Sheets (optional)
+    if args.sheets_file_id and args.sheets_name and args.google_credentials:
+        try:
+            export_to_sheets(grouped_transactions, args.sheets_file_id, args.sheets_name, args.google_credentials)
+        except Exception as e:
+            logger.error(f"❌ Google Sheets export failed: {e}")
+            logger.info("💡 CSV export was successful, continuing...")
     
     elapsed_time = time.time() - start_time
     logger.info(f"⏱️  Total processing time: {elapsed_time:.2f} seconds")
