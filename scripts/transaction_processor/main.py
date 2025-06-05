@@ -326,19 +326,15 @@ def _prepare_export_data(grouped_transactions: list[GroupedTransaction]) -> tupl
     rows = []
     for transaction in grouped_transactions:
         row = {
-            'description': transaction.description,
-            'category': transaction.category,
-            'occurrences': transaction.occurrences,
-            'comment': transaction.comment,
+            'Description': transaction.description,
+            'Category': transaction.category,
+            'Occurrences': transaction.occurrences,
+            'Comment': transaction.comment,
         }
         
-        # Add original amounts with currency suffix
-        for currency, amount in transaction.amounts.items():
-            row[f'amount_{currency}'] = round(amount, 2)
-        
-        # Add converted amounts with currency suffix
+        # Add only converted amounts with user-friendly names
         for currency, amount in transaction.converted_amounts.items():
-            row[f'converted_{currency}'] = round(amount, 2)
+            row[f'Amount ({currency}, Aggregated)'] = round(amount, 2)
         
         rows.append(row)
     
@@ -346,22 +342,22 @@ def _prepare_export_data(grouped_transactions: list[GroupedTransaction]) -> tupl
     fieldnames = []
     if rows:
         # Define the order of fields
-        base_fields = ['description', 'category', 'occurrences', 'comment']
+        base_fields = ['Description', 'Category', 'Occurrences', 'Comment']
         
-        # Collect all unique amount and converted fields from ALL rows
+        # Collect all unique amount fields from ALL rows
         all_amount_fields = set()
-        all_converted_fields = set()
         
         for row in rows:
-            all_amount_fields.update([k for k in row.keys() if k.startswith('amount_')])
-            all_converted_fields.update([k for k in row.keys() if k.startswith('converted_')])
+            all_amount_fields.update([k for k in row.keys() if k.startswith('Amount (')])
         
-        # Sort the fields
+        # Sort the amount fields
         amount_fields = sorted(list(all_amount_fields))
-        converted_fields = sorted(list(all_converted_fields))
         
-        # Combine in logical order
-        fieldnames = base_fields + amount_fields + converted_fields
+        # Combine in logical order: Description, Amount fields, Occurrences, Category, Comment
+        # Reorder to match user's requested format
+        fieldnames = ['Description']
+        fieldnames.extend(amount_fields)
+        fieldnames.extend(['Occurrences', 'Category', 'Comment'])
         
         # Ensure all rows have all fields (fill missing with empty string)
         for row in rows:
