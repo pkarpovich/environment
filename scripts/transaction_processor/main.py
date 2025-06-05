@@ -187,7 +187,6 @@ def filter_external_transactions(transactions: list[TransactionRow]) -> list[Tra
     
     for transaction in transactions:
         if transaction.state != "COMPLETED":
-            # Skip non-completed transactions
             continue
             
         if is_internal_transfer(transaction):
@@ -246,7 +245,6 @@ async def categorize_transactions(grouped_transactions: list[GroupedTransaction]
     logger.info("🏷️ Categorizing transactions...")
     initial_count = len(grouped_transactions)
 
-    # Simplify transactions for AI - only send description and category
     simplified_transactions = [
         {"description": t.description, "category": ""} 
         for t in grouped_transactions
@@ -263,11 +261,9 @@ async def categorize_transactions(grouped_transactions: list[GroupedTransaction]
 
     categorized_results = response.output_parsed or []
     
-    # Validate response count
     if len(categorized_results.transactions) != initial_count:
         logger.warning(f"⚠️  Count mismatch: sent {initial_count} transactions, received {len(categorized_results.transactions)} categorized")
     
-    # Map categories back to original transactions
     category_map = {t.description: t.category for t in categorized_results.transactions}
     missing_descriptions = []
     
@@ -281,7 +277,6 @@ async def categorize_transactions(grouped_transactions: list[GroupedTransaction]
     if missing_descriptions:
         logger.warning(f"⚠️  {len(missing_descriptions)} transactions not found in AI response, defaulted to 'Miscellaneous'")
     
-    # Final validation
     final_count = len(grouped_transactions)
     if final_count != initial_count:
         logger.error(f"❌ Transaction count changed during categorization: {initial_count} → {final_count}")
@@ -293,21 +288,17 @@ async def categorize_transactions(grouped_transactions: list[GroupedTransaction]
 
 async def convert_currency_amounts(grouped_transactions: list[GroupedTransaction], target_currencies: list[str]) -> list[GroupedTransaction]:
     """Convert all transaction amounts to target currencies."""
-    # Get USD exchange rates once
     usd_rates = await get_exchange_rates("USD")
     
     for transaction in grouped_transactions:
-        # First convert everything to USD
         total_usd = 0.0
         for currency, amount in transaction.amounts.items():
             if currency == "USD":
                 total_usd += amount
             else:
-                # Convert to USD (1 / rate because we need USD per foreign currency)
-                rate_to_usd = 1.0 / usd_rates.get(currency, 1.0)
+                rate_to_usd = 1.0 / usd_rates.get(currency, 1.0)  # 1 / rate because we need USD per foreign currency
                 total_usd += amount * rate_to_usd
         
-        # Then convert USD total to all target currencies
         converted_amounts = {}
         for target_currency in target_currencies:
             if target_currency == "USD":
@@ -539,33 +530,27 @@ Examples:
 async def main():
     args = parse_arguments()
     
-    # Validate arguments
     if not args.skip_categorization and not args.api_key:
         logger.error("--api-key is required unless --skip-categorization is used")
         sys.exit(1)
     
-    # Validate Google Sheets arguments
     sheets_args = [args.sheets_file_id, args.sheets_name, args.google_credentials]
     if any(sheets_args) and not all(sheets_args):
         logger.error("All Google Sheets arguments (--sheets-file-id, --sheets-name, --google-credentials) are required when using Sheets export")
         sys.exit(1)
     
-    # Configure logging level
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
     
     start_time = time.time()
     
-    # Determine output path
     if args.output:
         output_path = args.output
     else:
         output_path = args.input.replace('.csv', DEFAULT_OUTPUT_SUFFIX)
     
-    # Parse target currencies
     target_currencies = [currency.strip().upper() for currency in args.currencies.split(',')]
     
-    # Initialize OpenAI client if categorization is enabled
     openai_client = None
     if not args.skip_categorization:
         openai_client = AsyncOpenAI(api_key=args.api_key)
@@ -581,34 +566,27 @@ async def main():
         logger.info(f"AI model: {args.model}")
     logger.info("=" * 50)
     
-    # Step 1: Load transactions from CSV
     logger.info("📖 Reading transactions from CSV...")
     transactions = read_transactions_from_csv(args.input)
     
-    # Step 2: Filter out internal transfers
     logger.info("🔍 Filtering external transactions...")
     external_transactions = filter_external_transactions(transactions)
 
-    # Step 3: Group identical transactions
     logger.info("📊 Grouping identical transactions...")
     grouped_transactions = group_transactions_by_description(external_transactions)
 
-    # Step 4: Convert currencies
     logger.info("💱 Converting currencies...")
     grouped_transactions = await convert_currency_amounts(grouped_transactions, target_currencies)
 
-    # Step 5: Categorize transactions (optional)
     if not args.skip_categorization:
         grouped_transactions = await categorize_transactions(grouped_transactions, openai_client, args.model)
     else:
         logger.info("⏭️  Skipping AI categorization...")
     
-    # Generate summary statistics
     logger.info("=" * 50)
     logger.info("✨ Transaction processing complete!")
     logger.info(f"📊 Total unique transactions: {len(grouped_transactions)}")
     
-    # Count transactions by category
     if not args.skip_categorization:
         category_counts = defaultdict(int)
         for transaction in grouped_transactions:
@@ -618,10 +596,8 @@ async def main():
         for category, count in sorted(category_counts.items()):
             logger.info(f"   • {category}: {count}")
     
-    # Export results to CSV
     export_to_csv(grouped_transactions, output_path)
     
-    # Export results to Google Sheets (optional)
     if args.sheets_file_id and args.sheets_name and args.google_credentials:
         try:
             export_to_sheets(grouped_transactions, args.sheets_file_id, args.sheets_name, args.google_credentials)
