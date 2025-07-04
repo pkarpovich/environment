@@ -8,6 +8,7 @@ import {
   executeCommand,
   keyCode,
   open,
+  app,
 } from "./utils.js";
 import { doubleCommandQ } from "./customRules/doubleCommandQ.js";
 import { languageSwitch } from "./customRules/languageSwitch.js";
@@ -69,10 +70,18 @@ const rules = ({ isLaptop }: RulesOptions) => [
       },
     ],
   },
-  createSubLayer("right_option", "Media Commands Sublayer", {
+  createSubLayer("right_option", "Media Commands Sublayer + Apps", {
     s: keyCode("play_or_pause"),
     d: keyCode("fastforward"),
     a: keyCode("rewind"),
+    t: app("WezTerm"),
+    g: app("GoLand"),
+    w: app("WebStorm"),
+    b: app("Arc"),
+    z: app("Zed"),
+    l: app("Logseq"),
+    m: app("Telegram"),
+    h: app("Bruno"),
   }),
   ...createHyperSubLayers({
     // search via

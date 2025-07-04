@@ -1,47 +1,48 @@
+import { fail } from "node:assert";
 import {
-    To,
-    KeyCode,
-    Manipulator,
-    KarabinerRules,
-    Modifiers,
-    ModifiersKeys,
-    Conditions,
-    ToDelayedAction,
-    Parameters,
+  To,
+  KeyCode,
+  Manipulator,
+  KarabinerRules,
+  Modifiers,
+  ModifiersKeys,
+  Conditions,
+  ToDelayedAction,
+  Parameters,
 } from "./types.js";
 
 /**
  * Custom way to describe a command in a layer
  */
 export interface LayerCommand {
-    to?: To[];
-    to_if_alone?: To[];
-    to_after_key_up?: To[];
-    to_if_held_down?: To[];
-    to_delayed_action?: ToDelayedAction;
-    from?: {
-        key_code: KeyCode;
-        modifiers: {
-            optional: ["any"];
-        };
+  to?: To[];
+  to_if_alone?: To[];
+  to_after_key_up?: To[];
+  to_if_held_down?: To[];
+  to_delayed_action?: ToDelayedAction;
+  from?: {
+    key_code: KeyCode;
+    modifiers: {
+      optional: ["any"];
     };
-    description?: string;
-    parameters?: Parameters;
+  };
+  description?: string;
+  parameters?: Parameters;
 }
 
 type HyperKeySublayer = {
-    // The ? is necessary, otherwise we'd have to define something for _every_ key code
-    [key_code in KeyCode]?: LayerCommand;
+  // The ? is necessary, otherwise we'd have to define something for _every_ key code
+  [key_code in KeyCode]?: LayerCommand;
 };
 
 type SubLayers = {
-    [key_code in KeyCode]?: HyperKeySublayer | LayerCommand;
+  [key_code in KeyCode]?: HyperKeySublayer | LayerCommand;
 };
 
 export const HyperLayerCondition: Conditions = {
-    type: "variable_if",
-    name: "hyper",
-    value: 1,
+  type: "variable_if",
+  name: "hyper",
+  value: 1,
 };
 
 /**
@@ -50,77 +51,79 @@ export const HyperLayerCondition: Conditions = {
  * e.g. Hyper + O + G ("Google Chrome") to open Chrome
  */
 export function createHyperSubLayer(
-    sublayer_key: KeyCode,
-    commands: HyperKeySublayer,
-    allSubLayerVariables: string[],
+  sublayer_key: KeyCode,
+  commands: HyperKeySublayer,
+  allSubLayerVariables: string[],
 ): Manipulator[] {
-    const subLayerVariableName = generateSubLayerVariableName(sublayer_key);
+  const subLayerVariableName = generateSubLayerVariableName(sublayer_key);
 
-    return [
-        // When Hyper + sublayer_key is pressed, set the variable to 1; on key_up, set it to 0 again
-        {
-            description: `Toggle Hyper sublayer ${sublayer_key}`,
-            type: "basic",
-            from: {
-                key_code: sublayer_key,
-                modifiers: {
-                    optional: ["any"],
-                },
-            },
-            to_after_key_up: [
-                {
-                    set_variable: {
-                        name: subLayerVariableName,
-                        // The default value of a variable is 0: https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/conditions/variable/
-                        // That means by using 0 and 1 we can filter for "0" in the conditions below and it'll work on startup
-                        value: 0,
-                    },
-                },
-            ],
-            to: [
-                {
-                    set_variable: {
-                        name: subLayerVariableName,
-                        value: 1,
-                    },
-                },
-            ],
-            // This enables us to press other sublayer keys in the current sublayer
-            // (e.g. Hyper + O > M even though Hyper + M is also a sublayer)
-            // basically, only trigger a sublayer if no other sublayer is active
-            conditions: [
-                ...allSubLayerVariables
-                    .filter((subLayerVariable) => subLayerVariable !== subLayerVariableName)
-                    .map((subLayerVariable) => ({
-                        type: "variable_if" as const,
-                        name: subLayerVariable,
-                        value: 0,
-                    })),
-                HyperLayerCondition,
-            ],
+  return [
+    // When Hyper + sublayer_key is pressed, set the variable to 1; on key_up, set it to 0 again
+    {
+      description: `Toggle Hyper sublayer ${sublayer_key}`,
+      type: "basic",
+      from: {
+        key_code: sublayer_key,
+        modifiers: {
+          optional: ["any"],
         },
-        // Define the individual commands that are meant to trigger in the sublayer
-        ...(Object.keys(commands) as (keyof typeof commands)[]).map(
-            (command_key): Manipulator => ({
-                ...commands[command_key],
-                type: "basic" as const,
-                from: {
-                    key_code: command_key,
-                    modifiers: {
-                        optional: ["any"],
-                    },
-                },
-                // Only trigger this command if the variable is 1 (i.e., if Hyper + sublayer is held)
-                conditions: [
-                    {
-                        type: "variable_if",
-                        name: subLayerVariableName,
-                        value: 1,
-                    },
-                ],
-            }),
-        ),
-    ];
+      },
+      to_after_key_up: [
+        {
+          set_variable: {
+            name: subLayerVariableName,
+            // The default value of a variable is 0: https://karabiner-elements.pqrs.org/docs/json/complex-modifications-manipulator-definition/conditions/variable/
+            // That means by using 0 and 1 we can filter for "0" in the conditions below and it'll work on startup
+            value: 0,
+          },
+        },
+      ],
+      to: [
+        {
+          set_variable: {
+            name: subLayerVariableName,
+            value: 1,
+          },
+        },
+      ],
+      // This enables us to press other sublayer keys in the current sublayer
+      // (e.g. Hyper + O > M even though Hyper + M is also a sublayer)
+      // basically, only trigger a sublayer if no other sublayer is active
+      conditions: [
+        ...allSubLayerVariables
+          .filter(
+            (subLayerVariable) => subLayerVariable !== subLayerVariableName,
+          )
+          .map((subLayerVariable) => ({
+            type: "variable_if" as const,
+            name: subLayerVariable,
+            value: 0,
+          })),
+        HyperLayerCondition,
+      ],
+    },
+    // Define the individual commands that are meant to trigger in the sublayer
+    ...(Object.keys(commands) as (keyof typeof commands)[]).map(
+      (command_key): Manipulator => ({
+        ...commands[command_key],
+        type: "basic" as const,
+        from: {
+          key_code: command_key,
+          modifiers: {
+            optional: ["any"],
+          },
+        },
+        // Only trigger this command if the variable is 1 (i.e., if Hyper + sublayer is held)
+        conditions: [
+          {
+            type: "variable_if",
+            name: subLayerVariableName,
+            value: 1,
+          },
+        ],
+      }),
+    ),
+  ];
 }
 
 /**
@@ -129,187 +132,234 @@ export function createHyperSubLayer(
  * activates at a time
  */
 export function createHyperSubLayers(subLayers: {
-    [key_code in KeyCode]?: HyperKeySublayer | LayerCommand;
+  [key_code in KeyCode]?: HyperKeySublayer | LayerCommand;
 }): KarabinerRules[] {
-    const allSubLayerVariables = (Object.keys(subLayers) as (keyof typeof subLayers)[]).map((sublayer_key) =>
-        generateSubLayerVariableName(sublayer_key),
-    );
+  const allSubLayerVariables = (
+    Object.keys(subLayers) as (keyof typeof subLayers)[]
+  ).map((sublayer_key) => generateSubLayerVariableName(sublayer_key));
 
-    return Object.entries(subLayers).map(([key, value]) =>
-        "to" in value
-            ? {
-                  description: `Hyper Key + ${key}`,
-                  manipulators: [
-                      {
-                          ...value,
-                          type: "basic" as const,
-                          from: {
-                              key_code: key as KeyCode,
-                              modifiers: {
-                                  optional: ["any"],
-                              },
-                          },
-                          conditions: [
-                              {
-                                  type: "variable_if",
-                                  name: "hyper",
-                                  value: 1,
-                              },
-                              ...allSubLayerVariables.map((subLayerVariable) => ({
-                                  type: "variable_if" as const,
-                                  name: subLayerVariable,
-                                  value: 0,
-                              })),
-                          ],
-                      },
-                  ],
-              }
-            : {
-                  description: `Hyper Key sublayer "${key}"`,
-                  manipulators: createHyperSubLayer(key as KeyCode, value as HyperKeySublayer, allSubLayerVariables),
+  return Object.entries(subLayers).map(([key, value]) =>
+    "to" in value
+      ? {
+          description: `Hyper Key + ${key}`,
+          manipulators: [
+            {
+              ...value,
+              type: "basic" as const,
+              from: {
+                key_code: key as KeyCode,
+                modifiers: {
+                  optional: ["any"],
+                },
               },
-    );
+              conditions: [
+                {
+                  type: "variable_if",
+                  name: "hyper",
+                  value: 1,
+                },
+                ...allSubLayerVariables.map((subLayerVariable) => ({
+                  type: "variable_if" as const,
+                  name: subLayerVariable,
+                  value: 0,
+                })),
+              ],
+            },
+          ],
+        }
+      : {
+          description: `Hyper Key sublayer "${key}"`,
+          manipulators: createHyperSubLayer(
+            key as KeyCode,
+            value as HyperKeySublayer,
+            allSubLayerVariables,
+          ),
+        },
+  );
 }
 
 function generateSubLayerVariableName(key: KeyCode) {
-    return `hyper_sublayer_${key}`;
+  return `hyper_sublayer_${key}`;
 }
 
-export function createSubLayer(layer_key: string, description: string, subLayers: SubLayers): KarabinerRules {
-    return {
-        description: description,
-        manipulators: Object.entries(subLayers).map(
-            ([key, value]) =>
-                ({
-                    type: "basic",
-                    from: {
-                        key_code: key as KeyCode,
-                        modifiers: {
-                            mandatory: [layer_key],
-                        },
-                    },
-                    ...value,
-                }) as Manipulator,
-        ),
-    };
+export function createSubLayer(
+  layer_key: string,
+  description: string,
+  subLayers: SubLayers,
+): KarabinerRules {
+  return {
+    description: description,
+    manipulators: Object.entries(subLayers).map(
+      ([key, value]) =>
+        ({
+          type: "basic",
+          from: {
+            key_code: key as KeyCode,
+            modifiers: {
+              mandatory: [layer_key],
+            },
+          },
+          ...value,
+        }) as Manipulator,
+    ),
+  };
 }
 
-export function createTapHoldAction(instantAction: To, holdAction: To, tapHoldThreshold: number = 1000): LayerCommand {
-    return {
-        to_if_alone: [instantAction],
-        to_if_held_down: [holdAction],
-        parameters: {
-            "basic.to_if_alone_timeout_milliseconds": tapHoldThreshold,
-            "basic.to_if_held_down_threshold_milliseconds": tapHoldThreshold,
-        },
-    };
+export function createTapHoldAction(
+  instantAction: To,
+  holdAction: To,
+  tapHoldThreshold: number = 1000,
+): LayerCommand {
+  return {
+    to_if_alone: [instantAction],
+    to_if_held_down: [holdAction],
+    parameters: {
+      "basic.to_if_alone_timeout_milliseconds": tapHoldThreshold,
+      "basic.to_if_held_down_threshold_milliseconds": tapHoldThreshold,
+    },
+  };
 }
 
 /**
  * Shortcut for "open" shell command
  */
-export function open(what: string, options = { foreground: true, raw: false }): LayerCommand {
-    return {
-        to: [openRaw(what, options)],
-        description: `Open ${what}`,
-    };
+export function open(
+  what: string,
+  options = { foreground: true, raw: false },
+): LayerCommand {
+  return {
+    to: [openRaw(what, options)],
+    description: `Open ${what}`,
+  };
 }
 
 export function openRaw(what: string, options = { foreground: true }): To {
-    const command = options.foreground ? `open ${what}` : `open -g ${what}`;
+  const command = options.foreground ? `open ${what}` : `open -g ${what}`;
 
-    return {
-        shell_command: command,
-    };
+  return {
+    shell_command: command,
+  };
 }
 
 export enum LaunchType {
-    UserInit = "userInitiated",
-    Background = "background",
+  UserInit = "userInitiated",
+  Background = "background",
 }
 
 export function executeCommand(
-    command: string,
-    args?: Record<string, any>,
-    launchType: LaunchType = LaunchType.Background,
+  command: string,
+  args?: Record<string, any>,
+  launchType: LaunchType = LaunchType.Background,
 ): To {
-    let extCommand = `raycast://extensions/${command}`;
-    const queryParams = new URLSearchParams();
-    if (launchType === LaunchType.Background) {
-        queryParams.append("launchType", "background");
-    }
+  let extCommand = `raycast://extensions/${command}`;
+  const queryParams = new URLSearchParams();
+  if (launchType === LaunchType.Background) {
+    queryParams.append("launchType", "background");
+  }
 
-    if (args) {
-        queryParams.append("arguments", JSON.stringify(args));
-    }
+  if (args) {
+    queryParams.append("arguments", JSON.stringify(args));
+  }
 
-    if (queryParams.toString()) {
-        extCommand += "?" + queryParams.toString();
-    }
+  if (queryParams.toString()) {
+    extCommand += "?" + queryParams.toString();
+  }
 
-    return {
-        shell_command: `open -g '${extCommand}'`,
-    };
+  return {
+    shell_command: `open -g '${extCommand}'`,
+  };
 }
 
-export function delegate(url: URL, options = { foreground: true, raw: false }): LayerCommand {
-    return open(url.toString(), options);
+export function delegate(
+  url: URL,
+  options = { foreground: true, raw: false },
+): LayerCommand {
+  return open(url.toString(), options);
 }
 
-export function delegateRaw(url: URL, options = { foreground: true, raw: false }): To {
-    return openRaw(url.toString(), options);
+export function delegateRaw(
+  url: URL,
+  options = { foreground: true, raw: false },
+): To {
+  return openRaw(url.toString(), options);
 }
 
 /**
  * Utility function to create a LayerCommand from a tagged template literal
  * where each line is a shell command to be executed.
  */
-export function shell(strings: TemplateStringsArray, ...values: any[]): LayerCommand {
-    const commands = strings.reduce((acc, str, i) => {
-        const value = i < values.length ? values[i] : "";
-        const lines = (str + value).split("\n").filter((line) => line.trim() !== "");
-        acc.push(...lines);
-        return acc;
-    }, [] as string[]);
+export function shell(
+  strings: TemplateStringsArray,
+  ...values: any[]
+): LayerCommand {
+  const commands = strings.reduce((acc, str, i) => {
+    const value = i < values.length ? values[i] : "";
+    const lines = (str + value)
+      .split("\n")
+      .filter((line) => line.trim() !== "");
+    acc.push(...lines);
+    return acc;
+  }, [] as string[]);
 
-    return {
-        to: commands.map((command) => ({
-            shell_command: command.trim(),
-        })),
-        description: commands.join(" && "),
-    };
+  return {
+    to: commands.map((command) => ({
+      shell_command: command.trim(),
+    })),
+    description: commands.join(" && "),
+  };
 }
 
 /**
  * Shortcut for managing window sizing
  */
 export function windowManagement(name: string): LayerCommand {
-    return delegate(new URL(`raycast://extensions/raycast/window-management/${name}?launchType=background`));
+  return delegate(
+    new URL(
+      `raycast://extensions/raycast/window-management/${name}?launchType=background`,
+    ),
+  );
 }
 
 /**
  * Shortcut for "Open an app" command (of which there are a bunch)
  */
-export function app(name: string): LayerCommand | To {
-    return open(`-a '${name}.app'`);
+export function app(name: string): LayerCommand {
+  return {
+    to: [
+      {
+        shell_command: `open -a "${name}" && sleep 0.1 && osascript -e 'tell application "System Events" to set frontmost of process "${name}" to true'`,
+      },
+    ],
+    description: `Open and focus ${name}`,
+  };
 }
 
 type KeyCodeOptions = {
-    hyper?: boolean;
-    modifiers?: ModifiersKeys[];
+  hyper?: boolean;
+  modifiers?: ModifiersKeys[];
 };
 
-export const Hyper: ModifiersKeys[] = ["left_command", "left_option", "left_control", "left_shift"];
+export const Hyper: ModifiersKeys[] = [
+  "left_command",
+  "left_option",
+  "left_control",
+  "left_shift",
+];
 
-export function keyCode(keyCode: KeyCode, { modifiers = [], hyper = false }: KeyCodeOptions = {}): LayerCommand {
-    const keyModifiers: ModifiersKeys[] = hyper ? [...Hyper, ...modifiers] : modifiers;
+export function keyCode(
+  keyCode: KeyCode,
+  { modifiers = [], hyper = false }: KeyCodeOptions = {},
+): LayerCommand {
+  const keyModifiers: ModifiersKeys[] = hyper
+    ? [...Hyper, ...modifiers]
+    : modifiers;
 
-    return {
-        to: [
-            {
-                key_code: keyCode,
-                modifiers: keyModifiers,
-            },
-        ],
-    };
+  return {
+    to: [
+      {
+        key_code: keyCode,
+        modifiers: keyModifiers,
+      },
+    ],
+  };
 }
