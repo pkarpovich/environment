@@ -3,6 +3,89 @@ local act = wezterm.action
 
 local pub = {}
 
+local function resize_panes_to_ratio(window, pane, first_pane_ratio)
+    local tab = window:active_tab()
+    local panes = tab:panes_with_info()
+
+    if #panes ~= 2 then
+        return
+    end
+
+    local current_pane = pane
+    tab:set_zoomed(false)
+    
+    -- Add tolerance to prevent infinite adjustments
+    local tolerance = 2  -- pixels
+    
+    -- Find which pane is active
+    local active_pane_index = 1
+    for i, p in ipairs(panes) do
+        if p.is_active then
+            active_pane_index = i
+            break
+        end
+    end
+    
+    -- Adjust ratio based on which pane is active
+    -- If second pane is active, we need to invert the ratio
+    local target_ratio = active_pane_index == 1 and first_pane_ratio or (1 - first_pane_ratio)
+
+    -- Determine if panes are split horizontally or vertically
+    -- In a horizontal split, panes are side by side (different x positions)
+    -- In a vertical split, panes are stacked (different y positions)
+    local is_horizontal = panes[1].left ~= panes[2].left
+
+    if is_horizontal then
+        -- Calculate total width and target sizes
+        local total_width = panes[1].width + panes[2].width
+        local target_first_width = math.floor(total_width * target_ratio)
+        local current_first_width = panes[1].width
+        local adjustment = target_first_width - current_first_width
+
+        -- Only adjust if difference is greater than tolerance
+        if math.abs(adjustment) > tolerance then
+            -- Activate first pane and adjust
+            panes[1].pane:activate()
+            if adjustment > 0 then
+                window:perform_action(
+                    wezterm.action.AdjustPaneSize({ "Right", adjustment }),
+                    panes[1].pane
+                )
+            elseif adjustment < 0 then
+                window:perform_action(
+                    wezterm.action.AdjustPaneSize({ "Left", -adjustment }),
+                    panes[1].pane
+                )
+            end
+        end
+    else
+        -- For vertical split
+        local total_height = panes[1].height + panes[2].height
+        local target_first_height = math.floor(total_height * target_ratio)
+        local current_first_height = panes[1].height
+        local adjustment = target_first_height - current_first_height
+
+        -- Only adjust if difference is greater than tolerance
+        if math.abs(adjustment) > tolerance then
+            panes[1].pane:activate()
+            if adjustment > 0 then
+                window:perform_action(
+                    wezterm.action.AdjustPaneSize({ "Down", adjustment }),
+                    panes[1].pane
+                )
+            elseif adjustment < 0 then
+                window:perform_action(
+                    wezterm.action.AdjustPaneSize({ "Up", -adjustment }),
+                    panes[1].pane
+                )
+            end
+        end
+    end
+
+    -- Return to original pane
+    current_pane:activate()
+end
+
 local function configure_keys(resurrect, workspace_switcher)
     local keys = {
         { key = "Enter", mods = "ALT",         action = "DisableDefaultAssignment" },
@@ -21,6 +104,34 @@ local function configure_keys(resurrect, workspace_switcher)
         { key = "RightArrow", mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Right" }) },
         { key = "UpArrow",    mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Up" }) },
         { key = "DownArrow",  mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Down" }) },
+        {
+            key = "}",
+            mods = "ALT|SHIFT",
+            action = wezterm.action_callback(function(window, pane)
+                resize_panes_to_ratio(window, pane, 0.333)
+            end),
+        },
+        {
+            key = "{",
+            mods = "ALT|SHIFT",
+            action = wezterm.action_callback(function(window, pane)
+                resize_panes_to_ratio(window, pane, 0.667)
+            end),
+        },
+        {
+            key = "P",
+            mods = "ALT|SHIFT",
+            action = wezterm.action_callback(function(window, pane)
+                resize_panes_to_ratio(window, pane, 0.5)
+            end),
+        },
+        {
+            key = "O",
+            mods = "ALT|SHIFT",
+            action = wezterm.action_callback(function(window, pane)
+                resize_panes_to_ratio(window, pane, 0.25)
+            end),
+        },
         {
             key = 'LeftArrow',
             mods = 'CMD',
