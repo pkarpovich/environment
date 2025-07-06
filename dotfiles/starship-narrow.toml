@@ -1,35 +1,33 @@
+# Minimal format for narrow terminals
+format = """
+$directory
+$character"""
+
 [character]
 success_symbol = "[>](bold green)"
 error_symbol = "[x](bold red)"
 vimcmd_symbol = "[<](bold green)"
 
-[git_commit]
-tag_symbol = " tag "
+[directory]
+truncate_to_repo = true
+format = "[$path]($style) "
+style = "cyan bold"
 
+# Disable all other modules for narrow terminals
 [git_branch]
-symbol = "git "
-format = "on [$branch(:$remote_branch)]($style)"
-truncation_symbol = '…/'
-style = 'bold purple'
+disabled = true
 
 [git_status]
-format = '([ \($all_status$ahead_behind\)]($style) )'
-style = 'bold green'
-conflicted = '[confliced=${count}](red)'
-up_to_date = '[up-to-date](green)'
-untracked = '[untracked=${count}](red) '
-ahead = 'ahead=${count}'
-diverged = 'ahead=${ahead_count} behind=${behind_count}'
-behind = 'behind=${count}'
-stashed = '[stashed=${count}](green) '
-modified = '[modified=${count}](yellow) '
-staged = '[staged=${count}](green) '
-renamed = '[renamed=${count}](yellow) '
-deleted = '[deleted=${count}](red) '
+disabled = true
+
+[nodejs]
+disabled = true
+
+[package]
+disabled = true
 
 [aws]
 disabled = true
-symbol = "aws "
 
 [azure]
 disabled = true
@@ -64,9 +62,6 @@ symbol = "deno "
 
 [dotnet]
 symbol = ".NET "
-
-[directory]
-read_only = " ro"
 
 [docker_context]
 disabled = true
@@ -111,9 +106,6 @@ symbol = "kt "
 
 [lua]
 symbol = "lua "
-
-[nodejs]
-symbol = "nodejs "
 
 [memory_usage]
 symbol = "memory "
@@ -181,10 +173,6 @@ Ultramarine = "ultm "
 Unknown = "unk "
 Void = "void "
 Windows = "win "
-
-[package]
-disabled = true
-symbol = "pkg "
 
 [perl]
 symbol = "pl "

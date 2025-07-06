@@ -13,10 +13,10 @@ local function resize_panes_to_ratio(window, pane, first_pane_ratio)
 
     local current_pane = pane
     tab:set_zoomed(false)
-    
+
     -- Add tolerance to prevent infinite adjustments
-    local tolerance = 2  -- pixels
-    
+    local tolerance = 2 -- pixels
+
     -- Find which pane is active
     local active_pane_index = 1
     for i, p in ipairs(panes) do
@@ -25,7 +25,7 @@ local function resize_panes_to_ratio(window, pane, first_pane_ratio)
             break
         end
     end
-    
+
     -- Adjust ratio based on which pane is active
     -- If second pane is active, we need to invert the ratio
     local target_ratio = active_pane_index == 1 and first_pane_ratio or (1 - first_pane_ratio)
@@ -218,6 +218,17 @@ local function configure_keys(resurrect, workspace_switcher)
             key = "t",
             mods = "LEADER",
             action = act.SpawnTab 'CurrentPaneDomain',
+        },
+        -- Starship prompt switching
+        {
+            key = "1",
+            mods = "ALT|SHIFT",
+            action = act.SendString("starship_normal\n"),
+        },
+        {
+            key = "2",
+            mods = "ALT|SHIFT",
+            action = act.SendString("starship_narrow\n"),
         }
     }
 
