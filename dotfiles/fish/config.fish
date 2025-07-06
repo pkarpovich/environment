@@ -40,6 +40,9 @@ alias ping 'gping'
 alias dig 'doggo'
 alias htop 'glances'
 alias lg 'lazygit'
+alias qq 'exit'
+alias cc 'claude'
+alias f 'open .'
 
 zoxide init fish | source
 starship init fish | source
