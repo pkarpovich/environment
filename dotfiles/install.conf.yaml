@@ -18,3 +18,5 @@
     ~/.config/wezterm/: wezterm/**
     ~/.config/fish: fish/**
     ~/.config/zed/: zed/**
+
+    ~/.claude/: claude/**

@@ -7,6 +7,8 @@ python = "3.13"
 "pipx:git-remote-codecommit" = "latest"
 "pipx:claudesync" = "latest"
 rust = "latest"
+deno = "latest"
+"npm:@openai/codex" = "0.20"
 
 [settings]
 experimental = true

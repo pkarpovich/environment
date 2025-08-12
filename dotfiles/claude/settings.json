@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.local/share/mise/installs/deno/2.4.1/bin/deno run --allow-run jsr:@wyattjoh/claude-code-notification"
+          }
+        ]
+      }
+    ]
+  }
+}
