@@ -33,16 +33,6 @@
     current-branch = "!git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \\(.*\\)/\\1/'"
     fame = shortlog -sn --all --no-merges
 
-[diff]
-    tool = difftastic
-    external = difft
-
-[difftool]
-    prompt = false
-
-[difftool "difftastic"]
-    cmd = difft "$LOCAL" "$REMOTE"
-
 [pager]
     difftool = true
 

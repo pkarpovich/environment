@@ -20,3 +20,5 @@
     ~/.config/zed/: zed/**
 
     ~/.claude/: claude/**
+
+    ~/.config/yafetch/init.lua: yafetch.lua

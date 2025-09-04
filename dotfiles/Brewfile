@@ -36,3 +36,4 @@ brew "pkarpovich/apps/turtle-harbor"
 brew "pkarpovich/apps/shortcuts-remote-server"
 brew "pkarpovich/apps/commit-author-refresher"
 
+brew "umputun/apps/mpt"

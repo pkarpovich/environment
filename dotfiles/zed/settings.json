@@ -1,4 +1,15 @@
 {
+  "ssh_connections": [
+    {
+      "host": "192.168.198.3",
+      "username": "pi",
+      "projects": [
+        {
+          "paths": ["~/home-environment"]
+        }
+      ]
+    }
+  ],
   "ui_font_size": 16,
   "buffer_font_size": 16,
   "theme": {
@@ -53,5 +64,10 @@
     "toml": true,
     "lua": true,
     "fish": true
+  },
+  "languages": {
+    "YAML": {
+      "format_on_save": "off"
+    }
   }
 }

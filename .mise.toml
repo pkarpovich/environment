@@ -2,7 +2,7 @@
 node = "22"
 pnpm = "9"
 pipx = "latest"
-"pipx:dotbot" = "1.21.0"
+"pipx:dotbot" = "1.23"
 
 [tasks.install_tools]
 description = "Install dev tools with brew"

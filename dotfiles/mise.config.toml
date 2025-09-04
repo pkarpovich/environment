@@ -8,6 +8,7 @@ python = "3.13"
 "pipx:claudesync" = "latest"
 rust = "latest"
 deno = "latest"
+bun = "1.2"
 "npm:@openai/codex" = "0.20"
 
 [settings]
