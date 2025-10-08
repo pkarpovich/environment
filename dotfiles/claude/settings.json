@@ -12,7 +12,6 @@
       }
     ]
   },
-  "model": "opusplan",
   "statusLine": {
     "type": "command",
     "command": "bash /Users/pavel.karpovich/.claude/statusline-script.sh"

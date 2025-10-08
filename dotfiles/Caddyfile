@@ -1,0 +1,3 @@
+continuum-api.localhost {
+    reverse_proxy localhost:3000
+}

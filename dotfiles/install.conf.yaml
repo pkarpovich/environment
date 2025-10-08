@@ -22,3 +22,6 @@
     ~/.claude/: claude/**
 
     ~/.config/yafetch/init.lua: yafetch.lua
+    ~/.mcpjungle.conf: .mcpjungle.conf
+    ~/Library/Application Support/Claude/claude_desktop_config.json: claude_desktop_config.json
+    /opt/homebrew/etc/Caddyfile: Caddyfile
