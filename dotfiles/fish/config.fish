@@ -43,6 +43,12 @@ alias lg 'lazygit'
 alias qq 'exit'
 alias cc 'claude'
 alias f 'open .'
+alias gg 'smerge .' # Git Gui
+alias e 'zed .'
+
+bind \eOH beginning-of-line
+bind \eOF end-of-line
+bind \cU backward-kill-line
 
 zoxide init fish | source
 starship init fish | source

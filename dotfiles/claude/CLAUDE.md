@@ -1,0 +1,3 @@
+- Avoid all comments and pydocs/docstrings in code (they rot and mislead); exception: MCP tool definitions require docstrings for tool descriptions. Use clear variable/function names instead
+- Use early return pattern - check failure/edge cases first with 'if not X: return', then main logic flows flat without nesting
+- Never use inline arrow functions in props - use useCallback for event handlers, or curried pattern (item) => () => handler(item) for loops with args

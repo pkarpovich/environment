@@ -10,14 +10,29 @@
       ]
     }
   ],
+  "features": {
+    "edit_prediction_provider": "zed"
+  },
+  "assistant": {
+    "default_profile": "write",
+    "always_allow_tool_actions": true,
+    "enable_experimental_live_diffs": true,
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-3-7-sonnet-latest"
+    },
+    "version": "2"
+  },
+  "icon_theme": "Catppuccin Latte",
   "ui_font_size": 16,
   "buffer_font_size": 16,
   "theme": {
     "mode": "system",
-    "light": "Catppuccin Latte",
-    "dark": "Catppuccin Mocha"
+    "light": "Catppuccin Latte - No Italics",
+    "dark": "Catppuccin Mocha - No Italics"
   },
-  "ui_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_family": "Maple Mono NF",
+  "ui_font_family": "Maple Mono NF",
   "ui_font_features": {
     "liga": true,
     "calt": true
@@ -33,7 +48,8 @@
   },
   "tabs": {
     "file_icons": true,
-    "git_status": true
+    "git_status": true,
+    "show_close_button": "hover"
   },
   "project_panel": {
     "button": true,
@@ -52,6 +68,17 @@
   "collaboration_panel": {
     "button": false
   },
+  "terminal": {
+    "dock": "bottom",
+    "detect_venv": { "on": { "activate_script": "fish" } },
+    "env": { "EDITOR": "zed --wait" }
+  },
+  "indent_guides": {
+    "enabled": true,
+    "coloring": "indent_aware"
+  },
+  "inlay_hints": { "enabled": true },
+  "scrollbar": { "show": "auto" },
   "telemetry": {
     "diagnostics": false,
     "metrics": false
@@ -68,6 +95,59 @@
   "languages": {
     "YAML": {
       "format_on_save": "off"
+    },
+    "Python": {
+      "format_on_save": "on",
+      "language_servers": ["pyright", "ruff"],
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.ruff": true,
+            "source.fixAll.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
     }
-  }
+  },
+  "lsp": {
+    "ruff": {
+      "initialization_options": {
+        "settings": {
+          "lineLength": 130,
+          "lint": {
+            "extendSelect": ["I"]
+          }
+        }
+      }
+    },
+    "pyright": {
+      "settings": {
+        "python.analysis": {
+          "diagnosticMode": "workspace"
+          // "typeCheckingMode": "strict"
+        },
+        "python": {
+          "pythonPath": ".venv/bin/python"
+        }
+      }
+    }
+  },
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/.venv",
+    "**/node_modules",
+    "**/dist",
+    "**/build",
+    "**/target",
+    "**/.rope*",
+    "**/*_cache",
+    "**/__pycache__",
+    "**/.*-version",
+    "**/.DS_Store"
+  ]
 }

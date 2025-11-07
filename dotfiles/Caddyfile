@@ -1,3 +1,27 @@
+dorag-mcp.localhost {
+    reverse_proxy localhost:8001
+}
+
+ask-agent.localhost {
+    reverse_proxy localhost:5173
+}
+
+ask-agent-api.localhost {
+    reverse_proxy localhost:3001
+}
+
+th-telegram-mcp.localhost {
+    reverse_proxy localhost:50001
+}
+
+continuum.localhost {
+    reverse_proxy localhost:50002
+}
+
 continuum-api.localhost {
-    reverse_proxy localhost:3000
+    reverse_proxy localhost:50003
+}
+
+dc-query-api.localhost {
+    reverse_proxy localhost:50100
 }

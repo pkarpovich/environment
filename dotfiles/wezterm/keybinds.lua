@@ -148,6 +148,16 @@ local function configure_keys(resurrect, workspace_switcher)
             action = wezterm.action { SendString = "\x15" },
         },
         {
+            key = '[',
+            mods = 'OPT|SHIFT',
+            action = act.ActivateTabRelative(-1),
+        },
+        {
+            key = ']',
+            mods = 'OPT|SHIFT',
+            action = act.ActivateTabRelative(1),
+        },
+        {
             -- Delete a saved session using a fuzzy finder
             key = 'd',
             mods = 'LEADER',
@@ -229,6 +239,11 @@ local function configure_keys(resurrect, workspace_switcher)
             key = "2",
             mods = "ALT|SHIFT",
             action = act.SendString("starship_narrow\n"),
+        },
+        {
+            key = "Enter",
+            mods = "SHIFT",
+            action = act.SendString("\x1b\r"),
         }
     }
 
