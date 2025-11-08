@@ -1,3 +1,4 @@
 - Avoid all comments and pydocs/docstrings in code (they rot and mislead); exception: MCP tool definitions require docstrings for tool descriptions. Use clear variable/function names instead
 - Use early return pattern - check failure/edge cases first with 'if not X: return', then main logic flows flat without nesting
 - Never use inline arrow functions in props - use useCallback for event handlers, or curried pattern (item) => () => handler(item) for loops with args
+- **ALWAYS check package.json (JS/TS), pyproject.toml (Python), go.mod (Go), or equivalent before implementing** - use installed libraries instead of reimplementing from scratch. Examples: use React Query for data fetching not manual fetch+useState, use react-hook-form not manual form state, use zod for validation not custom validators. If a library is installed but not used, that's a code smell indicating previous implementations should be refactored
