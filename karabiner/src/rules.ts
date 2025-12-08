@@ -77,11 +77,14 @@ const rules = ({ isLaptop }: RulesOptions) => [
     t: app("WezTerm"),
     g: app("GoLand"),
     w: app("WebStorm"),
-    b: app("Arc"),
+    b: app("Dia"),
     z: app("Zed"),
     l: app("Logseq"),
     m: app("Telegram"),
     h: app("Bruno"),
+    n: app("Obsidian"),
+    f: app("Finder"),
+    c: app("Claude"),
   }),
   ...createHyperSubLayers({
     // search via
