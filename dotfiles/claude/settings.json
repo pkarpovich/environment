@@ -1,4 +1,31 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(git show:*)",
+      "Bash(ls:*)",
+      "Bash(pwd)",
+      "Bash(which:*)",
+      "Bash(echo:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(tree:*)",
+      "WebSearch",
+      "WebFetch"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/secrets/**)"
+    ]
+  },
   "hooks": {
     "Notification": [
       {
@@ -10,10 +37,29 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/skill-activation.sh"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
     "type": "command",
     "command": "bash /Users/pavel.karpovich/.claude/statusline-script.sh"
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-code-plugins": false,
+    "example-skills@anthropic-agent-skills": true,
+    "theme-factory@awesome-claude-skills": false,
+    "blockchain-explorer-cli@claude-code-plugins-plus": false,
+    "ai-ml-engineering-pack@claude-code-plugins-plus": false,
+    "skill-creator@awesome-claude-skills": false
   }
 }

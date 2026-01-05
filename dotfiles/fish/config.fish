@@ -51,4 +51,5 @@ bind \eOF end-of-line
 bind \cU backward-kill-line
 
 zoxide init fish | source
+atuin init fish | source
 starship init fish | source

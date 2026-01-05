@@ -1,5 +1,6 @@
 brew "eza"
 brew "moar"
+brew "atuin"
 
 # yazi
 brew "ffmpeg"
@@ -30,6 +31,7 @@ brew "tabiew"
 brew "lnav"
 brew "goreleaser"
 brew "golangci-lint"
+brew "sk"
 
 brew "pkarpovich/apps/yafetch"
 brew "pkarpovich/apps/turtle-harbor"

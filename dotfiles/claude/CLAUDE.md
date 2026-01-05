@@ -3,3 +3,4 @@
 - Never use inline arrow functions in props - use useCallback for event handlers, or curried pattern (item) => () => handler(item) for loops with args
 - **ALWAYS check package.json (JS/TS), pyproject.toml (Python), go.mod (Go), or equivalent before implementing** - use installed libraries instead of reimplementing from scratch. Examples: use React Query for data fetching not manual fetch+useState, use react-hook-form not manual form state, use zod for validation not custom validators. If a library is installed but not used, that's a code smell indicating previous implementations should be refactored
 - Never run code, builds, or tests to verify changes - instead ask user to run them and share results. User prefers to execute commands themselves (npm run build, pytest, python scripts, etc.)
+- Always place imports at the top of the file, never inside functions or methods

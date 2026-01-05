@@ -12,6 +12,7 @@
     }
   },
   "preferences": {
-    "menuBarEnabled": false
+    "menuBarEnabled": false,
+    "quickEntryShortcut": "off"
   }
 }

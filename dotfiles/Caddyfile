@@ -25,3 +25,11 @@ continuum-api.localhost {
 dc-query-api.localhost {
     reverse_proxy localhost:50100
 }
+
+retribution.localhost {
+    reverse_proxy localhost:50200
+}
+
+content-oracle.localhost {
+    reverse_proxy localhost:50201
+}
