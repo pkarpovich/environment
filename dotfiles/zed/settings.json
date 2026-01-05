@@ -13,7 +13,7 @@
   "features": {
     "edit_prediction_provider": "zed"
   },
-  "assistant": {
+  "agent": {
     "default_profile": "write",
     "always_allow_tool_actions": true,
     "enable_experimental_live_diffs": true,
@@ -21,7 +21,6 @@
       "provider": "anthropic",
       "model": "claude-3-7-sonnet-latest"
     },
-    "version": "2"
   },
   "icon_theme": "Catppuccin Latte",
   "ui_font_size": 16,
@@ -101,10 +100,10 @@
       "language_servers": ["pyright", "ruff"],
       "formatter": [
         {
-          "code_actions": {
-            "source.organizeImports.ruff": true,
-            "source.fixAll.ruff": true
-          }
+          "code_action": "source.organizeImports.ruff"
+        },
+        {
+          "code_action": "source.fixAll.ruff"
         },
         {
           "language_server": {

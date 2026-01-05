@@ -9,35 +9,38 @@ description = "Install dev tools with brew"
 run = "brew bundle install"
 dir = "dotfiles"
 
-[tasks.link_dotfiles]
-description = "Link dotfiles"
-depends = ['install_tools', 'setup_keyboard']
-run = "dotbot -c ./dotfiles/install.conf.yaml"
-
 [tasks.setup_keyboard]
 description = "Setup keyboard via karabiner"
-run = [
-    "pnpm build",
-    "dotbot -c ../dotfiles/install.conf.yaml",
-    "launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server",
-]
+run = """
+pnpm build
+launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server
+"""
 dir = "karabiner"
 
 [tasks.setup_keyboard_laptop]
-description = "Setup keyboard via karabiner for Macbook"
-run = [
-    "pnpm build:laptop",
-    "dotbot -c ../dotfiles/install.conf.yaml",
-    "launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server",
-]
+description = "Setup keyboard via karabiner for laptop"
+run = """
+pnpm build:laptop
+launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server
+"""
 dir = "karabiner"
+
+[tasks.link_dotfiles]
+description = "Link dotfiles"
+depends = ['install_tools']
+run = "dotbot -c ./dotfiles/install.conf.yaml"
 
 [tasks.apply_duti]
 description = "Apply duti settings"
-run = "duti defauts.duti"
+run = "duti defaults.duti"
 dir = "duti"
 
 [tasks.setup_env]
 description = "Setup environment"
 alias = "init"
 depends = ['install_tools', 'setup_keyboard', 'link_dotfiles', 'apply_duti']
+
+[tasks.setup_env_laptop]
+description = "Setup environment for laptop"
+alias = "init_laptop"
+depends = ['install_tools', 'setup_keyboard_laptop', 'link_dotfiles', 'apply_duti']

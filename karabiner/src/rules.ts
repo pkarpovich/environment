@@ -81,10 +81,11 @@ const rules = ({ isLaptop }: RulesOptions) => [
     z: app("Zed"),
     l: app("Logseq"),
     m: app("Telegram"),
-    h: app("Bruno"),
+    h: app("Bruno v3 Preview"),
     n: app("Obsidian"),
     f: app("Finder"),
     c: app("Claude"),
+    4: app("Sublime Merge"),
   }),
   ...createHyperSubLayers({
     // search via

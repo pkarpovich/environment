@@ -33,13 +33,15 @@ brew "goreleaser"
 brew "golangci-lint"
 brew "sk"
 
-brew "pkarpovich/apps/yafetch"
-brew "pkarpovich/apps/turtle-harbor"
+cask "yafetch"
+brew "turtle-harbor"
 brew "pkarpovich/apps/shortcuts-remote-server"
 brew "pkarpovich/apps/commit-author-refresher"
+brew "ovq"
 
 brew "caddy"
 brew "mcpjungle/mcpjungle/mcpjungle"
 
 cask "font-maple-mono"
 cask "font-maple-mono-nf"
+cask "font-iosevka-nerd-font"

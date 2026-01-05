@@ -55,11 +55,7 @@
     "command": "bash /Users/pavel.karpovich/.claude/statusline-script.sh"
   },
   "enabledPlugins": {
-    "frontend-design@claude-code-plugins": false,
-    "example-skills@anthropic-agent-skills": true,
-    "theme-factory@awesome-claude-skills": false,
-    "blockchain-explorer-cli@claude-code-plugins-plus": false,
-    "ai-ml-engineering-pack@claude-code-plugins-plus": false,
-    "skill-creator@awesome-claude-skills": false
-  }
+    "example-skills@anthropic-agent-skills": true
+  },
+  "alwaysThinkingEnabled": true
 }
