@@ -35,8 +35,8 @@ brew "sk"
 
 cask "yafetch"
 brew "turtle-harbor"
-brew "pkarpovich/apps/shortcuts-remote-server"
-brew "pkarpovich/apps/commit-author-refresher"
+brew "shortcuts-remote-server"
+brew "commit-author-refresher"
 brew "ovq"
 
 brew "caddy"
