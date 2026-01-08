@@ -5,13 +5,13 @@
       "username": "pi",
       "projects": [
         {
-          "paths": ["~/home-environment"]
-        }
-      ]
-    }
+          "paths": ["~/home-environment"],
+        },
+      ],
+    },
   ],
   "features": {
-    "edit_prediction_provider": "zed"
+    "edit_prediction_provider": "zed",
   },
   "agent": {
     "default_profile": "write",
@@ -19,7 +19,7 @@
     "enable_experimental_live_diffs": true,
     "default_model": {
       "provider": "anthropic",
-      "model": "claude-3-7-sonnet-latest"
+      "model": "claude-3-7-sonnet-latest",
     },
   },
   "icon_theme": "Catppuccin Latte",
@@ -28,13 +28,13 @@
   "theme": {
     "mode": "system",
     "light": "Catppuccin Latte - No Italics",
-    "dark": "Catppuccin Mocha - No Italics"
+    "dark": "Catppuccin Mocha - No Italics",
   },
   "buffer_font_family": "Maple Mono NF",
   "ui_font_family": "Maple Mono NF",
   "ui_font_features": {
     "liga": true,
-    "calt": true
+    "calt": true,
   },
   "base_keymap": "JetBrains",
   "preferred_line_length": 120,
@@ -43,12 +43,12 @@
   "restore_on_startup": "last_session",
   "tab_bar": {
     "show": true,
-    "show_nav_history_buttons": false
+    "show_nav_history_buttons": false,
   },
   "tabs": {
     "file_icons": true,
     "git_status": true,
-    "show_close_button": "hover"
+    "show_close_button": "hover",
   },
   "project_panel": {
     "button": true,
@@ -61,26 +61,26 @@
     "auto_reveal_entries": true,
     "auto_fold_dirs": true,
     "scrollbar": {
-      "show": null
-    }
+      "show": null,
+    },
   },
   "collaboration_panel": {
-    "button": false
+    "button": false,
   },
   "terminal": {
     "dock": "bottom",
     "detect_venv": { "on": { "activate_script": "fish" } },
-    "env": { "EDITOR": "zed --wait" }
+    "env": { "EDITOR": "zed --wait" },
   },
   "indent_guides": {
     "enabled": true,
-    "coloring": "indent_aware"
+    "coloring": "indent_aware",
   },
   "inlay_hints": { "enabled": true },
   "scrollbar": { "show": "auto" },
   "telemetry": {
     "diagnostics": false,
-    "metrics": false
+    "metrics": false,
   },
   "current_line_highlight": "all",
   "auto_install_extensions": {
@@ -89,29 +89,28 @@
     "html": true,
     "toml": true,
     "lua": true,
-    "fish": true
+    "fish": true,
   },
   "languages": {
     "YAML": {
-      "format_on_save": "off"
+      "format_on_save": "off",
     },
     "Python": {
-      "format_on_save": "on",
-      "language_servers": ["pyright", "ruff"],
+      "language_servers": ["basedpyright", "ruff", "!ty"],
       "formatter": [
         {
-          "code_action": "source.organizeImports.ruff"
+          "code_action": "source.organizeImports.ruff",
         },
         {
-          "code_action": "source.fixAll.ruff"
+          "code_action": "source.fixAll.ruff",
         },
         {
           "language_server": {
-            "name": "ruff"
-          }
-        }
-      ]
-    }
+            "name": "ruff",
+          },
+        },
+      ],
+    },
   },
   "lsp": {
     "ruff": {
@@ -119,22 +118,22 @@
         "settings": {
           "lineLength": 130,
           "lint": {
-            "extendSelect": ["I"]
-          }
-        }
-      }
+            "extendSelect": ["I"],
+          },
+        },
+      },
     },
     "pyright": {
       "settings": {
         "python.analysis": {
-          "diagnosticMode": "workspace"
+          "diagnosticMode": "workspace",
           // "typeCheckingMode": "strict"
         },
         "python": {
-          "pythonPath": ".venv/bin/python"
-        }
-      }
-    }
+          "pythonPath": ".venv/bin/python",
+        },
+      },
+    },
   },
   "file_scan_exclusions": [
     "**/.git",
@@ -147,6 +146,6 @@
     "**/*_cache",
     "**/__pycache__",
     "**/.*-version",
-    "**/.DS_Store"
-  ]
+    "**/.DS_Store",
+  ],
 }
