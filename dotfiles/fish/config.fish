@@ -5,9 +5,14 @@ fish_add_path $PNPM_HOME
 # add GOROOT
 set -gx GOROOT (mise where go)
 
+# Proxy settings for ClashX
+#set -gx HTTP_PROXY http://localhost:7890
+#set -gx HTTPS_PROXY http://localhost:7890
+
 # Load PATH
 fish_add_path ~/.local/bin
 fish_add_path ~/.local/share/mise/shims
+fish_add_path ~/.dotnet/tools
 
 if type -q mise
     mise activate fish | source
@@ -43,6 +48,7 @@ alias lg 'lazygit'
 alias qq 'exit'
 alias cc 'claude'
 alias f 'open .'
+alias cb 'pbcopy'
 alias gg 'smerge .' # Git Gui
 alias e 'zed .'
 
