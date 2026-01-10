@@ -55,7 +55,8 @@
     "command": "bash /Users/pavel.karpovich/.claude/statusline-script.sh"
   },
   "enabledPlugins": {
-    "example-skills@anthropic-agent-skills": true
+    "example-skills@anthropic-agent-skills": true,
+    "code-simplifier@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true
 }
