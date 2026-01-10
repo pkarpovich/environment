@@ -47,6 +47,7 @@ alias htop 'glances'
 alias lg 'lazygit'
 alias qq 'exit'
 alias cc 'claude'
+alias ccr 'claude --resume'
 alias f 'open .'
 alias cb 'pbcopy'
 alias gg 'smerge .' # Git Gui
