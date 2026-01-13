@@ -38,6 +38,7 @@ brew "turtle-harbor"
 brew "shortcuts-remote-server"
 brew "commit-author-refresher"
 brew "ovq"
+brew "bruq"
 
 brew "caddy"
 brew "mcpjungle/mcpjungle/mcpjungle"

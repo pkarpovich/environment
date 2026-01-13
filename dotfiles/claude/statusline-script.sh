@@ -28,31 +28,30 @@ current_date=$(date "+%b %d")
 current_time=$(date "+%H:%M")
 current_datetime="${current_date} • ${current_time}"
 
-# Color codes
-GREEN="\033[32m"    # Model name
-CYAN="\033[36m"     # Directory
-YELLOW="\033[33m"   # Branch
-GRAY="\033[37m"     # Date/Time (dim)
-WHITE="\033[37m"    # Separator
-BG_FILLED="\033[48;5;240m"  # Lighter gray for filled part
-BG_EMPTY="\033[48;5;236m"   # Darker gray for empty part
+# Flexoki color palette (dark theme 400 values)
+FX_CYAN="\033[38;2;58;169;159m"     # #3AA99F
+FX_YELLOW="\033[38;2;208;162;21m"   # #D0A215
+FX_ORANGE="\033[38;2;218;112;44m"   # #DA702C
+FX_RED="\033[38;2;209;77;65m"       # #D14D41
+FX_GREEN="\033[38;2;135;154;57m"    # #879A39
+FX_BLUE="\033[38;2;67;133;190m"     # #4385BE
+FX_PURPLE="\033[38;2;139;126;200m"  # #8B7EC8
+
+# UI colors
+GRAY="\033[38;2;128;128;128m"
+WHITE="\033[37m"
+BG_FILLED="\033[48;5;240m"
+BG_EMPTY="\033[48;5;236m"
 RESET="\033[0m"
 
-# Calculate context usage progress bar first
+# Get context info from API (used_percentage is pre-calculated by Claude)
+max_ctx=$(echo "$input" | jq -r '.context_window.context_window_size // 200000')
+used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
+
 context_percent=""
-if [ -n "$CLAUDE_CONTEXT_USED_PERCENT" ]; then
-    context_percent="$CLAUDE_CONTEXT_USED_PERCENT"
-elif [ -n "$CLAUDE_CONTEXT_TOKENS_USED" ] && [ -n "$CLAUDE_CONTEXT_TOKENS_MAX" ] && [ "$CLAUDE_CONTEXT_TOKENS_MAX" -gt 0 ]; then
-    context_percent=$((CLAUDE_CONTEXT_TOKENS_USED * 100 / CLAUDE_CONTEXT_TOKENS_MAX))
-else
-    usage=$(echo "$input" | jq '.context_window.current_usage')
-    if [ "$usage" != "null" ]; then
-        current=$(echo "$usage" | jq '.input_tokens + .cache_creation_input_tokens + .cache_read_input_tokens')
-        size=$(echo "$input" | jq '.context_window.context_window_size')
-        if [ "$size" -gt 0 ]; then
-            context_percent=$((current * 100 / size))
-        fi
-    fi
+if [ -n "$used_pct" ] && [ "$used_pct" != "null" ]; then
+    context_percent=$(printf "%.0f" "$used_pct" 2>/dev/null || echo "$used_pct")
+    [ "$context_percent" -gt 100 ] 2>/dev/null && context_percent=100
 fi
 
 # Build the statusline: "Date | ▓▓▓░░░░░░░ 30% | Model in Dir on branch ~ files"
@@ -65,15 +64,27 @@ if [ -n "$context_percent" ]; then
     empty_bar=""
     for i in $(seq 1 $filled); do filled_bar="${filled_bar} "; done
     for i in $(seq 1 $empty); do empty_bar="${empty_bar} "; done
-    printf " ${WHITE}|${RESET} ${BG_FILLED}%s${RESET}${BG_EMPTY}%s${RESET} ${GRAY}%d%%${RESET}" "$filled_bar" "$empty_bar" "$context_percent"
+
+    used_k=$(( max_ctx * context_percent / 100 / 1000 ))
+    max_k=$(( max_ctx / 1000 ))
+
+    if [ "$context_percent" -gt 60 ]; then
+        CTX_COLOR="$FX_RED"
+    elif [ "$context_percent" -gt 40 ]; then
+        CTX_COLOR="$FX_ORANGE"
+    else
+        CTX_COLOR="$FX_CYAN"
+    fi
+
+    printf " ${WHITE}|${RESET} ${BG_FILLED}%s${RESET}${BG_EMPTY}%s${RESET} ${CTX_COLOR}%dk${RESET}${GRAY}/${RESET}${FX_CYAN}%dk${RESET} ${GRAY}(${RESET}${CTX_COLOR}%d%%${RESET} ${GRAY}used)${RESET}" "$filled_bar" "$empty_bar" "$used_k" "$max_k" "$context_percent"
 fi
 
-printf " ${WHITE}|${RESET} ${GREEN}%s${RESET} in ${CYAN}%s${RESET}" "$model_name" "$dir_name"
+printf " ${WHITE}|${RESET} ${FX_GREEN}%s${RESET} ${GRAY}in${RESET} ${FX_BLUE}%s${RESET}" "$model_name" "$dir_name"
 
 if [ -n "$branch" ] && [ "$branch" != "HEAD" ]; then
-    printf " on ${YELLOW}%s${RESET}" "$branch"
+    printf " ${GRAY}on${RESET} ${FX_PURPLE}%s${RESET}" "$branch"
 
     if [ -n "$changed_files_count" ] && [ "$changed_files_count" -gt 0 ]; then
-        printf " ${YELLOW}~ %s files${RESET}" "$changed_files_count"
+        printf " ${FX_ORANGE}~%s${RESET}" "$changed_files_count"
     fi
 fi
