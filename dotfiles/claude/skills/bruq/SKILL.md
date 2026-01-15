@@ -1,6 +1,12 @@
 ---
 name: bruq
 description: Execute Bruno .bru API requests via curl, or create new .bru files. Use when user asks to run, execute, or test an API request from a Bruno collection, references a .bru file, or wants to create a new Bruno request file.
+allowed-tools:
+  - Read
+  - Bash(bruq:*)
+  - Bash(ls:*)
+  - Bash(find:*)
+  - Bash(eval:*)
 ---
 
 # bruq
@@ -9,23 +15,40 @@ Convert and execute Bruno `.bru` files as curl commands, or create new `.bru` fi
 
 ## Execute Requests
 
+**CRITICAL: File paths must be on a single line with no line breaks inside quotes.**
+
 ```bash
-eval "$(bruq <path-to-file.bru> -e <environment>)"
+BRU_FILE='<path-to-file.bru>'
+eval "$(bruq "$BRU_FILE" -e <environment>)"
 ```
-
-### Examples
-
-**Run request:** `eval "$(bruq ./api/users/create.bru -e Local)"`
-
-**With verbose:** `eval "$(bruq ./api/auth/login.bru -e Dev -v)"`
-
-**Without env:** `eval "$(bruq ./api/health.bru)"`
 
 ### Options
 
-- `-e, --env <NAME>` - Load variables from `environments/<NAME>.bru`
+- `-e, --env <NAME>` - Load variables from `environments/<NAME>.bru` at collection root
 - `-v, --verbose` - Curl verbose output
 - `-s, --silent` - Curl silent mode
+
+## Collection Structure
+
+Bruno collections have this structure - **environments are always at the collection root** (same level as `bruno.json`):
+
+```
+collection-root/
+├── bruno.json           # Collection marker - find this first!
+├── environments/        # Environments are HERE, not in subfolders
+│   ├── LOCAL.bru
+│   ├── Dev.bru
+│   └── Prod.bru
+└── requests/            # Requests can be nested anywhere
+    └── subfolder/
+        └── request.bru
+```
+
+### Finding Files Efficiently
+
+1. **Find collection root**: Look for `bruno.json` by traversing up from the .bru file
+2. **Environments**: Always at `<collection-root>/environments/<NAME>.bru`
+3. **List available environments**: `ls <collection-root>/environments/`
 
 ## Create .bru Files
 
@@ -76,11 +99,3 @@ vars {
   TOKEN: your-token
 }
 ```
-
-## Finding Requests
-
-```bash
-find . -name "*.bru" -type f
-```
-
-Collections typically in `collections/` or `api/` directories.

@@ -15,6 +15,9 @@
       "Bash(tail:*)",
       "Bash(wc:*)",
       "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(dirname:*)",
+      "Bash(basename:*)",
       "WebSearch",
       "WebFetch"
     ],
