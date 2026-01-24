@@ -13,6 +13,9 @@
   },
   "preferences": {
     "menuBarEnabled": false,
-    "quickEntryShortcut": "off"
+    "quickEntryShortcut": "off",
+    "localAgentModeTrustedFolders": [
+      "/Users/pavel.karpovich/Obsidian/PK Workspace"
+    ]
   }
 }
