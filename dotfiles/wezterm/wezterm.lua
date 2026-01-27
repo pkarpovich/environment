@@ -61,7 +61,6 @@ local function configure_plugins(config, plugins)
         },
     })
 
-    plugins.domains.apply_to_config(config)
 end
 
 local function configure_gui_startup(plugins)
@@ -100,6 +99,7 @@ local function main()
         hide_tab_bar_if_only_one_tab = false,
         native_macos_fullscreen_mode = true,
         leader = { key = "L", mods = "ALT|SHIFT", timeout_milliseconds = 2000 },
+        key_map_preference = "Physical",
         keys = keybinds.configure_keys(plugins.resurrect, plugins.workspace_switcher),
     }
 

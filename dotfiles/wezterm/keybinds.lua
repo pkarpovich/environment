@@ -225,20 +225,25 @@ local function configure_keys(resurrect, workspace_switcher)
             action = act.CloseCurrentTab { confirm = false },
         },
         {
-            key = "t",
-            mods = "LEADER",
+            key = "T",
+            mods = "ALT|SHIFT",
             action = act.SpawnTab 'CurrentPaneDomain',
+        },
+        {
+            key = "V",
+            mods = "ALT|SHIFT",
+            action = act.ActivateCopyMode,
         },
         -- Starship prompt switching
         {
-            key = "1",
-            mods = "ALT|SHIFT",
-            action = act.SendString("starship_normal\n"),
+            key = "n",
+            mods = "LEADER",
+            action = act.SendString("starship_narrow\n"),
         },
         {
-            key = "2",
-            mods = "ALT|SHIFT",
-            action = act.SendString("starship_narrow\n"),
+            key = "N",
+            mods = "LEADER|SHIFT",
+            action = act.SendString("starship_normal\n"),
         },
         {
             key = "Enter",
@@ -262,7 +267,7 @@ local function configure_keys(resurrect, workspace_switcher)
         })
     end
 
-    tab_switch_keys(keys, "LEADER")
+    tab_switch_keys(keys, "ALT|SHIFT")
 
     return keys
 end
