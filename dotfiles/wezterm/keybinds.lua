@@ -137,45 +137,6 @@ local function configure_keys(resurrect, workspace_switcher)
             action = act.ActivateTabRelative(1),
         },
         {
-            -- Delete a saved session using a fuzzy finder
-            key = 'd',
-            mods = 'LEADER',
-            action = wezterm.action_callback(function(win, pane)
-                resurrect.fuzzy_loader.fuzzy_load(
-                    win,
-                    pane,
-                    function(id)
-                        resurrect.state_manager.delete_state(id)
-                    end,
-                    {
-                        title             = 'Delete State',
-                        description       = 'Select session to delete and press Enter = accept, Esc = cancel, / = filter',
-                        fuzzy_description = 'Search session to delete: ',
-                        is_fuzzy          = true,
-                    }
-                )
-            end),
-        },
-        {
-            key = 'r',
-            mods = 'LEADER',
-            action = wezterm.action.PromptInputLine({
-                description = wezterm.format({
-                    { Attribute = { Intensity = "Bold" } },
-                    { Foreground = { AnsiColor = "Fuchsia" } },
-                    { Text = "Renaming Current Workspace Titlel:" },
-                }),
-                action = wezterm.action_callback(function(window, _, line)
-                    if line then
-                        local current_name = wezterm.mux.get_active_workspace()
-                        wezterm.mux.rename_workspace(current_name, line)
-                        resurrect.state_manager.save_state(resurrect.workspace_state.get_workspace_state())
-                        resurrect.state_manager.delete_state(current_name)
-                    end
-                end),
-            }),
-        },
-        {
             key = 'u',
             mods = 'LEADER',
             action = wezterm.action_callback(function()
