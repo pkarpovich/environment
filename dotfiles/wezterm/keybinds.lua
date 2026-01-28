@@ -220,8 +220,8 @@ local function configure_keys(resurrect, workspace_switcher)
             action = act.CloseCurrentPane { confirm = false },
         },
         {
-            key = "C",
-            mods = "LEADER",
+            key = "W",
+            mods = "ALT|SHIFT",
             action = act.CloseCurrentTab { confirm = false },
         },
         {
