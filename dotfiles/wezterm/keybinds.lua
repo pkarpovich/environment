@@ -105,31 +105,10 @@ local function configure_keys(resurrect, workspace_switcher)
         { key = "UpArrow",    mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Up" }) },
         { key = "DownArrow",  mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Down" }) },
         {
-            key = "}",
-            mods = "ALT|SHIFT",
-            action = wezterm.action_callback(function(window, pane)
-                resize_panes_to_ratio(window, pane, 0.333)
-            end),
-        },
-        {
-            key = "{",
-            mods = "ALT|SHIFT",
-            action = wezterm.action_callback(function(window, pane)
-                resize_panes_to_ratio(window, pane, 0.667)
-            end),
-        },
-        {
-            key = "P",
-            mods = "ALT|SHIFT",
+            key = "=",
+            mods = "LEADER",
             action = wezterm.action_callback(function(window, pane)
                 resize_panes_to_ratio(window, pane, 0.5)
-            end),
-        },
-        {
-            key = "O",
-            mods = "ALT|SHIFT",
-            action = wezterm.action_callback(function(window, pane)
-                resize_panes_to_ratio(window, pane, 0.25)
             end),
         },
         {
@@ -162,11 +141,11 @@ local function configure_keys(resurrect, workspace_switcher)
             key = 'd',
             mods = 'LEADER',
             action = wezterm.action_callback(function(win, pane)
-                resurrect.fuzzy_load(
+                resurrect.fuzzy_loader.fuzzy_load(
                     win,
                     pane,
                     function(id)
-                        resurrect.delete_state(id)
+                        resurrect.state_manager.delete_state(id)
                     end,
                     {
                         title             = 'Delete State',
@@ -190,8 +169,8 @@ local function configure_keys(resurrect, workspace_switcher)
                     if line then
                         local current_name = wezterm.mux.get_active_workspace()
                         wezterm.mux.rename_workspace(current_name, line)
-                        resurrect.save_state(resurrect.workspace_state.get_workspace_state())
-                        resurrect.delete_state(current_name)
+                        resurrect.state_manager.save_state(resurrect.workspace_state.get_workspace_state())
+                        resurrect.state_manager.delete_state(current_name)
                     end
                 end),
             }),
@@ -207,7 +186,30 @@ local function configure_keys(resurrect, workspace_switcher)
         {
             key = "w",
             mods = "LEADER",
-            action = act.ShowLauncherArgs({ flags = "WORKSPACES", title = "workspaces" }),
+            action = wezterm.action_callback(function(_, pane)
+                pane:move_to_new_window()
+            end),
+        },
+        {
+            key = "a",
+            mods = "LEADER",
+            action = wezterm.action_callback(function(win, _)
+                local current_window_id = win:mux_window():window_id()
+                local wezterm_bin = wezterm.executable_dir .. '/wezterm'
+                for _, window in ipairs(wezterm.mux.all_windows()) do
+                    if window:window_id() ~= current_window_id then
+                        for _, tab in ipairs(window:tabs()) do
+                            for _, p in ipairs(tab:panes()) do
+                                wezterm.run_child_process({
+                                    wezterm_bin, 'cli', 'move-pane-to-new-tab',
+                                    '--pane-id', tostring(p:pane_id()),
+                                    '--window-id', tostring(current_window_id)
+                                })
+                            end
+                        end
+                    end
+                end
+            end),
         },
         {
             key = "s",
@@ -218,6 +220,23 @@ local function configure_keys(resurrect, workspace_switcher)
             key = "c",
             mods = "LEADER",
             action = act.CloseCurrentPane { confirm = false },
+        },
+        {
+            key = "z",
+            mods = "LEADER",
+            action = act.TogglePaneZoomState,
+        },
+        {
+            key = "f",
+            mods = "LEADER",
+            action = act.Search("CurrentSelectionOrEmptyString"),
+        },
+        {
+            key = "t",
+            mods = "LEADER",
+            action = wezterm.action_callback(function(_, pane)
+                pane:move_to_new_tab()
+            end),
         },
         {
             key = "W",

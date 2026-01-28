@@ -7,13 +7,13 @@ local function basename(s)
 end
 
 local function configure_workspaces(resurrect, workspace_switcher, colors)
-    resurrect.periodic_save({
+    resurrect.state_manager.periodic_save({
         interval_seconds = 15 * 60,
         save_workspaces = true,
         save_windows = true,
         save_tabs = true,
     })
-    resurrect.set_max_nlines(5000)
+    resurrect.state_manager.set_max_nlines(5000)
 
     workspace_switcher.zoxide_path = "/opt/homebrew/bin/zoxide"
     workspace_switcher.workspace_formatter = function(label)
@@ -38,7 +38,7 @@ local function configure_workspaces(resurrect, workspace_switcher, colors)
                 { Foreground = { Color = colors.ansi[5] } },
                 { Text = basename(path) .. "  " },
             }))
-            resurrect.workspace_state.restore_workspace(resurrect.load_state(label, "workspace"), {
+            resurrect.workspace_state.restore_workspace(resurrect.state_manager.load_state(label, "workspace"), {
                 window = window,
                 relative = true,
                 restore_text = true,
@@ -47,7 +47,7 @@ local function configure_workspaces(resurrect, workspace_switcher, colors)
         end)
 
         wezterm.on("smart_workspace_switcher.workspace_switcher.chosen", function(window, path, label)
-            wezterm.log_info("Chosen workspace: " .. label .. window)
+            wezterm.log_info("Chosen workspace: " .. label)
             window:gui_window():set_right_status(wezterm.format({
                 { Attribute = { Intensity = "Bold" } },
                 { Foreground = { Color = colors.ansi[5] } },
@@ -57,8 +57,8 @@ local function configure_workspaces(resurrect, workspace_switcher, colors)
 
         wezterm.on("smart_workspace_switcher.workspace_switcher.selected", function(_, _, label)
             wezterm.log_info("Selected workspace: " .. label)
-            resurrect.save_state(resurrect.workspace_state.get_workspace_state())
-            resurrect.write_current_state(label, "workspace")
+            resurrect.state_manager.save_state(resurrect.workspace_state.get_workspace_state())
+            resurrect.state_manager.write_current_state(label, "workspace")
         end)
 
         wezterm.on("smart_workspace_switcher.workspace_switcher.start", function(window, _)

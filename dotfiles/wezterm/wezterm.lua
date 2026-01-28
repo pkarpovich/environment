@@ -54,6 +54,9 @@ local function configure_plugins(config, plugins)
                 enabled = true,
                 icon = utf8.char(0x1f30a)
             },
+            zoom = {
+                enabled = true,
+            },
             pane = { enabled = false },
             username = { enabled = false },
             hostname = { enabled = false },
@@ -68,7 +71,7 @@ local function configure_gui_startup(plugins)
         wezterm.log_info("gui-startup")
         local _, _, window = wezterm.mux.spawn_window(cmd or {})
         window:gui_window():maximize()
-        plugins.resurrect.resurrect_on_gui_startup()
+        plugins.resurrect.state_manager.resurrect_on_gui_startup()
     end)
 end
 
