@@ -34,10 +34,10 @@
   .keyboard {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding: 24px;
+    gap: 10px;
+    padding: 40px;
     background: var(--bg-secondary);
-    border-radius: 16px;
+    border-radius: 24px;
     border: 1px solid var(--border-color);
     box-shadow:
       0 4px 24px rgba(0, 0, 0, 0.4),
@@ -46,12 +46,12 @@
 
   .keyboard-row {
     display: flex;
-    gap: 6px;
+    gap: 10px;
     justify-content: center;
   }
 
   .keyboard-row.arrows {
-    margin-top: 6px;
+    margin-top: 10px;
     margin-left: auto;
   }
 

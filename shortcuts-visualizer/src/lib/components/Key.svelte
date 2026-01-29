@@ -24,23 +24,23 @@
 
 <style>
   .key {
-    min-width: 48px;
-    height: 48px;
+    min-width: 80px;
+    height: 80px;
     background: var(--bg-key);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 500;
     color: var(--text-secondary);
     cursor: pointer;
     transition: all 0.15s ease;
     text-transform: uppercase;
     box-shadow:
-      0 2px 0 var(--bg-primary),
+      0 4px 0 var(--bg-primary),
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
@@ -89,15 +89,15 @@
       0 0 20px rgba(152, 195, 121, 0.3);
   }
 
-  .w-tab { min-width: 72px; }
-  .w-caps { min-width: 84px; }
-  .w-shift-l { min-width: 108px; }
-  .w-shift-r { min-width: 132px; }
-  .w-ctrl { min-width: 64px; }
-  .w-alt { min-width: 56px; }
-  .w-cmd { min-width: 64px; }
-  .w-space { min-width: 300px; }
-  .w-enter { min-width: 96px; }
-  .w-backspace { min-width: 84px; }
-  .w-backslash { min-width: 72px; }
+  .w-tab { min-width: 120px; }
+  .w-caps { min-width: 140px; }
+  .w-shift-l { min-width: 180px; }
+  .w-shift-r { min-width: 220px; }
+  .w-ctrl { min-width: 100px; }
+  .w-alt { min-width: 90px; }
+  .w-cmd { min-width: 100px; }
+  .w-space { min-width: 500px; }
+  .w-enter { min-width: 160px; }
+  .w-backspace { min-width: 140px; }
+  .w-backslash { min-width: 120px; }
 </style>
