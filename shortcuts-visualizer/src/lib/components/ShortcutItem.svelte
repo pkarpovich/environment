@@ -50,17 +50,19 @@
     border-radius: 6px;
     margin-bottom: 6px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     border: 1px solid transparent;
     width: 100%;
     font-family: inherit;
     font-size: inherit;
     text-align: left;
+    transform: translateX(0);
   }
 
   .shortcut-item:hover {
     background: var(--bg-key-hover);
     border-color: var(--border-color);
+    transform: translateX(4px);
   }
 
   .shortcut-item:focus {
@@ -68,9 +70,14 @@
     outline-offset: 2px;
   }
 
+  .shortcut-item:active {
+    transform: translateX(2px) scale(0.98);
+  }
+
   .shortcut-item.active {
     background: linear-gradient(135deg, rgba(57, 197, 207, 0.12), rgba(198, 120, 221, 0.08));
     border-color: var(--accent-cyan);
+    transform: translateX(4px);
   }
 
   .shortcut-keys {

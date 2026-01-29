@@ -75,13 +75,16 @@
   <main class="main-content">
     <div class="current-shortcut">
       <div class="current-shortcut-label">Selected Shortcut</div>
-      {#if activeShortcut}
-        <div class="current-shortcut-text">{activeShortcut.keys.join(' + ')}</div>
-        <div class="current-shortcut-action">{activeShortcut.action}</div>
-      {:else}
-        <div class="current-shortcut-text">Hover over a shortcut</div>
-        <div class="current-shortcut-action"></div>
-      {/if}
+      {#key activeShortcut}
+        <div class="current-shortcut-content">
+          {#if activeShortcut}
+            <div class="current-shortcut-text">{activeShortcut.keys.join(' + ')}</div>
+            <div class="current-shortcut-action">{activeShortcut.action}</div>
+          {:else}
+            <div class="current-shortcut-text placeholder">Hover over a shortcut</div>
+          {/if}
+        </div>
+      {/key}
     </div>
 
     <Keyboard highlightedKeys={highlightedKeys()} {showLeaderMode} />
@@ -127,7 +130,11 @@
 
   .current-shortcut {
     text-align: center;
-    min-height: 60px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
   }
 
   .current-shortcut-label {
@@ -138,11 +145,30 @@
     margin-bottom: 8px;
   }
 
+  .current-shortcut-content {
+    animation: fadeSlideIn 0.2s ease-out;
+  }
+
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .current-shortcut-text {
     font-family: 'JetBrains Mono', monospace;
     font-size: 18px;
     color: var(--accent-cyan);
     font-weight: 600;
+  }
+
+  .current-shortcut-text.placeholder {
+    color: var(--text-muted);
   }
 
   .current-shortcut-action {
