@@ -1,0 +1,23 @@
+[
+  {
+    "label": "shortcuts-visualizer: dev",
+    "command": "pnpm dev",
+    "cwd": "$ZED_WORKTREE_ROOT/shortcuts-visualizer",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false
+  },
+  {
+    "label": "shortcuts-visualizer: build",
+    "command": "pnpm build",
+    "cwd": "$ZED_WORKTREE_ROOT/shortcuts-visualizer",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false
+  },
+  {
+    "label": "shortcuts-visualizer: preview",
+    "command": "pnpm preview",
+    "cwd": "$ZED_WORKTREE_ROOT/shortcuts-visualizer",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false
+  }
+]
