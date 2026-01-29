@@ -89,6 +89,15 @@
       0 0 20px rgba(152, 195, 121, 0.3);
   }
 
+  .highlight-overview {
+    background: linear-gradient(135deg, rgba(139, 148, 158, 0.2), rgba(139, 148, 158, 0.08));
+    border-color: rgba(139, 148, 158, 0.4);
+    color: var(--text-primary);
+    box-shadow:
+      0 2px 0 var(--bg-primary),
+      0 0 10px rgba(139, 148, 158, 0.1);
+  }
+
   .w-tab { min-width: 120px; }
   .w-caps { min-width: 140px; }
   .w-shift-l { min-width: 180px; }

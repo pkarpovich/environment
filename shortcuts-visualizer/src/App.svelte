@@ -2,7 +2,7 @@
   import type { Shortcut, HighlightedKey } from './lib/types'
   import Sidebar from './lib/components/Sidebar.svelte'
   import Keyboard from './lib/components/Keyboard.svelte'
-  import { normalizeActionKey } from './lib/data/shortcuts'
+  import { normalizeActionKey, SHORTCUTS_DATA } from './lib/data/shortcuts'
 
   let currentApp = $state('wezterm')
   let selectedShortcut = $state<Shortcut | null>(null)
@@ -11,8 +11,33 @@
   const activeShortcut = $derived(hoveredShortcut || selectedShortcut)
   const showLeaderMode = $derived(activeShortcut?.leader === true)
 
+  const allUsedKeys = $derived((): HighlightedKey[] => {
+    const appData = SHORTCUTS_DATA[currentApp]
+    if (!appData) return []
+
+    const keySet = new Set<string>()
+
+    keySet.add('alt-l')
+    keySet.add('alt-r')
+    keySet.add('shift-l')
+    keySet.add('shift-r')
+
+    appData.groups.forEach(group => {
+      group.shortcuts.forEach(shortcut => {
+        if (shortcut.leader) {
+          keySet.add('l')
+        }
+        shortcut.actionKeys.forEach(key => {
+          keySet.add(normalizeActionKey(key))
+        })
+      })
+    })
+
+    return Array.from(keySet).map(id => ({ id, type: 'highlight-overview' as const }))
+  })
+
   const highlightedKeys = $derived((): HighlightedKey[] => {
-    if (!activeShortcut) return []
+    if (!activeShortcut) return allUsedKeys()
 
     const keys: HighlightedKey[] = []
     const isLeader = activeShortcut.leader === true
