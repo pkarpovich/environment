@@ -1,0 +1,51 @@
+:root {
+  --bg-primary: #0a0e14;
+  --bg-secondary: #131920;
+  --bg-tertiary: #1a2028;
+  --bg-key: #1e252e;
+  --bg-key-hover: #2a3340;
+  --text-primary: #e6e6e6;
+  --text-secondary: #8b949e;
+  --text-muted: #5c6370;
+  --accent-cyan: #39c5cf;
+  --accent-magenta: #c678dd;
+  --accent-orange: #e5c07b;
+  --accent-green: #98c379;
+  --accent-red: #e06c75;
+  --accent-blue: #61afef;
+  --border-color: #2d3640;
+  --glow-cyan: rgba(57, 197, 207, 0.3);
+  --glow-magenta: rgba(198, 120, 221, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(57, 197, 207, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(198, 120, 221, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#app {
+  min-height: 100vh;
+}
