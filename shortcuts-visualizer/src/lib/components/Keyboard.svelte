@@ -6,9 +6,12 @@
   interface Props {
     highlightedKeys?: HighlightedKey[]
     showLeaderMode?: boolean
+    hoveredKeyId?: string | null
+    onKeyHover?: (keyId: string) => void
+    onKeyLeave?: () => void
   }
 
-  let { highlightedKeys = [], showLeaderMode = false }: Props = $props()
+  let { highlightedKeys = [], showLeaderMode = false, hoveredKeyId = null, onKeyHover, onKeyLeave }: Props = $props()
 </script>
 
 <div class="keyboard-container">
@@ -19,13 +22,13 @@
     {#each KEYBOARD_LAYOUT as row}
       <div class="keyboard-row">
         {#each row as keyData}
-          <Key {keyData} {highlightedKeys} />
+          <Key {keyData} {highlightedKeys} {hoveredKeyId} {onKeyHover} {onKeyLeave} />
         {/each}
       </div>
     {/each}
     <div class="keyboard-row arrows">
       {#each ARROWS as keyData}
-        <Key {keyData} {highlightedKeys} />
+        <Key {keyData} {highlightedKeys} {hoveredKeyId} {onKeyHover} {onKeyLeave} />
       {/each}
     </div>
   </div>

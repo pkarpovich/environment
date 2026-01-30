@@ -4,9 +4,10 @@
   import Keyboard from './lib/components/Keyboard.svelte'
   import { normalizeActionKey, SHORTCUTS_DATA } from './lib/data/shortcuts'
 
-  let currentApp = $state('wezterm')
+  let currentApp = $state('all')
   let selectedShortcut = $state<Shortcut | null>(null)
   let hoveredShortcut = $state<Shortcut | null>(null)
+  let hoveredKeyId = $state<string | null>(null)
 
   const activeShortcut = $derived(hoveredShortcut || selectedShortcut)
   const showLeaderMode = $derived(activeShortcut?.leader === true)
@@ -122,12 +123,21 @@
       selectedShortcut = shortcut
     }
   }
+
+  function handleKeyHover(keyId: string) {
+    hoveredKeyId = keyId
+  }
+
+  function handleKeyLeave() {
+    hoveredKeyId = null
+  }
 </script>
 
 <div class="container">
   <Sidebar
     {currentApp}
     {selectedShortcut}
+    filterKeyId={hoveredKeyId}
     onAppChange={handleAppChange}
     onShortcutHover={handleShortcutHover}
     onShortcutLeave={handleShortcutLeave}
@@ -149,7 +159,13 @@
       {/key}
     </div>
 
-    <Keyboard highlightedKeys={highlightedKeys()} {showLeaderMode} />
+    <Keyboard
+      highlightedKeys={highlightedKeys()}
+      {showLeaderMode}
+      {hoveredKeyId}
+      onKeyHover={handleKeyHover}
+      onKeyLeave={handleKeyLeave}
+    />
 
     <div class="legend">
       <div class="legend-item">

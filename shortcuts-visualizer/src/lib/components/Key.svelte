@@ -4,9 +4,12 @@
   interface Props {
     keyData: KeyInput
     highlightedKeys?: HighlightedKey[]
+    hoveredKeyId?: string | null
+    onKeyHover?: (keyId: string) => void
+    onKeyLeave?: () => void
   }
 
-  let { keyData, highlightedKeys = [] }: Props = $props()
+  let { keyData, highlightedKeys = [], hoveredKeyId = null, onKeyHover, onKeyLeave }: Props = $props()
 
   const isObject = $derived(typeof keyData === 'object')
   const label = $derived(isObject ? (keyData as Exclude<KeyInput, string>).key : keyData)
@@ -18,11 +21,25 @@
     const match = highlightedKeys.find(h => h.id === keyId)
     return match ? match.type : ''
   })
+
+  const isKeyHovered = $derived(hoveredKeyId === keyId)
+
+  function handleMouseEnter() {
+    onKeyHover?.(keyId)
+  }
+
+  function handleMouseLeave() {
+    onKeyLeave?.()
+  }
 </script>
 
 <div
-  class={['key', widthClass, isModifier && 'modifier', highlightClass()]}
+  class={['key', widthClass, isModifier && 'modifier', highlightClass(), isKeyHovered && 'key-hovered']}
   data-key={keyId}
+  onmouseenter={handleMouseEnter}
+  onmouseleave={handleMouseLeave}
+  role="button"
+  tabindex="0"
 >
   {label}
 </div>
@@ -49,9 +66,20 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  .key:hover {
+  .key:hover:not(.key-hovered) {
     background: var(--bg-key-hover);
     transform: translateY(-1px);
+  }
+
+  .key.key-hovered,
+  .key.key-hovered:hover {
+    background: linear-gradient(135deg, rgba(58, 169, 159, 0.5), rgba(58, 169, 159, 0.3));
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    transform: translateY(-1px);
+    box-shadow:
+      0 2px 0 var(--bg-primary),
+      0 0 25px var(--glow-cyan);
   }
 
   .modifier {
