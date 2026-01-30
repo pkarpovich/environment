@@ -26,6 +26,9 @@
             incrementKey('alt-l')
             incrementKey('alt-r')
           }
+          if (shortcut.keys.includes('R-OPT')) {
+            incrementKey('alt-r')
+          }
           if (shortcut.keys.includes('SHIFT')) {
             incrementKey('shift-l')
             incrementKey('shift-r')
@@ -33,6 +36,9 @@
           if (shortcut.keys.includes('CMD')) {
             incrementKey('cmd-l')
             incrementKey('cmd-r')
+          }
+          if (shortcut.keys.includes('HYPER')) {
+            incrementKey('caps')
           }
           if (shortcut.leader) {
             incrementKey('l')
@@ -80,6 +86,10 @@
       keys.push({ id: 'alt-r', type: 'highlight-alt' })
     }
 
+    if (activeShortcut.keys.includes('R-OPT')) {
+      keys.push({ id: 'alt-r', type: 'highlight-alt' })
+    }
+
     if (activeShortcut.keys.includes('SHIFT')) {
       keys.push({ id: 'shift-l', type: 'highlight-shift' })
       keys.push({ id: 'shift-r', type: 'highlight-shift' })
@@ -88,6 +98,10 @@
     if (activeShortcut.keys.includes('CMD')) {
       keys.push({ id: 'cmd-l', type: 'highlight-cmd' })
       keys.push({ id: 'cmd-r', type: 'highlight-cmd' })
+    }
+
+    if (activeShortcut.keys.includes('HYPER')) {
+      keys.push({ id: 'caps', type: 'highlight-hyper' })
     }
 
     if (isLeader) {
@@ -187,6 +201,10 @@
       <div class="legend-item">
         <div class="legend-color mod-leader"></div>
         <span>Leader Combo</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color mod-hyper"></div>
+        <span>Hyper (Caps)</span>
       </div>
     </div>
   </main>
@@ -303,5 +321,10 @@
   .legend-color.mod-leader {
     background: linear-gradient(135deg, rgba(135, 154, 57, 0.5), rgba(135, 154, 57, 0.25));
     border: 1px solid var(--accent-green);
+  }
+
+  .legend-color.mod-hyper {
+    background: linear-gradient(135deg, rgba(138, 96, 179, 0.5), rgba(138, 96, 179, 0.25));
+    border: 1px solid #8a60b3;
   }
 </style>

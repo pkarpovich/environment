@@ -142,8 +142,10 @@
 
   function shortcutUsesKey(shortcut: Shortcut, keyId: string): boolean {
     if (shortcut.keys.includes('ALT') && (keyId === 'alt-l' || keyId === 'alt-r')) return true
+    if (shortcut.keys.includes('R-OPT') && keyId === 'alt-r') return true
     if (shortcut.keys.includes('SHIFT') && (keyId === 'shift-l' || keyId === 'shift-r')) return true
     if (shortcut.keys.includes('CMD') && (keyId === 'cmd-l' || keyId === 'cmd-r')) return true
+    if (shortcut.keys.includes('HYPER') && keyId === 'caps') return true
     if (shortcut.leader && keyId === 'l') return true
     return shortcut.actionKeys.some(key => normalizeActionKey(key) === keyId)
   }

@@ -131,6 +131,15 @@
       0 0 20px rgba(135, 154, 57, 0.3);
   }
 
+  .highlight-hyper {
+    background: linear-gradient(135deg, rgba(138, 96, 179, 0.35), rgba(138, 96, 179, 0.15));
+    border-color: #8a60b3;
+    color: #8a60b3;
+    box-shadow:
+      0 2px 0 var(--bg-primary),
+      0 0 20px rgba(138, 96, 179, 0.3);
+  }
+
   .highlight-heat-1 {
     background: linear-gradient(135deg, rgba(58, 169, 159, 0.08), rgba(58, 169, 159, 0.03));
     border-color: rgba(58, 169, 159, 0.2);

@@ -32,6 +32,7 @@ export type HighlightType =
   | 'highlight-cmd'
   | 'highlight-action'
   | 'highlight-leader'
+  | 'highlight-hyper'
   | 'highlight-heat-1'
   | 'highlight-heat-2'
   | 'highlight-heat-3'
