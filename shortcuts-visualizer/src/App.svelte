@@ -8,11 +8,13 @@
   let selectedShortcut = $state<Shortcut | null>(null)
   let hoveredShortcut = $state<Shortcut | null>(null)
   let hoveredKeyId = $state<string | null>(null)
+  let showHeatmap = $state(false)
+  let heldModifier = $state<'cmd' | 'alt' | 'hyper' | null>(null)
 
   const activeShortcut = $derived(hoveredShortcut || selectedShortcut)
   const showLeaderMode = $derived(activeShortcut?.leader === true)
 
-  const allUsedKeys = $derived((): HighlightedKey[] => {
+  const heatmapKeys = $derived((): HighlightedKey[] => {
     const keyFrequency = new Map<string, number>()
 
     const incrementKey = (key: string) => {
@@ -75,8 +77,62 @@
     }))
   })
 
+  const modifierHighlights = $derived((): HighlightedKey[] => {
+    if (!heldModifier) return []
+
+    const keys: HighlightedKey[] = []
+    const modifierKey = heldModifier === 'cmd' ? 'CMD' :
+                        heldModifier === 'alt' ? ['ALT', 'R-OPT'] :
+                        heldModifier === 'hyper' ? 'HYPER' : null
+
+    if (!modifierKey) return []
+
+    const highlightType: HighlightedKey['type'] =
+      heldModifier === 'cmd' ? 'highlight-cmd' :
+      heldModifier === 'alt' ? 'highlight-alt' :
+      'highlight-hyper'
+
+    if (heldModifier === 'cmd') {
+      keys.push({ id: 'cmd-l', type: highlightType })
+      keys.push({ id: 'cmd-r', type: highlightType })
+    } else if (heldModifier === 'alt') {
+      keys.push({ id: 'alt-l', type: highlightType })
+      keys.push({ id: 'alt-r', type: highlightType })
+    } else if (heldModifier === 'hyper') {
+      keys.push({ id: 'caps', type: highlightType })
+    }
+
+    const processApp = (appData: typeof SHORTCUTS_DATA[string]) => {
+      appData.groups.forEach(group => {
+        group.shortcuts.forEach(shortcut => {
+          const hasModifier = Array.isArray(modifierKey)
+            ? modifierKey.some(m => shortcut.keys.includes(m))
+            : shortcut.keys.includes(modifierKey)
+
+          if (hasModifier || (heldModifier === 'hyper' && shortcut.leader)) {
+            shortcut.actionKeys.forEach(key => {
+              const keyId = normalizeActionKey(key)
+              if (!keys.find(k => k.id === keyId)) {
+                keys.push({ id: keyId, type: 'highlight-action' })
+              }
+            })
+          }
+        })
+      })
+    }
+
+    if (currentApp === 'all') {
+      Object.values(SHORTCUTS_DATA).forEach(processApp)
+    } else {
+      const appData = SHORTCUTS_DATA[currentApp]
+      if (appData) processApp(appData)
+    }
+
+    return keys
+  })
+
   const highlightedKeys = $derived((): HighlightedKey[] => {
-    if (!activeShortcut) return allUsedKeys()
+    if (!activeShortcut) return []
 
     const keys: HighlightedKey[] = []
     const isLeader = activeShortcut.leader === true
@@ -114,6 +170,27 @@
     })
 
     return keys
+  })
+
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Meta') heldModifier = 'cmd'
+    else if (e.key === 'Alt') heldModifier = 'alt'
+    else if (e.key === 'CapsLock') heldModifier = 'hyper'
+  }
+
+  function handleKeyUp(e: KeyboardEvent) {
+    if (e.key === 'Meta' || e.key === 'Alt' || e.key === 'CapsLock') {
+      heldModifier = null
+    }
+  }
+
+  $effect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
   })
 
   function handleAppChange(appId: string) {
@@ -175,10 +252,14 @@
 
     <Keyboard
       highlightedKeys={highlightedKeys()}
+      heatmapKeys={heatmapKeys()}
+      modifierHighlights={modifierHighlights()}
       {showLeaderMode}
       {hoveredKeyId}
+      {showHeatmap}
       onKeyHover={handleKeyHover}
       onKeyLeave={handleKeyLeave}
+      onToggleHeatmap={() => showHeatmap = !showHeatmap}
     />
 
     <div class="legend">
