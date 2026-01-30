@@ -26,7 +26,18 @@ export interface KeyData {
 
 export type KeyInput = string | KeyData
 
+export type HighlightType =
+  | 'highlight-alt'
+  | 'highlight-shift'
+  | 'highlight-action'
+  | 'highlight-leader'
+  | 'highlight-heat-1'
+  | 'highlight-heat-2'
+  | 'highlight-heat-3'
+  | 'highlight-heat-4'
+  | 'highlight-heat-5'
+
 export interface HighlightedKey {
   id: string
-  type: 'highlight-alt' | 'highlight-shift' | 'highlight-action' | 'highlight-leader' | 'highlight-overview'
+  type: HighlightType
 }

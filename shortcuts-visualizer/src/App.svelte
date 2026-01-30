@@ -15,25 +15,46 @@
     const appData = SHORTCUTS_DATA[currentApp]
     if (!appData) return []
 
-    const keySet = new Set<string>()
+    const keyFrequency = new Map<string, number>()
 
-    keySet.add('alt-l')
-    keySet.add('alt-r')
-    keySet.add('shift-l')
-    keySet.add('shift-r')
+    const incrementKey = (key: string) => {
+      keyFrequency.set(key, (keyFrequency.get(key) || 0) + 1)
+    }
 
     appData.groups.forEach(group => {
       group.shortcuts.forEach(shortcut => {
+        if (shortcut.keys.includes('ALT')) {
+          incrementKey('alt-l')
+          incrementKey('alt-r')
+        }
+        if (shortcut.keys.includes('SHIFT')) {
+          incrementKey('shift-l')
+          incrementKey('shift-r')
+        }
         if (shortcut.leader) {
-          keySet.add('l')
+          incrementKey('l')
         }
         shortcut.actionKeys.forEach(key => {
-          keySet.add(normalizeActionKey(key))
+          incrementKey(normalizeActionKey(key))
         })
       })
     })
 
-    return Array.from(keySet).map(id => ({ id, type: 'highlight-overview' as const }))
+    const maxFreq = Math.max(...keyFrequency.values())
+
+    const getHeatLevel = (freq: number): HighlightedKey['type'] => {
+      const ratio = freq / maxFreq
+      if (ratio > 0.8) return 'highlight-heat-5'
+      if (ratio > 0.6) return 'highlight-heat-4'
+      if (ratio > 0.4) return 'highlight-heat-3'
+      if (ratio > 0.2) return 'highlight-heat-2'
+      return 'highlight-heat-1'
+    }
+
+    return Array.from(keyFrequency.entries()).map(([id, freq]) => ({
+      id,
+      type: getHeatLevel(freq)
+    }))
   })
 
   const highlightedKeys = $derived((): HighlightedKey[] => {

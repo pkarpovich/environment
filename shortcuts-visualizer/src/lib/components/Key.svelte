@@ -94,13 +94,47 @@
       0 0 20px rgba(135, 154, 57, 0.3);
   }
 
-  .highlight-overview {
-    background: linear-gradient(135deg, rgba(135, 133, 128, 0.2), rgba(135, 133, 128, 0.08));
-    border-color: rgba(135, 133, 128, 0.4);
+  .highlight-heat-1 {
+    background: linear-gradient(135deg, rgba(58, 169, 159, 0.08), rgba(58, 169, 159, 0.03));
+    border-color: rgba(58, 169, 159, 0.2);
+    color: rgba(206, 205, 195, 0.6);
+    box-shadow: 0 2px 0 var(--bg-primary);
+  }
+
+  .highlight-heat-2 {
+    background: linear-gradient(135deg, rgba(58, 169, 159, 0.15), rgba(58, 169, 159, 0.06));
+    border-color: rgba(58, 169, 159, 0.35);
+    color: rgba(206, 205, 195, 0.75);
+    box-shadow:
+      0 2px 0 var(--bg-primary),
+      0 0 8px rgba(58, 169, 159, 0.1);
+  }
+
+  .highlight-heat-3 {
+    background: linear-gradient(135deg, rgba(58, 169, 159, 0.22), rgba(58, 169, 159, 0.1));
+    border-color: rgba(58, 169, 159, 0.5);
     color: var(--text-primary);
     box-shadow:
       0 2px 0 var(--bg-primary),
-      0 0 10px rgba(135, 133, 128, 0.1);
+      0 0 12px rgba(58, 169, 159, 0.15);
+  }
+
+  .highlight-heat-4 {
+    background: linear-gradient(135deg, rgba(58, 169, 159, 0.3), rgba(58, 169, 159, 0.15));
+    border-color: rgba(58, 169, 159, 0.65);
+    color: var(--accent-cyan);
+    box-shadow:
+      0 2px 0 var(--bg-primary),
+      0 0 16px rgba(58, 169, 159, 0.2);
+  }
+
+  .highlight-heat-5 {
+    background: linear-gradient(135deg, rgba(58, 169, 159, 0.4), rgba(58, 169, 159, 0.2));
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    box-shadow:
+      0 2px 0 var(--bg-primary),
+      0 0 20px rgba(58, 169, 159, 0.3);
   }
 
   .w-tab { min-width: 120px; }
