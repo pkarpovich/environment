@@ -109,6 +109,28 @@ export const ARROWS: KeyInput[] = [
   { key: '→', id: 'arrow-right' }
 ]
 
+export const KEYBOARD_LAYOUT_RU: KeyInput[][] = [
+  [{ key: 'ё', id: '`' }, { key: '1', id: '1' }, { key: '2', id: '2' }, { key: '3', id: '3' }, { key: '4', id: '4' }, { key: '5', id: '5' }, { key: '6', id: '6' }, { key: '7', id: '7' }, { key: '8', id: '8' }, { key: '9', id: '9' }, { key: '0', id: '0' }, { key: '-', id: '-' }, { key: '=', id: '=' }, { key: '⌫', width: 'backspace' }],
+  [{ key: '⇥', width: 'tab' }, { key: 'Й', id: 'q' }, { key: 'Ц', id: 'w' }, { key: 'У', id: 'e' }, { key: 'К', id: 'r' }, { key: 'Е', id: 't' }, { key: 'Н', id: 'y' }, { key: 'Г', id: 'u' }, { key: 'Ш', id: 'i' }, { key: 'Щ', id: 'o' }, { key: 'З', id: 'p' }, { key: 'Х', id: '[' }, { key: 'Ъ', id: ']' }, { key: '\\', width: 'backslash' }],
+  [{ key: '⇪', width: 'caps' }, { key: 'Ф', id: 'a' }, { key: 'Ы', id: 's' }, { key: 'В', id: 'd' }, { key: 'А', id: 'f' }, { key: 'П', id: 'g' }, { key: 'Р', id: 'h' }, { key: 'О', id: 'j' }, { key: 'Л', id: 'k' }, { key: 'Д', id: 'l' }, { key: 'Ж', id: ';' }, { key: 'Э', id: "'" }, { key: '↵', width: 'enter' }],
+  [{ key: '⇧', width: 'shift-l', id: 'shift-l', modifier: true }, { key: 'Я', id: 'z' }, { key: 'Ч', id: 'x' }, { key: 'С', id: 'c' }, { key: 'М', id: 'v' }, { key: 'И', id: 'b' }, { key: 'Т', id: 'n' }, { key: 'Ь', id: 'm' }, { key: 'Б', id: ',' }, { key: 'Ю', id: '.' }, { key: '.', id: '/' }, { key: '⇧', width: 'shift-r', id: 'shift-r', modifier: true }],
+  [
+    { key: 'ctrl', width: 'ctrl', modifier: true },
+    { key: '⌥', width: 'alt', id: 'alt-l', modifier: true },
+    { key: '⌘', width: 'cmd', id: 'cmd-l', modifier: true },
+    { key: '', width: 'space' },
+    { key: '⌘', width: 'cmd', id: 'cmd-r', modifier: true },
+    { key: '⌥', width: 'alt', id: 'alt-r', modifier: true },
+    { key: 'ctrl', width: 'ctrl', modifier: true }
+  ]
+]
+
+export type KeyboardLang = 'en' | 'ru'
+
+export function getKeyboardLayout(lang: KeyboardLang): KeyInput[][] {
+  return lang === 'ru' ? KEYBOARD_LAYOUT_RU : KEYBOARD_LAYOUT
+}
+
 export function getKeyId(keyData: KeyInput): string {
   if (typeof keyData === 'string') {
     return keyData.toLowerCase()

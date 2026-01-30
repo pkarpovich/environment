@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { HighlightedKey } from '../types'
   import Key from './Key.svelte'
-  import { KEYBOARD_LAYOUT, ARROWS } from '../data/shortcuts'
+  import { ARROWS, getKeyboardLayout, type KeyboardLang } from '../data/shortcuts'
 
   interface Props {
     highlightedKeys?: HighlightedKey[]
@@ -12,14 +12,24 @@
   }
 
   let { highlightedKeys = [], showLeaderMode = false, hoveredKeyId = null, onKeyHover, onKeyLeave }: Props = $props()
+
+  let lang = $state<KeyboardLang>('en')
+  const layout = $derived(getKeyboardLayout(lang))
+
+  function toggleLang() {
+    lang = lang === 'en' ? 'ru' : 'en'
+  }
 </script>
 
 <div class="keyboard-container">
   <div class={['mode-indicator', showLeaderMode && 'visible']}>
     Leader Mode
   </div>
+  <button class="lang-toggle" onclick={toggleLang} title="Switch keyboard layout">
+    {lang.toUpperCase()}
+  </button>
   <div class="keyboard">
-    {#each KEYBOARD_LAYOUT as row}
+    {#each layout as row}
       <div class="keyboard-row">
         {#each row as keyData}
           <Key {keyData} {highlightedKeys} {hoveredKeyId} {onKeyHover} {onKeyLeave} />
@@ -82,5 +92,28 @@
 
   .mode-indicator.visible {
     opacity: 1;
+  }
+
+  .lang-toggle {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--bg-tertiary);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .lang-toggle:hover {
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
   }
 </style>
