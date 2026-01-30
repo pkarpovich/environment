@@ -76,6 +76,15 @@
       0 0 20px var(--glow-cyan);
   }
 
+  .highlight-cmd {
+    background: linear-gradient(135deg, rgba(67, 133, 190, 0.3), rgba(67, 133, 190, 0.15));
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    box-shadow:
+      0 2px 0 var(--bg-primary),
+      0 0 20px rgba(67, 133, 190, 0.3);
+  }
+
   .highlight-action {
     background: linear-gradient(135deg, rgba(218, 112, 44, 0.35), rgba(218, 112, 44, 0.15));
     border-color: var(--accent-orange);

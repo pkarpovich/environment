@@ -12,33 +12,44 @@
   const showLeaderMode = $derived(activeShortcut?.leader === true)
 
   const allUsedKeys = $derived((): HighlightedKey[] => {
-    const appData = SHORTCUTS_DATA[currentApp]
-    if (!appData) return []
-
     const keyFrequency = new Map<string, number>()
 
     const incrementKey = (key: string) => {
       keyFrequency.set(key, (keyFrequency.get(key) || 0) + 1)
     }
 
-    appData.groups.forEach(group => {
-      group.shortcuts.forEach(shortcut => {
-        if (shortcut.keys.includes('ALT')) {
-          incrementKey('alt-l')
-          incrementKey('alt-r')
-        }
-        if (shortcut.keys.includes('SHIFT')) {
-          incrementKey('shift-l')
-          incrementKey('shift-r')
-        }
-        if (shortcut.leader) {
-          incrementKey('l')
-        }
-        shortcut.actionKeys.forEach(key => {
-          incrementKey(normalizeActionKey(key))
+    const processApp = (appData: typeof SHORTCUTS_DATA[string]) => {
+      appData.groups.forEach(group => {
+        group.shortcuts.forEach(shortcut => {
+          if (shortcut.keys.includes('ALT')) {
+            incrementKey('alt-l')
+            incrementKey('alt-r')
+          }
+          if (shortcut.keys.includes('SHIFT')) {
+            incrementKey('shift-l')
+            incrementKey('shift-r')
+          }
+          if (shortcut.keys.includes('CMD')) {
+            incrementKey('cmd-l')
+            incrementKey('cmd-r')
+          }
+          if (shortcut.leader) {
+            incrementKey('l')
+          }
+          shortcut.actionKeys.forEach(key => {
+            incrementKey(normalizeActionKey(key))
+          })
         })
       })
-    })
+    }
+
+    if (currentApp === 'all') {
+      Object.values(SHORTCUTS_DATA).forEach(processApp)
+    } else {
+      const appData = SHORTCUTS_DATA[currentApp]
+      if (!appData) return []
+      processApp(appData)
+    }
 
     const maxFreq = Math.max(...keyFrequency.values())
 
@@ -71,6 +82,11 @@
     if (activeShortcut.keys.includes('SHIFT')) {
       keys.push({ id: 'shift-l', type: 'highlight-shift' })
       keys.push({ id: 'shift-r', type: 'highlight-shift' })
+    }
+
+    if (activeShortcut.keys.includes('CMD')) {
+      keys.push({ id: 'cmd-l', type: 'highlight-cmd' })
+      keys.push({ id: 'cmd-r', type: 'highlight-cmd' })
     }
 
     if (isLeader) {
@@ -136,6 +152,10 @@
     <Keyboard highlightedKeys={highlightedKeys()} {showLeaderMode} />
 
     <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color mod-cmd"></div>
+        <span>CMD</span>
+      </div>
       <div class="legend-item">
         <div class="legend-color mod-alt"></div>
         <span>ALT</span>
@@ -242,6 +262,11 @@
     width: 16px;
     height: 16px;
     border-radius: 4px;
+  }
+
+  .legend-color.mod-cmd {
+    background: linear-gradient(135deg, rgba(67, 133, 190, 0.5), rgba(67, 133, 190, 0.25));
+    border: 1px solid var(--accent-blue);
   }
 
   .legend-color.mod-alt {

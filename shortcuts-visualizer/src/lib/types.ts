@@ -29,6 +29,7 @@ export type KeyInput = string | KeyData
 export type HighlightType =
   | 'highlight-alt'
   | 'highlight-shift'
+  | 'highlight-cmd'
   | 'highlight-action'
   | 'highlight-leader'
   | 'highlight-heat-1'

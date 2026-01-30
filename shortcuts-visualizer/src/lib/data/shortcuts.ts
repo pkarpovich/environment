@@ -1,6 +1,45 @@
 import type { ShortcutsData, KeyInput } from '../types'
 
 export const SHORTCUTS_DATA: ShortcutsData = {
+  obsidian: {
+    name: "Obsidian",
+    groups: [
+      {
+        name: "Navigation",
+        shortcuts: [
+          { keys: ["CMD", "E"], action: "Quick Switcher", actionKeys: ["E"] },
+          { keys: ["CMD", "SHIFT", "E"], action: "Previous file", actionKeys: ["E"] }
+        ]
+      },
+      {
+        name: "Templates",
+        shortcuts: [
+          { keys: ["CMD", "T"], action: "Templater", actionKeys: ["T"] },
+          { keys: ["CMD", "SHIFT", "T"], action: "QuickAdd menu", actionKeys: ["T"] }
+        ]
+      },
+      {
+        name: "Panels",
+        shortcuts: [
+          { keys: ["CMD", "\\"], action: "Left sidebar", actionKeys: ["\\"] },
+          { keys: ["CMD", "SHIFT", "\\"], action: "Right sidebar", actionKeys: ["\\"] }
+        ]
+      },
+      {
+        name: "Mode",
+        shortcuts: [
+          { keys: ["CMD", "R"], action: "Toggle Read/Edit view", actionKeys: ["R"] }
+        ]
+      },
+      {
+        name: "Periods",
+        shortcuts: [
+          { keys: ["CMD", "D"], action: "Current week", actionKeys: ["D"] },
+          { keys: ["CMD", "SHIFT", "D"], action: "Previous week", actionKeys: ["D"] }
+        ]
+      }
+    ]
+  },
   wezterm: {
     name: "WezTerm",
     groups: [
@@ -55,9 +94,9 @@ export const KEYBOARD_LAYOUT: KeyInput[][] = [
   [
     { key: 'ctrl', width: 'ctrl', modifier: true },
     { key: '⌥', width: 'alt', id: 'alt-l', modifier: true },
-    { key: '⌘', width: 'cmd', modifier: true },
+    { key: '⌘', width: 'cmd', id: 'cmd-l', modifier: true },
     { key: '', width: 'space' },
-    { key: '⌘', width: 'cmd', modifier: true },
+    { key: '⌘', width: 'cmd', id: 'cmd-r', modifier: true },
     { key: '⌥', width: 'alt', id: 'alt-r', modifier: true },
     { key: 'ctrl', width: 'ctrl', modifier: true }
   ]

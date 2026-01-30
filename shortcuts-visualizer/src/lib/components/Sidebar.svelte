@@ -22,13 +22,35 @@
   }: Props = $props()
 
   const apps = Object.entries(SHORTCUTS_DATA)
-  const currentAppData = $derived(SHORTCUTS_DATA[currentApp])
+
+  const allAppsData = $derived(() => {
+    const groups: { name: string; shortcuts: Shortcut[] }[] = []
+    Object.entries(SHORTCUTS_DATA).forEach(([appId, app]) => {
+      app.groups.forEach(group => {
+        groups.push({
+          name: `${app.name} — ${group.name}`,
+          shortcuts: group.shortcuts
+        })
+      })
+    })
+    return { name: 'All', groups }
+  })
+
+  const currentAppData = $derived(
+    currentApp === 'all' ? allAppsData() : SHORTCUTS_DATA[currentApp]
+  )
 </script>
 
 <aside class="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-title">Applications</div>
     <div class="app-tabs">
+      <button
+        class={['app-tab', currentApp === 'all' && 'active']}
+        onclick={() => onAppChange('all')}
+      >
+        All
+      </button>
       {#each apps as [id, app]}
         <button
           class={['app-tab', id === currentApp && 'active']}
