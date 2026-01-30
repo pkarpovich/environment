@@ -108,7 +108,7 @@
   }
 
   .app-tab.active {
-    background: linear-gradient(135deg, rgba(57, 197, 207, 0.15), rgba(198, 120, 221, 0.1));
+    background: linear-gradient(135deg, rgba(58, 169, 159, 0.15), rgba(206, 93, 151, 0.1));
     border-color: var(--accent-cyan);
     color: var(--accent-cyan);
   }

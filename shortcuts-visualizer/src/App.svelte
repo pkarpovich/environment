@@ -224,22 +224,22 @@
   }
 
   .legend-color.mod-alt {
-    background: linear-gradient(135deg, rgba(198, 120, 221, 0.5), rgba(198, 120, 221, 0.25));
+    background: linear-gradient(135deg, rgba(206, 93, 151, 0.5), rgba(206, 93, 151, 0.25));
     border: 1px solid var(--accent-magenta);
   }
 
   .legend-color.mod-shift {
-    background: linear-gradient(135deg, rgba(57, 197, 207, 0.5), rgba(57, 197, 207, 0.25));
+    background: linear-gradient(135deg, rgba(58, 169, 159, 0.5), rgba(58, 169, 159, 0.25));
     border: 1px solid var(--accent-cyan);
   }
 
   .legend-color.mod-action {
-    background: linear-gradient(135deg, rgba(229, 192, 123, 0.5), rgba(229, 192, 123, 0.25));
+    background: linear-gradient(135deg, rgba(218, 112, 44, 0.5), rgba(218, 112, 44, 0.25));
     border: 1px solid var(--accent-orange);
   }
 
   .legend-color.mod-leader {
-    background: linear-gradient(135deg, rgba(152, 195, 121, 0.5), rgba(152, 195, 121, 0.25));
+    background: linear-gradient(135deg, rgba(135, 154, 57, 0.5), rgba(135, 154, 57, 0.25));
     border: 1px solid var(--accent-green);
   }
 </style>

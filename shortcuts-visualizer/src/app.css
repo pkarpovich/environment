@@ -1,21 +1,21 @@
 :root {
-  --bg-primary: #0a0e14;
-  --bg-secondary: #131920;
-  --bg-tertiary: #1a2028;
-  --bg-key: #1e252e;
-  --bg-key-hover: #2a3340;
-  --text-primary: #e6e6e6;
-  --text-secondary: #8b949e;
-  --text-muted: #5c6370;
-  --accent-cyan: #39c5cf;
-  --accent-magenta: #c678dd;
-  --accent-orange: #e5c07b;
-  --accent-green: #98c379;
-  --accent-red: #e06c75;
-  --accent-blue: #61afef;
-  --border-color: #2d3640;
-  --glow-cyan: rgba(57, 197, 207, 0.3);
-  --glow-magenta: rgba(198, 120, 221, 0.3);
+  --bg-primary: #100F0F;
+  --bg-secondary: #1C1B1A;
+  --bg-tertiary: #282726;
+  --bg-key: #343331;
+  --bg-key-hover: #403E3C;
+  --text-primary: #CECDC3;
+  --text-secondary: #878580;
+  --text-muted: #6F6E69;
+  --accent-cyan: #3AA99F;
+  --accent-magenta: #CE5D97;
+  --accent-orange: #DA702C;
+  --accent-green: #879A39;
+  --accent-red: #D14D41;
+  --accent-blue: #4385BE;
+  --border-color: #403E3C;
+  --glow-cyan: rgba(58, 169, 159, 0.3);
+  --glow-magenta: rgba(206, 93, 151, 0.3);
 }
 
 * {
@@ -40,8 +40,8 @@ body::before {
   right: 0;
   bottom: 0;
   background:
-    radial-gradient(ellipse at 20% 20%, rgba(57, 197, 207, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(198, 120, 221, 0.06) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 20%, rgba(58, 169, 159, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(206, 93, 151, 0.04) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
 }

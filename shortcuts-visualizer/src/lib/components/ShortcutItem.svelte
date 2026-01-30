@@ -70,7 +70,7 @@
   }
 
   .shortcut-item.active {
-    background: linear-gradient(135deg, rgba(57, 197, 207, 0.12), rgba(198, 120, 221, 0.08));
+    background: linear-gradient(135deg, rgba(58, 169, 159, 0.12), rgba(206, 93, 151, 0.08));
     border-color: var(--accent-cyan);
     transform: translateX(4px);
   }

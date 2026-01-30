@@ -59,7 +59,7 @@
   }
 
   .highlight-alt {
-    background: linear-gradient(135deg, rgba(198, 120, 221, 0.3), rgba(198, 120, 221, 0.15));
+    background: linear-gradient(135deg, rgba(206, 93, 151, 0.3), rgba(206, 93, 151, 0.15));
     border-color: var(--accent-magenta);
     color: var(--accent-magenta);
     box-shadow:
@@ -68,7 +68,7 @@
   }
 
   .highlight-shift {
-    background: linear-gradient(135deg, rgba(57, 197, 207, 0.3), rgba(57, 197, 207, 0.15));
+    background: linear-gradient(135deg, rgba(58, 169, 159, 0.3), rgba(58, 169, 159, 0.15));
     border-color: var(--accent-cyan);
     color: var(--accent-cyan);
     box-shadow:
@@ -77,30 +77,30 @@
   }
 
   .highlight-action {
-    background: linear-gradient(135deg, rgba(229, 192, 123, 0.35), rgba(229, 192, 123, 0.15));
+    background: linear-gradient(135deg, rgba(218, 112, 44, 0.35), rgba(218, 112, 44, 0.15));
     border-color: var(--accent-orange);
     color: var(--accent-orange);
     box-shadow:
       0 2px 0 var(--bg-primary),
-      0 0 20px rgba(229, 192, 123, 0.3);
+      0 0 20px rgba(218, 112, 44, 0.3);
   }
 
   .highlight-leader {
-    background: linear-gradient(135deg, rgba(152, 195, 121, 0.35), rgba(152, 195, 121, 0.15));
+    background: linear-gradient(135deg, rgba(135, 154, 57, 0.35), rgba(135, 154, 57, 0.15));
     border-color: var(--accent-green);
     color: var(--accent-green);
     box-shadow:
       0 2px 0 var(--bg-primary),
-      0 0 20px rgba(152, 195, 121, 0.3);
+      0 0 20px rgba(135, 154, 57, 0.3);
   }
 
   .highlight-overview {
-    background: linear-gradient(135deg, rgba(139, 148, 158, 0.2), rgba(139, 148, 158, 0.08));
-    border-color: rgba(139, 148, 158, 0.4);
+    background: linear-gradient(135deg, rgba(135, 133, 128, 0.2), rgba(135, 133, 128, 0.08));
+    border-color: rgba(135, 133, 128, 0.4);
     color: var(--text-primary);
     box-shadow:
       0 2px 0 var(--bg-primary),
-      0 0 10px rgba(139, 148, 158, 0.1);
+      0 0 10px rgba(135, 133, 128, 0.1);
   }
 
   .w-tab { min-width: 120px; }
