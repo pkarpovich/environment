@@ -3,11 +3,16 @@
   import Key from './Key.svelte'
   import { KEYBOARD_LAYOUT, ARROWS } from '../data/shortcuts'
 
-  let { highlightedKeys = [], showLeaderMode = false }: { highlightedKeys: HighlightedKey[]; showLeaderMode: boolean } = $props()
+  interface Props {
+    highlightedKeys?: HighlightedKey[]
+    showLeaderMode?: boolean
+  }
+
+  let { highlightedKeys = [], showLeaderMode = false }: Props = $props()
 </script>
 
 <div class="keyboard-container">
-  <div class="mode-indicator" class:visible={showLeaderMode}>
+  <div class={['mode-indicator', showLeaderMode && 'visible']}>
     Leader Mode
   </div>
   <div class="keyboard">

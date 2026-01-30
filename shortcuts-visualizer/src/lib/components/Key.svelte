@@ -1,7 +1,12 @@
 <script lang="ts">
   import type { KeyInput, HighlightedKey } from '../types'
 
-  let { keyData, highlightedKeys = [] }: { keyData: KeyInput; highlightedKeys: HighlightedKey[] } = $props()
+  interface Props {
+    keyData: KeyInput
+    highlightedKeys?: HighlightedKey[]
+  }
+
+  let { keyData, highlightedKeys = [] }: Props = $props()
 
   const isObject = $derived(typeof keyData === 'object')
   const label = $derived(isObject ? (keyData as Exclude<KeyInput, string>).key : keyData)
@@ -16,7 +21,7 @@
 </script>
 
 <div
-  class="key {widthClass} {isModifier ? 'modifier' : ''} {highlightClass()}"
+  class={['key', widthClass, isModifier && 'modifier', highlightClass()]}
   data-key={keyId}
 >
   {label}

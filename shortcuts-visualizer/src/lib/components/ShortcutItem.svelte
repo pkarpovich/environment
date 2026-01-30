@@ -1,19 +1,15 @@
 <script lang="ts">
   import type { Shortcut } from '../types'
 
-  let {
-    shortcut,
-    isActive = false,
-    onhover,
-    onleave,
-    onclick
-  }: {
+  interface Props {
     shortcut: Shortcut
-    isActive: boolean
+    isActive?: boolean
     onhover: () => void
     onleave: () => void
     onclick: () => void
-  } = $props()
+  }
+
+  let { shortcut, isActive = false, onhover, onleave, onclick }: Props = $props()
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -25,8 +21,7 @@
 
 <button
   type="button"
-  class="shortcut-item"
-  class:active={isActive}
+  class={['shortcut-item', isActive && 'active']}
   onmouseenter={onhover}
   onmouseleave={onleave}
   onclick={onclick}

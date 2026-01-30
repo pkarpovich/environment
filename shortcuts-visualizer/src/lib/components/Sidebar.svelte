@@ -3,6 +3,15 @@
   import ShortcutItem from './ShortcutItem.svelte'
   import { SHORTCUTS_DATA } from '../data/shortcuts'
 
+  interface Props {
+    currentApp?: string
+    selectedShortcut?: Shortcut | null
+    onAppChange: (appId: string) => void
+    onShortcutHover: (shortcut: Shortcut) => void
+    onShortcutLeave: (shortcut: Shortcut) => void
+    onShortcutClick: (shortcut: Shortcut) => void
+  }
+
   let {
     currentApp = 'wezterm',
     selectedShortcut = null,
@@ -10,14 +19,7 @@
     onShortcutHover,
     onShortcutLeave,
     onShortcutClick
-  }: {
-    currentApp: string
-    selectedShortcut: Shortcut | null
-    onAppChange: (appId: string) => void
-    onShortcutHover: (shortcut: Shortcut) => void
-    onShortcutLeave: (shortcut: Shortcut) => void
-    onShortcutClick: (shortcut: Shortcut) => void
-  } = $props()
+  }: Props = $props()
 
   const apps = Object.entries(SHORTCUTS_DATA)
   const currentAppData = $derived(SHORTCUTS_DATA[currentApp])
@@ -29,8 +31,7 @@
     <div class="app-tabs">
       {#each apps as [id, app]}
         <button
-          class="app-tab"
-          class:active={id === currentApp}
+          class={['app-tab', id === currentApp && 'active']}
           onclick={() => onAppChange(id)}
         >
           {app.name}
