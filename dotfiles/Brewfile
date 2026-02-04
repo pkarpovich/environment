@@ -33,6 +33,8 @@ brew "goreleaser"
 brew "golangci-lint"
 brew "sk"
 cask "1password-cli"
+cask "claude-code"
+cask "codex"
 
 cask "yafetch"
 brew "turtle-harbor"

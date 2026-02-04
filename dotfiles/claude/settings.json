@@ -60,7 +60,8 @@
   "enabledPlugins": {
     "example-skills@anthropic-agent-skills": true,
     "code-simplifier@claude-plugins-official": true,
-    "rust-analyzer-lsp@claude-plugins-official": true
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "ralphex@ralphex": true
   },
   "alwaysThinkingEnabled": true
 }
