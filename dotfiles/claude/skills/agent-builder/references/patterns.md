@@ -237,26 +237,73 @@ Single node with multiple tool iterations.
 
 ## Sub-Agent Delegation
 
-Invoke nested agents for specialized tasks.
+Invoke specialized agents for domain-specific processing.
 
-**Use when:** Complex subtasks benefit from dedicated agent logic.
+**Use when:**
+- Output requires specialized formatting (DSL, structured documents)
+- Complex subtasks benefit from dedicated agent logic
+- You want to compose reusable agent capabilities
+
+**Key principle:** Sub-agents are **black boxes**. Describe what you need, they handle internal tools.
+
+### Sub-Agent via Data Connection (Recommended)
+
+Define sub-agent as type 2 data_connection, then use `call_sub_agent` tool:
 
 ```json
 {
-  "nodes": [
+  "data_connections": [
     {
-      "id": "coordinator",
-      "name": "Coordinator",
-      "prompt": "Break down the task. Use call_sub_agent for specialized processing. Coordinate results.",
-      "tools": [],
-      "max_iterations": 10,
-      "is_exit_node": true
+      "id": "dd2e3f4a-5b6c-4d7e-8f90-12345678dd2e",
+      "type": 2,
+      "name": "Document Generator",
+      "description": "Generates structured documents. Describe desired output.",
+      "config": {
+        "agent_id": "document-generator-agent"
+      }
+    }
+  ],
+  "agents": [
+    {
+      "id": "main-agent-uuid",
+      "name": "Main Agent",
+      "response_format": { "type": 2, "payload": { "format": "json" } },
+      "nodes": [
+        {
+          "id": "a1b2c3d4-...",
+          "name": "Gather Data",
+          "prompt": "Collect required information from sources.",
+          "tools": [
+            { "name": "get_content", "data_connection_id": "content-source-uuid" }
+          ]
+        },
+        {
+          "id": "b2c3d4e5-...",
+          "name": "Generate Output",
+          "prompt": "Generate a formatted report with:\n- Title and summary\n- Key findings section\n- Recommendations list",
+          "tools": [
+            { "name": "call_sub_agent", "data_connection_id": "dd2e3f4a-5b6c-4d7e-8f90-12345678dd2e" }
+          ],
+          "is_exit_node": true
+        }
+      ]
+    },
+    {
+      "id": "document-generator-agent",
+      "name": "Document Generator",
+      "description": "Internal sub-agent for document formatting",
+      "nodes": [...]
     }
   ]
 }
 ```
 
-The `call_sub_agent` system tool accepts a full agent definition inline.
+### Rules for Sub-Agent Delegation
+
+1. **Describe outcomes, not mechanics** - Exit node prompt says WHAT to produce, not HOW to call tools
+2. **Sub-agent is self-contained** - Don't include sub-agent's internal tools in parent agent
+3. **Tool binding required** - `call_sub_agent` needs `data_connection_id` pointing to type 2 connection
+4. **Response format alignment** - If parent uses type 2, exit node must have tool to produce structured output
 
 ## Prompt Writing Tips
 

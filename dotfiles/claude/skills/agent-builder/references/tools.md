@@ -5,9 +5,11 @@
 - [MCP Tools](#mcp-tools)
 - [Tool Binding](#tool-binding)
 
-## System Tools
+## Tool Categories
 
-Always available to all nodes without explicit binding:
+### System Tools (Auto-Available)
+
+**Never include in node tools array** - automatically available to all nodes:
 
 ### get_state(keys)
 Read values from shared state.
@@ -37,9 +39,15 @@ list_state_keys()
 Access conversation history before current execution.
 
 ### call_sub_agent(user_question, agent_def)
-Invoke a nested agent. Agent definition is a full GraphDefinition JSON.
+Invoke a nested agent. Can use inline definition or reference via data_connection.
 
-## MCP Tools
+**Important:** When used with type 2 data_connection (sub-agent reference), this becomes a **bindable tool** that requires explicit binding in node tools array.
+
+## Bindable Tools
+
+Tools that **must be included in node tools array** with `data_connection_id`:
+
+### MCP Tools
 
 External tools provided by MCP (Model Context Protocol) servers via data connections.
 
@@ -98,9 +106,10 @@ Bind MCP tools to nodes that need them:
 ### Binding Rules
 
 1. **Exact name match** - Tool name must match MCP tool name exactly
-2. **Valid connection** - data_connection_id must reference active connection
+2. **Non-null data_connection_id** - Every tool binding requires valid UUID, never null
 3. **Node scope** - Tools only available in nodes where bound
-4. **System tools implicit** - Don't bind get_state, set_state, etc.
+4. **No system tools** - Never include set_state, get_state, list_state_keys in tools array
+5. **Sub-agent binding** - `call_sub_agent` with type 2 connection requires explicit binding
 
 ### max_iterations
 
@@ -136,3 +145,30 @@ Be specific about:
 - In what order
 - What to do with results
 - Where to store output
+
+## Response Format & Exit Node
+
+The exit node tools must align with response_format:
+
+| Response Format | Exit Node Tools |
+|-----------------|-----------------|
+| Type 1 (markdown) | Empty `[]` - node synthesizes text directly |
+| Type 2 (structured) | Requires tool to produce output (e.g., `call_sub_agent` for delegation) |
+
+**Example for structured output:**
+```json
+{
+  "response_format": { "type": 2, "payload": { "format": "json" } },
+  "nodes": [
+    {
+      "id": "exit-node-uuid",
+      "name": "Generate Report",
+      "prompt": "Generate a report with title, summary, and findings sections.",
+      "tools": [
+        { "name": "call_sub_agent", "data_connection_id": "dsl-generator-uuid" }
+      ],
+      "is_exit_node": true
+    }
+  ]
+}
+```

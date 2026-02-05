@@ -116,6 +116,49 @@ user_manager = UserManager()
 handle_button_click = lambda: ...
 ```
 
+### No Global State
+
+```python
+# Bad: global variables create hidden dependencies
+_db_connection = None
+_config = {}
+
+def get_user(user_id: str) -> User:
+    global _db_connection
+    return _db_connection.query(User).get(user_id)
+
+def init():
+    global _db_connection, _config
+    _db_connection = create_connection()
+    _config = load_config()
+
+# Good: explicit dependencies via injection
+@dataclass
+class AppContext:
+    db: Database
+    config: Config
+
+def get_user(ctx: AppContext, user_id: str) -> User:
+    return ctx.db.query(User).get(user_id)
+
+# Or pass directly
+def get_user(db: Database, user_id: str) -> User:
+    return db.query(User).get(user_id)
+```
+
+**Why globals are harmful:**
+- Hidden dependencies make testing impossible without monkeypatching
+- Execution order matters (init must run first)
+- Concurrent code breaks with shared mutable state
+- Refactoring becomes dangerous
+
+**Acceptable module-level constants:**
+```python
+DEFAULT_TIMEOUT = 30
+MAX_RETRIES = 3
+API_VERSION = "v2"
+```
+
 ## Code Patterns
 
 ### Early Return (flat code)

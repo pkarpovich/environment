@@ -12,20 +12,30 @@ Build agents as directed graphs where nodes are LLM steps and edges define execu
 Minimal agent structure:
 ```json
 {
+  "id": "a1b2c3d4-e5f6-4789-abcd-1234567890ab",
   "name": "Agent Name",
   "description": "What this agent does",
   "generation_prompt": "Original user request",
   "response_format": { "type": 1, "payload": null },
   "nodes": [
-    { "id": "process", "name": "Process", "prompt": "Do the task.", "is_exit_node": true }
+    {
+      "id": "b2c3d4e5-f6a7-4890-bcde-234567890abc",
+      "name": "Process",
+      "prompt": "Do the task.",
+      "tools": [],
+      "max_iterations": 3,
+      "is_exit_node": true
+    }
   ],
   "edges": [
-    { "id": "e1", "source": "START", "target": "process" },
-    { "id": "e2", "source": "process", "target": "END" }
+    { "id": "c3d4e5f6-a7b8-4901-cdef-34567890abcd", "source": "START", "target": "b2c3d4e5-f6a7-4890-bcde-234567890abc", "condition_prompt": null },
+    { "id": "d4e5f6a7-b8c9-4012-defa-4567890abcde", "source": "b2c3d4e5-f6a7-4890-bcde-234567890abc", "target": "END", "condition_prompt": null }
   ],
   "execution_plan": "graph TD\n    START([START]) --> process[Process]\n    process --> END([END])"
 }
 ```
+
+**Note:** Use UUIDs for all IDs, but keep execution_plan human-readable.
 
 ## Discovery Scripts
 
@@ -80,12 +90,13 @@ See [patterns.md](references/patterns.md) for detailed examples.
 
 ### 3. Design Nodes
 For each step:
-- **id**: camelCase identifier (`analyzeData`)
+- **id**: UUID format (`a1b2c3d4-e5f6-4789-abcd-1234567890ab`)
 - **name**: Human-readable (`Analyze Data`)
-- **prompt**: Clear instructions with tool/state guidance
-- **tools**: MCP tools needed (system tools auto-available)
+- **prompt**: Clear instructions focused on outcomes, not tool mechanics
+- **tools**: Only bindable tools with data_connection_id (system tools auto-available)
 - **is_exit_node**: true for final user-facing node
 - **defer**: true if waiting for parallel branches
+- **max_iterations**: 1-10 based on expected tool calls
 
 ### 4. Connect Edges
 - Start from `START`
@@ -177,27 +188,26 @@ The final result only
 </output>
 ```
 
+### Outcome-Focused Prompts
+
+**Focus on WHAT to produce, not HOW to call tools.** Let the agent discover and use tools naturally.
+
+```
+Good: "Generate a deal intelligence report with:
+       - Executive summary
+       - Company profiles with key metrics
+       - Contact list with roles"
+
+Bad:  "Call the DSL generator sub-agent with call_sub_agent tool..."
+```
+
 ### State Communication
 
-Nodes share data via state tools:
+Nodes share data via state tools (auto-available, don't mention in tools array):
 ```
 "Analyze the input. Store results with set_state('analysis', your_findings)."
 
 "Retrieve previous analysis with get_state(['analysis']). Build on those findings."
-```
-
-### Tool Usage
-
-Be explicit about which tools and how:
-```
-<tools>
-Use web_search to find information about X.
-For each relevant result, use fetch_url to get details.
-</tools>
-
-<state>
-Store compiled findings with set_state('research', findings)
-</state>
 ```
 
 ## Response Formats
@@ -228,11 +238,13 @@ Store compiled findings with set_state('research', findings)
 ## Validation Checklist
 
 Before finalizing:
+- [ ] All IDs are UUIDs (nodes, edges, data_connections)
 - [ ] Every node has unique id
 - [ ] Edges connect all nodes (no orphans)
 - [ ] Path from START to END exists
 - [ ] Exit node marked with `is_exit_node: true`
 - [ ] Deferred nodes have multiple incoming edges
-- [ ] Tool bindings reference valid data connections
-- [ ] Mermaid diagram matches edges
-- [ ] Prompts specify state usage for data passing
+- [ ] Every tool has non-null data_connection_id (no system tools in tools array)
+- [ ] For type 2 response_format, exit node has appropriate tool (call_sub_agent if delegating)
+- [ ] Mermaid diagram matches edges (use human-readable names, not UUIDs)
+- [ ] Prompts focus on outcomes, not tool mechanics
