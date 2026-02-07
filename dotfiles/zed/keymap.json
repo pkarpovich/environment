@@ -4,5 +4,31 @@
     "bindings": {
       "cmd-e": "tab_switcher::Toggle"
     }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "alt-shift-t": "task::Spawn",
+      "alt-shift-r": "task::Rerun",
+      "cmd-\\": "workspace::ToggleLeftDock"
+    }
+  },
+  {
+    "context": "(Editor && mode == full)",
+    "bindings": {
+      "cmd-\\": null
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "cmd-\\": null
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-b": null
+    }
   }
 ]
