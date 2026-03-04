@@ -1,15 +1,25 @@
 settings:
   log_dir: "./logs"
+  loki:
+    url: "http://192.168.198.3:3100"
+    labels:
+      host: "mbp-2021"
 
 scripts:
   calendar:
     command: "./calendar.sh"
+    context: "."
     restart_policy: "always"
     max_restarts: 5
     cron: "0 0 * * * * *"
 
-  bulk_gitea_sync:
-    command: "./bulk_gitea_sync.sh"
+  tm-backup-checker:
+    command: "python tm-backup-checker.py"
+    context: "."
+    venv: ".venv"
+    env_file: ".env"
+    env:
+      PYTHONUNBUFFERED: "1"
     restart_policy: "always"
     max_restarts: 3
-    cron: "0 0 2 * * * *"
+    cron: "0 0 */6 * * * *"
