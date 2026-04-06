@@ -3,13 +3,10 @@ node = "22"
 pnpm = "9"
 go = "1.23"
 python = "3.13"
-"npm:opencommit" = "3.2"
-"pipx:git-remote-codecommit" = "latest"
-"pipx:claudesync" = "latest"
-rust = "latest"
-deno = "latest"
+rust = "1.93"
+deno = "2.7"
 bun = "1.2"
-"npm:@openai/codex" = "0.20"
+"pipx:claude-swap" = "latest"
 
 [settings]
 experimental = true

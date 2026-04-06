@@ -27,8 +27,10 @@
       "Read(.env)",
       "Read(.env.*)",
       "Read(**/secrets/**)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
+  "model": "opus[1m]",
   "hooks": {
     "Notification": [
       {
@@ -37,6 +39,16 @@
           {
             "type": "command",
             "command": "/Users/pavel.karpovich/.local/share/mise/installs/deno/2.4.1/bin/deno run --allow-run jsr:@wyattjoh/claude-code-notification"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10
           }
         ]
       }
@@ -50,6 +62,61 @@
             "command": "~/.claude/hooks/skill-activation.sh"
           }
         ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/temporal-context.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10
+          }
+        ]
       }
     ]
   },
@@ -61,7 +128,27 @@
     "example-skills@anthropic-agent-skills": true,
     "code-simplifier@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "ralphex@ralphex": true
+    "ralphex@ralphex": true,
+    "brainstorm@umputun-cc-thingz": true,
+    "review@umputun-cc-thingz": true,
+    "planning@umputun-cc-thingz": true,
+    "thinking-tools@umputun-cc-thingz": true,
+    "skill-eval@umputun-cc-thingz": true,
+    "workflow@umputun-cc-thingz": true,
+    "swift-lsp@claude-plugins-official": true,
+    "revdiff@revdiff": true,
+    "revdiff-planning@revdiff": true
   },
-  "alwaysThinkingEnabled": true
+  "extraKnownMarketplaces": {
+    "revdiff": {
+      "source": {
+        "source": "github",
+        "repo": "umputun/revdiff"
+      },
+      "autoUpdate": true
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "skipAutoPermissionPrompt": true
 }

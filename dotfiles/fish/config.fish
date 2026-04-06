@@ -5,6 +5,8 @@ fish_add_path $PNPM_HOME
 # add GOROOT
 set -gx GOROOT (mise where go)
 
+set -gx EDITOR "zed --wait"
+
 # Proxy settings for ClashX
 #set -gx HTTP_PROXY http://localhost:7890
 #set -gx HTTPS_PROXY http://localhost:7890

@@ -16,6 +16,10 @@
     "quickEntryShortcut": "off",
     "localAgentModeTrustedFolders": [
       "/Users/pavel.karpovich/Obsidian/PK Workspace"
-    ]
+    ],
+    "coworkScheduledTasksEnabled": true,
+    "sidebarMode": "chat",
+    "coworkWebSearchEnabled": true,
+    "ccdScheduledTasksEnabled": true
   }
 }

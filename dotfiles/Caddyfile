@@ -6,10 +6,6 @@ ask-agent.localhost {
     reverse_proxy localhost:5173
 }
 
-ask-agent-api.localhost {
-    reverse_proxy localhost:3001
-}
-
 th-telegram-mcp.localhost {
     reverse_proxy localhost:50001
 }
@@ -24,6 +20,10 @@ continuum-api.localhost {
 
 dc-query-api.localhost {
     reverse_proxy localhost:50100
+}
+
+ask-agent-api.localhost {
+    reverse_proxy localhost:50101
 }
 
 retribution.localhost {
