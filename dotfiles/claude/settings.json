@@ -32,6 +32,18 @@
   },
   "model": "opus[1m]",
   "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/hooks/revdiff-plan-review.py",
+            "timeout": 345600
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "matcher": "",
@@ -125,7 +137,6 @@
     "command": "bash /Users/pavel.karpovich/.claude/statusline-script.sh"
   },
   "enabledPlugins": {
-    "example-skills@anthropic-agent-skills": true,
     "code-simplifier@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "ralphex@ralphex": true,
@@ -137,7 +148,9 @@
     "workflow@umputun-cc-thingz": true,
     "swift-lsp@claude-plugins-official": true,
     "revdiff@revdiff": true,
-    "revdiff-planning@revdiff": true
+    "revdiff-planning@revdiff": true,
+    "frontend-design@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "revdiff": {
