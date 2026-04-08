@@ -11,13 +11,8 @@ current_dir=$(echo "$input" | jq -r '.workspace.current_dir')
 cd "$current_dir" 2>/dev/null || cd "$(echo "$input" | jq -r '.cwd')" 2>/dev/null || true
 
 branch=""
-changed_files_count=""
 if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    # Get current branch, skipping optional locks
     branch=$(git branch --show-current 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "detached")
-
-    # Count changed files (modified, added, deleted)
-    changed_files_count=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
 fi
 
 # Get directory name (basename of current directory)
@@ -83,8 +78,4 @@ printf " ${WHITE}|${RESET} ${FX_GREEN}%s${RESET} ${GRAY}in${RESET} ${FX_BLUE}%s$
 
 if [ -n "$branch" ] && [ "$branch" != "HEAD" ]; then
     printf " ${GRAY}on${RESET} ${FX_PURPLE}%s${RESET}" "$branch"
-
-    if [ -n "$changed_files_count" ] && [ "$changed_files_count" -gt 0 ]; then
-        printf " ${FX_ORANGE}~%s${RESET}" "$changed_files_count"
-    fi
 fi
