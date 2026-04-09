@@ -66,6 +66,21 @@ local function configure_plugins(config, plugins)
 
 end
 
+local function configure_ssh_appearance()
+    wezterm.on("update-status", function(window, pane)
+        local domain = pane:get_domain_name()
+        local overrides = window:get_config_overrides() or {}
+        if domain ~= "local" then
+            overrides.background = {
+                { source = { Color = "#2e1d1a" }, width = "100%", height = "100%", opacity = 0.97 },
+            }
+        else
+            overrides.background = nil
+        end
+        window:set_config_overrides(overrides)
+    end)
+end
+
 local function configure_gui_startup(plugins)
     wezterm.on("gui-startup", function(cmd)
         wezterm.log_info("gui-startup")
@@ -109,6 +124,15 @@ local function main()
     workspaces.configure_workspaces(plugins.resurrect, plugins.workspace_switcher, colors)
     configure_ssh(config)
     configure_plugins(config, plugins)
+    plugins.domains.apply_to_config(config, {
+        keys = {
+            attach = { key = "d", mods = "LEADER", tbl = "" },
+        },
+        auto = {
+            ssh_ignore = true,
+        },
+    })
+    configure_ssh_appearance()
     configure_gui_startup(plugins)
 
     return config

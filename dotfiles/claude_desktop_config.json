@@ -18,8 +18,8 @@
       "/Users/pavel.karpovich/Obsidian/PK Workspace"
     ],
     "coworkScheduledTasksEnabled": true,
+    "ccdScheduledTasksEnabled": true,
     "sidebarMode": "chat",
-    "coworkWebSearchEnabled": true,
-    "ccdScheduledTasksEnabled": true
+    "coworkWebSearchEnabled": true
   }
 }

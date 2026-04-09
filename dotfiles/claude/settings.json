@@ -143,6 +143,7 @@
     "brainstorm@umputun-cc-thingz": true,
     "review@umputun-cc-thingz": true,
     "planning@umputun-cc-thingz": true,
+    "release-tools@umputun-cc-thingz": true,
     "thinking-tools@umputun-cc-thingz": true,
     "skill-eval@umputun-cc-thingz": true,
     "workflow@umputun-cc-thingz": true,
@@ -163,5 +164,6 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
 }
