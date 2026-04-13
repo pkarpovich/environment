@@ -21,6 +21,7 @@
 
     ~/.claude/: claude/**
     ~/.config/revdiff/keybindings: revdiff/keybindings
+    ~/.config/1Password/ssh/agent.toml: 1password/agent.toml
 
     ~/.config/yafetch/init.lua: yafetch.lua
     ~/.mcpjungle.conf: .mcpjungle.conf

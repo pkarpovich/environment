@@ -1,0 +1,35 @@
+# This is the 1Password SSH agent config file, which allows you to customize the
+# behavior of the SSH agent running on this machine.
+#
+# You can use it to:
+# * Enable keys from other vaults than the Private vault
+# * Control the order in which keys are offered to SSH servers
+#
+# Whitelist mode: only listed keys are exposed via the agent.
+# This avoids hitting MaxAuthTries on servers when many keys exist in the vault.
+#
+# Verify with:
+#  SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ssh-add -l
+#
+# Docs: https://developer.1password.com/docs/ssh/agent/config
+
+[[ssh-keys]]
+item = "Launchpad DigitalOcean"
+
+[[ssh-keys]]
+item = "Local pi SSH Key"
+
+[[ssh-keys]]
+item = "Lasso-ERP DigitalOcean"
+
+[[ssh-keys]]
+item = "tuclaw-rpi"
+
+[[ssh-keys]]
+item = "Gitlab SSH Key"
+
+[[ssh-keys]]
+item = "GitLab Macbook Air"
+
+[[ssh-keys]]
+item = "Github Signing Key"
