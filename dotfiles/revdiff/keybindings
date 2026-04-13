@@ -1,0 +1,35 @@
+# Russian ЙЦУКЕН layout → QWERTY equivalents
+# Navigation
+map о down
+map л up
+map р focus_tree
+map д focus_diff
+
+# File/Hunk
+map т next_item
+map Т prev_item
+map з prev_item
+map х prev_hunk
+map б next_hunk
+
+# Search
+map . search
+
+# Annotations
+map ф confirm
+map Ф annotate_file
+map в delete_annotation
+
+# View
+map м toggle_collapsed
+map ц toggle_wrap
+map е toggle_tree
+map Д toggle_line_numbers
+map И toggle_blame
+map ю toggle_hunk
+map а filter
+
+# Quit
+map й quit
+map Й discard_quit
+map , help

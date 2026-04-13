@@ -165,5 +165,6 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "skipAutoPermissionPrompt": true,
+  "skipDangerousModePermissionPrompt": true,
   "voiceEnabled": true
 }

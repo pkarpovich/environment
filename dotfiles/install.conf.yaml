@@ -20,6 +20,7 @@
     ~/.config/zed/: zed/**
 
     ~/.claude/: claude/**
+    ~/.config/revdiff/keybindings: revdiff/keybindings
 
     ~/.config/yafetch/init.lua: yafetch.lua
     ~/.mcpjungle.conf: .mcpjungle.conf

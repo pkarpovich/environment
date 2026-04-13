@@ -5,6 +5,8 @@
 - Never run code, builds, or tests to verify changes - instead ask user to run them and share results. User prefers to execute commands themselves (npm run build, pytest, python scripts, etc.)
 - **NEVER commit or push without explicit user request** - only run git commit/push when the user explicitly asks (e.g., "commit this", "push", or uses /commit skill)
 - Always place imports at the top of the file, never inside functions or methods
+- **NEVER use `run_in_background` for TUI/interactive tools** (revdiff, fzf, etc.) — background mode silently loses stdout output. Only use `run_in_background` for truly non-interactive commands (builds, linters, long-running scripts)
+- **Always use ASCII hyphen `-` in ALL content, never `—` (em dash) or `–` (en dash)** - even if em dash is grammatically "more correct". Applies everywhere: chat responses to the user, markdown files, code comments, commit messages, PR descriptions - everything. User writes with ASCII hyphens and wants consistency across all output
 
 ## Epistemic rules
 

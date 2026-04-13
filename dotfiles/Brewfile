@@ -33,8 +33,12 @@ brew "goreleaser"
 brew "golangci-lint"
 brew "sk"
 cask "1password-cli"
-cask "claude-code"
 cask "codex"
+brew "PeonPing/tap/peon-ping"
+
+brew "umputun/apps/revdiff"
+brew "umputun/apps/spot"
+brew "umputun/apps/ralphex"
 
 cask "yafetch"
 brew "turtle-harbor"
