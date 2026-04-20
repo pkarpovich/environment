@@ -1,0 +1,51 @@
+:root {
+  --bg-primary: #100F0F;
+  --bg-secondary: #1C1B1A;
+  --bg-tertiary: #282726;
+  --bg-key: #343331;
+  --bg-key-hover: #403E3C;
+  --text-primary: #CECDC3;
+  --text-secondary: #878580;
+  --text-muted: #6F6E69;
+  --accent-cyan: #3AA99F;
+  --accent-magenta: #CE5D97;
+  --accent-orange: #DA702C;
+  --accent-green: #879A39;
+  --accent-red: #D14D41;
+  --accent-blue: #4385BE;
+  --border-color: #403E3C;
+  --glow-cyan: rgba(58, 169, 159, 0.3);
+  --glow-magenta: rgba(206, 93, 151, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(58, 169, 159, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(206, 93, 151, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#app {
+  min-height: 100vh;
+}
