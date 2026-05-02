@@ -58,11 +58,11 @@ Why: the two upstream plugins both register `format-tab-title` on the wezterm ev
 - [x] manual check: `require("status")` in `wezterm.lua` does not error on wezterm reload (verified via stubbed-wezterm load test; wiring into wezterm.lua deferred to Task 5)
 
 ### Task 2: Marker poll + cache
-- [ ] implement `read_marker(dir, pane_id)` - opens file, parses JSON via `wezterm.json_parse`, validates `type` against allowed set
-- [ ] implement `M.poll(window)` - iterates all panes of all tabs in window, refreshes cache entry for each
-- [ ] register `wezterm.on("update-status", function(window) M.poll(window) end)` inside `apply`
-- [ ] register `wezterm.on("pane-destroyed", function(_, pane) cleanup cache + remove file end)`
-- [ ] manual check: write a marker via `mark.sh stop`, run `tail -f ~/Library/Logs/wezterm/...` (or use `wezterm.log_info`) to confirm cache picks it up within 1s
+- [x] implement `read_marker(dir, pane_id)` - opens file, parses JSON via `wezterm.json_parse`, validates `type` against allowed set
+- [x] implement `M.poll(window)` - iterates all panes of all tabs in window, refreshes cache entry for each
+- [x] register `wezterm.on("update-status", function(window) M.poll(window) end)` inside `apply`
+- [x] register `wezterm.on("pane-destroyed", function(_, pane) cleanup cache + remove file end)`
+- [x] manual check: covered by stubbed-wezterm test (`luajit dotfiles/wezterm/test_status.lua`); live `mark.sh` check deferred to Task 5/6 once wired into wezterm.lua and dir is renamed
 
 ### Task 3: Format-tab-title with indicators
 - [ ] implement `get_tab_attention(tab)` - scans cache for all panes in tab, returns `(indicator, type, color)` of highest-priority match (or empty)
