@@ -160,11 +160,28 @@
         "repo": "umputun/revdiff"
       },
       "autoUpdate": true
+    },
+    "umputun-cc-thingz": {
+      "source": {
+        "source": "github",
+        "repo": "umputun/cc-thingz"
+      }
+    },
+    "ralphex": {
+      "source": {
+        "source": "github",
+        "repo": "umputun/ralphex"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "skipAutoPermissionPrompt": true,
   "skipDangerousModePermissionPrompt": true,
-  "voiceEnabled": true
+  "theme": "auto",
+  "preferredNotifChannel": "terminal_bell",
+  "autoCompactEnabled": true,
+  "terminalProgressBarEnabled": false,
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true,
+  "agentPushNotifEnabled": true
 }
