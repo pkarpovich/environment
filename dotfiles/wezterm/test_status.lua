@@ -140,7 +140,10 @@ write_marker(20, '{"type":"thinking"}')
 handlers["update-status"](fake_window({ fake_tab({ fake_pane(20) }) }))
 assert(status._cache()[20], "pane 20 cached")
 handlers["update-status"](fake_window({ fake_tab({}) }))
-assert_eq(status._cache()[20], nil, "stale cache pruned when pane absent")
+assert(status._cache()[20], "pane 20 cache preserved when polled from a different window (multi-window safe)")
+os.remove(tmpdir .. "/20")
+handlers["update-status"](fake_window({ fake_tab({ fake_pane(20) }) }))
+assert_eq(status._cache()[20], nil, "cache cleared when marker file removed and pane visible")
 
 assert_eq(handlers["format-tab-title"] ~= nil, true, "format-tab-title handler registered")
 
@@ -244,6 +247,21 @@ local active_thinking = fake_tab_info({
 })
 handlers["format-tab-title"](active_thinking, {}, {}, {}, false, 80)
 assert(status._cache()[103], "thinking marker NOT auto-cleared on active tab")
+
+write_marker(104, '{"type":"thinking"}')
+write_marker(105, '{"type":"stop"}')
+handlers["update-status"](fake_window({
+    fake_tab({ fake_pane(104), fake_pane(105) }),
+}))
+local active_mixed = fake_tab_info({
+    tab_index = 6,
+    is_active = true,
+    active_pane = pane_info(104, "build"),
+    panes = { pane_info(104, "build"), pane_info(105, "log") },
+})
+handlers["format-tab-title"](active_mixed, {}, {}, {}, false, 80)
+assert(status._cache()[104], "thinking marker preserved on active mixed tab")
+assert_eq(status._cache()[105], nil, "stop marker auto-cleared even when thinking outranks it")
 
 write_marker(110, '{"type":"review"}')
 write_marker(111, '{"type":"stop"}')

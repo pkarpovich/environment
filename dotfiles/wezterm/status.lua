@@ -26,6 +26,7 @@ local defaults = {
 
 local config = nil
 local cache = {}
+local handlers_registered = false
 
 local allowed_types = { thinking = true, stop = true, notify = true, review = true }
 
@@ -81,17 +82,10 @@ function M.poll(window)
         return
     end
     local mux_window = window.mux_window and window:mux_window() or window
-    local seen = {}
     for _, tab in ipairs(mux_window:tabs()) do
         for _, pane in ipairs(tab:panes()) do
             local pane_id = pane:pane_id()
-            seen[pane_id] = true
             cache[pane_id] = read_marker(config.dir, pane_id)
-        end
-    end
-    for pane_id in pairs(cache) do
-        if not seen[pane_id] then
-            cache[pane_id] = nil
         end
     end
 end
@@ -232,14 +226,11 @@ local function format_tab(tab, _tabs, _panes, _conf, _hover, max_width)
     local budget = math.max(1, (max_width or 999) - 2)
 
     if tab.is_active then
-        if attention and is_auto_clear(attention.type) then
-            for _, pane in ipairs(tab.panes or {}) do
-                local entry = cache[pane.pane_id]
-                if entry and is_auto_clear(entry.type) then
-                    M.remove_marker(pane.pane_id)
-                end
+        for _, pane in ipairs(tab.panes or {}) do
+            local entry = cache[pane.pane_id]
+            if entry and is_auto_clear(entry.type) then
+                M.remove_marker(pane.pane_id)
             end
-            attention = nil
         end
         return " " .. truncate(label, budget) .. " "
     end
@@ -261,11 +252,14 @@ function M.apply(_, opts)
         deep_merge(config, opts)
     end
     cache = {}
-    wezterm.on("update-status", function(window)
-        M.poll(window)
-        update_left_status(window)
-    end)
-    wezterm.on("format-tab-title", format_tab)
+    if not handlers_registered then
+        wezterm.on("update-status", function(window)
+            M.poll(window)
+            update_left_status(window)
+        end)
+        wezterm.on("format-tab-title", format_tab)
+        handlers_registered = true
+    end
     return config
 end
 
