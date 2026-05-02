@@ -341,7 +341,9 @@ handlers["update-status"](idle_win)
 assert_eq(idle_capture[1], "", "idle window: empty left status")
 
 local cfg = status._config()
+assert(cfg.zoom_icon and cfg.zoom_icon ~= "", "zoom_icon has a non-empty default so zoom indicator works out of the box")
 local prev_leader_icon = cfg.leader_icon
+local prev_zoom_icon = cfg.zoom_icon
 cfg.leader_icon = "L"
 cfg.zoom_icon = "Z"
 
@@ -379,7 +381,54 @@ end
 assert_eq(foreground_seen, true, "build_left_status emits Foreground cells")
 
 cfg.leader_icon = prev_leader_icon
-cfg.zoom_icon = ""
+cfg.zoom_icon = prev_zoom_icon
+
+status.apply(nil, {
+    dir = tmpdir,
+    priority = { "stop", "notify" },
+    indicators = { thinking_frames = { "A", "B" } },
+})
+local merged = status._config()
+assert_eq(#merged.priority, 2, "priority list replaced wholesale, not merged")
+assert_eq(merged.priority[1], "stop", "priority[1]=stop")
+assert_eq(merged.priority[2], "notify", "priority[2]=notify")
+assert_eq(#merged.indicators.thinking_frames, 2, "thinking_frames list replaced wholesale")
+assert_eq(merged.indicators.thinking_frames[1], "A", "thinking_frames[1]=A")
+assert_eq(merged.indicators.stop, "✓ ", "non-list indicator preserved across merge")
+
+status.apply(nil, { dir = tmpdir, auto_clear = { "stop", "notify" } })
+local ac = status._config().auto_clear
+assert_eq(ac.stop, true, "list-form auto_clear normalized: stop")
+assert_eq(ac.notify, true, "list-form auto_clear normalized: notify")
+assert_eq(ac[1], nil, "list-form auto_clear stripped of numeric index")
+
+write_marker(250, '{"type":"stop"}')
+handlers["update-status"](fake_window({ fake_tab({ fake_pane(250) }) }))
+local list_form_active = fake_tab_info({
+    tab_index = 10,
+    is_active = true,
+    active_pane = pane_info(250, "log"),
+    panes = { pane_info(250, "log") },
+})
+handlers["format-tab-title"](list_form_active, {}, {}, {}, false, 80)
+assert_eq(status._cache()[250], nil, "list-form auto_clear still clears stop on active tab")
+
+status.apply(nil, { dir = tmpdir })
+
+write_marker(300, '{"type":"stop"}')
+handlers["update-status"](fake_window({ fake_tab({ fake_pane(300) }) }))
+assert_eq(status._cache()[300].type, "stop", "stop cached pre-race")
+write_marker(300, '{"type":"thinking"}')
+local race_tab = fake_tab_info({
+    tab_index = 9,
+    is_active = true,
+    active_pane = pane_info(300, "shell"),
+    panes = { pane_info(300, "shell") },
+})
+handlers["format-tab-title"](race_tab, {}, {}, {}, false, 80)
+assert(io.open(tmpdir .. "/300", "r"), "marker file preserved when state changed mid-cycle")
+assert_eq(status._cache()[300].type, "thinking", "cache updated to current marker on race")
+os.remove(tmpdir .. "/300")
 
 os.execute("rm -rf '" .. tmpdir .. "'")
 print("OK")

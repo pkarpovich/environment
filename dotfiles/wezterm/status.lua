@@ -5,7 +5,7 @@ local M = {}
 local defaults = {
     dir = wezterm.home_dir .. "/.local/state/wezterm-status",
     leader_icon = utf8.char(0x1f30a),
-    zoom_icon = "",
+    zoom_icon = utf8.char(0x1f50d),
     leader_color = "Blue",
     zoom_color = "Red",
     indicators = {
@@ -30,17 +30,6 @@ local handlers_registered = false
 
 local allowed_types = { thinking = true, stop = true, notify = true, review = true }
 
-local function deep_merge(dst, src)
-    for k, v in pairs(src) do
-        if type(v) == "table" and type(dst[k]) == "table" then
-            deep_merge(dst[k], v)
-        else
-            dst[k] = v
-        end
-    end
-    return dst
-end
-
 local function clone(t)
     local out = {}
     for k, v in pairs(t) do
@@ -51,6 +40,31 @@ local function clone(t)
         end
     end
     return out
+end
+
+local function is_list(t)
+    if type(t) ~= "table" then
+        return false
+    end
+    local n = #t
+    local count = 0
+    for _ in pairs(t) do
+        count = count + 1
+    end
+    return count == n
+end
+
+local function deep_merge(dst, src)
+    for k, v in pairs(src) do
+        if type(v) == "table" and type(dst[k]) == "table" and not is_list(v) and not is_list(dst[k]) then
+            deep_merge(dst[k], v)
+        elseif type(v) == "table" then
+            dst[k] = clone(v)
+        else
+            dst[k] = v
+        end
+    end
+    return dst
 end
 
 local function read_marker(dir, pane_id)
@@ -134,6 +148,19 @@ end
 
 function M.remove_marker(pane_id)
     if not config then
+        return
+    end
+    os.remove(config.dir .. "/" .. tostring(pane_id))
+    cache[pane_id] = nil
+end
+
+local function auto_clear_marker(pane_id, expected_type)
+    if not config then
+        return
+    end
+    local current = read_marker(config.dir, pane_id)
+    if current and current.type ~= expected_type then
+        cache[pane_id] = current
         return
     end
     os.remove(config.dir .. "/" .. tostring(pane_id))
@@ -229,7 +256,7 @@ local function format_tab(tab, _tabs, _panes, _conf, _hover, max_width)
         for _, pane in ipairs(tab.panes or {}) do
             local entry = cache[pane.pane_id]
             if entry and is_auto_clear(entry.type) then
-                M.remove_marker(pane.pane_id)
+                auto_clear_marker(pane.pane_id, entry.type)
             end
         end
         return " " .. truncate(label, budget) .. " "
@@ -250,6 +277,13 @@ function M.apply(_, opts)
     config = clone(defaults)
     if opts then
         deep_merge(config, opts)
+    end
+    if type(config.auto_clear) == "table" and is_list(config.auto_clear) then
+        local normalized = {}
+        for _, name in ipairs(config.auto_clear) do
+            normalized[name] = true
+        end
+        config.auto_clear = normalized
     end
     cache = {}
     if not handlers_registered then
