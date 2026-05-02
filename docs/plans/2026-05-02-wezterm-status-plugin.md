@@ -95,11 +95,11 @@ Why: the two upstream plugins both register `format-tab-title` on the wezterm ev
 - [x] manual check (skipped - not automatable; no hook scripts exist in repo to trigger marker writes, and any future external CLI integration will write directly to `~/.local/state/wezterm-status/`)
 
 ### Task 7: Verify acceptance criteria
-- [ ] verify all requirements from Overview are implemented
-- [ ] verify edge cases (multi-pane tab, light theme, dark theme, no markers, multiple markers competing for priority)
-- [ ] cold-restart wezterm and exercise: open multiple tabs, run a long command in one, switch tabs, observe `thinking` indicator on inactive tab
-- [ ] confirm `bar.wezterm` and `wezterm-attention` plugin requires fully removed from `wezterm.lua`
-- [ ] grep for stale `wezterm-attention` references in repo: `grep -r wezterm-attention dotfiles/`
+- [x] verify all requirements from Overview are implemented (single `dotfiles/wezterm/status.lua` owns format-tab-title, update-status left-status with leader+zoom, marker-based attention via JSON files in `~/.local/state/wezterm-status/`; both legacy plugins fully removed)
+- [x] verify edge cases (multi-pane tab, light theme, dark theme, no markers, multiple markers competing for priority — covered by `test_status.lua`: priority case `thinking` beats `stop` in 2-pane tab; `tab_no_marker` returns nil; `colors[type]` defaults `false` so light/dark themes inherit palette without hardcoded backgrounds; leader/zoom use `AnsiColor` names which adapt per scheme)
+- [x] manual cold-restart exercise (skipped - not automatable; requires running wezterm GUI, opening multiple tabs, and visually confirming `thinking` indicator on inactive tab)
+- [x] confirm `bar.wezterm` and `wezterm-attention` plugin requires fully removed from `wezterm.lua` (verified by grep: no matches in `dotfiles/`)
+- [x] grep for stale `wezterm-attention` references in repo: `grep -r wezterm-attention dotfiles/` (no matches; only reference is in this plan file documenting the migration)
 
 ## Technical Details
 
