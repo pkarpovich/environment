@@ -70,7 +70,6 @@ end
 status.apply(nil, { dir = tmpdir })
 
 assert_eq(handlers["update-status"] ~= nil, true, "update-status handler registered")
-assert_eq(handlers["pane-destroyed"] ~= nil, true, "pane-destroyed handler registered")
 
 local m = status._read_marker(tmpdir, 999)
 assert_eq(m, nil, "missing file returns nil")
@@ -89,6 +88,11 @@ assert_eq(status._read_marker(tmpdir, 3), nil, "garbage rejected")
 
 write_marker(4, "")
 assert_eq(status._read_marker(tmpdir, 4), nil, "empty file rejected")
+
+write_marker(5, '{"type":"thinking","frame":"bogus"}')
+local m5 = status._read_marker(tmpdir, 5)
+assert(m5, "marker with non-numeric frame still parses")
+assert_eq(m5.frame, nil, "non-numeric frame coerced to nil")
 
 write_marker(10, '{"type":"stop"}')
 write_marker(11, '{"type":"notify"}')
@@ -124,9 +128,6 @@ os.remove(tmpdir .. "/10")
 handlers["update-status"](window)
 assert_eq(status._cache()[10], nil, "pane 10 cleared after marker removed")
 assert(status._cache()[11], "pane 11 still cached")
-
-handlers["pane-destroyed"](nil, fake_pane(11))
-assert_eq(status._cache()[11], nil, "pane 11 cleared after destroy")
 
 write_marker(11, '{"type":"stop"}')
 local stat_check = io.open(tmpdir .. "/11", "r")
@@ -243,6 +244,32 @@ local active_thinking = fake_tab_info({
 })
 handlers["format-tab-title"](active_thinking, {}, {}, {}, false, 80)
 assert(status._cache()[103], "thinking marker NOT auto-cleared on active tab")
+
+write_marker(110, '{"type":"review"}')
+write_marker(111, '{"type":"stop"}')
+write_marker(112, '{"type":"notify"}')
+handlers["update-status"](fake_window({
+    fake_tab({ fake_pane(110), fake_pane(111), fake_pane(112) }),
+}))
+local review_priority_tab = fake_tab_info({
+    tab_index = 7,
+    is_active = false,
+    active_pane = pane_info(110, "review"),
+    panes = { pane_info(110, "review"), pane_info(111, "log"), pane_info(112, "log2") },
+})
+local rev_att = status._get_tab_attention(review_priority_tab)
+assert(rev_att, "review attention returned")
+assert_eq(rev_att.type, "review", "review beats stop and notify")
+assert_eq(rev_att.indicator, "◆ ", "review indicator")
+
+local stop_vs_notify_tab = fake_tab_info({
+    tab_index = 8,
+    is_active = false,
+    active_pane = pane_info(111, "log"),
+    panes = { pane_info(111, "log"), pane_info(112, "log2") },
+})
+local sn_att = status._get_tab_attention(stop_vs_notify_tab)
+assert_eq(sn_att.type, "stop", "stop beats notify")
 
 local long_title = string.rep("x", 200)
 local long_tab = fake_tab_info({

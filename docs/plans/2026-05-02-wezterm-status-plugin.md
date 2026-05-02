@@ -61,7 +61,7 @@ Why: the two upstream plugins both register `format-tab-title` on the wezterm ev
 - [x] implement `read_marker(dir, pane_id)` - opens file, parses JSON via `wezterm.json_parse`, validates `type` against allowed set
 - [x] implement `M.poll(window)` - iterates all panes of all tabs in window, refreshes cache entry for each
 - [x] register `wezterm.on("update-status", function(window) M.poll(window) end)` inside `apply`
-- [x] register `wezterm.on("pane-destroyed", function(_, pane) cleanup cache + remove file end)`
+- [x] register `wezterm.on("pane-destroyed", function(_, pane) cleanup cache + remove file end)` (revised — wezterm has no `pane-destroyed` event; cache pruning happens in `M.poll` when a pane id is no longer in `mux_window:tabs()`)
 - [x] manual check: covered by stubbed-wezterm test (`luajit dotfiles/wezterm/test_status.lua`); live `mark.sh` check deferred to Task 5/6 once wired into wezterm.lua and dir is renamed
 
 ### Task 3: Format-tab-title with indicators

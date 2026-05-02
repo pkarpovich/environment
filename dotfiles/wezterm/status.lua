@@ -21,8 +21,7 @@ local defaults = {
         review = false,
     },
     priority = { "thinking", "review", "stop", "notify" },
-    auto_clear = { "stop", "notify" },
-    review_key = { key = "b", mods = "ALT" },
+    auto_clear = { stop = true, notify = true },
 }
 
 local config = nil
@@ -70,6 +69,9 @@ local function read_marker(dir, pane_id)
     end
     if not allowed_types[parsed.type] then
         return nil
+    end
+    if type(parsed.frame) ~= "number" then
+        parsed.frame = nil
     end
     return parsed
 end
@@ -145,15 +147,7 @@ function M.remove_marker(pane_id)
 end
 
 local function is_auto_clear(t)
-    if not config or not t then
-        return false
-    end
-    for _, name in ipairs(config.auto_clear) do
-        if name == t then
-            return true
-        end
-    end
-    return false
+    return config ~= nil and t ~= nil and config.auto_clear[t] == true
 end
 
 local function get_tab_attention(tab)
@@ -270,11 +264,6 @@ function M.apply(_, opts)
     wezterm.on("update-status", function(window)
         M.poll(window)
         update_left_status(window)
-    end)
-    wezterm.on("pane-destroyed", function(_, pane)
-        if pane then
-            M.remove_marker(pane:pane_id())
-        end
     end)
     wezterm.on("format-tab-title", format_tab)
     return config
