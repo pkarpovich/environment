@@ -49,6 +49,38 @@ function gmi
     lazygit
 end
 
+function gdub --description "delete local branches whose upstream is gone (merged/deleted PRs)"
+    git fetch --prune
+    set -l gone (git branch -vv | grep ': gone]' | grep -v '^\*' | awk '{print $1}')
+    if test (count $gone) -eq 0
+        echo "No branches with gone upstream"
+        return 0
+    end
+    echo "Deleting:"
+    printf '  %s\n' $gone
+    git branch -D $gone
+end
+
+function gcrb --description "skim-pick a branch (local or remote) and check it out, with commit log preview"
+    set -l branch (
+        git branch -a --format='%(refname:short)' |
+        grep -v 'HEAD$' |
+        sed 's|^origin/||' |
+        sort -u |
+        sk --height 50% --border --tac \
+            --preview-window right:60% \
+            --preview '(git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" {} 2>/dev/null || git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" origin/{}) | head -200'
+    )
+
+    test -z "$branch"; and return
+
+    if git show-ref --verify --quiet "refs/heads/$branch"
+        git checkout $branch
+    else
+        git checkout --track origin/$branch
+    end
+end
+
 function apply-pr-diff
     set -l script_path ~/Projects/environment/scripts/apply_pr_diff.py
 
@@ -226,6 +258,44 @@ function process-transactions
     end
 
     $venv_path/bin/python $script_path/main.py $args
+end
+
+function brewup --description "fully refresh Homebrew: update, upgrade, cleanup, autoremove"
+    echo "==> brew update"
+    brew update
+    echo
+    echo "==> brew upgrade --greedy"
+    brew upgrade --greedy
+    echo
+    echo "==> brew cleanup"
+    brew cleanup
+    echo
+    echo "==> brew autoremove"
+    brew autoremove
+end
+
+function rvb --description "revdiff: review own branch changes since divergence from default branch"
+    set -l default_branch (git symbolic-ref refs/remotes/origin/HEAD --short 2>/dev/null | string replace 'origin/' '')
+    if test -z "$default_branch"
+        for candidate in main master
+            if git show-ref --verify --quiet refs/heads/$candidate
+                set default_branch $candidate
+                break
+            end
+        end
+    end
+    if test -z "$default_branch"
+        echo "rvb: could not detect default branch (main/master)" >&2
+        return 1
+    end
+
+    set -l base (git merge-base $default_branch HEAD 2>/dev/null)
+    if test -z "$base"
+        echo "rvb: could not find merge-base with $default_branch" >&2
+        return 1
+    end
+
+    revdiff $base $argv
 end
 
 function starship_narrow

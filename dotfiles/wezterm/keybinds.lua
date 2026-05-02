@@ -207,7 +207,34 @@ local function configure_keys(resurrect, workspace_switcher)
         {
             key = "T",
             mods = "ALT|SHIFT",
-            action = act.SpawnTab 'CurrentPaneDomain',
+            action = wezterm.action_callback(function(window, pane)
+                local mux = wezterm.mux
+
+                if pane:get_domain_name() == "local" then
+                    window:perform_action(act.SpawnTab "CurrentPaneDomain", pane)
+                    return
+                end
+
+                local target_workspace = "~"
+                local target_window = nil
+                for _, w in ipairs(mux.all_windows()) do
+                    if w:get_workspace() == target_workspace then
+                        target_window = w
+                        break
+                    end
+                end
+
+                if target_window then
+                    target_window:spawn_tab { domain = { DomainName = "local" } }
+                else
+                    mux.spawn_window {
+                        workspace = target_workspace,
+                        domain = { DomainName = "local" },
+                    }
+                end
+
+                mux.set_active_workspace(target_workspace)
+            end),
         },
         {
             key = "V",

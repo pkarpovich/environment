@@ -1,0 +1,29 @@
+[
+  {
+    "label": "revdiff current file",
+    "command": "rm -f /tmp/revdiff-out.txt; revdiff --only=\"$ZED_FILE\" --output=/tmp/revdiff-out.txt; test -f /tmp/revdiff-out.txt; and pbcopy < /tmp/revdiff-out.txt; true",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "reveal_target": "center",
+    "hide": "on_success",
+  },
+  {
+    "label": "revdiff vs master",
+    "command": "rm -f /tmp/revdiff-out.txt; set MAIN (git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||'; or echo master); revdiff \"$MAIN\" --output=/tmp/revdiff-out.txt; test -f /tmp/revdiff-out.txt; and pbcopy < /tmp/revdiff-out.txt; true",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "reveal_target": "center",
+    "hide": "on_success",
+  },
+  {
+    "label": "revdiff uncommitted",
+    "command": "rm -f /tmp/revdiff-out.txt; revdiff --output=/tmp/revdiff-out.txt; test -f /tmp/revdiff-out.txt; and pbcopy < /tmp/revdiff-out.txt; true",
+    "use_new_terminal": true,
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "reveal_target": "center",
+    "hide": "on_success",
+  },
+]

@@ -26,6 +26,18 @@ description: Go 1.25+ development standards and coding conventions. Use when wri
 - Private struct fields; add accessor methods only when needed outside package
 - Compile regex once at package level: `var reToken = regexp.MustCompile(...)`
 - Deferred cleanup: `defer f.Close()` immediately after acquiring resource
+- Big structs: group fields into named sub-structs by concern (`m.cfg`, `m.layout`, `m.modes`) to make ownership explicit; keep methods on the parent type — don't fragment into mini-types
+- Split a large file by concern across multiple files in the same package, not by type or by alphabetical order; keep each file focused enough that a reader can hold it in their head
+
+```go
+type Model struct {
+    cfg    modelConfigState  // immutable session config
+    layout layoutState       // viewport, focus, geometry
+    file   loadedFileState   // current file's parallel arrays grouped — sync invariant explicit
+    modes  modeState         // user-togglable view modes
+    nav    navigationState   // cursor position
+}
+```
 
 ### Error Handling
 
@@ -78,6 +90,94 @@ type Service struct {
 }
 ```
 
+### Capability interfaces
+
+Keep base interfaces minimal. Optional features go into separate additive interfaces, type-asserted at use site. Lets some implementations support a feature without forcing all of them to.
+
+```go
+type Renderer interface {
+    Files() []string
+}
+
+// optional capability — only some renderers implement it
+type CommitLogger interface {
+    CommitLog(ref string) ([]CommitInfo, error)
+}
+
+func showCommits(r Renderer, ref string) {
+    cl, ok := r.(CommitLogger)
+    if !ok {
+        return // base renderer, capability absent
+    }
+    log, _ := cl.CommitLog(ref)
+    // ...
+}
+```
+
+### Decorator pattern
+
+Cross-cutting concerns (filtering, fallback, retry) compose by wrapping the same interface — not via flags or branches inside the concrete type.
+
+```go
+type ExcludeFilter struct {
+    inner   Renderer
+    prefix  string
+}
+
+func (f ExcludeFilter) Files() []string {
+    out := f.inner.Files()[:0]
+    for _, p := range f.inner.Files() {
+        if !strings.HasPrefix(p, f.prefix) {
+            out = append(out, p)
+        }
+    }
+    return out
+}
+```
+
+### Outcome pattern
+
+Subcomponents return discriminated `Outcome` values instead of mutating parent state through a back-reference. Caller switches on the kind. Keeps the subcomponent free of parent-type knowledge and makes side effects explicit and testable.
+
+```go
+type OutcomeKind int
+
+const (
+    OutcomeNone OutcomeKind = iota
+    OutcomeClosed
+    OutcomeItemChosen
+)
+
+type Outcome struct {
+    Kind OutcomeKind
+    Item string // populated for OutcomeItemChosen
+}
+
+func (o *Overlay) HandleKey(k string) Outcome { /* ... */ }
+```
+
+## Composition Root
+
+- `package main` is the only place that knows concrete types — it constructs everything and injects through interfaces into core types via a `Config` struct
+- Split `main` package by concern across files (`config.go`, `setup.go`, `wiring.go`), not by alphabetical order
+- Application packages depend only on consumer-side interfaces, never on each other's concrete types
+- When two packages need to interoperate but neither owns the bridging concept, build the adapter at the composition root — not inside either package
+- Use factory closures (`func(...) Component`) when a constructor needs runtime parameters that the consuming type shouldn't know about
+
+```go
+// app/main.go — composition root
+func run(cfg options) error {
+    storage := newStorage(cfg.DBPath)
+    logger  := slog.New(...)
+
+    return tui.NewModel(tui.Config{
+        Storage:    storage,
+        Logger:     logger,
+        NewItem:    func(name string) tui.Item { return item.New(name, logger) },
+    }).Run()
+}
+```
+
 ## Concurrency
 
 - `context.Context` as first parameter for blocking/cancellable operations
@@ -85,6 +185,21 @@ type Service struct {
 - Protect shared state with `sync.Mutex`; prefer `atomic` for simple counters
 - Channel direction in signatures: `func process(in <-chan Item, out chan<- Result)`
 - Never start goroutines without a way to stop them (context, done channel, or WaitGroup)
+- Async work that can be superseded (re-loads, search, debounced inputs) must carry a sequence number — increment on dispatch, drop responses where `msg.seq != current` so a stale completion can't overwrite newer state
+
+```go
+m.loadSeq++
+seq := m.loadSeq
+go func() {
+    data, err := load()
+    m.results <- loadedMsg{seq: seq, data: data, err: err}
+}()
+
+// in handler:
+if msg.seq != m.loadSeq {
+    return // stale, a newer load is in flight
+}
+```
 
 ## Testing
 
@@ -137,3 +252,4 @@ internal/{pkg}/          — private packages
 
 - Flat package structure preferred — avoid deep nesting
 - One package per concern, not per type
+- Enforce import boundaries with `depguard` in `.golangci.yml` when consumer-side interfaces alone aren't enough (e.g. UI package must not import a theme/storage package directly)

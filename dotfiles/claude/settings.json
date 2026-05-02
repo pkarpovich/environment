@@ -63,6 +63,40 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh notify",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh thinking",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/clear.sh",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -82,6 +116,16 @@
             "type": "command",
             "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh thinking",
+            "timeout": 5
           }
         ]
       }
@@ -115,6 +159,16 @@
             "type": "command",
             "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh stop",
+            "timeout": 5
           }
         ]
       }
@@ -160,11 +214,28 @@
         "repo": "umputun/revdiff"
       },
       "autoUpdate": true
+    },
+    "umputun-cc-thingz": {
+      "source": {
+        "source": "github",
+        "repo": "umputun/cc-thingz"
+      }
+    },
+    "ralphex": {
+      "source": {
+        "source": "github",
+        "repo": "umputun/ralphex"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "skipAutoPermissionPrompt": true,
   "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
+  "preferredNotifChannel": "terminal_bell",
+  "autoCompactEnabled": true,
+  "terminalProgressBarEnabled": false,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
   "voiceEnabled": true
 }
