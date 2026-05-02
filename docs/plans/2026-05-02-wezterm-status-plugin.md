@@ -52,10 +52,10 @@ Why: the two upstream plugins both register `format-tab-title` on the wezterm ev
 ## Implementation Steps
 
 ### Task 1: Create status.lua skeleton with config defaults
-- [ ] create `dotfiles/wezterm/status.lua` with module table `M`, defaults block (`dir`, `indicators`, `colors`, `priority`, `auto_clear`, `leader_icon`, `zoom_icon`)
-- [ ] implement `M.apply(config, opts)` that merges user opts into defaults, stores active config on module-locals
-- [ ] export module (`return M`)
-- [ ] manual check: `require("status")` in `wezterm.lua` does not error on wezterm reload
+- [x] create `dotfiles/wezterm/status.lua` with module table `M`, defaults block (`dir`, `indicators`, `colors`, `priority`, `auto_clear`, `leader_icon`, `zoom_icon`)
+- [x] implement `M.apply(config, opts)` that merges user opts into defaults, stores active config on module-locals
+- [x] export module (`return M`)
+- [x] manual check: `require("status")` in `wezterm.lua` does not error on wezterm reload (verified via stubbed-wezterm load test; wiring into wezterm.lua deferred to Task 5)
 
 ### Task 2: Marker poll + cache
 - [ ] implement `read_marker(dir, pane_id)` - opens file, parses JSON via `wezterm.json_parse`, validates `type` against allowed set
