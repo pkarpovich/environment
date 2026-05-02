@@ -1,34 +1,51 @@
-- Avoid all comments and pydocs/docstrings in code (they rot and mislead); exception: MCP tool definitions require docstrings for tool descriptions. Use clear variable/function names instead
-- Use early return pattern - check failure/edge cases first with 'if not X: return', then main logic flows flat without nesting
-- Never use inline arrow functions in props - use useCallback for event handlers, or curried pattern (item) => () => handler(item) for loops with args
-- **ALWAYS check package.json (JS/TS), pyproject.toml (Python), go.mod (Go), or equivalent before implementing** - use installed libraries instead of reimplementing from scratch. Examples: use React Query for data fetching not manual fetch+useState, use react-hook-form not manual form state, use zod for validation not custom validators. If a library is installed but not used, that's a code smell indicating previous implementations should be refactored
-- Never run code, builds, or tests to verify changes - instead ask user to run them and share results. User prefers to execute commands themselves (npm run build, pytest, python scripts, etc.)
-- **NEVER commit or push without explicit user request** - only run git commit/push when the user explicitly asks (e.g., "commit this", "push", or uses /commit skill)
-- Always place imports at the top of the file, never inside functions or methods
-- **NEVER use `run_in_background` for TUI/interactive tools** (revdiff, fzf, etc.) — background mode silently loses stdout output. Only use `run_in_background` for truly non-interactive commands (builds, linters, long-running scripts)
-- **Always use ASCII hyphen `-` in ALL content, never `—` (em dash) or `–` (en dash)** - even if em dash is grammatically "more correct". Applies everywhere: chat responses to the user, markdown files, code comments, commit messages, PR descriptions - everything. User writes with ASCII hyphens and wants consistency across all output
+## Approach
+- **Think before coding** - if task is unclear or has multiple interpretations, stop and ask. Surface assumptions explicitly instead of picking silently. If a simpler approach exists, say so and push back.
+- **Simplicity first** - write minimum code that solves the problem. No features beyond what was asked, no abstractions for single-use code, no "configurability" that wasn't requested, no error handling for impossible scenarios. If 200 lines could be 50, rewrite.
+- **Surgical changes** - every changed line traces directly to user request. Don't "improve" adjacent code, don't refactor what isn't broken, don't delete pre-existing dead code unless asked.
+- **Goal-driven execution** - turn vague tasks into verifiable outcomes before starting:
+  - "Fix bug" -> write a failing test that reproduces it, then make it pass.
+  - "Add validation" -> write tests for invalid inputs first, then implement.
+  - "Refactor X" -> ensure tests pass before and after, behavior unchanged.
+  - Multi-step tasks -> state a brief plan with per-step verification.
 
-## Epistemic rules
+## Code style
+- No comments or docstrings (they rot and mislead) - use clear names instead. Exception: MCP tool definitions require docstrings.
+- Early return pattern - check failure/edge cases first with `if not X: return`, main logic flows flat.
+- Never inline arrow functions in React props - use `useCallback` or curried `(item) => () => handler(item)` for loops with args.
+- Imports always at the top of the file, never inside functions or methods.
 
-### Source hierarchy (priority of truth)
-1. **Project files & user context** (HIGHEST): package.json, pyproject.toml, go.mod, lock files are authoritative. User-provided facts = ground truth. Unknown feature/API = assume NEW, not error
-2. **External tools & documentation**: web search, fetched docs, MCP responses override training data
-3. **Training data** (LOWEST): reliable for syntax/logic, unreliable for versions/APIs/current state
+## Workflow
+- **Check package.json / pyproject.toml / go.mod BEFORE implementing** - use installed libraries (React Query, react-hook-form, zod, etc.), never reimplement from scratch. Unused installed lib = code smell.
+- Never commit or push without explicit user request (e.g. "commit this", "push", `/commit`).
+- Never use `run_in_background` for TUI/interactive tools (revdiff, fzf) - stdout gets lost silently.
+- Always use ASCII hyphen `-` in ALL content (chat, markdown, comments, commits, PRs) - no em/en dashes.
+
+## Shell
+User's interactive shell is **fish** (4.x, macOS). Claude Code's Bash tool itself runs commands in `/bin/zsh` - keep using zsh/POSIX syntax there, that is fine.
+- Commands suggested in chat for the user to copy-paste -> **fish syntax** (`set -x VAR value`, `for x in (seq 1 5)`, `(cmd)` for substitution, `end` to close blocks, no `[[ ]]`, no `{1..5}`).
+- Shell scripts written for the user to run -> default to `.fish` with fish syntax. Use `.sh` only if explicitly asked or the script targets CI / other systems.
+- Commands you execute yourself via the Bash tool -> stay in zsh/POSIX, don't translate.
+
+## Epistemic
+
+### Source hierarchy
+1. **Project files & user context** (HIGHEST) - package.json, pyproject.toml, go.mod, lock files. User-provided facts = ground truth. Unknown API = assume NEW.
+2. **External tools & docs** - web search, fetched docs, MCP responses override training.
+3. **Training data** (LOWEST) - reliable for syntax/logic, unreliable for versions/current state.
 
 ### Anti-hallucination
-- Do NOT "correct" user code to older syntax you're familiar with
-- Do NOT claim "this doesn't exist" without verification
-- Do NOT silently downgrade modern patterns to legacy equivalents
-- Do NOT state version numbers from memory as facts
-- Unfamiliar code → assume valid modern syntax
-- Uncertain existence → search or ask user
-- Stating versions → mark as unverified from training
+- Don't "correct" user code to older syntax you recognize.
+- Don't claim "this doesn't exist" without verification.
+- Don't silently downgrade modern patterns to legacy equivalents.
+- Don't state version numbers from memory as facts.
+- Unfamiliar code -> assume valid modern syntax.
+- Uncertain existence -> search or ask.
 
 ### Version handling
-1. Check project files (package.json, pyproject.toml, go.mod) FIRST
-2. Version specified → use THAT version's API
-3. No version info → ASK user
-4. User states version → trust it, even if unfamiliar
+1. Check project manifests FIRST.
+2. Version specified -> use that version's API.
+3. No version info -> ASK user.
+4. User states version -> trust it, even if unfamiliar.
 
 ### Permission to say "I don't know"
-Admitting uncertainty is better than confident hallucination. Say "I'm not certain", "this might have changed", "I don't recognize this but assuming it's valid modern syntax" when appropriate
+Admitting uncertainty > confident hallucination. Say "not certain", "might have changed", "don't recognize this but assuming valid modern syntax" when appropriate.
