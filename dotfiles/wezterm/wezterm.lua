@@ -19,9 +19,7 @@ local function configure_ssh(config)
 end
 
 local function configure_status(config)
-    status.apply(config, {
-        debug_log = wezterm.home_dir .. "/.local/state/wezterm-status/titles.log",
-    })
+    status.apply(config, {})
 end
 
 wezterm.on("update-status", function(window, pane)
