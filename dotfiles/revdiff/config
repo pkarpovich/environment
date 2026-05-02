@@ -1,0 +1,4 @@
+[Application Options]
+
+; allow [ and ] to jump across file boundaries
+cross-file-hunks = true
