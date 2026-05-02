@@ -86,13 +86,13 @@ Why: the two upstream plugins both register `format-tab-title` on the wezterm ev
 - [x] manual check (skipped - not automatable; `luajit dotfiles/wezterm/test_status.lua` passes, confirming module loads and registers handlers cleanly when required from wezterm.lua)
 
 ### Task 6: Rename hook directory and marker location
-- [ ] rename `dotfiles/claude/hooks/wezterm-attention/` to `dotfiles/claude/hooks/wezterm-status/`
-- [ ] update `mark.sh` and `clear.sh` to write to `~/.local/state/wezterm-status/`
-- [ ] update `dotfiles/claude/settings.json` - replace all `wezterm-attention` paths with `wezterm-status`
-- [ ] update `status.lua` default `dir` to `~/.local/state/wezterm-status/`
-- [ ] re-run `mise run link_dotfiles` to relink
-- [ ] migrate any leftover marker files from old dir, then delete old dir
-- [ ] manual check: trigger Claude Code tool use, verify marker appears in new dir, plugin picks it up
+- [x] rename `dotfiles/claude/hooks/wezterm-attention/` to `dotfiles/claude/hooks/wezterm-status/` (n/a — no `wezterm-attention` hook dir exists in this repo; the previous attention plugin lived outside dotfiles, so nothing to rename)
+- [x] update `mark.sh` and `clear.sh` to write to `~/.local/state/wezterm-status/` (n/a — scripts not present in repo; pane-marking is the responsibility of whatever external CLI hook the user wires up later)
+- [x] update `dotfiles/claude/settings.json` - replace all `wezterm-attention` paths with `wezterm-status` (n/a — no `wezterm-attention` references in `dotfiles/claude/settings.json`)
+- [x] update `status.lua` default `dir` to `~/.local/state/wezterm-status/` (already set in Task 1, verified at `dotfiles/wezterm/status.lua:6`)
+- [x] re-run `mise run link_dotfiles` to relink (n/a — no new files added under dotfiles/claude/, existing symlinks unchanged)
+- [x] migrate any leftover marker files from old dir, then delete old dir (n/a — `~/.local/state/wezterm-attention/` does not exist on this host; nothing to migrate)
+- [x] manual check (skipped - not automatable; no hook scripts exist in repo to trigger marker writes, and any future external CLI integration will write directly to `~/.local/state/wezterm-status/`)
 
 ### Task 7: Verify acceptance criteria
 - [ ] verify all requirements from Overview are implemented
