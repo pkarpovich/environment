@@ -73,11 +73,11 @@ Why: the two upstream plugins both register `format-tab-title` on the wezterm ev
 - [x] manual check (skipped - not automatable; covered by stubbed-wezterm test invoking the format-tab-title handler with priority/auto-clear/tint/truncate cases)
 
 ### Task 4: Left status (leader + zoom)
-- [ ] inside the same `update-status` callback used by poller, build leader/zoom segments
-- [ ] leader: if `window:leader_is_active()`, append `<leader_icon>` colored with palette `ansi[4]` (or configured ANSI index)
-- [ ] zoom: if any pane in current tab is `is_zoomed`, append `<zoom_icon>` colored ANSI red (or configured)
-- [ ] call `window:set_left_status(wezterm.format(cells))`
-- [ ] manual check: `Alt+Shift+L` shows 🌊 for 2s; zooming a pane shows zoom indicator
+- [x] inside the same `update-status` callback used by poller, build leader/zoom segments
+- [x] leader: if `window:leader_is_active()`, append `<leader_icon>` colored with palette `ansi[4]` (or configured ANSI index)
+- [x] zoom: if any pane in current tab is `is_zoomed`, append `<zoom_icon>` colored ANSI red (or configured)
+- [x] call `window:set_left_status(wezterm.format(cells))`
+- [x] manual check (skipped - not automatable; covered by stubbed-wezterm test invoking update-status with leader/zoom/both/idle window stubs)
 
 ### Task 5: Wire status.lua into wezterm.lua
 - [ ] in `wezterm.lua`, replace `attention`+`bar` from `load_plugins` and `configure_plugins` with single `require("status").apply(config, { dir = ..., leader_icon = ..., zoom_icon = ..., colors = ... })`

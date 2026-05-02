@@ -26,6 +26,15 @@ local wezterm_stub = {
     truncate_right = function(s, n)
         return s:sub(1, n)
     end,
+    format = function(cells)
+        local out = {}
+        for _, c in ipairs(cells) do
+            if type(c) == "table" and c.Text then
+                table.insert(out, c.Text)
+            end
+        end
+        return table.concat(out)
+    end,
 }
 
 package.preload["wezterm"] = function()
@@ -246,6 +255,86 @@ local rendered_long = handlers["format-tab-title"](long_tab, {}, {}, {}, false, 
 assert_eq(type(rendered_long), "string", "long title rendered")
 assert(rendered_long:find("…"), "long title gets ellipsis")
 assert(#rendered_long <= 14, "long title respects max_width budget (got=" .. #rendered_long .. ")")
+
+local function fake_window_status(opts)
+    opts = opts or {}
+    local left_status_capture = {}
+    local mux = {
+        tabs = function() return opts.tabs or {} end,
+        active_tab = function()
+            return opts.active_tab
+        end,
+    }
+    local win = {
+        mux_window = function(self) return mux end,
+        leader_is_active = function() return opts.leader == true end,
+        set_left_status = function(self, s)
+            left_status_capture[1] = s
+        end,
+    }
+    return win, left_status_capture
+end
+
+local function fake_active_tab(zoom_flags)
+    return {
+        panes_with_info = function()
+            local out = {}
+            for _, z in ipairs(zoom_flags) do
+                table.insert(out, { is_zoomed = z })
+            end
+            return out
+        end,
+        panes = function() return {} end,
+    }
+end
+
+local idle_win, idle_capture = fake_window_status({
+    leader = false,
+    active_tab = fake_active_tab({ false }),
+})
+handlers["update-status"](idle_win)
+assert_eq(idle_capture[1], "", "idle window: empty left status")
+
+local cfg = status._config()
+local prev_leader_icon = cfg.leader_icon
+cfg.leader_icon = "L"
+cfg.zoom_icon = "Z"
+
+local lead_win, lead_capture = fake_window_status({
+    leader = true,
+    active_tab = fake_active_tab({ false }),
+})
+handlers["update-status"](lead_win)
+assert(lead_capture[1] and lead_capture[1]:find("L"), "leader active: icon present (got=" .. tostring(lead_capture[1]) .. ")")
+assert(not lead_capture[1]:find("Z"), "leader active no zoom: zoom absent")
+
+local zoom_win, zoom_capture = fake_window_status({
+    leader = false,
+    active_tab = fake_active_tab({ false, true }),
+})
+handlers["update-status"](zoom_win)
+assert(zoom_capture[1] and zoom_capture[1]:find("Z"), "zoomed: icon present")
+assert(not zoom_capture[1]:find("L"), "no leader: icon absent")
+
+local both_win, both_capture = fake_window_status({
+    leader = true,
+    active_tab = fake_active_tab({ true }),
+})
+handlers["update-status"](both_win)
+assert(both_capture[1]:find("L") and both_capture[1]:find("Z"), "both leader and zoom present")
+assert(both_capture[1]:find("L") < both_capture[1]:find("Z"), "leader before zoom")
+
+local cells = status._build_left_status(both_win)
+local foreground_seen = false
+for _, c in ipairs(cells) do
+    if type(c) == "table" and c.Foreground and c.Foreground.AnsiColor then
+        foreground_seen = true
+    end
+end
+assert_eq(foreground_seen, true, "build_left_status emits Foreground cells")
+
+cfg.leader_icon = prev_leader_icon
+cfg.zoom_icon = ""
 
 os.execute("rm -rf '" .. tmpdir .. "'")
 print("OK")

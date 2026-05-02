@@ -6,6 +6,8 @@ local defaults = {
     dir = wezterm.home_dir .. "/.local/state/wezterm-status",
     leader_icon = utf8.char(0x1f30a),
     zoom_icon = "",
+    leader_color = "Blue",
+    zoom_color = "Red",
     indicators = {
         thinking_frames = { "◌ ", "◔ ", "◑ ", "◕ " },
         stop = "✓ ",
@@ -89,6 +91,48 @@ function M.poll(window)
         if not seen[pane_id] then
             cache[pane_id] = nil
         end
+    end
+end
+
+local function active_tab_is_zoomed(window)
+    local mux_window = window.mux_window and window:mux_window() or window
+    local active = mux_window.active_tab and mux_window:active_tab() or nil
+    if not active or not active.panes_with_info then
+        return false
+    end
+    for _, info in ipairs(active:panes_with_info()) do
+        if info.is_zoomed then
+            return true
+        end
+    end
+    return false
+end
+
+local function build_left_status(window)
+    local cells = {}
+    if config.leader_icon and config.leader_icon ~= "" and window.leader_is_active and window:leader_is_active() then
+        table.insert(cells, { Foreground = { AnsiColor = config.leader_color } })
+        table.insert(cells, { Text = " " .. config.leader_icon .. " " })
+    end
+    if config.zoom_icon and config.zoom_icon ~= "" and active_tab_is_zoomed(window) then
+        table.insert(cells, { Foreground = { AnsiColor = config.zoom_color } })
+        table.insert(cells, { Text = " " .. config.zoom_icon .. " " })
+    end
+    return cells
+end
+
+local function update_left_status(window)
+    if not config or not window then
+        return
+    end
+    local cells = build_left_status(window)
+    if not window.set_left_status then
+        return
+    end
+    if #cells == 0 then
+        window:set_left_status("")
+    else
+        window:set_left_status(wezterm.format(cells))
     end
 end
 
@@ -225,6 +269,7 @@ function M.apply(_, opts)
     cache = {}
     wezterm.on("update-status", function(window)
         M.poll(window)
+        update_left_status(window)
     end)
     wezterm.on("pane-destroyed", function(_, pane)
         if pane then
@@ -257,6 +302,10 @@ end
 
 function M._format_tab(tab, tabs, panes, conf, hover, max_width)
     return format_tab(tab, tabs, panes, conf, hover, max_width)
+end
+
+function M._build_left_status(window)
+    return build_left_status(window)
 end
 
 return M
