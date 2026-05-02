@@ -3,24 +3,6 @@ local keybinds = require("keybinds")
 local workspaces = require("workspaces")
 local status = require("status")
 
-local function get_appearance()
-    if wezterm.gui then
-        return wezterm.gui.get_appearance()
-    end
-    return 'Dark'
-end
-
-local function scheme_for_appearance(appearance)
-    if appearance:find("Dark") then
-        return "Earthsong"
-    else
-        -- Codeschool (light) (terminal.sexy)
-        -- Atelier Cave Light (base16)
-        -- Atelier Cave Light (base16)
-        return "Catppuccin Latte"
-    end
-end
-
 local function load_plugins()
     return {
         domains = wezterm.plugin.require("https://github.com/DavidRR-F/quick_domains.wezterm"),
@@ -37,7 +19,9 @@ local function configure_ssh(config)
 end
 
 local function configure_status(config)
-    status.apply(config, {})
+    status.apply(config, {
+        debug_log = wezterm.home_dir .. "/.local/state/wezterm-status/titles.log",
+    })
 end
 
 wezterm.on("update-status", function(window, pane)
@@ -62,8 +46,7 @@ wezterm.on("gui-startup", function(cmd)
 end)
 
 local function main()
-    local appearance = get_appearance()
-    local color_scheme = scheme_for_appearance(appearance)
+    local color_scheme = "Earthsong"
     local plugins = load_plugins()
     local colors = require("colors").configure_colors(color_scheme)
 
@@ -86,6 +69,7 @@ local function main()
         tab_bar_at_bottom = true,
         use_fancy_tab_bar = false,
         hide_tab_bar_if_only_one_tab = false,
+        tab_max_width = 30,
         native_macos_fullscreen_mode = true,
         leader = { key = "L", mods = "ALT|SHIFT", timeout_milliseconds = 2000 },
         key_map_preference = "Physical",

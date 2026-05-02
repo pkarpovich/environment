@@ -9,19 +9,21 @@ local defaults = {
     leader_color = "Blue",
     zoom_color = "Red",
     indicators = {
-        thinking_frames = { "◌ ", "◔ ", "◑ ", "◕ " },
-        stop = "✓ ",
-        notify = "! ",
-        review = "◆ ",
+        thinking_frames = { "" },
+        stop = "",
+        notify = "",
+        review = "",
     },
     colors = {
-        thinking = false,
-        stop = false,
-        notify = false,
+        thinking = "#d97706",
+        stop = "#16a34a",
+        notify = "#dc2626",
         review = false,
     },
+    foreground = "#f5f5f5",
     priority = { "thinking", "review", "stop", "notify" },
     auto_clear = { stop = true, notify = true },
+    min_width = 30,
 }
 
 local config = nil
@@ -118,7 +120,7 @@ local function active_tab_is_zoomed(window)
     return false
 end
 
-local function build_left_status(window)
+local function build_right_status(window)
     local cells = {}
     if config.leader_icon and config.leader_icon ~= "" and window.leader_is_active and window:leader_is_active() then
         table.insert(cells, { Foreground = { AnsiColor = config.leader_color } })
@@ -131,18 +133,18 @@ local function build_left_status(window)
     return cells
 end
 
-local function update_left_status(window)
+local function update_right_status(window)
     if not config or not window then
         return
     end
-    local cells = build_left_status(window)
-    if not window.set_left_status then
+    local cells = build_right_status(window)
+    if not window.set_right_status then
         return
     end
     if #cells == 0 then
-        window:set_left_status("")
+        window:set_right_status("")
     else
-        window:set_left_status(wezterm.format(cells))
+        window:set_right_status(wezterm.format(cells))
     end
 end
 
@@ -236,13 +238,51 @@ local function truncate(s, max_width)
     return s:sub(1, max_width - 1) .. "…"
 end
 
+local function pad_to_min(s, min_width)
+    if not min_width or min_width <= 0 then
+        return s
+    end
+    local w = visual_width(s)
+    if w >= min_width then
+        return s
+    end
+    return s .. string.rep(" ", min_width - w)
+end
+
+local function strip_cc_prefix(s)
+    if not s then
+        return ""
+    end
+    s = s:gsub("^%*%s*", "")
+    s = s:gsub("^\xc2\xb7%s*", "")
+    s = s:gsub("^\xe2\x80\xa2%s*", "")
+    s = s:gsub("^\xe2[\x94-\x97][\x80-\xbf]%s*", "")
+    s = s:gsub("^\xe2[\x9c-\x9e][\x80-\xbf]%s*", "")
+    s = s:gsub("^\xe2[\xa0-\xa3][\x80-\xbf]%s*", "")
+    return s
+end
+
+local function log_title(raw)
+    if not config or not config.debug_log then
+        return
+    end
+    local f = io.open(config.debug_log, "a")
+    if not f then
+        return
+    end
+    f:write(os.date("%H:%M:%S"), " ", tostring(raw or ""), "\n")
+    f:close()
+end
+
 local function tab_title(tab)
     local t = tab.tab_title
     if t and t ~= "" then
-        return t
+        log_title(t)
+        return strip_cc_prefix(t)
     end
     if tab.active_pane and tab.active_pane.title then
-        return tab.active_pane.title
+        log_title(tab.active_pane.title)
+        return strip_cc_prefix(tab.active_pane.title)
     end
     return ""
 end
@@ -259,16 +299,20 @@ local function format_tab(tab, _tabs, _panes, _conf, _hover, max_width)
                 auto_clear_marker(pane.pane_id, entry.type)
             end
         end
-        return " " .. truncate(label, budget) .. " "
+        return pad_to_min(" " .. truncate(label, budget) .. " ", config.min_width)
     end
 
     local prefix = attention and attention.indicator or ""
-    local text = " " .. truncate(prefix .. label, budget) .. " "
+    local text = pad_to_min(" " .. truncate(prefix .. label, budget) .. " ", config.min_width)
     if attention and attention.color then
-        return {
+        local cells = {
             { Background = { Color = attention.color } },
-            { Text = text },
         }
+        if config.foreground then
+            table.insert(cells, { Foreground = { Color = config.foreground } })
+        end
+        table.insert(cells, { Text = text })
+        return cells
     end
     return text
 end
@@ -289,7 +333,7 @@ function M.apply(_, opts)
     if not handlers_registered then
         wezterm.on("update-status", function(window)
             M.poll(window)
-            update_left_status(window)
+            update_right_status(window)
         end)
         wezterm.on("format-tab-title", format_tab)
         handlers_registered = true
@@ -321,8 +365,8 @@ function M._format_tab(tab, tabs, panes, conf, hover, max_width)
     return format_tab(tab, tabs, panes, conf, hover, max_width)
 end
 
-function M._build_left_status(window)
-    return build_left_status(window)
+function M._build_right_status(window)
+    return build_right_status(window)
 end
 
 return M
