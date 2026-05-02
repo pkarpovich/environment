@@ -1,6 +1,7 @@
 local wezterm = require("wezterm")
 local keybinds = require("keybinds")
 local workspaces = require("workspaces")
+local status = require("status")
 
 local function get_appearance()
     if wezterm.gui then
@@ -22,7 +23,6 @@ end
 
 local function load_plugins()
     return {
-        bar = wezterm.plugin.require("https://github.com/adriankarlen/bar.wezterm"),
         domains = wezterm.plugin.require("https://github.com/DavidRR-F/quick_domains.wezterm"),
         resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.wezterm"),
         workspace_switcher = wezterm.plugin.require("https://github.com/MLFlexer/smart_workspace_switcher.wezterm")
@@ -36,37 +36,8 @@ local function configure_ssh(config)
     end
 end
 
-local function configure_plugins(config, plugins)
-    plugins.bar.apply_to_config(config, {
-        padding = {
-            left = 1,
-            right = 2,
-            tabs = { left = 2, right = 0 },
-        },
-        separator = {
-            space = 0,
-            left_icon = ": ",
-        },
-        modules = {
-            tabs = {
-                active_tab_fg = 2,
-                inactive_tab_fg = 8,
-            },
-            leader = {
-                enabled = true,
-                icon = utf8.char(0x1f30a)
-            },
-            zoom = {
-                enabled = true,
-            },
-            pane = { enabled = false },
-            username = { enabled = false },
-            hostname = { enabled = false },
-            clock = { enabled = false },
-            workspace = { enabled = true, icon = "" },
-            cwd = { enabled = false },
-        },
-    })
+local function configure_status(config)
+    status.apply(config, {})
 end
 
 wezterm.on("update-status", function(window, pane)
@@ -113,6 +84,7 @@ local function main()
         freetype_load_target = "Light",
         freetype_render_target = "HorizontalLcd",
         tab_bar_at_bottom = true,
+        use_fancy_tab_bar = false,
         hide_tab_bar_if_only_one_tab = false,
         native_macos_fullscreen_mode = true,
         leader = { key = "L", mods = "ALT|SHIFT", timeout_milliseconds = 2000 },
@@ -124,7 +96,7 @@ local function main()
 
     workspaces.configure_workspaces(plugins.resurrect, plugins.workspace_switcher, colors)
     configure_ssh(config)
-    configure_plugins(config, plugins)
+    configure_status(config)
     plugins.domains.apply_to_config(config, {
         keys = {
             attach = { key = "d", mods = "LEADER", tbl = "" },

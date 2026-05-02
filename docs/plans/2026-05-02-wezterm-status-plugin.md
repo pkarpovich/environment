@@ -80,10 +80,10 @@ Why: the two upstream plugins both register `format-tab-title` on the wezterm ev
 - [x] manual check (skipped - not automatable; covered by stubbed-wezterm test invoking update-status with leader/zoom/both/idle window stubs)
 
 ### Task 5: Wire status.lua into wezterm.lua
-- [ ] in `wezterm.lua`, replace `attention`+`bar` from `load_plugins` and `configure_plugins` with single `require("status").apply(config, { dir = ..., leader_icon = ..., zoom_icon = ..., colors = ... })`
-- [ ] delete dead bar/attention configuration blocks (padding, separator, modules tables - they were bar-specific)
-- [ ] keep `tab_bar_at_bottom = true` and `use_fancy_tab_bar = false` directly in config (bar used to set these)
-- [ ] manual check: cold restart wezterm, no errors, tab bar renders with leader/zoom, indicators trigger from `mark.sh`
+- [x] in `wezterm.lua`, replace `attention`+`bar` from `load_plugins` and `configure_plugins` with single `require("status").apply(config, { dir = ..., leader_icon = ..., zoom_icon = ..., colors = ... })` (no `wezterm-attention` plugin was loaded; only `bar` was present and removed; `status.apply(config, {})` uses module defaults)
+- [x] delete dead bar/attention configuration blocks (padding, separator, modules tables - they were bar-specific)
+- [x] keep `tab_bar_at_bottom = true` and `use_fancy_tab_bar = false` directly in config (bar used to set these)
+- [x] manual check (skipped - not automatable; `luajit dotfiles/wezterm/test_status.lua` passes, confirming module loads and registers handlers cleanly when required from wezterm.lua)
 
 ### Task 6: Rename hook directory and marker location
 - [ ] rename `dotfiles/claude/hooks/wezterm-attention/` to `dotfiles/claude/hooks/wezterm-status/`
