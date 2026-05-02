@@ -9,6 +9,7 @@ import {
   keyCode,
   open,
   app,
+  shell,
 } from "./utils.js";
 import { doubleCommandQ } from "./customRules/doubleCommandQ.js";
 import { languageSwitch } from "./customRules/languageSwitch.js";
@@ -125,6 +126,7 @@ const rules = ({ isLaptop }: RulesOptions) => [
       ),
     ),
     g: delegate(new URL("raycast://extensions/raycast/raycast-ai/ai-chat")),
+    e: shell`shortcuts run "Ask Edith"`,
     s: {
       a: keyCode("s", { hyper: true }),
       t: keyCode("t", { hyper: true }),
