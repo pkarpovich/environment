@@ -20,6 +20,12 @@ local wezterm_stub = {
         end
         return f()
     end,
+    column_width = function(s)
+        return #s
+    end,
+    truncate_right = function(s, n)
+        return s:sub(1, n)
+    end,
 }
 
 package.preload["wezterm"] = function()
@@ -125,6 +131,121 @@ handlers["update-status"](fake_window({ fake_tab({ fake_pane(20) }) }))
 assert(status._cache()[20], "pane 20 cached")
 handlers["update-status"](fake_window({ fake_tab({}) }))
 assert_eq(status._cache()[20], nil, "stale cache pruned when pane absent")
+
+assert_eq(handlers["format-tab-title"] ~= nil, true, "format-tab-title handler registered")
+
+local function fake_tab_info(opts)
+    return {
+        tab_index = opts.tab_index or 0,
+        is_active = opts.is_active or false,
+        tab_title = opts.tab_title,
+        active_pane = opts.active_pane,
+        panes = opts.panes or {},
+    }
+end
+local function pane_info(id, title)
+    return { pane_id = id, title = title or "" }
+end
+
+for k in pairs(status._cache()) do
+    status._cache()[k] = nil
+end
+
+local tab_no_marker = fake_tab_info({
+    tab_index = 0,
+    is_active = false,
+    active_pane = pane_info(100, "shell"),
+    panes = { pane_info(100, "shell") },
+})
+assert_eq(status._get_tab_attention(tab_no_marker), nil, "no marker -> no attention")
+
+write_marker(101, '{"type":"thinking","frame":2}')
+write_marker(102, '{"type":"stop"}')
+handlers["update-status"](fake_window({
+    fake_tab({ fake_pane(101), fake_pane(102) }),
+}))
+
+local tab_priority = fake_tab_info({
+    tab_index = 1,
+    is_active = false,
+    active_pane = pane_info(101, "build"),
+    panes = { pane_info(101, "build"), pane_info(102, "log") },
+})
+local att = status._get_tab_attention(tab_priority)
+assert(att, "attention returned")
+assert_eq(att.type, "thinking", "thinking has higher priority than stop")
+assert_eq(att.indicator, "◔ ", "thinking frame=2 -> second frame")
+
+local rendered = handlers["format-tab-title"](tab_priority, {}, {}, {}, false, 80)
+assert_eq(type(rendered), "string", "no color tint -> plain string")
+assert(rendered:find("◔"), "rendered string contains thinking indicator")
+assert(rendered:find("2: build"), "rendered string contains index and title")
+
+local stop_only_tab = fake_tab_info({
+    tab_index = 2,
+    is_active = false,
+    active_pane = pane_info(102, "log"),
+    panes = { pane_info(102, "log") },
+})
+local stop_att = status._get_tab_attention(stop_only_tab)
+assert(stop_att, "stop attention returned")
+assert_eq(stop_att.type, "stop", "stop type")
+assert_eq(stop_att.indicator, "✓ ", "stop indicator")
+
+local tinted_tab = fake_tab_info({
+    tab_index = 3,
+    is_active = false,
+    active_pane = pane_info(102, "log"),
+    panes = { pane_info(102, "log") },
+})
+status._config().colors.stop = "#ff0000"
+local rendered_tint = handlers["format-tab-title"](tinted_tab, {}, {}, {}, false, 80)
+assert_eq(type(rendered_tint), "table", "color tint -> format cells")
+assert_eq(rendered_tint[1].Background.Color, "#ff0000", "Background color cell")
+status._config().colors.stop = false
+
+write_marker(101, '{"type":"thinking","frame":2}')
+write_marker(102, '{"type":"stop"}')
+handlers["update-status"](fake_window({
+    fake_tab({ fake_pane(101), fake_pane(102) }),
+}))
+assert(status._cache()[102], "stop cached pre-active")
+local active_tab = fake_tab_info({
+    tab_index = 4,
+    is_active = true,
+    active_pane = pane_info(102, "log"),
+    panes = { pane_info(102, "log") },
+})
+local rendered_active = handlers["format-tab-title"](active_tab, {}, {}, {}, false, 80)
+assert_eq(type(rendered_active), "string", "active tab returns plain string")
+assert(not rendered_active:find("✓"), "active tab strips stop indicator after auto-clear")
+assert_eq(status._cache()[102], nil, "stop marker auto-cleared on active tab")
+assert_eq(io.open(tmpdir .. "/102", "r"), nil, "stop marker file removed on auto-clear")
+
+write_marker(103, '{"type":"thinking"}')
+handlers["update-status"](fake_window({
+    fake_tab({ fake_pane(103) }),
+}))
+local active_thinking = fake_tab_info({
+    tab_index = 5,
+    is_active = true,
+    active_pane = pane_info(103, "build"),
+    panes = { pane_info(103, "build") },
+})
+handlers["format-tab-title"](active_thinking, {}, {}, {}, false, 80)
+assert(status._cache()[103], "thinking marker NOT auto-cleared on active tab")
+
+local long_title = string.rep("x", 200)
+local long_tab = fake_tab_info({
+    tab_index = 0,
+    is_active = false,
+    active_pane = pane_info(200, long_title),
+    panes = { pane_info(200, long_title) },
+})
+local rendered_long = handlers["format-tab-title"](long_tab, {}, {}, {}, false, 12)
+assert_eq(type(rendered_long), "string", "long title rendered")
+assert(rendered_long:find("…"), "long title gets ellipsis")
+assert(#rendered_long <= 14, "long title respects max_width budget (got=" .. #rendered_long .. ")")
 
 os.execute("rm -rf '" .. tmpdir .. "'")
 print("OK")

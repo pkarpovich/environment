@@ -65,12 +65,12 @@ Why: the two upstream plugins both register `format-tab-title` on the wezterm ev
 - [x] manual check: covered by stubbed-wezterm test (`luajit dotfiles/wezterm/test_status.lua`); live `mark.sh` check deferred to Task 5/6 once wired into wezterm.lua and dir is renamed
 
 ### Task 3: Format-tab-title with indicators
-- [ ] implement `get_tab_attention(tab)` - scans cache for all panes in tab, returns `(indicator, type, color)` of highest-priority match (or empty)
-- [ ] register `wezterm.on("format-tab-title", function(tab, _, _, conf, _, _) ... end)`
-- [ ] for active tab: auto-clear `stop`/`notify` markers, render `<index>: <title>` with palette `tab_bar.active_tab.fg_color`/`bg_color`
-- [ ] for inactive tab: render `<indicator><index>: <title>`, optionally apply Background tint when `colors[type]` is non-false
-- [ ] truncate title to `tab_max_width` with ellipsis on overflow
-- [ ] manual check: switch to another tab, write `{"type":"stop"}` marker for current pane, observe `✓` indicator on tab bar
+- [x] implement `get_tab_attention(tab)` - scans cache for all panes in tab, returns `(indicator, type, color)` of highest-priority match (or empty)
+- [x] register `wezterm.on("format-tab-title", function(tab, _, _, conf, _, _) ... end)`
+- [x] for active tab: auto-clear `stop`/`notify` markers, render `<index>: <title>` with palette `tab_bar.active_tab.fg_color`/`bg_color` (palette restyling left to wezterm — plain-string return preserves the active-tab default colors)
+- [x] for inactive tab: render `<indicator><index>: <title>`, optionally apply Background tint when `colors[type]` is non-false
+- [x] truncate title to `tab_max_width` with ellipsis on overflow
+- [x] manual check (skipped - not automatable; covered by stubbed-wezterm test invoking the format-tab-title handler with priority/auto-clear/tint/truncate cases)
 
 ### Task 4: Left status (leader + zoom)
 - [ ] inside the same `update-status` callback used by poller, build leader/zoom segments
