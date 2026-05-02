@@ -16,7 +16,7 @@ local function scheme_for_appearance(appearance)
         -- Codeschool (light) (terminal.sexy)
         -- Atelier Cave Light (base16)
         -- Atelier Cave Light (base16)
-        return "Earthsong"
+        return "Catppuccin Latte"
     end
 end
 
@@ -39,11 +39,13 @@ end
 local function configure_plugins(config, plugins)
     plugins.bar.apply_to_config(config, {
         padding = {
-            left = 2,
-            right = 10,
+            left = 1,
+            right = 2,
+            tabs = { left = 2, right = 0 },
         },
         separator = {
-            space = 2,
+            space = 0,
+            left_icon = ": ",
         },
         modules = {
             tabs = {
@@ -61,34 +63,32 @@ local function configure_plugins(config, plugins)
             username = { enabled = false },
             hostname = { enabled = false },
             clock = { enabled = false },
+            workspace = { enabled = true, icon = "" },
+            cwd = { enabled = false },
         },
     })
-
 end
 
-local function configure_ssh_appearance()
-    wezterm.on("update-status", function(window, pane)
-        local domain = pane:get_domain_name()
-        local overrides = window:get_config_overrides() or {}
-        if domain ~= "local" then
-            overrides.background = {
-                { source = { Color = "#2e1d1a" }, width = "100%", height = "100%", opacity = 0.97 },
-            }
-        else
-            overrides.background = nil
-        end
-        window:set_config_overrides(overrides)
-    end)
-end
+wezterm.on("update-status", function(window, pane)
+    local domain = pane:get_domain_name()
+    local overrides = window:get_config_overrides() or {}
+    if domain ~= "local" then
+        overrides.background = {
+            { source = { Color = "#2e1d1a" }, width = "100%", height = "100%", opacity = 0.97 },
+        }
+    else
+        overrides.background = nil
+    end
+    window:set_config_overrides(overrides)
+end)
 
-local function configure_gui_startup(plugins)
-    wezterm.on("gui-startup", function(cmd)
-        wezterm.log_info("gui-startup")
-        local _, _, window = wezterm.mux.spawn_window(cmd or {})
-        window:gui_window():maximize()
-        plugins.resurrect.state_manager.resurrect_on_gui_startup()
-    end)
-end
+wezterm.on("gui-startup", function(cmd)
+    wezterm.log_info("gui-startup")
+    local _, _, window = wezterm.mux.spawn_window(cmd or {})
+    window:gui_window():maximize()
+    local resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.wezterm")
+    resurrect.state_manager.resurrect_on_gui_startup()
+end)
 
 local function main()
     local appearance = get_appearance()
@@ -101,16 +101,15 @@ local function main()
         color_scheme = color_scheme,
         colors = colors,
         font = wezterm.font_with_fallback({
-            { family = "Iosevka Nerd Font", weight = "Light" },
-            { family = "Victor Mono",       weight = "Regular" },
+            { family = "Iosevka Term",          weight = "Regular" },
+            { family = "Symbols Nerd Font Mono" },
         }),
         font_size = 18,
         window_frame = { font_size = 12 },
         command_palette_font_size = 16,
-        cell_width = 0.9,
         window_background_opacity = 0.97,
         window_decorations = "RESIZE",
-        front_end = "OpenGL",
+        front_end = "WebGpu",
         freetype_load_target = "Light",
         freetype_render_target = "HorizontalLcd",
         tab_bar_at_bottom = true,
@@ -118,6 +117,8 @@ local function main()
         native_macos_fullscreen_mode = true,
         leader = { key = "L", mods = "ALT|SHIFT", timeout_milliseconds = 2000 },
         key_map_preference = "Physical",
+        enable_kitty_keyboard = true,
+        term = "wezterm",
         keys = keybinds.configure_keys(plugins.resurrect, plugins.workspace_switcher),
     }
 
@@ -132,9 +133,6 @@ local function main()
             ssh_ignore = true,
         },
     })
-    configure_ssh_appearance()
-    configure_gui_startup(plugins)
-
     return config
 end
 
