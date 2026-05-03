@@ -24,6 +24,8 @@ local defaults = {
     priority = { "thinking", "review", "stop", "notify" },
     auto_clear = { stop = true, notify = true },
     min_width = 30,
+    ssh_color = "#155e63",
+    ssh_active_color = "#0a3a3e",
 }
 
 local config = nil
@@ -289,7 +291,17 @@ end
 
 local function format_tab(tab, _tabs, _panes, _conf, _hover, max_width)
     local attention = get_tab_attention(tab)
-    local label = string.format("%d: %s", (tab.tab_index or 0) + 1, tab_title(tab))
+    local index = (tab.tab_index or 0) + 1
+    local title = tab_title(tab)
+    local ap = tab.active_pane
+    local remote = ap and ap.domain_name and ap.domain_name ~= "local" and ap.domain_name or nil
+    local label
+    if remote then
+        local short = remote:gsub("^SSH:", ""):gsub("^SSHMUX:", "")
+        label = string.format("%d: [%s] %s", index, short, title)
+    else
+        label = string.format("%d: %s", index, title)
+    end
     local budget = math.max(1, (max_width or 999) - 2)
 
     if tab.is_active then
@@ -299,14 +311,29 @@ local function format_tab(tab, _tabs, _panes, _conf, _hover, max_width)
                 auto_clear_marker(pane.pane_id, entry.type)
             end
         end
-        return pad_to_min(" " .. truncate(label, budget) .. " ", config.min_width)
+        local active_text = pad_to_min(" " .. truncate(label, budget) .. " ", config.min_width)
+        if remote and config.ssh_active_color then
+            local cells = {
+                { Background = { Color = config.ssh_active_color } },
+            }
+            if config.foreground then
+                table.insert(cells, { Foreground = { Color = config.foreground } })
+            end
+            table.insert(cells, { Text = active_text })
+            return cells
+        end
+        return active_text
     end
 
     local prefix = attention and attention.indicator or ""
     local text = pad_to_min(" " .. truncate(prefix .. label, budget) .. " ", config.min_width)
-    if attention and attention.color then
+    local bg = attention and attention.color or nil
+    if not bg and config.ssh_color and remote then
+        bg = config.ssh_color
+    end
+    if bg then
         local cells = {
-            { Background = { Color = attention.color } },
+            { Background = { Color = bg } },
         }
         if config.foreground then
             table.insert(cells, { Foreground = { Color = config.foreground } })
