@@ -7,7 +7,6 @@ local function load_plugins()
     return {
         domains = wezterm.plugin.require("https://github.com/DavidRR-F/quick_domains.wezterm"),
         resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.wezterm"),
-        workspace_switcher = wezterm.plugin.require("https://github.com/MLFlexer/smart_workspace_switcher.wezterm")
     }
 end
 
@@ -22,31 +21,29 @@ local function configure_status(config)
     status.apply(config, {})
 end
 
-wezterm.on("update-status", function(window, pane)
-    local domain = pane:get_domain_name()
-    local overrides = window:get_config_overrides() or {}
-    if domain ~= "local" then
-        overrides.background = {
-            { source = { Color = "#2e1d1a" }, width = "100%", height = "100%", opacity = 0.97 },
-        }
-    else
-        overrides.background = nil
-    end
-    window:set_config_overrides(overrides)
-end)
-
 wezterm.on("gui-startup", function(cmd)
-    wezterm.log_info("gui-startup")
-    local _, _, window = wezterm.mux.spawn_window(cmd or {})
-    window:gui_window():maximize()
     local resurrect = wezterm.plugin.require("https://github.com/MLFlexer/resurrect.wezterm")
-    resurrect.state_manager.resurrect_on_gui_startup()
+    local ok = resurrect.state_manager.resurrect_on_gui_startup()
+    local windows = wezterm.mux.all_windows()
+    if not ok or #windows == 0 then
+        local _, _, window = wezterm.mux.spawn_window(cmd or {})
+        window:gui_window():maximize()
+    else
+        for _, w in ipairs(windows) do
+            local gw = w:gui_window()
+            if gw then gw:maximize() end
+        end
+    end
 end)
 
 local function main()
     local color_scheme = "Earthsong"
     local plugins = load_plugins()
     local colors = require("colors").configure_colors(color_scheme)
+    colors.tab_bar = colors.tab_bar or {}
+    colors.tab_bar.active_tab = colors.tab_bar.active_tab or {}
+    colors.tab_bar.active_tab.bg_color = "#5e4b9c"
+    colors.tab_bar.active_tab.fg_color = "#e0def4"
 
     local config = {
         default_workspace = "~",
@@ -73,10 +70,10 @@ local function main()
         key_map_preference = "Physical",
         enable_kitty_keyboard = true,
         term = "wezterm",
-        keys = keybinds.configure_keys(plugins.resurrect, plugins.workspace_switcher),
+        keys = keybinds.configure_keys(plugins.resurrect),
     }
 
-    workspaces.configure_workspaces(plugins.resurrect, plugins.workspace_switcher, colors)
+    workspaces.configure_workspaces(plugins.resurrect)
     configure_ssh(config)
     configure_status(config)
     plugins.domains.apply_to_config(config, {

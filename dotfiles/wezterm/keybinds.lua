@@ -86,7 +86,7 @@ local function resize_panes_to_ratio(window, pane, first_pane_ratio)
     current_pane:activate()
 end
 
-local function configure_keys(resurrect, workspace_switcher)
+local function configure_keys(resurrect)
     local keys = {
         { key = "Enter", mods = "ALT",         action = "DisableDefaultAssignment" },
         { key = "p",     mods = "SHIFT|SUPER", action = act.ActivateCommandPalette },
@@ -171,11 +171,6 @@ local function configure_keys(resurrect, workspace_switcher)
                     end
                 end
             end),
-        },
-        {
-            key = "s",
-            mods = "LEADER",
-            action = workspace_switcher.switch_workspace()
         },
         {
             key = "c",
