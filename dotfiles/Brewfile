@@ -54,4 +54,5 @@ cask "font-maple-mono"
 cask "font-maple-mono-nf"
 cask "font-iosevka-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
-cask "font-monaspace"
+
+cask "finetune"
