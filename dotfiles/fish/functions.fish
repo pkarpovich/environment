@@ -274,6 +274,50 @@ function brewup --description "fully refresh Homebrew: update, upgrade, cleanup,
     brew autoremove
 end
 
+function envup --description "refresh the full dev environment: brew, fisher, mise tools, uv tools, claude"
+    echo "==> brewup"
+    brewup
+    echo
+
+    if command -q fisher
+        echo "==> fisher update"
+        fisher update
+        echo
+    end
+
+    if command -q mise
+        echo "==> mise upgrade"
+        mise upgrade
+        echo
+    end
+
+    if command -q uv
+        echo "==> uv self update"
+        uv self update
+        echo
+        echo "==> uv tool upgrade --all"
+        uv tool upgrade --all
+        echo
+    end
+
+    if command -q claude
+        echo "==> claude update"
+        claude update
+        echo
+        echo "==> claude plugin marketplace update"
+        claude plugin marketplace update
+        echo
+        echo "==> claude plugin update (all installed)"
+        for plugin in (claude plugin list --json | jq -r '.[].id')
+            echo "    -> $plugin"
+            claude plugin update $plugin
+        end
+        echo
+    end
+
+    echo "==> envup done"
+end
+
 function rvb --description "revdiff: review own branch changes since divergence from default branch"
     set -l default_branch (git symbolic-ref refs/remotes/origin/HEAD --short 2>/dev/null | string replace 'origin/' '')
     if test -z "$default_branch"
