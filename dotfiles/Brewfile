@@ -49,6 +49,7 @@ brew "bruq"
 
 brew "caddy"
 brew "mcpjungle/mcpjungle/mcpjungle"
+brew "agent-browser"
 
 cask "font-maple-mono"
 cask "font-maple-mono-nf"
