@@ -3,8 +3,10 @@ name: draft-message
 description: >
   Draft a Slack / email / chat message, propose it in chat first, and save
   to `<repo-root>/.local/messages/` only after the user approves. Invoke
-  when the user says "draft a message", "напиши сообщение",
-  "write to <person> about", "slack <person>", "сообщение в слак", etc.
+  when the user says "draft a message", "write to <person> about",
+  "slack <person>", "send a message to <person>", or any similar request to
+  compose a chat / email message for review before sending. Pavel often
+  asks in Russian — same triggers apply regardless of language.
 argument-hint: "<topic>"
 metadata:
   version: "0.0.3"
@@ -147,10 +149,10 @@ These are the corrections that came up repeatedly in past iterations. Don't writ
 
 ## Invocation triggers
 
-Russian or English, any shape:
-- "draft a message about Y" / "напиши сообщение про Y"
-- "slack X" / "сообщение в слак"
-- "write to X about Y" / "напиши X про Y"
+Trigger on requests to compose a message for review (any phrasing, any language):
+- "draft a message about <topic>"
+- "slack <person>" / "send <person> a message"
+- "write to <person> about <topic>"
 - Explicit `/draft-message`.
 
 The audience mentioned in the request is used only as content inside the draft body (greeting, tone) - the skill doesn't filter or track by audience.

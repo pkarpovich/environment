@@ -4,13 +4,13 @@ description: >
   Work with ralphex-farm: an autonomous executor that polls Linear, picks up
   Todo issues whose description carries a `<!-- ralphex-farm -->` YAML block,
   runs ralphex against the named plan inside Docker, and opens a PR. Invoke
-  whenever the user wants to: create a Linear ticket for a plan ("создай
-  тикет в ферме", "create ralphex farm task", "add task for plan", "запусти
-  план через ферму"), add a new repository to the farm ("добавь репо в
-  ферму", "add repo to ralphex farm", "register repo in farm"), debug why a
-  ticket was not picked up, or generally answer questions about how the farm
-  works. Also trigger on any mention of the `<!-- ralphex-farm -->` metadata
-  block, repos.yaml in the farm context, or `/var/ralphex/...` host paths.
+  whenever the user wants to: create a Linear ticket for a plan ("create a
+  ralphex farm task", "add task for plan", "queue plan to the farm"), add a
+  new repository to the farm ("add repo to ralphex farm", "register repo in
+  farm"), debug why a ticket was not picked up, or generally answer questions
+  about how the farm works. Also trigger on any mention of the
+  `<!-- ralphex-farm -->` metadata block, repos.yaml in the farm context, or
+  `/var/ralphex/...` host paths.
 metadata:
   version: "0.0.1"
 ---
@@ -257,11 +257,11 @@ read it before guessing defaults.
 
 ## Invocation triggers
 
-Russian or English, any shape:
-- "create a ralphex farm task for <plan>" / "создай тикет в ферме на <plan>"
-- "add <repo> to the farm" / "добавь <repo> в ферму"
-- "запусти план через ферму" / "run this plan via ralphex"
-- "the farm is not picking up <issue>" / "ферма не берёт <issue>"
+Trigger on requests touching the farm (any phrasing, any language):
+- "create a ralphex farm task for <plan>"
+- "add <repo> to the farm" / "register <repo>"
+- "run this plan via the farm" / "queue this plan"
+- "the farm is not picking up <issue>"
 - "what slug should I use in repos.yaml" / similar config questions
 - Any direct mention of `<!-- ralphex-farm`, `repos.yaml` in farm context, or
   paths under `/var/ralphex/`.
