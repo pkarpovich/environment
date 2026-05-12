@@ -28,7 +28,12 @@ local defaults = {
 
 local config = nil
 local cache = {}
+local host_cache = {}
 local handlers_registered = false
+
+local ssh_bg_active = "#0a3a3e"
+local ssh_bg_inactive = "#155e63"
+local ssh_fg_active = "#e0def4"
 
 local allowed_types = { thinking = true, stop = true, notify = true, review = true }
 
@@ -93,6 +98,74 @@ local function read_marker(dir, pane_id)
     return parsed
 end
 
+local SSH_OPT_TAKES_ARG = {
+    ["-p"] = true, ["-i"] = true, ["-o"] = true, ["-l"] = true,
+    ["-F"] = true, ["-J"] = true, ["-L"] = true, ["-R"] = true,
+    ["-D"] = true, ["-w"] = true, ["-S"] = true, ["-c"] = true,
+    ["-b"] = true, ["-e"] = true, ["-m"] = true, ["-Q"] = true,
+}
+
+local function basename(path)
+    if not path or path == "" then
+        return path
+    end
+    return path:match("([^/]+)$") or path
+end
+
+local function parse_ssh_host(argv)
+    if not argv then
+        return nil
+    end
+    local skip_next = false
+    for i = 2, #argv do
+        local a = argv[i]
+        if skip_next then
+            skip_next = false
+        elseif a:sub(1, 1) == "-" then
+            if SSH_OPT_TAKES_ARG[a] then
+                skip_next = true
+            end
+        else
+            return a:match("@(.+)$") or a
+        end
+    end
+    return nil
+end
+
+local function find_ssh_in_tree(info)
+    if not info then
+        return nil
+    end
+    local exec = info.executable
+    if exec and basename(exec) == "ssh" then
+        return info
+    end
+    if info.children then
+        for _, child in pairs(info.children) do
+            local found = find_ssh_in_tree(child)
+            if found then
+                return found
+            end
+        end
+    end
+    return nil
+end
+
+local function read_ssh_host(pane)
+    if not pane.get_foreground_process_info then
+        return nil
+    end
+    local ok, info = pcall(pane.get_foreground_process_info, pane)
+    if not ok or not info then
+        return nil
+    end
+    local ssh_proc = find_ssh_in_tree(info)
+    if not ssh_proc then
+        return nil
+    end
+    return parse_ssh_host(ssh_proc.argv)
+end
+
 function M.poll(window)
     if not config or not window then
         return
@@ -102,6 +175,7 @@ function M.poll(window)
         for _, pane in ipairs(tab:panes()) do
             local pane_id = pane:pane_id()
             cache[pane_id] = read_marker(config.dir, pane_id)
+            host_cache[pane_id] = read_ssh_host(pane)
         end
     end
 end
@@ -287,9 +361,26 @@ local function tab_title(tab)
     return ""
 end
 
+local function pane_host(tab)
+    if not tab.active_pane then
+        return nil
+    end
+    local h = host_cache[tab.active_pane.pane_id]
+    if h then
+        return h
+    end
+    local domain = tab.active_pane.domain_name
+    if domain and domain ~= "" and domain ~= "local" then
+        return domain:match("^[A-Za-z]+:(.+)$") or domain
+    end
+    return nil
+end
+
 local function format_tab(tab, _tabs, _panes, _conf, _hover, max_width)
     local attention = get_tab_attention(tab)
-    local label = string.format("%d: %s", (tab.tab_index or 0) + 1, tab_title(tab))
+    local host = pane_host(tab)
+    local host_prefix = host and ("[" .. host .. "] ") or ""
+    local label = string.format("%d: %s%s", (tab.tab_index or 0) + 1, host_prefix, tab_title(tab))
     local budget = math.max(1, (max_width or 999) - 2)
 
     if tab.is_active then
@@ -299,11 +390,19 @@ local function format_tab(tab, _tabs, _panes, _conf, _hover, max_width)
                 auto_clear_marker(pane.pane_id, entry.type)
             end
         end
-        return pad_to_min(" " .. truncate(label, budget) .. " ", config.min_width)
+        local text = pad_to_min(" " .. truncate(label, budget) .. " ", config.min_width)
+        if host then
+            return {
+                { Background = { Color = ssh_bg_active } },
+                { Foreground = { Color = ssh_fg_active } },
+                { Text = text },
+            }
+        end
+        return text
     end
 
-    local prefix = attention and attention.indicator or ""
-    local text = pad_to_min(" " .. truncate(prefix .. label, budget) .. " ", config.min_width)
+    local indicator = attention and attention.indicator or ""
+    local text = pad_to_min(" " .. truncate(indicator .. label, budget) .. " ", config.min_width)
     if attention and attention.color then
         local cells = {
             { Background = { Color = attention.color } },
@@ -313,6 +412,13 @@ local function format_tab(tab, _tabs, _panes, _conf, _hover, max_width)
         end
         table.insert(cells, { Text = text })
         return cells
+    end
+    if host then
+        return {
+            { Background = { Color = ssh_bg_inactive } },
+            { Foreground = { Color = config.foreground or "#f5f5f5" } },
+            { Text = text },
+        }
     end
     return text
 end
@@ -330,6 +436,7 @@ function M.apply(_, opts)
         config.auto_clear = normalized
     end
     cache = {}
+    host_cache = {}
     if not handlers_registered then
         wezterm.on("update-status", function(window)
             M.poll(window)
