@@ -4,12 +4,92 @@ Ready-to-use XML patterns extracted from official Claude 4.x best practices.
 
 ## Table of Contents
 
-1. [Action Control](#action-control)
-2. [Tool Usage](#tool-usage)
-3. [Output Formatting](#output-formatting)
-4. [Code Quality](#code-quality)
-5. [Research & Exploration](#research--exploration)
-6. [Context Management](#context-management)
+1. [Specificity](#specificity)
+2. [Few-Shot Examples](#few-shot-examples)
+3. [Action Control](#action-control)
+4. [Tool Usage](#tool-usage)
+5. [Output Formatting](#output-formatting)
+6. [Code Quality](#code-quality)
+7. [Research & Exploration](#research--exploration)
+8. [Context Management](#context-management)
+
+---
+
+## Specificity
+
+Specificity comes in two flavours. Output Guidelines describe what the result should look like; Process Steps describe how the model should think through the problem before answering. Always include Output Guidelines. Add Process Steps for tasks that benefit from multi-angle analysis (troubleshooting, decisions, anything where a single-shot answer skips important factors).
+
+### Output Guidelines
+
+```xml
+<output_requirements>
+The output must include:
+- [Element 1, with specific constraint: format, count, units]
+- [Element 2]
+- [Element 3]
+Length: [bound, e.g. "under 1000 words" or "three paragraphs"]
+Tone: [e.g. "professional but informal"]
+Format: [e.g. "markdown with H2 section headers"]
+</output_requirements>
+```
+
+### Process Steps
+
+```xml
+<process>
+Work through the problem in this order before giving the final answer:
+1. [First diagnostic step, e.g. "list all candidate causes"]
+2. [Second step, e.g. "rank them by likelihood given the evidence"]
+3. [Third step, e.g. "for the top candidate, propose a verification test"]
+4. [Final synthesis, e.g. "recommend the next concrete action"]
+</process>
+```
+
+---
+
+## Few-Shot Examples
+
+Few-shot examples often outperform extra paragraphs of instruction for: corner cases (sarcasm, ambiguity), strict output formats (JSON shapes, fixed templates), specific style/tone, and judgment-call situations. Wrap each example in nested XML and add a one-line note explaining why the output is good.
+
+### Single example (one-shot)
+
+```xml
+<examples>
+<example>
+<sample_input>
+[Concrete input resembling runtime data]
+</sample_input>
+<ideal_output>
+[The response you want for that input]
+</ideal_output>
+<why_this_is_good>
+[One sentence: what makes this output correct, what edge case it covers.]
+</why_this_is_good>
+</example>
+</examples>
+```
+
+### Multiple examples (multi-shot, edge cases)
+
+```xml
+<examples>
+<example>
+<sample_input>Great game tonight!</sample_input>
+<ideal_output>Positive</ideal_output>
+<why_this_is_good>Straightforward positive sentiment, no ambiguity.</why_this_is_good>
+</example>
+
+<example>
+<sample_input>Oh yeah, I really needed a flight delay tonight! Excellent!</sample_input>
+<ideal_output>Negative</ideal_output>
+<why_this_is_good>Surface words look positive but tone is sarcastic; treat sarcastic praise as negative.</why_this_is_good>
+</example>
+</examples>
+```
+
+### Mining examples from evaluations
+
+When iterating with measurement (see `iteration.md`), take your highest-scoring outputs and lift them into the prompt as few-shot examples. This makes the prompt self-reinforcing: the model sees concrete proof of what "great" looks like for the specific task.
 
 ---
 

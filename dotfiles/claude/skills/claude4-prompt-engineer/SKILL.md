@@ -7,15 +7,21 @@ description: Expert prompt engineering for Claude 4.x models (Sonnet 4.5, Opus 4
 
 ## Core Principles
 
-**1. Be Explicit** — Claude 4.x follows instructions literally. Request "above and beyond" behavior explicitly.
+**1. Lead with an action verb, not a question.** The first line of a prompt carries the most weight. Start with `Write`, `Create`, `Generate`, `Analyze`, `Identify`, `Refactor`, etc. Replace "What should I eat?" with "Generate a one-day meal plan for an athlete that meets their dietary restrictions." Vague questions force the model to guess what shape of answer you want; action verbs collapse that ambiguity.
 
-**2. Context Over Commands** — Explain WHY, not just WHAT. Claude generalizes from explanations.
+**2. Be explicit; context over commands.** Claude 4.x follows instructions literally, and it generalizes from explanations. Tell it WHY a constraint exists, not just WHAT to do. "Output is consumed by TTS, so avoid ellipses which TTS cannot pronounce" beats "Never use ellipses". A reason gives the model coverage for adjacent cases the rule did not anticipate.
 
-**3. Positive Framing** — Say what TO DO, not what NOT to do.
+**3. Two flavours of specificity: Output Guidelines + Process Steps.**
+- **Output Guidelines** (always include) describe what the result should look like: length, structure, sections, fields, required attributes, tone.
+- **Process Steps** (add for non-trivial tasks) describe how the model should think through the problem before answering: brainstorm options, weigh tradeoffs, consider alternatives, then decide. Use Process Steps for troubleshooting, multi-factor analysis, anything where a single-shot answer would skip important angles.
 
-**4. XML Structure** — Use XML tags for complex instructions. Claude responds well to structured prompts.
+**4. Show, don't just tell.** Examples (few-shot) often beat extra paragraphs of instruction, especially for corner cases (sarcasm, ambiguous inputs), strict output formats, or specific style/tone. Wrap examples in XML (`<sample_input>` / `<ideal_output>`) and add a one-line note explaining WHY each example is good. See the few-shot pattern in `references/patterns.md`.
 
-**5. Match Style** — Your prompt's formatting influences Claude's output formatting.
+**5. XML structure with descriptive tag names.** When interpolating data or mixing content types (instructions + code + docs + records), wrap each section in XML. Use semantic names: `<athlete_info>`, `<sales_records>`, `<my_code>`, `<reference_docs>`. Avoid generic `<data>`, `<input>`, `<text>` because they tell the model nothing about what is inside.
+
+**6. Positive framing.** Say what TO DO, not what NOT to do. "Write in flowing prose paragraphs" beats "Do not use bullet points". Negative instructions force the model to mentally hold the forbidden behaviour; positive ones give it a target.
+
+**7. Match style.** Your prompt's own formatting (prose vs bullets, terse vs verbose, hedged vs decisive) influences the model's output style. Write the prompt in the register you want back.
 
 ## Workflow
 
@@ -47,9 +53,18 @@ Before: "Don't use bullet points"
 After:  "Write in flowing prose paragraphs"
 ```
 
-### Step 3: Structure with XML
+### Step 3: Structure with XML (descriptive tag names)
 
-For complex prompts, wrap sections in XML tags:
+For complex prompts, wrap sections in XML tags. Use semantic, descriptive names that tell the model what is inside the tag, not bag-of-content labels:
+
+| Better | Worse |
+|---|---|
+| `<athlete_info>` | `<input>` |
+| `<sales_records>` | `<data>` |
+| `<my_code>` / `<reference_docs>` | both jammed together |
+| `<example_review>` | `<text>` |
+
+Common structural tags:
 
 ```xml
 <role>
@@ -82,11 +97,29 @@ Select patterns from [patterns.md](references/patterns.md) based on needs:
 
 Check the prompt against:
 
+- [ ] First line is an instruction, not a question, and starts with an action verb
 - [ ] No vague modifiers ("be detailed", "be concise" without specifics)
 - [ ] No contradictions ("thorough but brief")
 - [ ] No negative-only instructions (all "don't" have a "do instead")
 - [ ] No assumed context (all needed info is provided or referenced)
+- [ ] XML tags, if any, have descriptive names (not `<data>` / `<input>` / `<text>`)
+- [ ] Output Guidelines are present; Process Steps are present if the task needs analysis
+- [ ] At least one few-shot example if the task has corner cases or strict format
 - [ ] No over-emphasis for Opus 4.5 (avoid "CRITICAL", "MUST", "ALWAYS" unless truly necessary)
+
+### Step 6: Iterate with measurement
+
+Do not trust gut feelings about prompt quality. The cycle is:
+
+1. Define what "good output" means as concrete criteria.
+2. Pick a handful (2-5) of representative inputs.
+3. Run the current prompt against them, score outputs against the criteria (model-graded is fine; the model is harsher than humans).
+4. Apply **one** engineering change at a time.
+5. Re-score. Keep the change if it improved, revert if it did not.
+
+The "one change at a time" rule is the discipline that makes the loop informative: bundle two changes together and you cannot attribute the result to either. See `references/iteration.md` for the full methodology.
+
+Skip this loop for one-off prompts where the cost of a bad result is low. Use it for any prompt that will run repeatedly (system prompts for agents, skill descriptions, automated workflows).
 
 ## Quick Patterns
 
@@ -118,26 +151,47 @@ Write in flowing prose paragraphs. Reserve markdown for code blocks and simple h
 </output_style>
 ```
 
+### Few-Shot Examples (Show, Don't Just Tell)
+```xml
+<examples>
+<example>
+<sample_input>
+[Concrete input that resembles what the model will see at runtime]
+</sample_input>
+<ideal_output>
+[The response you would want for that input]
+</ideal_output>
+<why_this_is_good>
+[One sentence explaining what makes this output correct: format, tone, judgment call, edge case it handles.]
+</why_this_is_good>
+</example>
+<!-- repeat <example> for each corner case worth showing -->
+</examples>
+```
+
+Use one-shot for a simple pattern, multi-shot to cover edge cases. Mine your highest-scoring outputs from Step 6 evaluations as ready-made examples.
+
 ## Reference Files
 
-- **[patterns.md](references/patterns.md)** — Complete XML patterns library with copy-paste templates
-- **[examples.md](references/examples.md)** — Before/after transformations and full system prompt examples
-- **[agentic.md](references/agentic.md)** — Multi-context window tasks, state management, subagent orchestration
+- **[patterns.md](references/patterns.md)** - Complete XML patterns library with copy-paste templates, plus Specificity and Few-Shot Examples sections
+- **[examples.md](references/examples.md)** - Before/after transformations and full system prompt examples
+- **[agentic.md](references/agentic.md)** - Multi-context window tasks, state management, subagent orchestration
+- **[iteration.md](references/iteration.md)** - Eval-driven loop for measuring whether prompt changes actually help
 
 ## Model-Specific Notes
 
 ### Opus 4.5
-- Very responsive to system prompts — dial back aggressive language
+- Very responsive to system prompts - dial back aggressive language
 - Replace "CRITICAL: You MUST..." with "Use X when..."
 - Excellent at parallel tool calls
-- May over-engineer — use `<minimal_implementation>`
+- May over-engineer - use `<minimal_implementation>`
 
 ### Sonnet 4.5
-- Aggressive parallelism — may need `<sequential_execution>` for stability
+- Aggressive parallelism - may need `<sequential_execution>` for stability
 - Good balance of capability and efficiency
 - Strong at following structured XML prompts
 
 ### Haiku 4.5
-- Keep prompts concise — smaller context window
+- Keep prompts concise - smaller context window
 - Prioritize essential instructions
 - Good for simple, well-defined tasks

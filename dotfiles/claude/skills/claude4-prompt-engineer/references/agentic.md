@@ -41,7 +41,7 @@ For complex tasks, emphasize step-by-step work:
 
 ```xml
 <incremental_approach>
-Focus on incremental progress—make steady advances on a few things at a time rather than attempting everything at once. Track your progress and commit working changes before moving to the next step.
+Focus on incremental progress-make steady advances on a few things at a time rather than attempting everything at once. Track your progress and commit working changes before moving to the next step.
 </incremental_approach>
 ```
 
@@ -165,7 +165,7 @@ Session 3 progress:
 - Fixed authentication token validation
 - Updated user model for edge cases
 - Next: investigate user_management test failures (test #2)
-- Note: Do not remove tests—could lead to missing functionality
+- Note: Do not remove tests-could lead to missing functionality
 ```
 
 ### Git for State Tracking
