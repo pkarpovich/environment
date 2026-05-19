@@ -85,15 +85,19 @@ Status enum values are documented per type because they drive `.base` filters; u
 
 ### Quote
 - **Folder**: vault root.
-- **Filename**: `<Short identifier or the quote itself>.md`.
+- **Filename**: a short evergreen-style identifier capturing the quote's idea, in the original language. Examples in the vault: `Photography didn't kill painting.md`, `Here's to the crazy ones.md`, `Талант - это скорость обучения.md`.
 - **Frontmatter**:
   ```yaml
   categories:
     - "[[Quotes]]"
-  author: "[[<Author Name>]]"
+  attribution: "[[<Person Name>]]"      # who said it; scalar wikilink or list if multiple
+  source: "[[<Original Work or Site>]]" # the show, book, blog, podcast where it was published
+  via: "[[<Where Pavel Encountered It>]]"  # optional: the secondary work that surfaced the quote
   created: YYYY-MM-DD
+  topics: []                            # optional list of topic wikilinks
   ```
-- **Body**: the quote.
+- **Body**: just the quote, typically as a blockquote (`> ...`). Source URL or extra context belongs in the `source` / `via` properties, not the body.
+- **Property names matter**: it is `attribution`, not `author`, even though the `Bases/Quotes.base` view config used to alias it. Always match the real frontmatter so existing notes and views keep working.
 
 ### Job Interview
 - **Folder**: vault root.
