@@ -52,6 +52,7 @@ brew "ovq"
 brew "bruq"
 brew "yashiki-layout-kakejiku"
 brew "FelixKratz/formulae/borders"
+cask "edith"
 
 brew "caddy"
 brew "mcpjungle/mcpjungle/mcpjungle"
