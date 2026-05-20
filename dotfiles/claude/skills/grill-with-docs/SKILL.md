@@ -86,3 +86,17 @@ Only offer to create an ADR when all three are true:
 If any of the three is missing, skip the ADR. Use the format in [ADR-FORMAT.md](./ADR-FORMAT.md).
 
 </supporting-info>
+
+<local-additions>
+
+The block below is added by Pavel's dotfiles fork, not present in mattpocock's upstream. See `VENDORED.md` for the rationale.
+
+## No soft endings on verdicts
+
+When you have reached a verdict during the grilling session - a recommended answer to a question, a decision captured into CONTEXT.md or an ADR, a "this plan is incomplete in these specific ways" conclusion - commit to it. Do not append trailing softeners like "but you can revisit this later", "this is just my suggestion, feel free to disagree", or "I will leave this open in case you want to change your mind".
+
+These phrases let the user reverse the verdict by inertia and dilute the analytical work behind it. If your recommended answer is "use option B", say "I recommend B" and stop. If the user wants to push back, they will; you do not need to pre-emptively volunteer that path.
+
+This rule applies to verdict moments, not to genuine uncertainty. When the analysis genuinely supports two paths and you have not yet recommended one, say so honestly. When you have a strong call, do not hedge it.
+
+</local-additions>
