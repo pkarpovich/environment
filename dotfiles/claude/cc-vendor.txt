@@ -1,0 +1,7 @@
+# vendored plugins for ~/.claude-work
+# format: <marketplace>/<plugin>          - whole plugin
+#         <marketplace>/<plugin>:s1,s2    - selected skills only
+
+ralphex/ralphex
+revdiff/revdiff
+revdiff/revdiff-planning

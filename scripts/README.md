@@ -88,7 +88,88 @@ stable-to-master feature/auth/stable feature/auth/master stable master
 
 ---
 
-### 4. process-transactions
+### 4. cc-vendor
+
+**Function:** `cc-vendor`
+**Script:** `cc_vendor.py`
+
+Vendors Claude Code plugins from the personal profile (`~/.claude`) into the
+work profile (`~/.claude-work`) via symlinks.
+
+#### Why this exists
+
+The work profile (`ccw` alias = `CLAUDE_CONFIG_DIR=~/.claude-work claude`)
+restricts `/plugin install` to a remote allowlist. Plugins you already trust
+in the personal profile (`cc`) cannot be installed in `ccw` until they make it
+onto that list. `cc-vendor` works around this by exposing the cached files
+from `~/.claude/plugins/cache/...` to the work profile directly, with no
+network access and no second install.
+
+#### Usage
+```fish
+# Show current manifest + state (default subcommand)
+cc-vendor
+cc-vendor status
+
+# Interactively edit which plugins to vendor (fzf multi-select)
+cc-vendor pick
+
+# Materialize the manifest: create symlinks + write settings.local.json
+cc-vendor apply
+
+# Remove everything created by this tool
+cc-vendor clean
+```
+
+Run `cc-vendor apply` after any of these:
+- editing the manifest (manually or via `pick`)
+- `claude plugin update` (cache path includes the version, so old symlinks go
+  stale on bump). `cc-vendor status` shows `BROKEN: N` when this happens.
+
+#### Manifest
+
+Lives at `~/.claude-work/cc-vendor.txt` (managed via dotbot from
+`dotfiles/claude/cc-vendor.txt`, so it travels with the repo).
+
+Two line formats:
+```
+umputun-cc-thingz/brainstorm                              # vendor whole plugin
+axiom-marketplace/axiom:axiom-build,axiom-concurrency     # vendor specific skills only
+```
+
+Use the second form for "mega-plugins" like axiom where you want only a
+subset of its 20+ skills.
+
+#### What gets vendored
+
+For each plugin in the manifest:
+- **skills** -> symlinks in `~/.claude-work/skills/<skill>` pointing at the
+  cache. Source location is read from the plugin's `.claude-plugin/plugin.json`
+  (`"skills"` field) if present, otherwise falls back to `./skills/` by
+  convention. This handles revdiff/ralphex which put skills in
+  non-standard paths.
+- **agents** -> symlinks in `~/.claude-work/agents/<name>.md` (same path
+  resolution).
+- **commands** -> symlinks in `~/.claude-work/commands/<name>.md`.
+- **hooks** -> merged from each plugin's `hooks/hooks.json` into
+  `~/.claude-work/settings.local.json`, with `${CLAUDE_PLUGIN_ROOT}` and
+  `${CLAUDE_PLUGIN_DATA}` expanded to absolute paths. The data dir is
+  emulated under `~/.claude-work/.vendored-data/<plugin>/`.
+
+NOT vendored: `bin/`, scripts referenced from skill bodies via
+`${CLAUDE_PLUGIN_ROOT}`. These still resolve correctly because the symlinks
+point INTO the cache, so any relative paths inside SKILL.md still work.
+
+#### State and safety
+
+`~/.claude-work/.vendored-state.json` tracks every symlink and the SHA-256 of
+the generated `settings.local.json`. `apply` refuses to clobber a
+`settings.local.json` that was modified outside the tool. `clean` removes
+only what `apply` created, leaving anything you hand-edited intact.
+
+---
+
+### 5. process-transactions
 
 **Function:** `process-transactions`
 **Script:** `transaction_processor/main.py`
