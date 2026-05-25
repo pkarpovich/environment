@@ -150,7 +150,9 @@ export interface To {
      */
     software_function?: SoftwareFunction;
     select_input_source?: {
-        language: "en" | "ru";
+        language?: string;
+        input_source_id?: string;
+        input_mode_id?: string;
     };
 }
 
