@@ -2,109 +2,143 @@
 name: ralphex-farm
 description: >
   Work with ralphex-farm: an autonomous executor that polls Linear, picks up
-  Todo issues whose description carries a `<!-- ralphex-farm -->` YAML block,
-  runs ralphex against the named plan inside Docker, and opens a PR. Invoke
-  whenever the user wants to: create a Linear ticket for a plan ("create a
-  ralphex farm task", "add task for plan", "queue plan to the farm"), add a
-  new repository to the farm ("add repo to ralphex farm", "register repo in
-  farm"), debug why a ticket was not picked up, or generally answer questions
+  Todo issues whose description carries a `<!-- ralphex-farm -->` YAML block
+  (repo + plan + branch, optional mode), runs ralphex against the named plan
+  inside Docker, and opens a PR. Invoke whenever the user wants to: create a
+  Linear ticket for a plan ("create a ralphex farm task", "add task for plan",
+  "queue plan to the farm"), re-run or recover a failed task ("re-run", "recover",
+  "review only", "move back to Todo"), add a new repository to the farm, trigger
+  an immediate sync, debug why a ticket was not picked up, or answer questions
   about how the farm works. Also trigger on any mention of the
-  `<!-- ralphex-farm -->` metadata block, repos.yaml in the farm context, or
-  `/var/ralphex/...` host paths.
+  `<!-- ralphex-farm -->` metadata block, repos.yaml in the farm context,
+  `/var/ralphex/...` host paths, the farm's `/api/sync` or `/api/repos`
+  endpoints, or Claude plugin provisioning in the farm.
 metadata:
-  version: "0.0.1"
+  version: "0.2.1"
 ---
 
 # ralphex-farm
 
 Operator skill for the ralphex-farm runner (https://github.com/pkarpovich/ralphex-farm).
 
-## What the farm does (one paragraph)
+## What the farm does
 
 Polls one Linear team every N minutes (default 5m). For each issue in `Todo`
 whose description contains a valid `<!-- ralphex-farm -->` metadata block, it
 runs ralphex inside a Docker container against the named plan in the named
-repo, then pushes a feature branch, opens a GitHub PR, comments the PR URL
-back on the Linear issue, and moves the issue to `In Review`. On any failure
-the issue moves to `Error` with a comment.
+repo, on the branch named in the block, then pushes that feature branch, opens
+a GitHub PR, comments the PR URL back on the Linear issue, and moves the issue
+to `In Review`. On any failure the issue moves to `Error` with a comment. On a
+transient Claude rate-limit/overload it waits and retries instead of dying
+(`RALPHEX_WAIT_ON_LIMIT`, default 30m).
 
-The farm is stateless — Linear is the source of truth. Repo clones live at
+The farm is stateless - Linear is the source of truth. Repo clones live at
 `<repos-root>/<name>` on the host (the operator picks the root, conventionally
 `/var/ralphex/repos`).
 
 ## The metadata block
 
-This is the single most important piece. The farm does a strict regex match.
-Get this wrong and the issue is silently skipped.
+The farm matches this block with a strict regex and requires `repo`, `plan`, and
+`branch`. Omit any one (or get a value wrong) and the issue is silently skipped -
+the one failure that surfaces no error anywhere, so it is worth getting right.
 
 ```
 <!-- ralphex-farm
 repo: <linear_slug>
 plan: <repo-relative-path-to-plan-md>
+branch: <feature-branch-name>
+mode: review
 -->
 ```
 
 Rules:
 - `<!--` and `-->` markers each on their own line.
 - `repo` matches a `linear_slug` (or repo key) in the operator's `repos.yaml`.
-- `plan` is repo-relative and the file MUST exist on the repo's default branch
-  (the farm does `git fetch && reset --hard origin/<default>` before checking).
+- `plan` is repo-relative; the file must exist on the repo's default branch (the
+  farm does `git fetch && reset --hard origin/<default>` before checking).
+- `branch` is the feature branch name, and the single source of truth: the farm
+  passes it to ralphex via `--branch` so both sides use the exact same name (this
+  replaced the old derive-from-filename logic that caused push failures). It must
+  differ from the repo's default branch.
+- `mode` is optional. Only `review` or empty are valid (any other value rejects
+  the block and the issue is skipped). `mode: review` = review-only recovery
+  (Workflow C); omit it for a normal full run.
 - The first matching block wins; the rest of the description is free-form.
 
 ## Workflow A: Create a Linear ticket for a plan
 
-Use this when the user has a plan committed somewhere and wants the farm to
-execute it.
+Use this when the user has a plan and wants the farm to execute it.
 
-### Pre-flight — verify the plan is on the default branch
+### Step 1 - confirm the repo and its default branch (`GET /api/repos`)
 
-This is the #1 reason tickets do not get picked up. Even if the user has
-pushed the plan to a feature branch, the farm runs `git reset --hard
-origin/<default>` first, so anything outside the default branch is invisible.
+Hit the farm's repos endpoint first to see which repos it actually serves and
+each one's default branch - so you use a valid `repo:` slug and know whether the
+default branch is `main` or `master` (needed for the plan-push step below, the
+`gh api` check, and the plan link). No SSH needed:
 
-Check before creating the ticket:
+```bash
+curl -s https://ralphex-farm.pkarpovich.space/api/repos
+# -> [{"slug":"turtle-hub","default_branch":"main"},{"slug":"ovq","default_branch":"master"}, ...]
+```
+
+If the target repo is not in the list, the farm does not serve it - run
+Workflow B (add a repository) first. Otherwise use the returned `slug` for
+`repo:` and the returned `default_branch` everywhere a default branch is
+referenced below.
+
+### Step 2 - put the plan on the default branch first
+
+The farm runs `git reset --hard origin/<default>` and reads the plan from there,
+so the plan file must exist on the repo's default branch (`main`/`master`) before
+the ticket is picked up - this is the most common reason a ticket never runs.
+
+So if the plan was just created and is not yet on the default branch, commit and
+push the plan file to master/main, then create the ticket - in that order.
+
+- If the plan is uncommitted in the target repo's working tree: stage just the
+  plan file, commit it (conventional message), `git push origin <default>`.
+- If the plan sits on a feature branch only: cherry-pick / open a tiny PR with
+  just the plan file and merge it (plans are documents - merging them alone is
+  safe), or push it straight to the default branch if direct pushes are allowed.
+- If the plan lives in a different repo than the one running it (e.g. a smoke
+  plan authored into a playground repo), push it to that repo's default branch.
+
+Verify it landed before continuing:
 
 ```bash
 gh api "repos/<owner>/<repo>/contents/<plan-path>?ref=<default-branch>" --jq .path
 ```
 
-If 404, stop and tell the user. Offer the cheapest fix:
+If 404, get the plan onto the default branch before creating the ticket.
 
-- Single-commit feature branch with just the plan → cherry-pick or merge to
-  default. Plans are documents; merging them alone is not risky.
-- Plan mixed with implementation commits → open a small PR with only the plan
-  file, merge it, then create the ticket.
+### Step 3 - decide the branch name
 
-Also check the user has not pre-created the implementation branch. The farm's
-ralphex container will create its own branch (typically derived from the plan
-filename) and push it. A pre-existing branch with the same name causes a push
-conflict at the end. Ask the user to delete it.
+For a fresh task, pick a clear new feature-branch name (ralphex creates it). For
+a re-run, reuse the existing branch name (Workflow C). It must differ from the
+repo's default branch.
 
-### Find the Linear team
+### Step 4 - find the Linear team
 
-The farm runs against ONE team (set by `LINEAR_TEAM_ID` in the operator's
-`.env`). The skill does not store this — discover at runtime:
+The farm runs against one team (`LINEAR_TEAM_ID` in the operator's `.env`).
+Discover at runtime:
 
 ```
 mcp__claude_ai_Linear__list_teams
 ```
 
-If the operator has only one team that fits the farm naming convention (often
-contains "ralphex" or "farm"), use it. Otherwise, present the list and ask the
-user to pick. Cache the choice for the rest of the session.
+If only one team fits the farm naming convention (often contains "ralphex" or
+"farm"), use it; otherwise present the list and ask. Cache the choice.
 
-### Create the issue
+### Step 5 - create the issue
 
-Use `mcp__claude_ai_Linear__save_issue` (Linear MCP must be authenticated;
-if not, tell the user to run `/mcp` and pick the Linear connector). Fields:
+Use `mcp__claude_ai_Linear__save_issue` (Linear MCP must be authenticated; if
+not, tell the user to run `/mcp`). Fields:
 
 - `team`: the team ID from above.
-- `title`: short, action-oriented. Use the plan commit message subject if
-  available, not the filename.
+- `title`: short, action-oriented (use the plan's intent, not the filename).
 - `state`: `Todo`. Anything else and the poller skips it.
-- `description`: metadata block FIRST (so the poller's regex catches it
-  cleanly), then a human summary, then a link to the plan on the default
-  branch.
+- `description`: metadata block first (so the regex catches it), then a human
+  summary, then a link to the plan on the default branch.
 
 Description template:
 
@@ -112,33 +146,35 @@ Description template:
 <!-- ralphex-farm
 repo: <linear_slug>
 plan: <repo-relative-plan-path>
+branch: <feature-branch-name>
 -->
 
-<one-paragraph summary of what the plan does — pull from the commit
-message that introduced the plan, or ask the user>
+<one-paragraph summary of what the plan does - pull from the plan/commit, or ask>
 
 Plan: [<relative-path>](<https-url-to-plan-on-default-branch>)
 ```
 
-Pass the description as raw markdown — do NOT escape newlines. The Linear
-MCP server requires literal newlines.
+Pass the description as raw markdown with literal newlines, which the Linear MCP
+requires (escaped `\n` will not render).
 
-### After creation
+### Step 6 - after creation
 
-Report the issue identifier (e.g. `XYZ-3`) and URL. Mention the poll cadence
-("up to 5 min by default") and that the user can restart the farm container
-to force an immediate poll: `docker compose restart farm` on the host running
-the farm.
+Report the issue identifier and URL. The farm picks it up on the next poll
+(`POLL_INTERVAL`, default 5m - confirm it if timing matters). To run it now
+instead of waiting, hit the sync endpoint:
+
+```bash
+curl -s -X POST https://ralphex-farm.pkarpovich.space/api/sync   # -> {"status":"triggered"}
+```
+
+(Or `docker compose restart farm` on the host, but `/api/sync` is cheaper.)
 
 ## Workflow B: Add a new repository to the farm
 
-Use this when `repo:` in a metadata block names a slug that is not yet in
-`repos.yaml`. All steps run on the host running the farm (typically a small
-home server / RPi reachable over SSH).
+Use this when `repo:` names a slug not yet in `repos.yaml`. All steps run on the
+host running the farm (a home server reachable over SSH).
 
 ### 1. Clone the repo
-
-Conventional layout (operator may differ — confirm with the user if unsure):
 
 ```fish
 sudo mkdir -p /var/ralphex/repos
@@ -147,121 +183,136 @@ sudo git clone <clone-url> <name>
 sudo chown -R <app-uid>:<app-uid> <name>
 ```
 
-`<app-uid>` must match the uid that owns the OTHER repos in this directory.
-The farm auto-detects this uid from the directory owner and passes it into
-the ralphex container as `APP_UID` so files written back to `/workspace` end
-up owned by the same host user. Mixed ownership across repos breaks the
-shared `RALPHEX_CONFIG_DIR` write-back. If unsure, run `stat -c '%u' *` in
-the repos root and use the same uid (commonly `1000`).
-
-For private repos use SSH (`git@github.com:...`) — the farm container mounts
-`~/.ssh` from the host.
+`<app-uid>` must match the uid owning the OTHER repos here (commonly `1000`).
+The farm auto-detects it from the directory owner and passes it as `APP_UID`.
+Mixed ownership breaks write-back. For private repos use SSH (`git@github.com:...`);
+the farm container mounts `~/.ssh`.
 
 ### 2. Add to `repos.yaml`
 
-Edit the file referenced by `REPOS_CONFIG_PATH` in the farm's `.env`
-(conventionally `/opt/ralphex-farm/repos.yaml` on the host, mounted into the
-farm container at `/etc/farm/repos.yaml`).
+Edit the file at `REPOS_CONFIG_PATH` in the farm's `.env` (mounted into the
+container at `/etc/farm/repos.yaml`).
 
 ```yaml
 <key>:
   clone_url: <https-or-git@-url>
   local_path: /var/ralphex/repos/<name>   # absolute, must match step 1
   default_branch: <main|master|...>       # gh repo view --json defaultBranchRef
-  # linear_slug: <slug>                   # defaults to <key>; only set if you
-                                          # want a different value in the
-                                          # ticket's metadata block
+  # linear_slug: <slug>                   # defaults to <key>
   # image: <registry>/ralphex-mise:latest # only to override RALPHEX_IMAGE
 ```
 
-Validation rules the farm enforces (taken from
-`pkg/config/config.go::LoadRepos`):
-- `clone_url`, `local_path`, `default_branch` are required.
-- `local_path` must be absolute.
-- `linear_slug` (defaults to key) must be unique across the file.
+Rules (from `pkg/config/config.go::LoadRepos`): `clone_url`, `local_path`,
+`default_branch` required; `local_path` absolute; `linear_slug` unique.
 
 ### 3. Apply
 
 ```fish
-cd /opt/ralphex-farm   # or wherever docker-compose.yml lives
-docker compose restart farm
+cd /home/<user>/ralphex-farm   # the compose dir
+docker compose up -d
 docker compose logs --tail=50 farm
 ```
 
-The farm validates `repos.yaml` at startup; if the file is malformed it
-refuses to start (clear error in logs). On success the log shows the loaded
-repo count.
+The farm validates `repos.yaml` at startup; a malformed file keeps the container
+down (clear error in the logs), so check the logs after restarting. Health check:
+`curl http://localhost:7077/health`. You can also confirm the loaded set via
+`GET /api/repos`.
 
-Health check: `curl http://localhost:7077/health` (port from `FARM_HEALTH_PORT`).
+## Workflow C: Re-run or recover a task
 
-## Critical gotchas (read before doing anything)
+The farm recovers on the branch (the durable unit), not the worktree.
 
-These come from real failures. None of them surface as obvious errors — the
-farm just silently skips or fails opaquely.
+- **Resume a full run** (e.g. a transient failure mid-task): move the issue
+  `Error -> Todo`. Keep `repo`/`plan`/`branch` as they were; the farm fetches
+  the existing branch and continues. (A fresh-from-scratch run uses a branch
+  that does not exist yet; recovery reuses the one that does.)
+- **Review-only recovery** (the task finished its code work and died during
+  review, or you only want the review pipeline re-run): set `mode: review` in
+  the block and move the issue to `Todo`. The farm checks out the existing
+  `branch` and runs `ralphex --review` in place, then pushes + opens/updates the
+  PR. `mode: review` needs the branch to already exist.
 
-1. **Plan not on default branch.** Farm resets to `origin/<default>` before
-   looking. Plan on a feature branch = `plan file not found`.
-2. **Pre-created implementation branch.** Ralphex creates and pushes its own
-   branch from the plan filename. A pre-existing remote branch with the same
-   name = push conflict at the end of an otherwise successful run.
-3. **Wrong Linear team.** The farm polls ONE team. Tickets in any other team
-   are invisible. Always confirm `team` matches the operator's
-   `LINEAR_TEAM_ID`.
-4. **Wrong state.** Only `Todo` is picked up. Backlog / In Progress / etc.
-   are skipped. Re-opening a closed ticket: move it back to `Todo` explicitly.
-5. **Metadata block formatting.** `<!--` and `-->` MUST be on their own
-   lines. Inline / single-line variants are not parsed.
-6. **`linear_slug` mismatch.** The `repo:` value in the metadata block must
-   match `linear_slug` (or the map key when slug is omitted) in `repos.yaml`.
-   Easy typo — copy-paste both sides.
-7. **`local_path` ownership.** All repos in the farm must be owned by the
-   same uid. If a new repo is `chown root` and others are `chown 1000`, the
-   farm writes config in the wrong place and writes back files no one can
-   read.
+Either way: edit the block (add/confirm `branch`, optionally `mode: review`) via
+`mcp__claude_ai_Linear__save_issue`, set `state: Todo`, and the farm takes it on
+the next poll (or hit `/api/sync`).
+
+## Claude plugins / skills in the farm
+
+The in-container `claude` (which ralphex drives) gets the operator's Claude Code
+plugins/skills from a host dir set by `FARM_CLAUDE_CONFIG_DIR` (e.g.
+`/var/ralphex/claude`). The farm mounts it read-only into each task container and
+copies it on start to a writable `CLAUDE_CONFIG_DIR=/home/app/.claude-farm`.
+Empty `FARM_CLAUDE_CONFIG_DIR` = feature off.
+
+Important - the paths must match the runtime location. Claude Code records
+absolute `installPath`s in `plugins/installed_plugins.json` and
+`known_marketplaces.json`; they have to match the path the container uses
+(`/home/app/.claude-farm`), or every plugin shows "failed to load". So build and
+update the config inside a container at that exact path:
+
+```fish
+docker run --rm \
+  -e CLAUDE_CONFIG_DIR=/home/app/.claude-farm \
+  -v /var/ralphex/claude:/home/app/.claude-farm \
+  --env-file /home/<user>/ralphex-farm/.env \
+  --entrypoint sh <RALPHEX_IMAGE> \
+  -c 'claude plugin marketplace add <owner>/<repo> && claude plugin install <name>@<marketplace>'
+# then: sudo chown -R <app-uid>:<app-uid> /var/ralphex/claude
+```
+
+Bootstrapping on a different path (a laptop `/tmp`, or the bare host dir) and
+copying it over leaves the recorded paths mismatched, so the plugins fail to
+load. Verify with `claude plugin list` run the same way (mount the dir, copy, list).
+
+## Gotchas (none surface as an obvious error)
+
+These come from real failures.
+
+1. **Plan not on default branch.** Farm resets to `origin/<default>` first; a
+   plan only on a feature branch (or uncommitted) yields `plan file not found`.
+   Push the plan to the default branch before creating the ticket (Workflow A
+   step 2).
+2. **Missing `branch` field.** The block needs `repo` + `plan` + `branch`; a
+   `repo`+`plan`-only block is invalid and the issue is silently never picked up.
+3. **`mode` other than `review`.** Any value besides empty or `review` rejects
+   the block -> skipped.
+4. **`branch` equals the default branch.** Rejected - work runs on a feature
+   branch and merges via PR.
+5. **Wrong Linear team.** The farm polls one team; tickets elsewhere are invisible.
+6. **Wrong state.** Only `Todo` is picked up. Re-opening: move explicitly to `Todo`.
+7. **`linear_slug` mismatch.** `repo:` must match `linear_slug` (or the map key)
+   in `repos.yaml`.
+8. **`local_path` ownership.** All repos owned by the same uid (commonly 1000).
+9. **Claude config path mismatch.** See the Claude plugins section - build the
+   config at `/home/app/.claude-farm` or plugins fail to load.
 
 ## Discovering farm config (when hands-on)
 
-If you have SSH access to the host and need to debug:
-
 | What | Where |
 |---|---|
-| `.env` | `/opt/ralphex-farm/.env` (conventional) |
-| `repos.yaml` (host) | path from `REPOS_CONFIG_PATH` in `.env` |
-| `repos.yaml` (in container) | `/etc/farm/repos.yaml` (read-only mount) |
-| Repo clones | `/var/ralphex/repos/<name>` (conventional) |
-| Shared ralphex config | `RALPHEX_CONFIG_DIR` from `.env`, default `/var/ralphex/config` |
-| Codex auth | `CODEX_CONFIG_DIR` from `.env`, default `/var/ralphex/codex` |
-| Mise toolchain cache | `MISE_DATA_DIR` from `.env`, default `/var/ralphex/mise` |
+| `.env` | `/home/<user>/ralphex-farm/.env` (conventional) |
+| `docker-compose.yml` | same dir; it is a git checkout - `git pull` updates it (the deploy pulls the IMAGE, not these files) |
+| `repos.yaml` (host) | path from `REPOS_CONFIG_PATH`; in container `/etc/farm/repos.yaml` |
+| Repo clones | `/var/ralphex/repos/<name>` |
+| Shared ralphex config | `RALPHEX_CONFIG_DIR`, default `/var/ralphex/config` |
+| Codex auth | `CODEX_CONFIG_DIR`, default `/var/ralphex/codex` |
+| Claude plugins config | `FARM_CLAUDE_CONFIG_DIR`, default `/var/ralphex/claude` (feature off if env unset) |
+| Wait-on-limit | `RALPHEX_WAIT_ON_LIMIT`, default `30m` |
+| Mise toolchain cache | `MISE_DATA_DIR`, default `/var/ralphex/mise` |
 | Health endpoint | `http://<host>:${FARM_HEALTH_PORT:-7077}/health` |
-| Logs | `docker compose logs farm` from compose dir |
-
-The `.env` file is the source of truth for everything tunable. When in doubt,
-read it before guessing defaults.
-
-## Anti-patterns (don't do)
-
-- **Don't hardcode a Linear team ID** in the ticket-creation tool call.
-  Always discover via `list_teams` first — the operator's setup is private.
-- **Don't fabricate the human summary** in the description. If the plan
-  commit message is short or unclear, ask the user instead of inventing.
-- **Don't write the metadata block as a multiline string with escaped `\n`.**
-  Linear's MCP wants literal newlines (server-side enforced).
-- **Don't restart the farm without first confirming `repos.yaml` parses.**
-  A typo will keep the container down. Test with `yq` or
-  `python -c 'import yaml; yaml.safe_load(open("repos.yaml"))'` first.
-- **Don't tell the user "it should pick up in 5 minutes"** without checking
-  the actual `POLL_INTERVAL` in their `.env`. They may have changed it.
-- **Don't suggest editing `local_path` after the fact** without re-cloning.
-  The farm uses it as the docker bind source — changing it requires a
-  matching directory move on the host or things break opaquely.
+| Sync (force a poll now) | `POST /api/sync` |
+| Repos the farm serves | `GET /api/repos` - returns `slug` + `default_branch` per repo; use it to pick a valid `repo:` and its default branch without SSH |
+| Logs | `docker compose logs farm` from the compose dir |
 
 ## Invocation triggers
 
 Trigger on requests touching the farm (any phrasing, any language):
-- "create a ralphex farm task for <plan>"
+- "create a ralphex farm task for <plan>" / "queue this plan"
+- "re-run <issue>" / "recover <issue>" / "review only" / "move back to Todo"
 - "add <repo> to the farm" / "register <repo>"
-- "run this plan via the farm" / "queue this plan"
+- "sync the farm now" / "force a poll"
 - "the farm is not picking up <issue>"
-- "what slug should I use in repos.yaml" / similar config questions
+- "what slug for repos.yaml" / farm config questions
+- Claude plugin provisioning in the farm (`FARM_CLAUDE_CONFIG_DIR`, plugins not loading)
 - Any direct mention of `<!-- ralphex-farm`, `repos.yaml` in farm context, or
   paths under `/var/ralphex/`.
