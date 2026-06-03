@@ -1,0 +1,18 @@
+{
+  "name": "pkarpovich",
+  "description": "Pavel's personal Claude Code skills as installable plugins",
+  "owner": {
+    "name": "pkarpovich"
+  },
+  "plugins": [
+    {
+      "name": "skills",
+      "source": "./",
+      "description": "Pavel's personal Claude Code skills",
+      "version": "0.1.0",
+      "author": {
+        "name": "pkarpovich"
+      }
+    }
+  ]
+}
