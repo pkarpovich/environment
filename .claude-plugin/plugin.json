@@ -1,0 +1,11 @@
+{
+  "name": "skills",
+  "version": "0.1.0",
+  "description": "Pavel's personal Claude Code skills",
+  "author": {
+    "name": "pkarpovich"
+  },
+  "repository": "https://github.com/pkarpovich/environment",
+  "license": "MIT",
+  "skills": "./dotfiles/claude/skills/"
+}
