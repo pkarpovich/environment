@@ -15,6 +15,7 @@ yashiki layout-set-default tatami
 yashiki set-outer-gap 8
 yashiki layout-cmd --layout tatami set-inner-gap 8
 yashiki layout-cmd --layout tatami set-main-ratio 0.6
+yashiki layout-cmd --layout kakejiku set-inner-gap 8
 
 # Cursor follows focus across monitors only
 yashiki set-cursor-warp on-output-change
@@ -40,8 +41,9 @@ yashiki bind alt-i output-focus prev
 yashiki bind alt-shift-o output-send next
 yashiki bind alt-shift-i output-send prev
 
-yashiki bind alt-t layout-set tatami   # tile (master-stack)
-yashiki bind alt-b layout-set byobu    # accordion
+yashiki bind alt-t layout-set tatami     # tile (master-stack)
+yashiki bind alt-b layout-set byobu      # accordion
+yashiki bind alt-v layout-set kakejiku   # vertical rows for portrait (1/3 stack top, 2/3 main bottom)
 
 # Window management
 yashiki bind alt-f window-toggle-fullscreen
