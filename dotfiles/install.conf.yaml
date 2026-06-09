@@ -19,6 +19,7 @@
     ~/.config/fish: fish/**
     ~/.config/zed/: zed/**
     ~/.config/zellij/: zellij/**
+    ~/.config/yashiki/: yashiki/**
 
     ~/.claude/: claude/**
     ~/.claude-work/: claude/**

@@ -1,0 +1,9 @@
+{
+  "accent_color": "#ffffffcc",
+  "font_family": "Hack Nerd Font",
+  "fullscreen_color": "#ff9f0a",
+  "layout_icons": {
+    "tatami": "rectangle.split.2x1",
+    "byobu": "rectangle.stack"
+  }
+}

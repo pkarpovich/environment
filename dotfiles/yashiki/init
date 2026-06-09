@@ -1,0 +1,111 @@
+#!/opt/homebrew/bin/fish
+
+function tag
+    math "2^($argv[1] - 1)"
+end
+
+# Monitors (by name - stable across reconnect)
+set -l LAPTOP "Built-in"
+set -l DELL_LANDSCAPE "U2723QE"
+set -l DELL_PORTRAIT "U2720Q"
+
+yashiki add-exec-path /opt/homebrew/bin
+
+yashiki layout-set-default tatami
+yashiki set-outer-gap 8
+yashiki layout-cmd --layout tatami set-inner-gap 8
+yashiki layout-cmd --layout tatami set-main-ratio 0.6
+
+# Cursor follows focus across monitors only
+yashiki set-cursor-warp on-output-change
+
+for i in (seq 1 9)
+    yashiki bind "alt-$i" tag-view (tag $i)
+    yashiki bind "alt-shift-$i" window-move-to-tag (tag $i)
+    yashiki bind "alt-ctrl-$i" window-toggle-tag (tag $i)
+end
+
+yashiki bind alt-shift-0 window-move-to-tag 0
+
+# Presentation tag (10) - staging canvas on the shared DELL for screen-share
+yashiki bind alt-p tag-view (tag 10)
+yashiki bind alt-ctrl-p window-toggle-tag (tag 10)
+
+yashiki bind alt-j window-focus next
+yashiki bind alt-k window-focus prev
+
+# Multi-monitor
+yashiki bind alt-o output-focus next
+yashiki bind alt-i output-focus prev
+yashiki bind alt-shift-o output-send next
+yashiki bind alt-shift-i output-send prev
+
+yashiki bind alt-t layout-set tatami   # tile (master-stack)
+yashiki bind alt-b layout-set byobu    # accordion
+
+# Window management
+yashiki bind alt-f window-toggle-fullscreen
+yashiki bind alt-shift-f window-toggle-float
+yashiki bind alt-shift-c window-close
+yashiki bind alt-return retile
+yashiki bind alt-shift-r tag-toggle 0   # hard retile: resync (drop ghost windows) + retile focused output
+yashiki bind alt-m layout-cmd zoom   # promote focused window to master slot
+
+# Ignore transient popups (prevents flicker / focus ping-pong)
+yashiki rule-add --subrole AXUnknown ignore
+yashiki rule-add --close-button none ignore
+
+yashiki rule-add --app-id company.thebrowser.dia tags (tag 1)
+yashiki rule-add --app-id company.thebrowser.dia output "$LAPTOP"
+
+yashiki rule-add --app-id dev.zed.Zed tags (tag 4)
+yashiki rule-add --app-id dev.zed.Zed output "$DELL_LANDSCAPE"
+yashiki rule-add --app-id dev.zed.Zed --title "*dealcloud*" tags (tag 1)
+yashiki rule-add --app-id dev.zed.Zed --title "*dealcloud*" output "$DELL_LANDSCAPE"
+yashiki rule-add --app-id dev.zed.Zed --title "*environment*" tags (tag 2)
+yashiki rule-add --app-id dev.zed.Zed --title "*environment*" output "$DELL_LANDSCAPE"
+yashiki rule-add --app-id dev.zed.Zed --title "*turtle-hub*" tags (tag 3)
+yashiki rule-add --app-id dev.zed.Zed --title "*turtle-hub*" output "$DELL_LANDSCAPE"
+
+yashiki rule-add --app-id com.sublimemerge tags (tag 5)
+yashiki rule-add --app-id com.sublimemerge output "$DELL_LANDSCAPE"
+
+yashiki rule-add --app-id com.github.wez.wezterm tags (tag 5)
+yashiki rule-add --app-id com.github.wez.wezterm output "$DELL_PORTRAIT"
+
+yashiki rule-add --app-id com.tinyspeck.slackmacgap tags (tag 6)
+yashiki rule-add --app-id com.tinyspeck.slackmacgap output "$LAPTOP"
+yashiki rule-add --app-id ru.keepcoder.Telegram tags (tag 5)
+yashiki rule-add --app-id ru.keepcoder.Telegram output "$LAPTOP"
+yashiki rule-add --app-id com.microsoft.teams2 tags (tag 8)
+yashiki rule-add --app-id com.microsoft.teams2 output "$LAPTOP"
+yashiki rule-add --app-id net.whatsapp.WhatsApp tags (tag 9)
+yashiki rule-add --app-id net.whatsapp.WhatsApp output "$LAPTOP"
+yashiki rule-add --app-id com.apple.mail tags (tag 3)
+yashiki rule-add --app-id com.apple.mail output "$LAPTOP"
+yashiki rule-add --app-id com.apple.iCal tags (tag 4)
+yashiki rule-add --app-id com.apple.iCal output "$LAPTOP"
+
+yashiki rule-add --app-id md.obsidian tags (tag 7)
+yashiki rule-add --app-id md.obsidian output "$LAPTOP"
+
+yashiki rule-add --app-id com.usebruno.app tags (tag 2)
+yashiki rule-add --app-id com.usebruno.app output "$LAPTOP"
+yashiki rule-add --app-id com.parallels.desktop.console tags (tag 6)
+yashiki rule-add --app-id com.parallels.desktop.console output "$DELL_LANDSCAPE"
+yashiki rule-add --app-id com.spotify.client tags (tag 8)
+yashiki rule-add --app-id com.spotify.client output "$DELL_PORTRAIT"
+yashiki rule-add --app-id com.apple.iphonesimulator tags (tag 2)
+yashiki rule-add --app-id com.apple.iphonesimulator output "$DELL_LANDSCAPE"
+yashiki rule-add --app-id com.apple.iphonesimulator float
+
+yashiki rule-add --app-id com.brnbw.Tuna float
+yashiki rule-add --app-name Finder float
+yashiki rule-add --app-name "System Settings" float
+yashiki rule-add --app-name "System Preferences" float
+yashiki rule-add --subrole Dialog float
+yashiki rule-add --subrole FloatingWindow float
+yashiki rule-add --fullscreen-button none float
+
+# Status bar (ranma) - tracked, so it dies with yashiki and relaunches on restart
+yashiki exec --track "ranma start --init $HOME/.config/yashiki/ranma/init"
