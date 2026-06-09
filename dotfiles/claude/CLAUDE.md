@@ -7,6 +7,7 @@
   - "Add validation" -> write tests for invalid inputs first, then implement.
   - "Refactor X" -> ensure tests pass before and after, behavior unchanged.
   - Multi-step tasks -> state a brief plan with per-step verification.
+- **No human-time estimates** - don't quote agent-executed work in person-days/weeks/months ("~1 week, not months", "2-3 days") or frame a plan as a long wait. Calendar/effort numbers map to human labor and are irrelevant here - the agent does the work, usually in minutes to hours. Convey scope as concrete steps, dependencies, and unknowns/risks instead. Exception: real external waits (CI, App Store review, scheduled jobs) - state those as actual durations.
 
 ## Code style
 - No comments or docstrings (they rot and mislead) - use clear names instead. Exception: MCP tool definitions require docstrings.
