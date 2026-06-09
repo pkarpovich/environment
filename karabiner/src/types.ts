@@ -136,6 +136,10 @@ export interface ToDelayedAction {
 export interface To {
     key_code?: KeyCode;
     modifiers?: ModifiersKeys[];
+    lazy?: boolean;
+    repeat?: boolean;
+    halt?: boolean;
+    hold_down_milliseconds?: number;
     shell_command?: string;
     set_variable?: {
         name: string;
