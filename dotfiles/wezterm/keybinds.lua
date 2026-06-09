@@ -92,18 +92,18 @@ local function configure_keys(resurrect)
         { key = "p",     mods = "SHIFT|SUPER", action = act.ActivateCommandPalette },
         {
             key = "|",
-            mods = "SHIFT|ALT",
+            mods = "SHIFT|CMD",
             action = act({ SplitHorizontal = { domain = "CurrentPaneDomain" } }),
         },
         {
             key = "_",
-            mods = "SHIFT|ALT",
+            mods = "SHIFT|CMD",
             action = act({ SplitVertical = { domain = "CurrentPaneDomain" } }),
         },
-        { key = "LeftArrow",  mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Left" }) },
-        { key = "RightArrow", mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Right" }) },
-        { key = "UpArrow",    mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Up" }) },
-        { key = "DownArrow",  mods = "ALT|SHIFT", action = act({ ActivatePaneDirection = "Down" }) },
+        { key = "LeftArrow",  mods = "CMD|SHIFT", action = act({ ActivatePaneDirection = "Left" }) },
+        { key = "RightArrow", mods = "CMD|SHIFT", action = act({ ActivatePaneDirection = "Right" }) },
+        { key = "UpArrow",    mods = "CMD|SHIFT", action = act({ ActivatePaneDirection = "Up" }) },
+        { key = "DownArrow",  mods = "CMD|SHIFT", action = act({ ActivatePaneDirection = "Down" }) },
         {
             key = "=",
             mods = "LEADER",
@@ -128,12 +128,12 @@ local function configure_keys(resurrect)
         },
         {
             key = '[',
-            mods = 'OPT|SHIFT',
+            mods = 'CMD|SHIFT',
             action = act.ActivateTabRelative(-1),
         },
         {
             key = ']',
-            mods = 'OPT|SHIFT',
+            mods = 'CMD|SHIFT',
             action = act.ActivateTabRelative(1),
         },
         {
@@ -196,12 +196,12 @@ local function configure_keys(resurrect)
         },
         {
             key = "W",
-            mods = "ALT|SHIFT",
+            mods = "CMD|SHIFT",
             action = act.CloseCurrentTab { confirm = false },
         },
         {
             key = "T",
-            mods = "ALT|SHIFT",
+            mods = "CMD|SHIFT",
             action = wezterm.action_callback(function(window, pane)
                 local mux = wezterm.mux
 
@@ -233,7 +233,7 @@ local function configure_keys(resurrect)
         },
         {
             key = "V",
-            mods = "ALT|SHIFT",
+            mods = "CMD|SHIFT",
             action = act.ActivateCopyMode,
         },
         -- Starship prompt switching
@@ -269,7 +269,7 @@ local function configure_keys(resurrect)
         })
     end
 
-    tab_switch_keys(keys, "ALT|SHIFT")
+    tab_switch_keys(keys, "CMD|SHIFT")
 
     return keys
 end

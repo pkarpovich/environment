@@ -66,10 +66,9 @@ local function main()
         hide_tab_bar_if_only_one_tab = false,
         tab_max_width = 30,
         native_macos_fullscreen_mode = true,
-        leader = { key = "L", mods = "ALT|SHIFT", timeout_milliseconds = 2000 },
+        leader = { key = "L", mods = "CMD|SHIFT", timeout_milliseconds = 2000 },
         key_map_preference = "Physical",
         enable_kitty_keyboard = true,
-        term = "wezterm",
         keys = keybinds.configure_keys(plugins.resurrect),
     }
 
