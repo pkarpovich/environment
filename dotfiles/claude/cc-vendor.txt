@@ -2,6 +2,13 @@
 # format: <marketplace>/<plugin>          - whole plugin
 #         <marketplace>/<plugin>:s1,s2    - selected skills only
 
-ralphex/ralphex
-revdiff/revdiff
+umputun-cc-thingz/workflow
+umputun-cc-thingz/thinking-tools
+umputun-cc-thingz/skill-eval
+umputun-cc-thingz/review
+umputun-cc-thingz/release-tools
+umputun-cc-thingz/planning
+umputun-cc-thingz/brainstorm
 revdiff/revdiff-planning
+revdiff/revdiff
+ralphex/ralphex

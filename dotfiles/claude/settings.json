@@ -205,7 +205,11 @@
     "revdiff@revdiff": true,
     "revdiff-planning@revdiff": true,
     "frontend-design@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
+    "skill-creator@claude-plugins-official": true,
+    "axiom@axiom-marketplace": true,
+    "grafana-lgtm@grafana-skills": true,
+    "grafana-core@grafana-skills": true,
+    "pg@aiguide": true
   },
   "extraKnownMarketplaces": {
     "revdiff": {
@@ -226,11 +230,31 @@
         "source": "github",
         "repo": "umputun/ralphex"
       }
+    },
+    "axiom-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "CharlesWiltgen/Axiom"
+      }
+    },
+    "grafana-skills": {
+      "source": {
+        "source": "github",
+        "repo": "grafana/skills"
+      }
+    },
+    "aiguide": {
+      "source": {
+        "source": "github",
+        "repo": "timescale/pg-aiguide"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
   "theme": "dark",
   "preferredNotifChannel": "terminal_bell",
   "autoCompactEnabled": true,
