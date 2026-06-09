@@ -6,6 +6,7 @@ input=$(cat)
 # Extract data from JSON
 model_name=$(echo "$input" | jq -r '.model.display_name')
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir')
+effort=$(echo "$input" | jq -r '.effort.level // empty')
 
 # Get git branch info (skip locks for safety)
 cd "$current_dir" 2>/dev/null || cd "$(echo "$input" | jq -r '.cwd')" 2>/dev/null || true
@@ -36,6 +37,27 @@ FX_PURPLE="\033[38;2;139;126;200m"  # #8B7EC8
 GRAY="\033[38;2;128;128;128m"
 WHITE="\033[37m"
 RESET="\033[0m"
+
+# API-account monthly spend (ccusage, claude-only) - shown only on the API-billed
+# account (no rate_limits in payload). Render reads a cache; ccusage runs detached.
+SPEND_CAP=1000
+SPEND_DATA_DIR="$HOME/.claude-work"
+SPEND_CACHE="/tmp/cc-month-spend-claude"
+SPEND_LOCK="/tmp/cc-month-spend-claude.lock"
+SPEND_TTL=600
+MISE_SHIMS="$HOME/.local/share/mise/shims"
+
+# Count Mon-Fri among the first N days of a month whose 1st falls on weekday W1 (1=Mon..7=Sun)
+count_wd() {
+    local n="$1" w1="$2" full rem i wd c
+    full=$((n / 7)); rem=$((n % 7)); c=$((full * 5)); i=0
+    while [ "$i" -lt "$rem" ]; do
+        wd=$(((w1 - 1 + i) % 7 + 1))
+        [ "$wd" -le 5 ] && c=$((c + 1))
+        i=$((i + 1))
+    done
+    echo "$c"
+}
 
 # Get context info from API (used_percentage is pre-calculated by Claude)
 max_ctx=$(echo "$input" | jq -r '.context_window.context_window_size // 200000')
@@ -136,7 +158,93 @@ if [ -n "$fivehour_pct" ] && [ -n "$fivehour_reset" ]; then
     fi
 fi
 
-printf "${sep}${FX_GREEN}%s${RESET} ${GRAY}in${RESET} ${FX_BLUE}%s${RESET}" "$model_name" "$dir_name"
+# Monthly API spend - only on the API-billed account (no weekly/5h rate limits)
+if [ -z "$weekly_pct" ] && [ -z "$fivehour_pct" ] && [ -d "$SPEND_DATA_DIR" ]; then
+    now=$(date +%s)
+
+    # Refresh the cache in the background if stale - never blocks the render
+    refresh=1
+    if [ -f "$SPEND_CACHE" ]; then
+        mtime=$(stat -f %m "$SPEND_CACHE" 2>/dev/null || stat -c %Y "$SPEND_CACHE" 2>/dev/null || echo 0)
+        [ $((now - mtime)) -lt "$SPEND_TTL" ] && refresh=0
+    fi
+    if [ "$refresh" -eq 1 ]; then
+        if [ -d "$SPEND_LOCK" ]; then
+            lmtime=$(stat -f %m "$SPEND_LOCK" 2>/dev/null || stat -c %Y "$SPEND_LOCK" 2>/dev/null || echo 0)
+            [ $((now - lmtime)) -gt 300 ] && rmdir "$SPEND_LOCK" 2>/dev/null
+        fi
+        if mkdir "$SPEND_LOCK" 2>/dev/null; then
+            (
+                export PATH="$MISE_SHIMS:/opt/homebrew/bin:$PATH"
+                cur=$(date +%Y-%m)
+                tmp="${SPEND_CACHE}.tmp.$$"
+                if CLAUDE_CONFIG_DIR="$SPEND_DATA_DIR" bunx ccusage monthly --json --offline 2>/dev/null \
+                    | jq -r --arg m "$cur" '[.monthly[] | select(.period==$m) | .modelBreakdowns[] | select((.modelName // "") | ascii_downcase | test("claude")) | .cost] | add // 0' > "$tmp" 2>/dev/null && [ -s "$tmp" ]; then
+                    mv "$tmp" "$SPEND_CACHE"
+                fi
+                rm -f "$tmp"
+                rmdir "$SPEND_LOCK" 2>/dev/null
+            ) >/dev/null 2>&1 </dev/null &
+        fi
+    fi
+
+    # Display from cache (instant)
+    if [ -f "$SPEND_CACHE" ]; then
+        spent=$(cat "$SPEND_CACHE" 2>/dev/null)
+        if [ -n "$spent" ]; then
+            spent_int=$(printf "%.0f" "$spent" 2>/dev/null || echo 0)
+            spend_pct=$((spent_int * 100 / SPEND_CAP))
+
+            # Working-day pacing (Mon-Fri): days left + actual vs ideal burn
+            dom=$((10#$(date +%d)))
+            dim=$((10#$(date -v1d -v+1m -v-1d +%d)))
+            w1=$(date -v1d +%u)
+            elapsed_wd=$(count_wd "$dom" "$w1")
+            total_wd=$(count_wd "$dim" "$w1")
+            left_wd=$((total_wd - elapsed_wd))
+            ideal_pct=$((elapsed_wd * 100 / total_wd))
+            pace=$((spend_pct - ideal_pct))
+
+            if [ "$spend_pct" -gt 80 ]; then
+                SP_COLOR="$FX_RED"
+            elif [ "$spend_pct" -gt 60 ]; then
+                SP_COLOR="$FX_ORANGE"
+            elif [ "$spend_pct" -gt 40 ]; then
+                SP_COLOR="$FX_YELLOW"
+            elif [ "$spend_pct" -gt 20 ]; then
+                SP_COLOR="$FX_CYAN"
+            else
+                SP_COLOR="$FX_GREEN"
+            fi
+
+            printf "${sep}${GRAY}mo${RESET} ${SP_COLOR}\$%d${RESET}${GRAY}/\$%d${RESET} ${GRAY}(${RESET}${SP_COLOR}%d%%${RESET}${GRAY})${RESET} ${GRAY}·${RESET} ${GRAY}%dd${RESET}" "$spent_int" "$SPEND_CAP" "$spend_pct" "$left_wd"
+
+            if [ "$pace" -gt 5 ]; then
+                printf " ${FX_RED}↑%d%%${RESET}" "$pace"
+            elif [ "$pace" -lt -5 ]; then
+                printf " ${FX_GREEN}↓%d%%${RESET}" "$((-pace))"
+            fi
+
+            sep=" ${WHITE}|${RESET} "
+        fi
+    fi
+fi
+
+printf "${sep}${FX_GREEN}%s${RESET}" "$model_name"
+
+if [ -n "$effort" ] && [ "$effort" != "null" ]; then
+    case "$effort" in
+        low)    EFF_COLOR="$FX_GREEN" ;;
+        medium) EFF_COLOR="$FX_CYAN" ;;
+        high)   EFF_COLOR="$FX_YELLOW" ;;
+        xhigh)  EFF_COLOR="$FX_ORANGE" ;;
+        max)    EFF_COLOR="$FX_RED" ;;
+        *)      EFF_COLOR="$GRAY" ;;
+    esac
+    printf " ${GRAY}·${RESET} ${EFF_COLOR}%s${RESET}" "$effort"
+fi
+
+printf " ${GRAY}in${RESET} ${FX_BLUE}%s${RESET}" "$dir_name"
 
 if [ -n "$branch" ] && [ "$branch" != "HEAD" ]; then
     printf " ${GRAY}on${RESET} ${FX_PURPLE}%s${RESET}" "$branch"
