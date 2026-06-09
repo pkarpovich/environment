@@ -1,0 +1,458 @@
+schemaVersion = 1
+
+[catalogs]
+sortOrders = []
+
+    [[catalogs.globalScopes]]
+    catalogIdentifier = 'Tuna.EffectsCatalog'
+    mode = 'none'
+    selectedItemKeys = []
+
+    [[catalogs.globalScopes]]
+    catalogIdentifier = 'TunaEmoji.EmojiCatalog'
+    mode = 'none'
+    selectedItemKeys = []
+
+[[comboMode.bindings]]
+iconPath = 'star.fill'
+key = 'a'
+label = 'Prompts'
+
+    [[comboMode.bindings.children]]
+    key = 'r'
+    label = 'ru'
+    url = 'tuna://run/text.shortcuts%2520run%2520%2522Edith%2520-%2520Fix%2520RU%2522/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'e'
+    label = 'en'
+    url = 'tuna://run/text.shortcuts%2520run%2520%2522Edith%2520-%2520Fix%2520EN%25E2%2580%259D/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'c'
+    label = 'next'
+    url = 'tuna://run/text.shortcuts%2520run%2520%2522Edith%2520-%2520Continue%2522/Run%20Text%20as%20Shell%20Command'
+
+[[comboMode.bindings]]
+iconPath = 'folder'
+key = 'f'
+label = 'folders'
+
+    [[comboMode.bindings.children]]
+    key = 'h'
+    url = 'tuna://run/path.%252FUsers%252Fpavel.karpovich/Open'
+
+    [[comboMode.bindings.children]]
+    key = 'f'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%25E2%2580%259CFinder%25E2%2580%259D%2520%2522open%2520-b%2520com.apple.finder%2522/Run%20Text%20as%20Shell%20Command'
+
+[[comboMode.bindings]]
+iconPath = 'cursorarrow.and.square.on.square.dashed'
+key = 's'
+label = 'Screenshot'
+
+    [[comboMode.bindings.children]]
+    key = 'a'
+    url = 'tuna://run/TunaCleanShot.CleanShotCommandsCatalog.Capture%20Area/TunaCore.CommonActionsCatalog.Run'
+
+    [[comboMode.bindings.children]]
+    key = 'w'
+    url = 'tuna://run/TunaCleanShot.CleanShotCommandsCatalog.Capture%20Window/TunaCore.CommonActionsCatalog.Run'
+
+    [[comboMode.bindings.children]]
+    key = 't'
+    url = 'tuna://run/TunaCleanShot.CleanShotCommandsCatalog.Capture%20Text%20(OCR)/TunaCore.CommonActionsCatalog.Run'
+
+    [[comboMode.bindings.children]]
+    key = 'v'
+    url = 'tuna://run/TunaCleanShot.CleanShotCommandsCatalog.Record%20Screen/TunaCore.CommonActionsCatalog.Run'
+
+[[comboMode.bindings]]
+iconPath = 'message'
+key = 'm'
+label = 'Messaging'
+
+    [[comboMode.bindings.children]]
+    key = 's'
+    label = 'slack'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Slack%2522%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%2522open%2520-b%2520com.tinyspeck.slackmacgap%2522/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 't'
+    label = 'telegram'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Telegram%2522%2520%2520%2520%2520%2520%2520%2520%2520%2522open%2520-b%2520ru.keepcoder.Telegram%2522/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'm'
+    label = 'teams'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Microsoft%2520Teams%2522%2520%2522open%2520-b%2520com.microsoft.teams2%2522/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'w'
+    label = 'whatsapp'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522WhatsApp%2522%2520%2520%2520%2520%2520%2520%2520%2520%2522open%2520-b%2520net.whatsapp.WhatsApp%2522/Run%20Text%20as%20Shell%20Command'
+
+[[comboMode.bindings]]
+key = 'b'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Dia/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+iconPath = 'folder.fill.badge.gearshape'
+key = 'd'
+label = 'Developer'
+
+    [[comboMode.bindings.children]]
+    key = 'e'
+    url = 'tuna://run/path.%252FUsers%252Fpavel.karpovich%252FProjects%252Fenvironment/TunaCore.CommonActionsCatalog.Open%20With%E2%80%A6/TunaCore.ApplicationsCatalog.Zed'
+
+    [[comboMode.bindings.children]]
+    key = 'a'
+    url = 'tuna://run/path.%252FUsers%252Fpavel.karpovich%252FProjects%252FDC%252Fask-dealcloud/TunaCore.CommonActionsCatalog.Open%20With%E2%80%A6/TunaCore.ApplicationsCatalog.Zed'
+
+    [[comboMode.bindings.children]]
+    key = 'h'
+    url = 'tuna://run/path.%252FUsers%252Fpavel.karpovich%252FProjects%252Fhome-environment/TunaCore.CommonActionsCatalog.Open%20With%E2%80%A6/TunaCore.ApplicationsCatalog.Zed'
+
+    [[comboMode.bindings.children]]
+    key = 't'
+    url = 'tuna://run/path.%252FUsers%252Fpavel.karpovich%252FProjects%252Fturtle-hub/TunaCore.CommonActionsCatalog.Open%20With%E2%80%A6/TunaCore.ApplicationsCatalog.Zed'
+
+[[comboMode.bindings]]
+key = 'space'
+url = 'tuna://run/TunaSystem.AllWindowsSearchCatalog.Windows/Tuna.BasicActionsCatalog.Browse'
+
+[[comboMode.bindings]]
+key = 'k'
+url = "tuna://stage/TunaSmartLinks.SmartLinksCatalog.Kagi/TunaSmartLinks.SmartLinksActionsCatalog.Open Smart Link\u2026/text.something"
+
+[[comboMode.bindings]]
+key = 'c'
+url = 'tuna://run/Tuna.Internal.ClipboardProxyCatalog.Clipboard%20History/TunaCore.CommonActionsCatalog.Browse'
+
+[[comboMode.bindings]]
+key = 'z'
+label = 'zed'
+url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--cycle%2520--app-name%2520%2522Zed%2522%2520%2522open%2520-b%2520dev.zed.Zed%2522/Run%20Text%20as%20Shell%20Command'
+
+[[comboMode.bindings]]
+key = 't'
+label = 'wezterm'
+url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%25E2%2580%259CWezterm%25E2%2580%259D%2520%2522open%2520-b%2520com.github.wez.wezterm%2522/Run%20Text%20as%20Shell%20Command'
+
+[[comboMode.bindings]]
+key = 'n'
+label = 'obsidian'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.Obsidian/TunaCore.CommonActionsCatalog.Open'
+
+[[comboMode.bindings]]
+iconPath = 'macwindow'
+key = 'w'
+label = 'Yashiki'
+
+    [[comboMode.bindings.children]]
+    key = 'f'
+    label = 'fullscreen'
+    url = 'tuna://run/text.yashiki%2520window-toggle-fullscreen/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'l'
+    label = 'float'
+    url = 'tuna://run/text.yashiki%2520window-toggle-float/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'c'
+    label = 'close'
+    url = 'tuna://run/text.yashiki%2520window-close/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'm'
+    label = 'zoom master'
+    url = 'tuna://run/text.yashiki%2520layout-cmd%2520zoom/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'r'
+    label = 'retile'
+    url = 'tuna://run/text.yashiki%2520retile/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'e'
+    label = 'resync'
+    url = 'tuna://run/text.yashiki%2520tag-toggle%25200/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 't'
+    label = 'tatami'
+    url = 'tuna://run/text.yashiki%2520layout-set%2520tatami/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'b'
+    label = 'byobu'
+    url = 'tuna://run/text.yashiki%2520layout-set%2520byobu/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'j'
+    label = 'focus next'
+    url = 'tuna://run/text.yashiki%2520window-focus%2520next/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'k'
+    label = 'focus prev'
+    url = 'tuna://run/text.yashiki%2520window-focus%2520prev/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'p'
+    label = 'present'
+    url = 'tuna://run/text.yashiki%2520tag-view%2520512/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    iconPath = 'square.grid.3x3'
+    key = 'v'
+    label = 'view tag'
+
+        [[comboMode.bindings.children.children]]
+        key = '1'
+        label = 'tag 1'
+        url = 'tuna://run/text.yashiki%2520tag-view%25201/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '2'
+        label = 'tag 2'
+        url = 'tuna://run/text.yashiki%2520tag-view%25202/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '3'
+        label = 'tag 3'
+        url = 'tuna://run/text.yashiki%2520tag-view%25204/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '4'
+        label = 'tag 4'
+        url = 'tuna://run/text.yashiki%2520tag-view%25208/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '5'
+        label = 'tag 5'
+        url = 'tuna://run/text.yashiki%2520tag-view%252016/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '6'
+        label = 'tag 6'
+        url = 'tuna://run/text.yashiki%2520tag-view%252032/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '7'
+        label = 'tag 7'
+        url = 'tuna://run/text.yashiki%2520tag-view%252064/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '8'
+        label = 'tag 8'
+        url = 'tuna://run/text.yashiki%2520tag-view%2520128/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '9'
+        label = 'tag 9'
+        url = 'tuna://run/text.yashiki%2520tag-view%2520256/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    iconPath = 'paperplane'
+    key = 's'
+    label = 'send to tag'
+
+        [[comboMode.bindings.children.children]]
+        key = '1'
+        label = 'tag 1'
+        url = 'tuna://run/text.yashiki%2520window-move-to-tag%25201/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '2'
+        label = 'tag 2'
+        url = 'tuna://run/text.yashiki%2520window-move-to-tag%25202/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '3'
+        label = 'tag 3'
+        url = 'tuna://run/text.yashiki%2520window-move-to-tag%25204/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '4'
+        label = 'tag 4'
+        url = 'tuna://run/text.yashiki%2520window-move-to-tag%25208/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '5'
+        label = 'tag 5'
+        url = 'tuna://run/text.yashiki%2520window-move-to-tag%252016/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '6'
+        label = 'tag 6'
+        url = 'tuna://run/text.yashiki%2520window-move-to-tag%252032/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '7'
+        label = 'tag 7'
+        url = 'tuna://run/text.yashiki%2520window-move-to-tag%252064/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '8'
+        label = 'tag 8'
+        url = 'tuna://run/text.yashiki%2520window-move-to-tag%2520128/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '9'
+        label = 'tag 9'
+        url = 'tuna://run/text.yashiki%2520window-move-to-tag%2520256/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '0'
+        label = 'hide'
+        url = 'tuna://run/text.yashiki%2520window-move-to-tag%25200/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    iconPath = 'plusminus'
+    key = 'g'
+    label = 'toggle tag'
+
+        [[comboMode.bindings.children.children]]
+        key = '1'
+        label = 'tag 1'
+        url = 'tuna://run/text.yashiki%2520window-toggle-tag%25201/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '2'
+        label = 'tag 2'
+        url = 'tuna://run/text.yashiki%2520window-toggle-tag%25202/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '3'
+        label = 'tag 3'
+        url = 'tuna://run/text.yashiki%2520window-toggle-tag%25204/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '4'
+        label = 'tag 4'
+        url = 'tuna://run/text.yashiki%2520window-toggle-tag%25208/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '5'
+        label = 'tag 5'
+        url = 'tuna://run/text.yashiki%2520window-toggle-tag%252016/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '6'
+        label = 'tag 6'
+        url = 'tuna://run/text.yashiki%2520window-toggle-tag%252032/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '7'
+        label = 'tag 7'
+        url = 'tuna://run/text.yashiki%2520window-toggle-tag%252064/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '8'
+        label = 'tag 8'
+        url = 'tuna://run/text.yashiki%2520window-toggle-tag%2520128/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = '9'
+        label = 'tag 9'
+        url = 'tuna://run/text.yashiki%2520window-toggle-tag%2520256/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = 'p'
+        label = 'present'
+        url = 'tuna://run/text.yashiki%2520window-toggle-tag%2520512/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    iconPath = 'display'
+    key = 'o'
+    label = 'monitor'
+
+        [[comboMode.bindings.children.children]]
+        key = 'j'
+        label = 'focus next'
+        url = 'tuna://run/text.yashiki%2520output-focus%2520next/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = 'k'
+        label = 'focus prev'
+        url = 'tuna://run/text.yashiki%2520output-focus%2520prev/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = 's'
+        label = 'send next'
+        url = 'tuna://run/text.yashiki%2520output-send%2520next/Run%20Text%20as%20Shell%20Command'
+
+        [[comboMode.bindings.children.children]]
+        key = 'd'
+        label = 'send prev'
+        url = 'tuna://run/text.yashiki%2520output-send%2520prev/Run%20Text%20as%20Shell%20Command'
+
+[hotkeys]
+custom = []
+
+    [hotkeys.app.activate]
+    carbonKeyCode = 49
+    carbonModifiers = 256
+
+    [hotkeys.app.dictation]
+    carbonKeyCode = 105
+    carbonModifiers = 0
+
+[settings]
+comboModeDoublePressTrigger = 'leftOption'
+comboModeModifierTrigger = 'hyper'
+comboModeTriggerType = 'modifier'
+physicalHyperKeySource = 'capsLock'
+shelfAutoCloseWhenTasksComplete = true
+textModeTriggerType = 'disabled'
+themeIdentifier = 'com.brnbw.tuna.themes.default'
+
+[[smartLinks.entries]]
+enabled = true
+name = 'Bing'
+requiresInput = true
+template = 'https://www.bing.com/search?q={{input}}'
+
+[[smartLinks.entries]]
+enabled = true
+name = 'DuckDuckGo'
+requiresInput = true
+template = 'https://duckduckgo.com/?q={{input}}'
+
+[[smartLinks.entries]]
+enabled = true
+name = 'GitHub'
+requiresInput = true
+template = 'https://github.com/search?q={{input}}'
+
+[[smartLinks.entries]]
+enabled = true
+name = 'Google'
+requiresInput = true
+template = 'https://www.google.com/search?q={{input}}'
+
+[[smartLinks.entries]]
+enabled = true
+name = 'Kagi'
+requiresInput = true
+template = 'https://kagi.com/search?q={{input}}'
+
+[[smartLinks.entries]]
+enabled = true
+name = 'Stack Overflow'
+requiresInput = true
+template = 'https://stackoverflow.com/search?q={{input}}'
+
+[[smartLinks.entries]]
+enabled = true
+name = 'Wikipedia'
+requiresInput = true
+template = 'https://en.wikipedia.org/wiki/Special:Search?search={{input}}'
+
+[[smartLinks.entries]]
+enabled = true
+name = 'YouTube'
+requiresInput = true
+template = 'https://www.youtube.com/results?search_query={{input}}'
