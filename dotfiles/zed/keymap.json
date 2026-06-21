@@ -8,8 +8,8 @@
   {
     "context": "Workspace",
     "bindings": {
-      "alt-shift-t": "task::Spawn",
-      "alt-shift-r": "task::Rerun",
+      "cmd-shift-t": "task::Spawn",
+      "cmd-shift-r": "task::Rerun",
       "cmd-\\": "workspace::ToggleLeftDock"
     }
   },
