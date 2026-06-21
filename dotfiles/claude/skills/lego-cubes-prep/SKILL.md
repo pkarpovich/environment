@@ -53,7 +53,8 @@ Goal: fill the `### Content` section with one-line hooks for each piece of conte
 3. Read each matched file in parallel (single tool message with multiple Read calls - Pavel cares about latency).
 4. For each file, extract a one-line hook:
    - **Skip files without a review body** - if the file has only frontmatter and the `> Mentioned in` line (no impression text), drop it. Files with `status: watching/playing/on hold` and empty body are typical skips. Tell Pavel which ones you skipped and why.
-   - The hook should capture what is interesting/notable in one phrase, not summarize the whole review. Look for a memorable detail Pavel emphasized in the text.
+   - These hooks become the published **show notes**, so keep them short - a teaser, not a verdict. Aim for roughly 3-8 words, one phrase. Do NOT spell out the reasoning or reveal the whole point: a three-word reaction is a hook, a full sentence explaining why belongs in the review, not the notes. Pick one memorable angle Pavel emphasized, then stop.
+   - Avoid loud, overblown claims - understate rather than oversell. Pavel has pushed back more than once when hooks ran too long or too loud; when in doubt, cut.
    - Keep hooks in Russian, in Pavel's voice (he writes informally).
 5. Group related items under a parent bullet:
    - Sequels watched together (e.g., "Дилогия X перед выходом второго")
@@ -74,6 +75,8 @@ Reference - example Content block (from episode 029):
 - Четвёртый сезон ощущается как промежуточный, но войну с Вилтрумитами показали круто - [[Invincible S04 (2026)]]
 - DLC к ремейку RE4 за Аду, чисто сюжетная история без новых механик и локаций - [[Resident Evil 4 - Separate Ways (2023)]]
 ```
+
+The 029 hooks above run a little long - they are kept only as a structure/grouping reference. Episode 030 deliberately trended shorter and is the better length target: look at the `### Content` block in `Lego Cubes 030 - *.md` for the calibrated brevity. If a hook reads like a sentence lifted from the review, trim it to a phrase.
 
 ### Stage 3 - Suggest title
 
@@ -185,11 +188,11 @@ Steps:
 4. Build the nfo. **Read the previous episode's nfo** (`LEGO Cubes E<N-1>.nfo`) before writing - it is the canonical layout to mirror exactly. Source the title and plot from the vault note (`Lego Cubes NNN - <Title>.md`).
 
    Plot field formatting (this is what makes Stage 6 different from a simple copy-paste):
-   - Two sections separated by a blank line: `Content:` then `Projects:`. Both have a 2-space indent on every bullet line (matches E28's nfo style).
+   - Sections, each labeled and separated by a blank line, in this order: `General:` (only if the vault note has a non-empty `### General`), then `Content:`, then `Projects:`. Every bullet line gets a 2-space indent (matches E28's nfo style - E28 included all three sections; E29 had no General so its nfo had only Content + Projects). Do not drop `General` when the note has it - Pavel flags this.
    - **Strip all `[[...]]` wikilink syntax**. For Content bullets `- <hook> - [[Title (Year)]]`, the link target becomes plain text: `Title (Year)`. For Projects bullets that mention `[[Tuclaw]]`, `[[Glitch]]`, etc., drop just the brackets: `Tuclaw`, `Glitch`.
    - Sub-bullets (dilogies, marathons) keep their 4-space indentation under the parent. Add a trailing `:` on the parent line for readability (e.g., `- Дилогия Devil Wears Prada перед выходом второго:`).
    - **Escape `&` as `&amp;`** in titles like `The Hunger Games - The Ballad of Songbirds &amp; Snakes (2023)` (XML requires it).
-   - Do NOT include the `## Links` section, frontmatter, or anything else from the vault note. Just Content + Projects.
+   - Do NOT include the `## Links` section, frontmatter, or anything else from the vault note. Just General (if present) + Content + Projects.
 
    Other nfo fields:
    - `<title>` and `<originaltitle>`: same value, the chosen episode title (no `Lego Cubes` prefix, no episode number).
