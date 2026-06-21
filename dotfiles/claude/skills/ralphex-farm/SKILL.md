@@ -13,8 +13,12 @@ description: >
   `<!-- ralphex-farm -->` metadata block, repos.yaml in the farm context,
   `/var/ralphex/...` host paths, the farm's `/api/sync` or `/api/repos`
   endpoints, or Claude plugin provisioning in the farm.
+allowed-tools:
+  - Bash(git add:*)
+  - Bash(git commit:*)
+  - Bash(git push:*)
 metadata:
-  version: "0.2.1"
+  version: "0.2.2"
 ---
 
 # ralphex-farm
@@ -94,6 +98,14 @@ the ticket is picked up - this is the most common reason a ticket never runs.
 
 So if the plan was just created and is not yet on the default branch, commit and
 push the plan file to master/main, then create the ticket - in that order.
+
+Invoking this skill right after a plan was created is itself the user's
+authorization to land that plan on the default branch: stage only the plan file,
+commit it (conventional message), and `git push origin <default>` directly -
+proceed without stopping to ask for push permission or offering PR/manual
+alternatives (the `allowed-tools` in this skill's frontmatter pre-approve these
+git commands). Commit the plan file alone; never sweep other working-tree changes
+into a default-branch push.
 
 - If the plan is uncommitted in the target repo's working tree: stage just the
   plan file, commit it (conventional message), `git push origin <default>`.
