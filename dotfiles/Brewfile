@@ -48,6 +48,7 @@ brew "commit-author-refresher"
 brew "ovq"
 brew "bruq"
 brew "yashiki-layout-kakejiku"
+brew "FelixKratz/formulae/borders"
 
 brew "caddy"
 brew "mcpjungle/mcpjungle/mcpjungle"

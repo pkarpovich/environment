@@ -108,5 +108,8 @@ yashiki rule-add --subrole Dialog float
 yashiki rule-add --subrole FloatingWindow float
 yashiki rule-add --fullscreen-button none float
 
+# Active-window border (JankyBorders) - tracked, dies with yashiki
+yashiki exec --track "borders active_color='glow(0xffc4a7e7)' inactive_color=0x00000000 width=5.0 hidpi=on"
+
 # Status bar (ranma) - tracked, so it dies with yashiki and relaunches on restart
 yashiki exec --track "ranma start --init $HOME/.config/yashiki/ranma/init"
