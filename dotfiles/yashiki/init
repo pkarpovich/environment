@@ -17,8 +17,8 @@ yashiki layout-cmd --layout tatami set-inner-gap 8
 yashiki layout-cmd --layout tatami set-main-ratio 0.6
 yashiki layout-cmd --layout kakejiku set-inner-gap 8
 
-# Cursor follows focus across monitors only
-yashiki set-cursor-warp on-output-change
+# Cursor follows focus - warps to the newly focused window (any monitor)
+yashiki set-cursor-warp on-focus-change
 
 for i in (seq 1 9)
     yashiki bind "alt-$i" tag-view (tag $i)
@@ -26,20 +26,19 @@ for i in (seq 1 9)
     yashiki bind "alt-ctrl-$i" window-toggle-tag (tag $i)
 end
 
-yashiki bind alt-shift-0 window-move-to-tag 0
-
-# Presentation tag (10) - staging canvas on the shared DELL for screen-share
-yashiki bind alt-p tag-view (tag 10)
-yashiki bind alt-ctrl-p window-toggle-tag (tag 10)
+# Presentation tag (10) - on the 0 key (10th digit); staging canvas on the shared DELL for screen-share
+yashiki bind alt-0 tag-view (tag 10)
+yashiki bind alt-shift-0 window-move-to-tag (tag 10)
+yashiki bind alt-ctrl-0 window-toggle-tag (tag 10)
 
 yashiki bind alt-j window-focus next
 yashiki bind alt-k window-focus prev
 
 # Multi-monitor
-yashiki bind alt-o output-focus next
-yashiki bind alt-i output-focus prev
-yashiki bind alt-shift-o output-send next
-yashiki bind alt-shift-i output-send prev
+yashiki bind alt-n output-focus next
+yashiki bind alt-p output-focus prev
+yashiki bind alt-shift-n output-send next
+yashiki bind alt-shift-p output-send prev
 
 yashiki bind alt-t layout-set tatami     # tile (master-stack)
 yashiki bind alt-b layout-set byobu      # accordion
