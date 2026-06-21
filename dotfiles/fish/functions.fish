@@ -382,3 +382,20 @@ function cc-vendor --description "Vendor selected CC plugins from ~/.claude into
     end
     python3 $script_path $argv
 end
+
+function wins --description "yashiki: list all windows grouped by display + tag + layout mode (read-only diagnostic)"
+    set -l script ~/Projects/environment/dotfiles/yashiki/wins.py
+    if not command -q yashiki
+        echo "wins: yashiki not in PATH" >&2
+        return 1
+    end
+    if not test -f $script
+        echo "wins: $script not found" >&2
+        return 1
+    end
+    if command -q fzf
+        python3 $script | fzf --no-sort --reverse --header-lines=1 --prompt="win> " >/dev/null
+    else
+        python3 $script
+    end
+end
