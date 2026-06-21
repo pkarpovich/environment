@@ -159,6 +159,34 @@ MAX_RETRIES = 3
 API_VERSION = "v2"
 ```
 
+## Hard rules
+
+Non-negotiable; the gate for marking any task complete. If a rule is violated the task is not done - refactor, re-test, then mark complete. This block is the source lifted into a plan's per-task Code-Quality gate.
+
+**Signatures:**
+- No function or method has 4+ parameters (`self`/`cls` do not count). Past the budget, pass a `@dataclass` or `TypedDict` of options.
+- A function returning 3+ values returns a `@dataclass`/`NamedTuple`, not a bare tuple unpacked at call sites.
+- Adjacent same-type parameters (`start: int, end: int`) are a swap hazard - use a small dataclass or keyword-only params (`*,`).
+- Public callables are fully type-annotated (params + return).
+
+**Visibility (private by default):**
+- Prefix internal names with a single underscore (`_helper`, `_State`); the public API is the non-underscore names.
+- Pin each module's public surface with `__all__`; nothing outside it is API.
+- Before making a new name public (no underscore), confirm an out-of-module caller; if none, underscore it.
+
+**Functions vs methods:**
+- Prefer free module-level functions for stateless logic. If a function only manipulates one class's internals (reaches into several of its attributes), make it a method on that class.
+- Do not create a class just to hold one function - a module function is enough.
+
+**Comments / docstrings (default: none):**
+- No comments or docstrings unless the WHY is non-obvious; clear names over comments.
+- Never restate WHAT self-evident code does.
+
+**Per-task gate (before marking a checkbox `[x]`):**
+1. `ruff format` clean, `ruff check` zero issues, type-check clean (`mypy`/`pyright`), `pytest` passes.
+2. Grep new code: `grep -nE 'def [^(]*\(([^)]*,){3,}'` for 4+ params (drop `self`/`cls`); for each new public (non-underscore) name confirm a cross-module caller or a deliberate `__all__` entry.
+3. Only after 1-2 pass: mark complete.
+
 ## Code Patterns
 
 ### Early Return (flat code)

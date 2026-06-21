@@ -46,6 +46,35 @@ type Model struct {
 - Check errors immediately, never ignore with `_`
 - Add linter exclusions to `.golangci.yml` instead of `_, _ =` prefixes
 
+## Hard rules
+
+Non-negotiable; the gate for marking any task complete. If a rule is violated the task is not done - refactor, re-test, then mark complete. This block is the source lifted into a plan's per-task Code-Quality gate.
+
+**Signatures:**
+- No function or method has 4+ parameters; `ctx context.Context` does not count. Past the budget, use an options struct (`type fooOpts struct { ... }`).
+- No function or method has 4+ return values; split into single-purpose functions or return a struct.
+- Adjacent same-type parameters (`oldLine, newLine int`) are a swap hazard - put them on a struct.
+
+**Methods vs standalone helpers:**
+- If a function is called only from methods of a single struct, it MUST be a method on that struct. Calling pattern decides, not field access.
+- Standalone helpers are only for: constructors/entry points (`New...`, `Parse...`, `Decorate...`), utilities shared by multiple unrelated types, and tiny cross-cutting helpers.
+- Before adding a standalone helper, walk its callers; if every caller is a method of one type, make it a method.
+
+**Visibility (private by default):**
+- Lowercase identifiers by default; export only when an out-of-package caller exists.
+- Exception (per CLAUDE.md): a method called by other structs in the same package may be exported for inter-component API clarity - methods only, not types, functions, constants, or variables.
+- Before exporting a new identifier, grep for cross-package callers; if none, lowercase it.
+
+**Comments (default: none):**
+- Default to no comments; add one only when the WHY is non-obvious (a hidden invariant, a workaround, surprising behavior).
+- Exported items get godoc comments starting with the name; unexported get a lowercase comment or none.
+- Never describe WHAT self-evident code does; no multi-paragraph comments on routine helpers.
+
+**Per-task gate (before marking a checkbox `[x]`):**
+1. `gofmt -s`/`goimports` clean, `golangci-lint run` zero issues, `go test ./... -race` passes.
+2. Grep new code for the rules above: `grep -nE '^func.*\(.*,.*,.*,.*\)'` for 4+ params (excluding `ctx`); for each new standalone helper confirm a non-method caller; for each new exported identifier confirm a cross-package caller.
+3. Only after 1-2 pass: mark complete.
+
 ## Constructors
 
 - **≤3 positional args**: fine as-is
