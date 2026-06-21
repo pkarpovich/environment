@@ -39,6 +39,7 @@ brew "PeonPing/tap/peon-ping"
 brew "umputun/apps/revdiff"
 brew "umputun/apps/spot"
 brew "umputun/apps/ralphex"
+brew "umputun/apps/fya"
 
 tap "pkarpovich/apps"
 cask "yafetch"
