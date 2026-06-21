@@ -92,6 +92,41 @@ label = 'Messaging'
     label = 'whatsapp'
     url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522WhatsApp%2522%2520%2520%2520%2520%2520%2520%2520%2520%2522open%2520-b%2520net.whatsapp.WhatsApp%2522/Run%20Text%20as%20Shell%20Command'
 
+    [[comboMode.bindings.children]]
+    key = 'e'
+    label = 'mail'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Mail%2522%2520%2522open%2520-b%2520com.apple.mail%2522/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'c'
+    label = 'calendar'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Calendar%2522%2520%2522open%2520-b%2520com.apple.iCal%2522/Run%20Text%20as%20Shell%20Command'
+
+[[comboMode.bindings]]
+iconPath = 'square.grid.2x2'
+key = 'o'
+label = 'Apps'
+
+    [[comboMode.bindings.children]]
+    key = 'a'
+    label = 'simulator'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Simulator%2522%2520%2522open%2520-b%2520com.apple.iphonesimulator%2522/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'g'
+    label = 'sublime merge'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Sublime%2520Merge%2522%2520%2522open%2520-b%2520com.sublimemerge%2522/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'm'
+    label = 'spotify'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Spotify%2522%2520%2522open%2520-b%2520com.spotify.client%2522/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'v'
+    label = 'parallels'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Parallels%2520Desktop%2522%2520%2522open%2520-b%2520com.parallels.desktop.console%2522/Run%20Text%20as%20Shell%20Command'
+
 [[comboMode.bindings]]
 key = 'b'
 url = 'tuna://run/TunaCore.ApplicationsCatalog.Dia/TunaCore.CommonActionsCatalog.Open'
@@ -389,6 +424,10 @@ label = 'Yashiki'
         label = 'send prev'
         url = 'tuna://run/text.yashiki%2520output-send%2520prev/Run%20Text%20as%20Shell%20Command'
 
+[[comboMode.bindings]]
+key = 'l'
+url = 'tuna://run/TunaCore.ApplicationsCatalog.FineTune/TunaCore.CommonActionsCatalog.Activate'
+
 [hotkeys]
 custom = []
 
@@ -456,3 +495,11 @@ enabled = true
 name = 'YouTube'
 requiresInput = true
 template = 'https://www.youtube.com/results?search_query={{input}}'
+
+[[catalogSettings]]
+catalogIdentifier = 'TunaPrompts.AIPromptCatalog'
+
+    [catalogSettings.values]
+    BaseURL = 'https://api.anthropic.com'
+    Model = 'claude-sonnet-4-6'
+    Provider = 'openaiCompatible'
