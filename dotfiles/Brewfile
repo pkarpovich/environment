@@ -1,6 +1,8 @@
 brew "eza"
 brew "moar"
 brew "atuin"
+brew "ical-buddy"
+brew "choose-gui"
 
 # yazi
 brew "ffmpeg"
