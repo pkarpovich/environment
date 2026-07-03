@@ -1,5 +1,14 @@
 schemaVersion = 1
 
+[catalogConfiguration]
+customFolders = []
+customItems = []
+folderDepthOverrides = []
+
+    [[catalogConfiguration.scriptsDirectories]]
+    id = '6CEDDE57-6C84-4015-8111-60F4B40F2257'
+    path = '~/Projects/environment/dotfiles/scripts'
+
 [catalogs]
 sortOrders = []
 
@@ -126,6 +135,24 @@ label = 'Apps'
     key = 'v'
     label = 'parallels'
     url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Parallels%2520Desktop%2522%2520%2522open%2520-b%2520com.parallels.desktop.console%2522/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'h'
+    label = 'bruno'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Bruno%2522%2520%2522open%2520-a%2520%252FApplications%252FBruno.app%2522/Run%20Text%20as%20Shell%20Command'
+
+    [[comboMode.bindings.children]]
+    key = 'o'
+    label = 'output device'
+    url = 'tuna://run/TunaMedia.AudioOutputDevicesCatalog.Audio%20Output%20Devices/TunaCore.CommonActionsCatalog.Browse'
+
+    [[comboMode.bindings.children]]
+    key = 'i'
+    label = 'input device'
+    url = 'tuna://run/TunaMedia.AudioInputDevicesCatalog.Audio%20Input%20Devices/TunaCore.CommonActionsCatalog.Browse'
+
+    [[comboMode.bindings.children]]
+    key = 'p'
 
 [[comboMode.bindings]]
 key = 'b'
@@ -414,19 +441,13 @@ label = 'Yashiki'
         label = 'focus prev'
         url = 'tuna://run/text.yashiki%2520output-focus%2520prev/Run%20Text%20as%20Shell%20Command'
 
-        [[comboMode.bindings.children.children]]
-        key = 's'
-        label = 'send next'
-        url = 'tuna://run/text.yashiki%2520output-send%2520next/Run%20Text%20as%20Shell%20Command'
-
-        [[comboMode.bindings.children.children]]
-        key = 'd'
-        label = 'send prev'
-        url = 'tuna://run/text.yashiki%2520output-send%2520prev/Run%20Text%20as%20Shell%20Command'
-
 [[comboMode.bindings]]
 key = 'l'
 url = 'tuna://run/TunaCore.ApplicationsCatalog.FineTune/TunaCore.CommonActionsCatalog.Activate'
+
+[[comboMode.bindings]]
+key = 'p'
+url = 'tuna://run/TunaAutomation.ScriptsCatalog.1Password%20Quick%20Access/TunaCore.CommonActionsCatalog.Run'
 
 [hotkeys]
 custom = []
