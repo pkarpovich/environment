@@ -1,7 +1,7 @@
 [user]
     name = Pavel Karpovich
     email = pavel.karpovich@outlook.com
-    signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKRJAFlkMadKkPSUtlasIPVCLHTh9UGGmhsjW/7vvGWz
+    signingkey = ~/.ssh/keys/github-signing
 
 [filter "lfs"]
     clean = git-lfs clean -- %f
@@ -11,9 +11,6 @@
 
 [gpg]
     format = ssh
-
-[gpg "ssh"]
-    program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
 
 [commit]
     gpgsign = true
