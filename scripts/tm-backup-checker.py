@@ -4,6 +4,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -12,6 +13,12 @@ from datetime import datetime, timezone
 GATUS_URL = os.environ.get("GATUS_URL", "")
 GATUS_TOKEN = os.environ.get("GATUS_TOKEN", "")
 MAX_BACKUP_AGE_HOURS = int(os.environ.get("MAX_BACKUP_AGE_HOURS", "48"))
+TMUTIL_TIMEOUT = int(os.environ.get("TMUTIL_TIMEOUT", "90"))
+TMUTIL_RETRIES = int(os.environ.get("TMUTIL_RETRIES", "3"))
+TMUTIL_RETRY_DELAY = int(os.environ.get("TMUTIL_RETRY_DELAY", "15"))
+STATE_FILE = os.environ.get(
+    "STATE_FILE", os.path.expanduser("~/.cache/tm-backup-checker.state")
+)
 
 BACKUP_DATE_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2}-\d{6})")
 
@@ -22,13 +29,23 @@ def log(msg):
 
 
 def get_latest_backup_time() -> datetime | None:
-    try:
-        result = subprocess.run(
-            ["tmutil", "latestbackup"],
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
+    for attempt in range(1, TMUTIL_RETRIES + 1):
+        try:
+            result = subprocess.run(
+                ["tmutil", "latestbackup"],
+                capture_output=True,
+                text=True,
+                timeout=TMUTIL_TIMEOUT,
+            )
+        except subprocess.TimeoutExpired:
+            log(f"tmutil timed out after {TMUTIL_TIMEOUT}s (attempt {attempt}/{TMUTIL_RETRIES})")
+            if attempt < TMUTIL_RETRIES:
+                time.sleep(TMUTIL_RETRY_DELAY)
+            continue
+        except Exception as e:
+            log(f"error getting backup time: {e}")
+            return None
+
         if result.returncode != 0:
             log(f"tmutil failed: {result.stderr.strip()}")
             return None
@@ -38,8 +55,25 @@ def get_latest_backup_time() -> datetime | None:
 
         log(f"no date found in tmutil output: {result.stdout.strip()}")
         return None
-    except Exception as e:
-        log(f"error getting backup time: {e}")
+
+    log(f"tmutil timed out on all {TMUTIL_RETRIES} attempts")
+    return None
+
+
+def save_last_backup(backup_time: datetime):
+    try:
+        os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
+        with open(STATE_FILE, "w") as f:
+            f.write(backup_time.isoformat())
+    except OSError as e:
+        log(f"could not write state file: {e}")
+
+
+def load_last_backup() -> datetime | None:
+    try:
+        with open(STATE_FILE) as f:
+            return datetime.fromisoformat(f.read().strip())
+    except (OSError, ValueError):
         return None
 
 
@@ -62,6 +96,13 @@ def push_to_gatus(success: bool, error_message: str = ""):
 
 def check_and_report():
     backup_time = get_latest_backup_time()
+    if backup_time:
+        save_last_backup(backup_time)
+    else:
+        backup_time = load_last_backup()
+        if backup_time:
+            log(f"tmutil unavailable, using cached backup time: {backup_time.isoformat()}")
+
     if not backup_time:
         push_to_gatus(False, "could not determine latest backup time")
         return
@@ -118,6 +159,24 @@ def run_tests():
         def test_returns_none_on_exception(self, mock_run):
             mock_run.side_effect = OSError("tmutil not found")
             self.assertIsNone(get_latest_backup_time())
+
+        @patch("time.sleep")
+        @patch("subprocess.run")
+        def test_retries_on_timeout_then_succeeds(self, mock_run, mock_sleep):
+            mock_run.side_effect = [
+                subprocess.TimeoutExpired(cmd="tmutil", timeout=90),
+                MagicMock(returncode=0, stdout="/Volumes/Backup/Mac/2026-04-04-101112\n"),
+            ]
+            result = get_latest_backup_time()
+            self.assertEqual(result, datetime(2026, 4, 4, 10, 11, 12))
+            self.assertEqual(mock_run.call_count, 2)
+
+        @patch("time.sleep")
+        @patch("subprocess.run")
+        def test_returns_none_when_all_attempts_timeout(self, mock_run, mock_sleep):
+            mock_run.side_effect = subprocess.TimeoutExpired(cmd="tmutil", timeout=90)
+            self.assertIsNone(get_latest_backup_time())
+            self.assertEqual(mock_run.call_count, TMUTIL_RETRIES)
 
     class TestPushToGatus(unittest.TestCase):
         @patch("urllib.request.urlopen")
@@ -197,17 +256,66 @@ def run_tests():
 
         @patch("subprocess.run")
         @patch("urllib.request.urlopen")
-        def test_reports_failure_when_no_backup_found(self, mock_urlopen, mock_run):
+        def test_reports_failure_when_no_backup_and_no_cache(self, mock_urlopen, mock_run):
             mock_run.return_value = MagicMock(returncode=1, stderr="No backups")
             mock_urlopen.return_value = MagicMock()
-            global GATUS_URL, GATUS_TOKEN
-            old_url, old_token = GATUS_URL, GATUS_TOKEN
+            global GATUS_URL, GATUS_TOKEN, STATE_FILE
+            old_url, old_token, old_state = GATUS_URL, GATUS_TOKEN, STATE_FILE
             GATUS_URL = "http://gatus/api/v1/endpoints/test/external"
             GATUS_TOKEN = "test-token"
+            STATE_FILE = "/nonexistent/tm-backup-checker.state"
             try:
                 check_and_report()
             finally:
-                GATUS_URL, GATUS_TOKEN = old_url, old_token
+                GATUS_URL, GATUS_TOKEN, STATE_FILE = old_url, old_token, old_state
+
+            req = mock_urlopen.call_args[0][0]
+            self.assertIn("success=false", req.full_url)
+
+        @patch("time.sleep")
+        @patch("subprocess.run")
+        @patch("urllib.request.urlopen")
+        def test_uses_cached_backup_when_tmutil_times_out(self, mock_urlopen, mock_run, mock_sleep):
+            import tempfile
+
+            mock_run.side_effect = subprocess.TimeoutExpired(cmd="tmutil", timeout=90)
+            mock_urlopen.return_value = MagicMock()
+            global GATUS_URL, GATUS_TOKEN, STATE_FILE
+            old_url, old_token, old_state = GATUS_URL, GATUS_TOKEN, STATE_FILE
+            GATUS_URL = "http://gatus/api/v1/endpoints/test/external"
+            GATUS_TOKEN = "test-token"
+            with tempfile.NamedTemporaryFile("w", suffix=".state", delete=False) as f:
+                f.write(datetime.now().isoformat())
+                STATE_FILE = f.name
+            try:
+                check_and_report()
+            finally:
+                os.unlink(STATE_FILE)
+                GATUS_URL, GATUS_TOKEN, STATE_FILE = old_url, old_token, old_state
+
+            req = mock_urlopen.call_args[0][0]
+            self.assertIn("success=true", req.full_url)
+
+        @patch("time.sleep")
+        @patch("subprocess.run")
+        @patch("urllib.request.urlopen")
+        def test_reports_failure_when_cached_backup_is_stale(self, mock_urlopen, mock_run, mock_sleep):
+            import tempfile
+
+            mock_run.side_effect = subprocess.TimeoutExpired(cmd="tmutil", timeout=90)
+            mock_urlopen.return_value = MagicMock()
+            global GATUS_URL, GATUS_TOKEN, STATE_FILE
+            old_url, old_token, old_state = GATUS_URL, GATUS_TOKEN, STATE_FILE
+            GATUS_URL = "http://gatus/api/v1/endpoints/test/external"
+            GATUS_TOKEN = "test-token"
+            with tempfile.NamedTemporaryFile("w", suffix=".state", delete=False) as f:
+                f.write("2020-01-01T12:00:00")
+                STATE_FILE = f.name
+            try:
+                check_and_report()
+            finally:
+                os.unlink(STATE_FILE)
+                GATUS_URL, GATUS_TOKEN, STATE_FILE = old_url, old_token, old_state
 
             req = mock_urlopen.call_args[0][0]
             self.assertIn("success=false", req.full_url)
