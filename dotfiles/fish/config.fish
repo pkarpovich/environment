@@ -1,15 +1,11 @@
-# add pnpm via mise
-set -gx PNPM_HOME "$(mise where pnpm)/bin"
-fish_add_path $PNPM_HOME
+# pnpm is provided by `mise activate` below - do NOT fish_add_path a versioned
+# mise pnpm bin here: fish_add_path writes to the persistent universal
+# fish_user_paths and accumulates stale pnpm version dirs that shadow mise.
 
 # add GOROOT
 set -gx GOROOT (mise where go)
 
 set -gx EDITOR "zed --wait"
-
-# Proxy settings for ClashX
-#set -gx HTTP_PROXY http://localhost:7890
-#set -gx HTTPS_PROXY http://localhost:7890
 
 # Load PATH
 fish_add_path ~/.local/bin
