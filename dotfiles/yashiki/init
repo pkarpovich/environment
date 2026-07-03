@@ -17,6 +17,9 @@ yashiki layout-cmd --layout tatami set-inner-gap 8
 yashiki layout-cmd --layout tatami set-main-ratio 0.6
 yashiki layout-cmd --layout kakejiku set-inner-gap 8
 
+# Portrait monitor: start tag 5 in the kakejiku (vertical) layout
+yashiki layout-set kakejiku --tags (tag 5) --output "$DELL_PORTRAIT"
+
 # Cursor follows focus - warps to the newly focused window (any monitor)
 yashiki set-cursor-warp on-focus-change
 
@@ -31,8 +34,10 @@ yashiki bind alt-0 tag-view (tag 10)
 yashiki bind alt-shift-0 window-move-to-tag (tag 10)
 yashiki bind alt-ctrl-0 window-toggle-tag (tag 10)
 
-yashiki bind alt-j window-focus next
-yashiki bind alt-k window-focus prev
+yashiki bind alt-h window-focus left
+yashiki bind alt-j window-focus down
+yashiki bind alt-k window-focus up
+yashiki bind alt-l window-focus right
 
 # Multi-monitor
 yashiki bind alt-n output-focus next
@@ -99,6 +104,8 @@ yashiki rule-add --app-id com.spotify.client output "$DELL_PORTRAIT"
 yashiki rule-add --app-id com.apple.iphonesimulator tags (tag 2)
 yashiki rule-add --app-id com.apple.iphonesimulator output "$DELL_LANDSCAPE"
 yashiki rule-add --app-id com.apple.iphonesimulator float
+yashiki rule-add --app-id com.colliderli.iina tags (tag 5)
+yashiki rule-add --app-id com.colliderli.iina output "$DELL_PORTRAIT"
 
 yashiki rule-add --app-id com.brnbw.Tuna float
 yashiki rule-add --app-name Finder float
