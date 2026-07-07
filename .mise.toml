@@ -17,14 +17,6 @@ launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_use
 """
 dir = "karabiner"
 
-[tasks.setup_keyboard_laptop]
-description = "Setup keyboard via karabiner for laptop"
-run = """
-pnpm build:laptop
-launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server
-"""
-dir = "karabiner"
-
 [tasks.link_dotfiles]
 description = "Link dotfiles"
 depends = ['install_tools']
@@ -39,8 +31,3 @@ dir = "duti"
 description = "Setup environment"
 alias = "init"
 depends = ['install_tools', 'setup_keyboard', 'link_dotfiles', 'apply_duti']
-
-[tasks.setup_env_laptop]
-description = "Setup environment for laptop"
-alias = "init_laptop"
-depends = ['install_tools', 'setup_keyboard_laptop', 'link_dotfiles', 'apply_duti']

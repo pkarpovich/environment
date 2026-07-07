@@ -36,18 +36,33 @@ const hyperManipulator: Manipulator = {
   type: "basic",
 };
 
-type RulesOptions = {
-  isLaptop: boolean;
-};
-
-const rules = ({ isLaptop }: RulesOptions) => [
+const rules = () => [
   // Temporarily disabled — re-enable to restore Hyper.
   // {
   //   description: "Hyper Key (⌃⌥⇧⌘)",
   //   manipulators: [hyperManipulator],
   // },
   ...doubleCommandQ,
-  ...languageSwitch({ isLaptop }),
+  ...languageSwitch(),
+  {
+    description: "F5 -> F13",
+    manipulators: [
+      {
+        type: "basic",
+        from: {
+          key_code: "f5",
+          modifiers: {
+            optional: ["any"],
+          },
+        },
+        to: [
+          {
+            key_code: "f13",
+          },
+        ],
+      },
+    ],
+  },
   // ...navigationKeys,
   // ...deletionKeys,
   // https://github.com/pqrs-org/Karabiner-Elements/issues/2880#issuecomment-1774847928
@@ -86,8 +101,6 @@ const rules = ({ isLaptop }: RulesOptions) => [
   }),
 ];
 
-const isLaptop = process.argv.includes("--laptop");
-
 const fileContent = JSON.stringify(
   {
     global: {
@@ -98,7 +111,7 @@ const fileContent = JSON.stringify(
         name: "Default",
         selected: true,
         complex_modifications: {
-          rules: rules({ isLaptop }),
+          rules: rules(),
         },
       },
     ],
