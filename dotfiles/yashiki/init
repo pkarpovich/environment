@@ -9,6 +9,31 @@ set -l LAPTOP "Built-in"
 set -l DELL_LANDSCAPE "U2723QE"
 set -l DELL_PORTRAIT "U2720Q"
 
+# --- Single-screen (MacBook Air) adaptation --------------------------------
+# The desktop separates apps by monitor. On one screen only a single tag is
+# visible at a time, so instead of piling every monitor's apps onto shared tags
+# we give each monitor its own tag bank - every slot keeps a dedicated tag,
+# reached via the tuna exec-or-focus (focus-by-app) bindings:
+#   laptop apps -> tags 1-10 (unchanged) | landscape -> +10 | portrait -> +20
+set -g DL_OFFSET 0
+set -g DP_OFFSET 0
+set -g SINGLE_SCREEN 0
+if test (yashiki list-outputs | grep -E '^[0-9]+:' | grep -vc "Built-in") -eq 0
+    set DELL_LANDSCAPE "Built-in"
+    set DELL_PORTRAIT "Built-in"
+    set -g DL_OFFSET 10
+    set -g DP_OFFSET 20
+    set -g SINGLE_SCREEN 1
+end
+
+function dltag # landscape-bank tag
+    tag (math "$argv[1] + $DL_OFFSET")
+end
+
+function dptag # portrait-bank tag
+    tag (math "$argv[1] + $DP_OFFSET")
+end
+
 yashiki add-exec-path /opt/homebrew/bin
 
 yashiki layout-set-default tatami
@@ -17,8 +42,10 @@ yashiki layout-cmd --layout tatami set-inner-gap 8
 yashiki layout-cmd --layout tatami set-main-ratio 0.6
 yashiki layout-cmd --layout kakejiku set-inner-gap 8
 
-# Portrait monitor: start tag 5 in the kakejiku (vertical) layout
-yashiki layout-set kakejiku --tags (tag 5) --output "$DELL_PORTRAIT"
+# Portrait monitor: start tag 5 in the kakejiku (vertical) layout (desktop only)
+if test "$SINGLE_SCREEN" != 1
+    yashiki layout-set kakejiku --tags (tag 5) --output "$DELL_PORTRAIT"
+end
 
 # Cursor follows focus - warps to the newly focused window (any monitor)
 yashiki set-cursor-warp on-focus-change
@@ -39,11 +66,13 @@ yashiki bind alt-j window-focus down
 yashiki bind alt-k window-focus up
 yashiki bind alt-l window-focus right
 
-# Multi-monitor
-yashiki bind alt-n output-focus next
-yashiki bind alt-p output-focus prev
-yashiki bind alt-shift-n output-send next
-yashiki bind alt-shift-p output-send prev
+# Multi-monitor (desktop only - no-op on a single screen)
+if test "$SINGLE_SCREEN" != 1
+    yashiki bind alt-n output-focus next
+    yashiki bind alt-p output-focus prev
+    yashiki bind alt-shift-n output-send next
+    yashiki bind alt-shift-p output-send prev
+end
 
 yashiki bind alt-t layout-set tatami     # tile (master-stack)
 yashiki bind alt-b layout-set byobu      # accordion
@@ -64,19 +93,19 @@ yashiki rule-add --close-button none ignore
 yashiki rule-add --app-id company.thebrowser.dia tags (tag 1)
 yashiki rule-add --app-id company.thebrowser.dia output "$LAPTOP"
 
-yashiki rule-add --app-id dev.zed.Zed tags (tag 4)
+yashiki rule-add --app-id dev.zed.Zed tags (dltag 4)
 yashiki rule-add --app-id dev.zed.Zed output "$DELL_LANDSCAPE"
-yashiki rule-add --app-id dev.zed.Zed --title "*dealcloud*" tags (tag 1)
+yashiki rule-add --app-id dev.zed.Zed --title "*dealcloud*" tags (dltag 1)
 yashiki rule-add --app-id dev.zed.Zed --title "*dealcloud*" output "$DELL_LANDSCAPE"
-yashiki rule-add --app-id dev.zed.Zed --title "*environment*" tags (tag 2)
+yashiki rule-add --app-id dev.zed.Zed --title "*environment*" tags (dltag 2)
 yashiki rule-add --app-id dev.zed.Zed --title "*environment*" output "$DELL_LANDSCAPE"
-yashiki rule-add --app-id dev.zed.Zed --title "*turtle-hub*" tags (tag 3)
+yashiki rule-add --app-id dev.zed.Zed --title "*turtle-hub*" tags (dltag 3)
 yashiki rule-add --app-id dev.zed.Zed --title "*turtle-hub*" output "$DELL_LANDSCAPE"
 
-yashiki rule-add --app-id com.sublimemerge tags (tag 5)
+yashiki rule-add --app-id com.sublimemerge tags (dltag 5)
 yashiki rule-add --app-id com.sublimemerge output "$DELL_LANDSCAPE"
 
-yashiki rule-add --app-id com.github.wez.wezterm tags (tag 5)
+yashiki rule-add --app-id com.github.wez.wezterm tags (dptag 5)
 yashiki rule-add --app-id com.github.wez.wezterm output "$DELL_PORTRAIT"
 
 yashiki rule-add --app-id com.tinyspeck.slackmacgap tags (tag 6)
@@ -97,14 +126,14 @@ yashiki rule-add --app-id md.obsidian output "$LAPTOP"
 
 yashiki rule-add --app-id com.usebruno.app tags (tag 2)
 yashiki rule-add --app-id com.usebruno.app output "$LAPTOP"
-yashiki rule-add --app-id com.parallels.desktop.console tags (tag 6)
+yashiki rule-add --app-id com.parallels.desktop.console tags (dltag 6)
 yashiki rule-add --app-id com.parallels.desktop.console output "$DELL_LANDSCAPE"
-yashiki rule-add --app-id com.spotify.client tags (tag 8)
+yashiki rule-add --app-id com.spotify.client tags (dptag 8)
 yashiki rule-add --app-id com.spotify.client output "$DELL_PORTRAIT"
-yashiki rule-add --app-id com.apple.iphonesimulator tags (tag 2)
+yashiki rule-add --app-id com.apple.iphonesimulator tags (dltag 2)
 yashiki rule-add --app-id com.apple.iphonesimulator output "$DELL_LANDSCAPE"
 yashiki rule-add --app-id com.apple.iphonesimulator float
-yashiki rule-add --app-id com.colliderli.iina tags (tag 5)
+yashiki rule-add --app-id com.colliderli.iina tags (dptag 5)
 yashiki rule-add --app-id com.colliderli.iina output "$DELL_PORTRAIT"
 
 yashiki rule-add --app-id com.brnbw.Tuna float
