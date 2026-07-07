@@ -167,29 +167,3 @@ the generated `settings.local.json`. `apply` refuses to clobber a
 `settings.local.json` that was modified outside the tool. `clean` removes
 only what `apply` created, leaving anything you hand-edited intact.
 
----
-
-### 5. process-transactions
-
-**Function:** `process-transactions`
-**Script:** `transaction_processor/main.py`
-
-Process bank transactions with AI categorization and currency conversion, with export to CSV and Google Sheets.
-
-#### Usage
-```fish
-# Use default transactions.csv
-process-transactions --sheets-name "December 2024"
-
-# Use custom input file
-process-transactions my-transactions.csv --sheets-name "December 2024"
-
-# Skip AI categorization for testing
-process-transactions --skip-categorization --sheets-name "Test Sheet"
-
-# Custom currencies
-process-transactions --currencies "USD,EUR,GBP" --sheets-name "Multi Currency"
-
-# Override API key temporarily
-process-transactions --api-key="different-key" --sheets-name "Test"
-```
