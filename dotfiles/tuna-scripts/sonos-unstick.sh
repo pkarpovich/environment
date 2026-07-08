@@ -1,4 +1,7 @@
 #!/bin/bash
+# @tuna.name Unstick Sonos Arc
+# @tuna.subtitle Kick the wedged Arc off Wi-Fi so it reassociates (~30s cure)
+#
 # Cure the Sonos Arc "network freeze" without walking to the power plug.
 #
 # Symptom (Arc on fw 95.1+): the speaker keeps its Wi-Fi association but its

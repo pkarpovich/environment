@@ -7,7 +7,7 @@ folderDepthOverrides = []
 
     [[catalogConfiguration.scriptsDirectories]]
     id = '6CEDDE57-6C84-4015-8111-60F4B40F2257'
-    path = '~/Projects/environment/dotfiles/scripts'
+    path = '~/Projects/environment/dotfiles/tuna-scripts'
 
 [catalogs]
 sortOrders = []

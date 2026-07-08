@@ -2,6 +2,8 @@
 
 This directory contains utility scripts and their corresponding fish shell functions for various development workflows.
 
+Split rule: CLI/maintenance utilities live here; user-facing launcher actions live in `dotfiles/tuna-scripts/` (picked up by tuna, require `@tuna.name` annotations).
+
 ## Prerequisites
 
 Before using these functions, set up the required environment variables in your `~/.config/fish/local.fish`:
