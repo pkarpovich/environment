@@ -190,11 +190,11 @@ type condition struct {
 - Modify: `karabiner/rules.go` (create)
 - Modify: `karabiner/rules_test.go` (create)
 
-- [ ] define `layerCmd` and `layerEntry` (key + cmd) types in `rules.go`
-- [ ] implement `keyCode(code string) layerCmd` and `app(name string) layerCmd` per the helper contracts (exact `app` shell string from Context)
-- [ ] implement `subLayer(modifier, description string, entries []layerEntry) rule` preserving entry order and applying `modifiers.mandatory=[modifier]` to each `from`
-- [ ] write tests: `app("Finder")` produces the exact expected `shell_command` string; `subLayer` preserves a given entry order in the emitted `from.key_code` sequence (gotcha #2); `keyCode` emits a bare `key_code` with no modifiers
-- [ ] run `go test ./... -race` — must pass before next task
+- [x] define `layerCmd` and `layerEntry` (key + cmd) types in `rules.go`
+- [x] implement `keyCode(code string) layerCmd` and `app(name string) layerCmd` per the helper contracts (exact `app` shell string from Context)
+- [x] implement `subLayer(modifier, description string, entries []layerEntry) rule` preserving entry order and applying `modifiers.mandatory=[modifier]` to each `from`
+- [x] write tests: `app("Finder")` produces the exact expected `shell_command` string; `subLayer` preserves a given entry order in the emitted `from.key_code` sequence (gotcha #2); `keyCode` emits a bare `key_code` with no modifiers
+- [x] run `go test ./... -race` — must pass before next task
 
 ### Task 3: The four rule builders
 
