@@ -68,7 +68,7 @@ type condition struct {
 	Name         string        `json:"name,omitempty"`
 	Value        *int          `json:"value,omitempty"`
 	InputSources []inputSource `json:"input_sources,omitempty"`
-	Identifiers  *identifiers  `json:"identifiers,omitempty"`
+	Identifiers  []identifiers `json:"identifiers,omitempty"`
 }
 
 type inputSource struct {

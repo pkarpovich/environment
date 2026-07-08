@@ -70,6 +70,38 @@ func TestLanguageSwitchManipulators(t *testing.T) {
 	}
 }
 
+func TestDeviceConditionSerializesIdentifiersAsArray(t *testing.T) {
+	r := languageSwitch()
+
+	var deviceConds int
+	for _, i := range []int{2, 3} {
+		m := r.Manipulators[i]
+		if m.From.KeyCode != "left_control" {
+			t.Fatalf("manipulator %d: expected left_control from, got %+v", i, m.From)
+		}
+		out, err := json.Marshal(m)
+		if err != nil {
+			t.Fatalf("marshal manipulator %d: %v", i, err)
+		}
+		if bytes.Contains(out, []byte(`"identifiers":{`)) {
+			t.Errorf("manipulator %d: identifiers must be a JSON array, not an object (Karabiner rejects the object form), got %s", i, out)
+		}
+		if !bytes.Contains(out, []byte(`"identifiers":[{"is_built_in_keyboard":true}]`)) {
+			t.Errorf("manipulator %d: expected device_unless identifiers array, got %s", i, out)
+		}
+		deviceConds++
+	}
+	if deviceConds != 2 {
+		t.Fatalf("expected 2 external ctrl manipulators, got %d", deviceConds)
+	}
+
+	for _, i := range []int{0, 1} {
+		if len(r.Manipulators[i].Conditions) != 1 {
+			t.Errorf("built-in fn manipulator %d must only have the input_source_if condition, got %+v", i, r.Manipulators[i].Conditions)
+		}
+	}
+}
+
 func TestDoubleCommandQResetEmitsValueZero(t *testing.T) {
 	r := doubleCommandQ()
 

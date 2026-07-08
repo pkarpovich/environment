@@ -112,7 +112,7 @@ func languageSwitch() rule {
 		{
 			from:   from{KeyCode: "left_control"},
 			to:     []to{{KeyCode: "left_control"}},
-			device: &condition{Type: "device_unless", Identifiers: &identifiers{IsBuiltInKeyboard: true}},
+			device: &condition{Type: "device_unless", Identifiers: []identifiers{{IsBuiltInKeyboard: true}}},
 		},
 	}
 	var manipulators []manipulator

@@ -163,9 +163,11 @@
                   },
                   {
                     "type": "device_unless",
-                    "identifiers": {
-                      "is_built_in_keyboard": true
-                    }
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ]
               },
@@ -197,9 +199,11 @@
                   },
                   {
                     "type": "device_unless",
-                    "identifiers": {
-                      "is_built_in_keyboard": true
-                    }
+                    "identifiers": [
+                      {
+                        "is_built_in_keyboard": true
+                      }
+                    ]
                   }
                 ]
               }
