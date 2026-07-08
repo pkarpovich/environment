@@ -15,6 +15,27 @@ Deeply explore the current project so you are fully in context and ready to work
 This is not about generating a report — it is about you genuinely understanding
 the codebase so that your subsequent answers and edits are accurate and informed.
 
+## Phase 0: Checkout Freshness
+
+Before exploring anything, make sure you are about to study CURRENT code, not a
+stale checkout — onboarding onto last week's code poisons every conclusion after it.
+
+1. Run `git fetch --quiet` (skip silently if not a git repo or offline).
+2. Check how far behind the checkout is:
+   - current branch vs its upstream: `git status -sb` (look for "behind N")
+   - local default branch vs origin: `git rev-list --count main..origin/main`
+     (or `master..origin/master`, whichever exists)
+3. If the working tree is clean and the current branch is simply behind its
+   upstream (fast-forward), pull right away: `git pull --ff-only`, then say what
+   was pulled ("pulled 7 commits on main").
+4. If there are local changes, diverged history, or you are on a feature branch
+   whose base (main) is stale — do NOT pull anything; state the staleness
+   prominently ("main is 12 commits behind origin/main") and ask before proceeding.
+5. Up to date — say nothing and move on.
+
+Never start Phase 1/2 exploration on a checkout you know is stale without
+flagging it first.
+
 ## Phase 1: Project Identity
 
 Run these in parallel to establish what the project is:
