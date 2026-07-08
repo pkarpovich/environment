@@ -208,7 +208,12 @@
     "axiom@axiom-marketplace": true,
     "grafana-lgtm@grafana-skills": true,
     "grafana-core@grafana-skills": true,
-    "pg@aiguide": true
+    "pg@aiguide": true,
+    "swiftui-expert@swiftui-expert-skill": true,
+    "swift-testing-expert@swift-testing-agent-skill": true,
+    "core-data-expert@core-data-agent-skill": true,
+    "swift-concurrency@swift-concurrency-agent-skill": true,
+    "xcode-build-skills@xcode-build-skills": true
   },
   "extraKnownMarketplaces": {
     "revdiff": {
@@ -246,6 +251,36 @@
       "source": {
         "source": "github",
         "repo": "timescale/pg-aiguide"
+      }
+    },
+    "swiftui-expert-skill": {
+      "source": {
+        "source": "github",
+        "repo": "AvdLee/SwiftUI-Agent-Skill"
+      }
+    },
+    "swift-testing-agent-skill": {
+      "source": {
+        "source": "github",
+        "repo": "AvdLee/Swift-Testing-Agent-Skill"
+      }
+    },
+    "core-data-agent-skill": {
+      "source": {
+        "source": "github",
+        "repo": "AvdLee/Core-Data-Agent-Skill"
+      }
+    },
+    "swift-concurrency-agent-skill": {
+      "source": {
+        "source": "github",
+        "repo": "AvdLee/Swift-Concurrency-Agent-Skill"
+      }
+    },
+    "xcode-build-skills": {
+      "source": {
+        "source": "github",
+        "repo": "AvdLee/Xcode-Build-Optimization-Agent-Skill"
       }
     }
   },
