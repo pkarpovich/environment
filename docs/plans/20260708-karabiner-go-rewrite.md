@@ -215,11 +215,11 @@ type condition struct {
 - Create: `karabiner/main_test.go`
 - Create: `karabiner/testdata/karabiner.golden.json`
 
-- [ ] `main.go`: assemble the `config` (rules in order: doubleCommandQ, languageSwitch, f5ToF13, escapeSleepFix, mediaAppsSubLayer), `json.MarshalIndent(cfg, "", "  ")`, `os.MkdirAll("dist", 0o755)`, write `dist/karabiner.json`, print confirmation; return/handle errors with `fmt.Errorf("...: %w", err)`
-- [ ] factor the config assembly into a testable function (e.g. `buildConfig() config`) so tests do not perform disk I/O
-- [ ] generate `testdata/karabiner.golden.json` from `buildConfig()` output once and commit it
-- [ ] write `main_test.go`: marshal `buildConfig()` and assert it equals the committed golden file (byte-for-byte)
-- [ ] run `go test ./... -race` — must pass before next task
+- [x] `main.go`: assemble the `config` (rules in order: doubleCommandQ, languageSwitch, f5ToF13, escapeSleepFix, mediaAppsSubLayer), `json.MarshalIndent(cfg, "", "  ")`, `os.MkdirAll("dist", 0o755)`, write `dist/karabiner.json`, print confirmation; return/handle errors with `fmt.Errorf("...: %w", err)`
+- [x] factor the config assembly into a testable function (e.g. `buildConfig() config`) so tests do not perform disk I/O
+- [x] generate `testdata/karabiner.golden.json` from `buildConfig()` output once and commit it
+- [x] write `main_test.go`: marshal `buildConfig()` and assert it equals the committed golden file (byte-for-byte)
+- [x] run `go test ./... -race` — must pass before next task
 
 ### Task 5: Semantic acceptance against the current TS output
 
