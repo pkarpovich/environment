@@ -227,11 +227,15 @@ type condition struct {
 - Modify: `karabiner/main_test.go`
 - (reads, does not commit) current TS output
 
-- [ ] with the TS generator still present, run `pnpm install && pnpm build` in `karabiner/` to produce the reference `dist/karabiner.json`; copy it aside as the reference (repo-relative temp, e.g. `karabiner/testdata/ts-reference.json`, do not commit)
-- [ ] add a test (build-tagged or skipped when the reference file is absent) that parses both the Go output and the reference into `map[string]any` and asserts `reflect.DeepEqual`
-- [ ] resolve any semantic diffs by fixing the Go builders (not by editing the golden); re-run until deep-equal
-- [ ] once parity is confirmed, delete `karabiner/testdata/ts-reference.json` (keep only the committed golden)
-- [ ] run `go test ./... -race` — must pass before next task
+- [x] with the TS generator still present, produce the reference `dist/karabiner.json` and copy it aside to `karabiner/testdata/ts-reference.json` (not committed). `pnpm install` hung on the network, so the generator was run directly via the already-present `node_modules/.bin/tsx ./src/rules.ts` (equivalent to `pnpm build`'s `tsx` step); the live `dist/karabiner.json` was backed up first and restored afterward.
+- [x] add a test (skipped when the reference file is absent) that parses both the Go output and the reference into `map[string]any` and asserts `reflect.DeepEqual` — `TestBuildConfigSemanticParityWithTS` in `main_test.go`
+- [x] resolve any semantic diffs — see discovery note below: **zero behavioral diffs**; the only two diffs are benign representational deltas rooted in the plan's own deliberate cleanups, so the builders were left unchanged and the test neutralizes them before `reflect.DeepEqual`
+- [x] once parity is confirmed, delete `karabiner/testdata/ts-reference.json` (kept only the committed golden); the parity test now skips when the reference is absent
+- [x] run `go test ./... -race` — passes (11 tests; parity test skips without the reference)
+
+➕ **Discovery (parity findings):** the parsed Go and TS trees differ in exactly two ways, both behaviorally inert in Karabiner and both a consequence of *intended* Go choices — so the Go builders were **not** changed to match TS (that would reverse Task 2's explicit "bare keyCode" decision and re-introduce cruft). The parity test instead neutralizes these two documented deltas, then asserts `reflect.DeepEqual` on everything else:
+  1. **Empty `modifiers: []` on bare keyCodes.** TS's `keyCode()` defaults `modifiers` to `[]`, so the three media keys (`play_or_pause`, `fastforward`, `rewind`) carry `"modifiers": []`. The Go port omits the field (Task 2's decision; `omitempty`). Test strips empty-array `modifiers` from both trees. An empty modifiers list is identical to an absent one; populated modifiers stay compared, so a real empty-vs-populated mismatch still fails.
+  2. **Position of the `"4"` (Sublime Merge) manipulator.** JS object-key iteration floats the integer-like key `"4"` to the front, so TS orders the media sublayer `4,s,d,a,t,...,c`; Go keeps source order `s,d,a,t,...,c,4` (gotcha #2 / Task 3, unchanged). These manipulators key off distinct letters, so their order is behaviorally irrelevant. Test sorts only this one rule's manipulators by `from.key_code` (preserving each key→command pairing, so a mis-mapped key still fails; other rules stay order-sensitive).
 
 ### Task 6: Wire mise task and update README
 
