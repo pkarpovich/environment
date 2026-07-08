@@ -202,11 +202,11 @@ type condition struct {
 - Modify: `karabiner/rules.go`
 - Modify: `karabiner/rules_test.go`
 
-- [ ] implement `doubleCommandQ()` — 2 manipulators (variable-gated `q`, and the `set_variable` + `to_delayed_action` reset to `value:0`)
-- [ ] implement `languageSwitch()` — 4 manipulators, built-in variant (fn→vk_none, no device condition) and external variant (left_control→left_control, `device_unless {is_built_in_keyboard:true}`), each × (EN→RU, RU→EN), using the two source-id constants
-- [ ] implement `f5ToF13()` and `escapeSleepFix()` (1 manipulator each) and the `right_option` `mediaAppsSubLayer()` using `subLayer` with the fixed entry order from Context
-- [ ] write tests: `languageSwitch()` returns exactly 4 manipulators; the external ones carry a `device_unless` condition and the built-in ones do not; `doubleCommandQ`'s delayed reset emits `"value": 0`; the media/apps sublayer emits the `from.key_code` order `s,d,a,t,g,w,b,z,l,m,h,n,f,c,4`
-- [ ] run `go test ./... -race` — must pass before next task
+- [x] implement `doubleCommandQ()` — 2 manipulators (variable-gated `q`, and the `set_variable` + `to_delayed_action` reset to `value:0`)
+- [x] implement `languageSwitch()` — 4 manipulators, built-in variant (fn→vk_none, no device condition) and external variant (left_control→left_control, `device_unless {is_built_in_keyboard:true}`), each × (EN→RU, RU→EN), using the two source-id constants
+- [x] implement `f5ToF13()` and `escapeSleepFix()` (1 manipulator each) and the `right_option` `mediaAppsSubLayer()` using `subLayer` with the fixed entry order from Context
+- [x] write tests: `languageSwitch()` returns exactly 4 manipulators; the external ones carry a `device_unless` condition and the built-in ones do not; `doubleCommandQ`'s delayed reset emits `"value": 0`; the media/apps sublayer emits the `from.key_code` order `s,d,a,t,g,w,b,z,l,m,h,n,f,c,4`
+- [x] run `go test ./... -race` — must pass before next task
 
 ### Task 4: Composition root, output writer, and golden test
 

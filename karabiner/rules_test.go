@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"testing"
 )
@@ -32,6 +33,74 @@ func TestKeyCodeIsBareKeyCode(t *testing.T) {
 	}
 	if string(out) != `{"key_code":"play_or_pause"}` {
 		t.Errorf("expected bare key_code with no modifiers, got %s", out)
+	}
+}
+
+func TestLanguageSwitchManipulators(t *testing.T) {
+	r := languageSwitch()
+
+	if len(r.Manipulators) != 4 {
+		t.Fatalf("expected 4 manipulators, got %d", len(r.Manipulators))
+	}
+
+	hasDeviceUnless := func(m manipulator) bool {
+		for _, c := range m.Conditions {
+			if c.Type == "device_unless" {
+				return true
+			}
+		}
+		return false
+	}
+
+	for i, m := range r.Manipulators {
+		builtIn := i < 2
+		if builtIn && hasDeviceUnless(m) {
+			t.Errorf("built-in manipulator %d must not carry a device_unless condition", i)
+		}
+		if !builtIn && !hasDeviceUnless(m) {
+			t.Errorf("external manipulator %d must carry a device_unless condition", i)
+		}
+	}
+
+	if r.Manipulators[0].From.AppleVendorTopCaseKeyCode != "keyboard_fn" {
+		t.Errorf("built-in variant should key off keyboard_fn, got %+v", r.Manipulators[0].From)
+	}
+	if r.Manipulators[2].From.KeyCode != "left_control" {
+		t.Errorf("external variant should key off left_control, got %+v", r.Manipulators[2].From)
+	}
+}
+
+func TestDoubleCommandQResetEmitsValueZero(t *testing.T) {
+	r := doubleCommandQ()
+
+	if len(r.Manipulators) != 2 {
+		t.Fatalf("expected 2 manipulators, got %d", len(r.Manipulators))
+	}
+
+	reset := r.Manipulators[1].ToDelayedAction
+	if reset == nil {
+		t.Fatal("expected a to_delayed_action on the reset manipulator")
+	}
+	out, err := json.Marshal(reset)
+	if err != nil {
+		t.Fatalf("marshal delayed action: %v", err)
+	}
+	if !bytes.Contains(out, []byte(`"value":0`)) {
+		t.Errorf(`expected "value":0 to survive in the reset, got %s`, out)
+	}
+}
+
+func TestMediaAppsSubLayerKeyOrder(t *testing.T) {
+	want := []string{"s", "d", "a", "t", "g", "w", "b", "z", "l", "m", "h", "n", "f", "c", "4"}
+	r := mediaAppsSubLayer()
+
+	if len(r.Manipulators) != len(want) {
+		t.Fatalf("expected %d manipulators, got %d", len(want), len(r.Manipulators))
+	}
+	for i, m := range r.Manipulators {
+		if m.From.KeyCode != want[i] {
+			t.Errorf("manipulator %d: expected key_code %q, got %q", i, want[i], m.From.KeyCode)
+		}
 	}
 }
 
