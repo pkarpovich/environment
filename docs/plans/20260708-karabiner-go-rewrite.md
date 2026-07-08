@@ -178,11 +178,11 @@ type condition struct {
 - Create: `karabiner/types.go`
 - Create: `karabiner/types_test.go`
 
-- [ ] `go mod init karabiner` in `karabiner/` and set the `go 1.26` directive (latest); confirm no dependencies are added
-- [ ] add the struct subset in `types.go` per Technical Details (`config`, `profile`, `global`, `complexModifications`, `rule`, `manipulator`, `from`, `to`, `modifiers`, `delayedAction`, `setVariable`, `condition`, `inputSource`, `identifiers`); all types lowercase (single-package program)
-- [ ] apply the gotcha rules: `setVariable.Value` is `int` with no `omitempty`; `condition.Value` is `*int` with `omitempty`
-- [ ] write `types_test.go`: marshal a `setVariable{Value:0}` and assert output contains `"value": 0` (gotcha #1); marshal a `condition` of type `input_source_if` and assert no `"value"` key appears
-- [ ] run `go test ./... -race` — must pass before next task
+- [x] `go mod init karabiner` in `karabiner/` and set the `go 1.26` directive (latest); confirm no dependencies are added
+- [x] add the struct subset in `types.go` per Technical Details (`config`, `profile`, `global`, `complexModifications`, `rule`, `manipulator`, `from`, `to`, `modifiers`, `delayedAction`, `setVariable`, `condition`, `inputSource`, `identifiers`); all types lowercase (single-package program)
+- [x] apply the gotcha rules: `setVariable.Value` is `int` with no `omitempty`; `condition.Value` is `*int` with `omitempty`
+- [x] write `types_test.go`: marshal a `setVariable{Value:0}` and assert output contains `"value": 0` (gotcha #1); marshal a `condition` of type `input_source_if` and assert no `"value"` key appears
+- [x] run `go test ./... -race` — must pass before next task
 
 ### Task 2: Sublayer + command helpers
 
