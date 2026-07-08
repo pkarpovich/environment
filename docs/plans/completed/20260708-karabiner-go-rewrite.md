@@ -271,9 +271,9 @@ type condition struct {
 
 ### Task 9: Update documentation and finalize
 
-- [ ] update `karabiner/README.md` final wording if anything changed during implementation
-- [ ] update root docs/CLAUDE.md if this establishes the monorepo's first Go conventions worth recording
-- [ ] move this plan to `docs/plans/completed/`
+- [x] update `karabiner/README.md` final wording if anything changed during implementation — nothing drifted; the "Generating the configuration" section added in Task 6 already documents `go run .` and `mise run setup_keyboard` accurately, so no further wording changes were needed
+- [x] update root docs/CLAUDE.md if this establishes the monorepo's first Go conventions worth recording — declined: there is no root `CLAUDE.md`/`AGENTS.md`/`README.md` in this monorepo to update, and the Go conventions are already fully captured by the auto-activating global `go` skill plus this plan's `## Code-Quality Rules` section. Authoring a new bespoke convention file for a single ~4-file module would duplicate the skill and contradict the plan's explicit "do not gold-plate" stance, so none was created
+- [x] move this plan to `docs/plans/completed/` — moved via `git mv docs/plans/20260708-karabiner-go-rewrite.md docs/plans/completed/`
 
 ## Post-Completion
 
