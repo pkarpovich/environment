@@ -33,10 +33,10 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("marshal config: %w", err)
 	}
-	if err := os.MkdirAll("dist", 0o755); err != nil {
-		return fmt.Errorf("create dist dir: %w", err)
+	if err := os.MkdirAll("output", 0o755); err != nil {
+		return fmt.Errorf("create output dir: %w", err)
 	}
-	out := filepath.Join("dist", "karabiner.json")
+	out := filepath.Join("output", "karabiner.json")
 	if err := os.WriteFile(out, data, 0o644); err != nil {
 		return fmt.Errorf("write %s: %w", out, err)
 	}

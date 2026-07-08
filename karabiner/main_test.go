@@ -37,7 +37,7 @@ func TestBuildConfigMatchesGolden(t *testing.T) {
 	}
 }
 
-func TestRunWritesGoldenToDist(t *testing.T) {
+func TestRunWritesGoldenToOutput(t *testing.T) {
 	want, err := os.ReadFile(goldenPath)
 	if err != nil {
 		t.Fatalf("read golden: %v", err)
@@ -60,7 +60,7 @@ func TestRunWritesGoldenToDist(t *testing.T) {
 		t.Fatalf("run: %v", err)
 	}
 
-	got, err := os.ReadFile(filepath.Join("dist", "karabiner.json"))
+	got, err := os.ReadFile(filepath.Join("output", "karabiner.json"))
 	if err != nil {
 		t.Fatalf("read generated config: %v", err)
 	}
