@@ -169,7 +169,9 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+
+# karabiner generated config (symlinked to ~/.config/karabiner)
+karabiner/output/
 
 # Gatsby files
 .cache/
