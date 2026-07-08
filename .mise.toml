@@ -1,6 +1,5 @@
 [tools]
-node = "22"
-pnpm = "9"
+go = "1.26"
 pipx = "latest"
 "pipx:dotbot" = "1.23"
 
@@ -12,7 +11,7 @@ dir = "dotfiles"
 [tasks.setup_keyboard]
 description = "Setup keyboard via karabiner"
 run = """
-pnpm build
+go run .
 launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.karabiner_console_user_server
 """
 dir = "karabiner"

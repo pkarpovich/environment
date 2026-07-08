@@ -6,3 +6,13 @@
 3. Delete the default `~/.config/karabiner` folder
 4. Create a symlink with `ln -s PATH ~/.config` (where `PATH` is your local path to where you cloned the repository)
 5. [Restart karabiner_console_user_server](https://karabiner-elements.pqrs.org/docs/manual/misc/configuration-file-path/) with `` launchctl kickstart -k gui/$(id -u)/org.pqrs.karabiner.karabiner_console_user_server ``
+
+## Generating the configuration
+
+The rules live in Go (standard library only, no third-party dependencies). Regenerate `dist/karabiner.json` with:
+
+```sh
+go run .
+```
+
+Or run `mise run setup_keyboard` from the repo root to regenerate and reload Karabiner in one step.

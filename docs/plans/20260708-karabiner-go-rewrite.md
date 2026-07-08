@@ -243,11 +243,11 @@ type condition struct {
 - Modify: `.mise.toml`
 - Modify: `karabiner/README.md`
 
-- [ ] `.mise.toml` `[tasks.setup_keyboard]`: replace `pnpm build` with `go run .` (keep `dir = "karabiner"` and the `launchctl kickstart` line)
-- [ ] `.mise.toml` `[tools]`: remove `node = "22"` and `pnpm = "9"`; add `go = "1.26"`
-- [ ] `karabiner/README.md`: replace the `pnpm build` build step with `go run .`; drop Node/pnpm install references
-- [ ] (no unit tests — config/docs only) verify `mise run setup_keyboard` regenerates `dist/karabiner.json` and reloads Karabiner without error
-- [ ] confirm `go run .` from `karabiner/` writes `dist/karabiner.json` identical to the golden
+- [x] `.mise.toml` `[tasks.setup_keyboard]`: replace `pnpm build` with `go run .` (keep `dir = "karabiner"` and the `launchctl kickstart` line)
+- [x] `.mise.toml` `[tools]`: remove `node = "22"` and `pnpm = "9"`; add `go = "1.26"`
+- [x] `karabiner/README.md`: the README carried no `pnpm build` step or Node/pnpm references to remove, so added a "Generating the configuration" section documenting `go run .` (and `mise run setup_keyboard`)
+- [x] verify `mise run setup_keyboard` regenerates `dist/karabiner.json` and reloads Karabiner without error — ran end-to-end, exit 0 (mise resolves `go 1.26.4`); `launchctl kickstart` silent on success
+- [x] confirm `go run .` from `karabiner/` writes `dist/karabiner.json` identical to the golden — `diff` reports IDENTICAL
 
 ### Task 7: Remove TypeScript artifacts
 
