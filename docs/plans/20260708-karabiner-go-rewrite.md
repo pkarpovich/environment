@@ -263,11 +263,11 @@ type condition struct {
 
 ### Task 8: Verify acceptance criteria
 
-- [ ] verify all Overview requirements: zero non-stdlib deps (`go.mod` has no `require` block), all five rules present and in order, autodetect languageSwitch (4 manipulators), F5→F13, no `--laptop` flag
-- [ ] verify the two gotchas hold in the real output: `dist/karabiner.json` contains `"value": 0` in the command-q reset, and the sublayer key order is `s,d,a,t,g,w,b,z,l,m,h,n,f,c,4`
-- [ ] run full test suite: `go test ./... -race` (from `karabiner/`)
-- [ ] run `go vet ./...` and `gofmt -s -l .` (no output) and the Code-Quality grep checks
-- [ ] run `mise run setup_keyboard` and confirm Karabiner reloads with no errors in its log
+- [x] verify all Overview requirements: zero non-stdlib deps (`go.mod` has no `require` block — 0 require lines), all five rules present and in order (`main.go` `buildConfig()`: doubleCommandQ, languageSwitch, f5ToF13, escapeSleepFix, mediaAppsSubLayer), autodetect languageSwitch (4 manipulators), F5→F13 present, no `--laptop` flag (main.go is flagless; the only `flag.Bool` is the test-only `-update` golden regenerator in `main_test.go`)
+- [x] verify the two gotchas hold in the real output: `dist/karabiner.json` contains `"value": 0` in the command-q reset (two occurrences), and the sublayer key order is exactly `s,d,a,t,g,w,b,z,l,m,h,n,f,c,4`
+- [x] run full test suite: `go test ./... -race` (from `karabiner/`) — passes fresh (`ok karabiner 1.360s`, `-count=1`)
+- [x] run `go vet ./...` and `gofmt -s -l .` (no output) and the Code-Quality grep checks — vet clean, gofmt clean; grep: no 4+ param funcs, no exported identifiers (all lowercase single-package)
+- [x] run `mise run setup_keyboard` and confirm Karabiner reloads with no errors in its log — exit 0, wrote `dist/karabiner.json` identical to golden; console_user_server.log shows a clean restart to v16.0.0 (receiver bound, core_service connected). The only `[error]` lines are pre-existing "invalid shared secret" startup-handshake noise present identically at the prior restart and unrelated to the config; no rule/JSON parse errors
 
 ### Task 9: Update documentation and finalize
 
