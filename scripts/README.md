@@ -169,3 +169,30 @@ the generated `settings.local.json`. `apply` refuses to clobber a
 `settings.local.json` that was modified outside the tool. `clean` removes
 only what `apply` created, leaving anything you hand-edited intact.
 
+---
+
+### 5. claude-usage-push
+
+**Script:** `claude_usage_push.py` (scheduled via turtle-harbor, no fish function)
+
+Ships Claude subscription utilization (5h / 7d windows) from the
+[claude-usage-bar](https://github.com/Blimp-Labs/claude-usage-bar) menu bar app
+into Loki, where the tuclaw Grafana dashboard plots it next to the in-stream
+RateLimitEvent gauges.
+
+#### How it works
+
+- claude-usage-bar polls `api.anthropic.com/api/oauth/usage` and appends data
+  points to `~/.config/claude-usage-bar/history.json` (no extra API calls are
+  made by this script - it only reads that file)
+- `claude_usage_push.py` runs every 10 minutes via `scripts.yml` (turtle-harbor),
+  prints any new points as JSON lines, and turtled's Loki shipper delivers them
+  with labels `{script="claude-usage-push", host="mbp-2021"}`
+- state (last shipped point) lives in `~/.local/state/claude-usage-push/state.json`;
+  first run ships only the latest point, points older than 2 days are never shipped
+
+#### Notes
+
+- freshness = app polling interval (Settings, default 30m) + up to 10m cron lag
+- if the menu bar app is logged out or not running, the script silently ships
+  nothing - the Grafana series just goes stale until the app is back

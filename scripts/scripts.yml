@@ -23,3 +23,10 @@ scripts:
     restart_policy: "always"
     max_restarts: 3
     cron: "0 0 */6 * * * *"
+
+  claude-usage-push:
+    command: "python3 claude_usage_push.py"
+    context: "."
+    restart_policy: "always"
+    max_restarts: 3
+    cron: "0 */10 * * * * *"
