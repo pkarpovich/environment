@@ -271,6 +271,36 @@ local function configure_keys(resurrect)
 
     tab_switch_keys(keys, "CMD|SHIFT")
 
+    -- Symbol / shifted-digit keys (splits, tab nav, tab numbers) can't match as
+    -- Ctrl+Shift in zellij 0.44 (kitty protocol reports Shift+symbol in a form
+    -- zellij fails to bind, #4148). We translate each physical combo into a
+    -- private PUA token (U+E010..E01D) that zellij binds directly, so your
+    -- fingers stay on the same Ctrl+Shift+<key> that wezterm uses on Cmd+Shift.
+    local pua_send = {
+        { "|",  "\u{E010}" }, { "\\", "\u{E010}" },   -- split right
+        { "_",  "\u{E011}" }, { "-",  "\u{E011}" },   -- split down
+        { "[",  "\u{E012}" }, { "]",  "\u{E013}" },   -- prev / next tab
+        { "1",  "\u{E014}" }, { "2",  "\u{E015}" }, { "3", "\u{E016}" },
+        { "4",  "\u{E017}" }, { "5",  "\u{E018}" }, { "6", "\u{E019}" },
+        { "7",  "\u{E01A}" }, { "8",  "\u{E01B}" }, { "9", "\u{E01C}" },
+        { "0",  "\u{E01D}" },                          -- go to tab 1..10
+    }
+    for _, m in ipairs(pua_send) do
+        table.insert(keys, { key = m[1], mods = "CTRL|SHIFT", action = act.SendString(m[2]) })
+    end
+
+    -- The rest of the Ctrl+Shift mirror is letters + arrows, which zellij matches
+    -- natively. Just suppress wezterm's own defaults on them (ShowDebugOverlay on
+    -- L, ActivateCopyMode on X, TogglePaneZoom on Z, SpawnTab on T, CloseTab on W,
+    -- Paste on V, pane-nav on arrows) so the keys fall through to zellij.
+    local mirror_passthrough = {
+        "z", "x", "t", "w", "v", "l",
+        "LeftArrow", "RightArrow", "UpArrow", "DownArrow",
+    }
+    for _, k in ipairs(mirror_passthrough) do
+        table.insert(keys, { key = k, mods = "CTRL|SHIFT", action = "DisableDefaultAssignment" })
+    end
+
     return keys
 end
 

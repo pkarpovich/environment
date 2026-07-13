@@ -150,31 +150,34 @@ keybinds clear-defaults=true {
         bind "Alt o" { MoveTab "right"; }
         bind "Ctrl q" { Quit; }
 
-        // wezterm-mirror bindings: Alt+Shift -> Ctrl+Shift
-        // pane splits via Alt-letter — Ctrl+Shift+symbol binds don't work
-        // in zellij 0.44 (open issues #3536, #3950, #4148: zellij can't decode
-        // shifted-symbol byte sequences back into Ctrl+|/Ctrl+_ key events).
-        bind "Alt v" { NewPane "right"; }
-        bind "Alt s" { NewPane "down"; }
-        bind "Ctrl Shift Left" { MoveFocus "left"; }
-        bind "Ctrl Shift Down" { MoveFocus "down"; }
-        bind "Ctrl Shift Up" { MoveFocus "up"; }
+        // ===== wezterm mirror: Cmd+Shift -> Ctrl+Shift (every mode but locked) =====
+        // Letters + arrows match natively. Symbols/digits (splits, tab nav, tab
+        // numbers) cannot match as Ctrl+Shift in zellij 0.44 (#4148), so wezterm
+        // sends PUA tokens U+E010..E01D (see keybinds.lua) that we bind here.
+        bind "" { NewPane "right"; }
+        bind "" { NewPane "down"; }
+        bind "Ctrl Shift Left"  { MoveFocus "left"; }
+        bind "Ctrl Shift Down"  { MoveFocus "down"; }
+        bind "Ctrl Shift Up"    { MoveFocus "up"; }
         bind "Ctrl Shift Right" { MoveFocus "right"; }
         bind "Ctrl Shift z" { ToggleFocusFullscreen; }
         bind "Ctrl Shift x" { CloseFocus; }
-        bind "Ctrl Shift 1" { GoToTab 1; }
-        bind "Ctrl Shift 2" { GoToTab 2; }
-        bind "Ctrl Shift 3" { GoToTab 3; }
-        bind "Ctrl Shift 4" { GoToTab 4; }
-        bind "Ctrl Shift 5" { GoToTab 5; }
-        bind "Ctrl Shift 6" { GoToTab 6; }
-        bind "Ctrl Shift 7" { GoToTab 7; }
-        bind "Ctrl Shift 8" { GoToTab 8; }
-        bind "Ctrl Shift 9" { GoToTab 9; }
-        bind "Ctrl Shift 0" { GoToTab 10; }
-        bind "Ctrl Shift [" { GoToPreviousTab; }
-        bind "Ctrl Shift ]" { GoToNextTab; }
         bind "Ctrl Shift t" { NewTab; }
+        bind "Ctrl Shift w" { CloseTab; }
+        bind "" { GoToPreviousTab; }
+        bind "" { GoToNextTab; }
+        bind "" { GoToTab 1; }
+        bind "" { GoToTab 2; }
+        bind "" { GoToTab 3; }
+        bind "" { GoToTab 4; }
+        bind "" { GoToTab 5; }
+        bind "" { GoToTab 6; }
+        bind "" { GoToTab 7; }
+        bind "" { GoToTab 8; }
+        bind "" { GoToTab 9; }
+        bind "" { GoToTab 10; }
+        bind "Ctrl Shift v" { SwitchToMode "scroll"; }
+        bind "Ctrl Shift l" { SwitchToMode "tmux"; }
     }
     shared_except "locked" "move" {
         bind "Ctrl h" { SwitchToMode "move"; }
@@ -251,26 +254,16 @@ keybinds clear-defaults=true {
     shared_among "session" "tmux" {
         bind "d" { Detach; }
     }
+    // wezterm leader submode: entered via Ctrl+Shift+L (mirrors wezterm's
+    // Cmd+Shift+L leader). Sub-keys match the wezterm leader.
     tmux {
-        bind "left" { MoveFocus "left"; SwitchToMode "normal"; }
-        bind "down" { MoveFocus "down"; SwitchToMode "normal"; }
-        bind "up" { MoveFocus "up"; SwitchToMode "normal"; }
-        bind "right" { MoveFocus "right"; SwitchToMode "normal"; }
-        bind "space" { NextSwapLayout; }
-        bind "\"" { NewPane "down"; SwitchToMode "normal"; }
-        bind "%" { NewPane "right"; SwitchToMode "normal"; }
-        bind "," { SwitchToMode "renametab"; }
-        bind "[" { SwitchToMode "scroll"; }
-        bind "Ctrl b" { Write 2; SwitchToMode "normal"; }
-        bind "c" { NewTab; SwitchToMode "normal"; }
-        bind "h" { MoveFocus "left"; SwitchToMode "normal"; }
-        bind "j" { MoveFocus "down"; SwitchToMode "normal"; }
-        bind "k" { MoveFocus "up"; SwitchToMode "normal"; }
-        bind "l" { MoveFocus "right"; SwitchToMode "normal"; }
-        bind "n" { GoToNextTab; SwitchToMode "normal"; }
-        bind "o" { FocusNextPane; }
-        bind "p" { GoToPreviousTab; SwitchToMode "normal"; }
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
+        bind "c" { CloseFocus; SwitchToMode "normal"; }
+        bind "f" { SwitchToMode "entersearch"; SearchInput 0; }
+        bind "t" { BreakPane; SwitchToMode "normal"; }
+        bind "w" { BreakPane; SwitchToMode "normal"; }
+        bind "=" { SwitchToMode "resize"; }
+        bind "esc" { SwitchToMode "normal"; }
     }
 }
 
@@ -474,10 +467,11 @@ default_mode "normal"
 // (Requires restart)
 // Default: true (if the host terminal supports it)
 // 
-// Disable kitty keyboard protocol — with it ON, zellij sees "Ctrl+Shift+\"
-// as Ctrl+Shift+\\ instead of Ctrl+| (similarly Alt+Shift+- → Alt+Shift+-,
-// not Alt+_), so binds on shifted symbols never match. See zellij issue #4148.
-support_kitty_keyboard_protocol false
+// Kitty protocol MUST be ON for the wezterm-mirror: it's the only way zellij can
+// tell "Ctrl+Shift+<letter>" apart from "Ctrl+<letter>" (legacy terminal encoding
+// drops Shift on control keys). Open question we are testing: whether shifted
+// SYMBOLS (Ctrl+Shift+| / [ / ]) survive decoding in 0.44 over wezterm. Ref #4148.
+support_kitty_keyboard_protocol true
  
 // Whether to stack panes when resizing beyond a certain size
 // Default: true
