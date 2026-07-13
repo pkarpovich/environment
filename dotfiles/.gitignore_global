@@ -9,3 +9,4 @@ dist
 .claudeignore
 
 .local
+**/.claude/.cc-writes/
