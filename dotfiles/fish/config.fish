@@ -62,3 +62,7 @@ bind \cU backward-kill-line
 zoxide init fish | source
 atuin init fish | source
 starship init fish | source
+
+# >>> agterm agent-status >>>
+source '/Users/pavel.karpovich/.config/agterm/agent-status/shell/integration.fish'
+# <<< agterm agent-status <<<
