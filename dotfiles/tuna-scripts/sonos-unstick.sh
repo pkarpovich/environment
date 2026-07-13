@@ -29,7 +29,7 @@ set -euo pipefail
 # --- config (matches Magellan UDR7 / Living Room Arc) ---
 UNIFI_HOST="192.168.198.1"
 SITE="default"
-ARC_IP="192.168.199.121"
+ARC_IP="192.168.199.83"
 ARC_MAC="38:42:0b:e4:81:8c"
 OP_KEY_REF="${OP_KEY_REF:-op://Private/UniFi Network API/credential}"
 RECOVER_WAIT=45            # seconds to wait for the Arc to come back after a kick
