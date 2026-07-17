@@ -107,6 +107,8 @@ yashiki rule-add --app-id com.sublimemerge output "$DELL_LANDSCAPE"
 
 yashiki rule-add --app-id com.github.wez.wezterm tags (dptag 5)
 yashiki rule-add --app-id com.github.wez.wezterm output "$DELL_PORTRAIT"
+yashiki rule-add --app-id com.umputun.agterm tags (dptag 4)
+yashiki rule-add --app-id com.umputun.agterm output "$DELL_PORTRAIT"
 
 yashiki rule-add --app-id com.tinyspeck.slackmacgap tags (tag 6)
 yashiki rule-add --app-id com.tinyspeck.slackmacgap output "$LAPTOP"
