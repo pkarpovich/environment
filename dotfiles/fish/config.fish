@@ -25,8 +25,6 @@ if test -f ~/.config/fish/local.fish
     source ~/.config/fish/local.fish
 end
 
-source ~/.config/fish/functions.fish
-
 alias cd 'z'
 alias cdi 'zi'
 alias ls 'eza --color=always --icons --group-directories-first'
