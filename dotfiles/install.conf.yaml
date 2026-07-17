@@ -16,9 +16,12 @@
     ~/.config/karabinder.json: ../karabiner/dist/karabiner.json
 
     ~/.config/wezterm/: wezterm/**
-    ~/.config/fish: fish/**
+    ~/.config/fish/config.fish: fish/config.fish
+    ~/.config/fish/fish_plugins: fish/fish_plugins
+    ~/.config/fish/functions/: fish/functions/**
     ~/.config/zed/: zed/**
     ~/.config/zellij/: zellij/**
+    ~/.config/agterm/: agterm/**
     ~/.config/yashiki/: yashiki/**
 
     ~/.claude/: claude/**
