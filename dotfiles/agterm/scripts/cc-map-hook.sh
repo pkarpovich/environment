@@ -7,6 +7,19 @@ JQ=/opt/homebrew/bin/jq
 [ -n "$AGTERM_SESSION_ID" ] || exit 0
 [ "$AGTERM_PANE" = "left" ] || exit 0
 
+# ignore claudes spawned by batch runners (ralphex): their per-iteration
+# conversations must not overwrite the session's interactive one
+p=$PPID
+while [ -n "$p" ] && [ "$p" -gt 1 ] 2>/dev/null; do
+  cmd=$(ps -o command= -p "$p" 2>/dev/null)
+  first=${cmd%% *}
+  case "${first##*/}" in
+    ralphex) exit 0 ;;
+    agterm) break ;;
+  esac
+  p=$(ps -o ppid= -p "$p" 2>/dev/null | tr -d ' ')
+done
+
 input=$(cat)
 conv=$(printf '%s' "$input" | "$JQ" -r '.session_id // empty')
 cwd=$(printf '%s' "$input" | "$JQ" -r '.cwd // empty')
