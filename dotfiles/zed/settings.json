@@ -9,7 +9,10 @@
   "edit_predictions": {
     "provider": "zed",
   },
-  "disable_ai": true,
+  "disable_ai": false,
+  "features": {
+    "edit_prediction_provider": "zed",
+  },
   "ssh_connections": [
     {
       "host": "192.168.198.3",
@@ -22,6 +25,7 @@
     },
   ],
   "agent": {
+    "enabled": false,
     "dock": "right",
     "expand_terminal_card": false,
     "expand_edit_card": false,
