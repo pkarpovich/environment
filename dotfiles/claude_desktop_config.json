@@ -1,16 +1,6 @@
 {
   "globalShortcut": "",
-  "mcpServers": {
-    "mcpjungle": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://mcpjungle.pkarpovich.space/mcp",
-        "--allow-http",
-        "--debug"
-      ]
-    }
-  },
+  "mcpServers": {},
   "preferences": {
     "menuBarEnabled": false,
     "quickEntryShortcut": "off",

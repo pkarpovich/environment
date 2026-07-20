@@ -58,7 +58,6 @@ brew "FelixKratz/formulae/borders"
 cask "edith"
 
 brew "caddy"
-brew "mcpjungle/mcpjungle/mcpjungle"
 brew "agent-browser"
 
 cask "font-maple-mono"
