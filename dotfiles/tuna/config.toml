@@ -167,19 +167,18 @@ label = 'Developer'
 
     [[comboMode.bindings.children]]
     key = 'e'
-    url = 'tuna://run/path.%252FUsers%252Fpavel.karpovich%252FProjects%252Fenvironment/TunaCore.CommonActionsCatalog.Open%20With%E2%80%A6/TunaCore.ApplicationsCatalog.Zed'
+    label = 'env'
+    url = "tuna://run/text.fish%2520-c%2520'zw%2520~%252FProjects%252Fworkspaces%252Fenv.code-workspace'/Run%20Text%20as%20Shell%20Command"
 
     [[comboMode.bindings.children]]
     key = 'a'
-    url = 'tuna://run/path.%252FUsers%252Fpavel.karpovich%252FProjects%252FDC%252Fask-dealcloud/TunaCore.CommonActionsCatalog.Open%20With%E2%80%A6/TunaCore.ApplicationsCatalog.Zed'
-
-    [[comboMode.bindings.children]]
-    key = 'h'
-    url = 'tuna://run/path.%252FUsers%252Fpavel.karpovich%252FProjects%252Fhome-environment/TunaCore.CommonActionsCatalog.Open%20With%E2%80%A6/TunaCore.ApplicationsCatalog.Zed'
+    label = 'dc'
+    url = "tuna://run/text.fish%2520-c%2520'zw%2520~%252FProjects%252Fworkspaces%252Fdc.code-workspace'/Run%20Text%20as%20Shell%20Command"
 
     [[comboMode.bindings.children]]
     key = 't'
-    url = 'tuna://run/path.%252FUsers%252Fpavel.karpovich%252FProjects%252Fturtle-hub/TunaCore.CommonActionsCatalog.Open%20With%E2%80%A6/TunaCore.ApplicationsCatalog.Zed'
+    label = 'turtle hub'
+    url = "tuna://run/text.fish%2520-c%2520'zw%2520~%252FProjects%252Fworkspaces%252Fturtle-hub.code-workspace'/Run%20Text%20as%20Shell%20Command"
 
 [[comboMode.bindings]]
 key = 'space'
