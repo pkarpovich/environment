@@ -243,3 +243,8 @@ Temporary Items
 __pycache__/
 *.py[cod]
 
+
+# Claude Code local state (kept out even with .claude unignored globally)
+.claude/worktrees/
+**/.claude/settings.local.json
+.claude/settings.local.json
