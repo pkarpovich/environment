@@ -322,6 +322,7 @@ default_mode "normal"
 // Default: "default"
 // 
 // default_layout "compact"
+default_layout "vertical-tabs"
  
 // The folder in which Zellij will look for layouts
 // (Requires restart)
