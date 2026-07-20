@@ -156,6 +156,11 @@ label = 'Apps'
     label = 'wezterm'
     url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%25E2%2580%259CWezterm%25E2%2580%259D%2520%2522open%2520-b%2520com.github.wez.wezterm%2522/Run%20Text%20as%20Shell%20Command'
 
+    [[comboMode.bindings.children]]
+    key = 'c'
+    label = 'claude desktop'
+    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%25E2%2580%259CClaude%25E2%2580%259D%2520%2522open%2520-b%2520com.anthropic.claudefordesktop%2522/Run%20Text%20as%20Shell%20Command'
+
 [[comboMode.bindings]]
 key = 'b'
 url = 'tuna://run/TunaCore.ApplicationsCatalog.Dia/TunaCore.CommonActionsCatalog.Open'
