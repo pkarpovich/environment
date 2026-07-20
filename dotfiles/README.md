@@ -1,16 +1,30 @@
 # Dotfiles
 
-## Pre-requisites
-- [Fish shell](https://fishshell.com/)
-- [Starship prompt](https://starship.rs/)
-- [Git](https://git-scm.com/)
-- [Sublime Merge](https://www.sublimemerge.com/)
-- [Difftastic](https://difftastic.wilfred.me.uk/)
-- [Mise en place](https://mise.jdx.dev/)
-- [Broot](https://dystroy.org/broot/)
-- [eza](https://eza.rocks/)
-- [bat](https://github.com/sharkdp/bat)
-- [zoxide](https://github.com/ajeetdsouza/zoxide)
-- [Warp](https://warp.dev/)
-- [Catppuccin for Warp](https://github.com/catppuccin/warp)
-- [Nerd Fonts](https://gist.github.com/davidteren/898f2dcccd42d9f8680ec69a3a5d350e)
+Config files symlinked into place by dotbot - the map of what goes where is
+[`install.conf.yaml`](install.conf.yaml). Tools themselves are installed from
+the [`Brewfile`](Brewfile) (`brew bundle install`), so that file doubles as
+the prerequisites list.
+
+```sh
+mise run link_dotfiles     # from the repo root; or: dotbot -c ./dotfiles/install.conf.yaml
+```
+
+## Notable pieces
+
+- **`agterm/`** - keymap and ghostty overrides for the
+  [agterm](https://github.com/umputun/agterm) terminal, plus control scripts:
+  numbered session jumps, the Claude-conversation map hook, side parking and
+  reopen for the two-Mac flow.
+- **`fish/`** - `config.fish` plus one autoloaded function per file in
+  `fish/functions/` (`wt`, `ccl`, `ccz`, the `claude` wrapper, `zw`, `gcrb`, ...).
+- **`zellij/`** - config and the vertical-tabs layout; zellij is the SSH
+  attach point when working from the second Mac.
+- **`claude/`** - Claude Code settings, hooks, agents, and custom skills;
+  linked into both `~/.claude` and `~/.claude-work` profiles.
+- **`zed/`**, **`tuna/`**, **`yashiki/`**, **`revdiff/`** - editor, launcher,
+  tiling WM, and diff-review configs.
+- **`starship.toml`** / **`starship-narrow.toml`** - two prompt presets,
+  switchable at runtime.
+- `karabiner.json` is linked from `../karabiner/dist/` - it is generated, see
+  the karabiner generator in the repo root.
+- `wezterm/` is the pre-agterm setup, kept for reference.
