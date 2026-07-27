@@ -27,7 +27,9 @@ orchestrated by [mise](https://mise.jdx.dev/) tasks.
 - **Two-Mac flow**: a zellij session on the main Mac mirrors Claude sessions
   into tabs (`ccz`), so the same conversations continue from a laptop over
   SSH; returning home swaps them back with one chord. A per-session
-  conversation map (written by a Claude Code hook) makes the handoff silent.
+  conversation map (written by a Claude Code hook) makes the handoff silent -
+  the whole system is documented in
+  [`dotfiles/agterm/README.md`](dotfiles/agterm/README.md).
 - **Worktrees**: `wt <name>` creates a git worktree via
   [gt](https://github.com/melonamin/gt) and an agterm session named after the
   branch - one parallel task, one sidebar row.

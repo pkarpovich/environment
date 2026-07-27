@@ -14,7 +14,10 @@ mise run link_dotfiles     # from the repo root; or: dotbot -c ./dotfiles/instal
 - **`agterm/`** - keymap and ghostty overrides for the
   [agterm](https://github.com/umputun/agterm) terminal, plus control scripts:
   numbered session jumps, the Claude-conversation map hook, side parking and
-  reopen for the two-Mac flow.
+  reopen for the two-Mac flow. **Start with
+  [`agterm/README.md`](agterm/README.md)** - it documents the whole
+  Claude-session system, whose parts are spread across `agterm/`, `fish/`,
+  `claude/` and `zellij/`.
 - **`fish/`** - `config.fish` plus one autoloaded function per file in
   `fish/functions/` (`wt`, `ccl`, `ccz`, the `claude` wrapper, `zw`, `gcrb`, ...).
 - **`zellij/`** - config and the vertical-tabs layout; zellij is the SSH
