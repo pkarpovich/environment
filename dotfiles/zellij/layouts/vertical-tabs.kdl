@@ -6,9 +6,6 @@ layout {
             }
             pane
         }
-        pane size=1 borderless=true {
-            plugin location="zellij:status-bar"
-        }
     }
     tab {
         pane split_direction="vertical" {
@@ -16,9 +13,6 @@ layout {
                 plugin location="file:~/.config/zellij/plugins/zellij-vertical-tabs.wasm"
             }
             pane
-        }
-        pane size=1 borderless=true {
-            plugin location="zellij:status-bar"
         }
     }
 }

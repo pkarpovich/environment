@@ -3,154 +3,32 @@
 //
 
 keybinds clear-defaults=true {
-    locked {
-        bind "Ctrl g" { SwitchToMode "normal"; }
-    }
-    pane {
-        bind "left" { MoveFocus "left"; }
-        bind "down" { MoveFocus "down"; }
-        bind "up" { MoveFocus "up"; }
-        bind "right" { MoveFocus "right"; }
-        bind "c" { SwitchToMode "renamepane"; PaneNameInput 0; }
-        bind "d" { NewPane "down"; SwitchToMode "normal"; }
-        bind "e" { TogglePaneEmbedOrFloating; SwitchToMode "normal"; }
-        bind "f" { ToggleFocusFullscreen; SwitchToMode "normal"; }
-        bind "h" { MoveFocus "left"; }
-        bind "i" { TogglePanePinned; SwitchToMode "normal"; }
-        bind "j" { MoveFocus "down"; }
-        bind "k" { MoveFocus "up"; }
-        bind "l" { MoveFocus "right"; }
-        bind "n" { NewPane; SwitchToMode "normal"; }
-        bind "p" { SwitchFocus; }
-        bind "Ctrl p" { SwitchToMode "normal"; }
-        bind "r" { NewPane "right"; SwitchToMode "normal"; }
-        bind "w" { ToggleFloatingPanes; SwitchToMode "normal"; }
-        bind "z" { TogglePaneFrames; SwitchToMode "normal"; }
-    }
-    tab {
-        bind "left" { GoToPreviousTab; }
-        bind "down" { GoToNextTab; }
-        bind "up" { GoToPreviousTab; }
-        bind "right" { GoToNextTab; }
-        bind "1" { GoToTab 1; SwitchToMode "normal"; }
-        bind "2" { GoToTab 2; SwitchToMode "normal"; }
-        bind "3" { GoToTab 3; SwitchToMode "normal"; }
-        bind "4" { GoToTab 4; SwitchToMode "normal"; }
-        bind "5" { GoToTab 5; SwitchToMode "normal"; }
-        bind "6" { GoToTab 6; SwitchToMode "normal"; }
-        bind "7" { GoToTab 7; SwitchToMode "normal"; }
-        bind "8" { GoToTab 8; SwitchToMode "normal"; }
-        bind "9" { GoToTab 9; SwitchToMode "normal"; }
-        bind "[" { BreakPaneLeft; SwitchToMode "normal"; }
-        bind "]" { BreakPaneRight; SwitchToMode "normal"; }
-        bind "b" { BreakPane; SwitchToMode "normal"; }
-        bind "h" { GoToPreviousTab; }
-        bind "j" { GoToNextTab; }
-        bind "k" { GoToPreviousTab; }
-        bind "l" { GoToNextTab; }
-        bind "n" { NewTab; SwitchToMode "normal"; }
-        bind "r" { SwitchToMode "renametab"; TabNameInput 0; }
-        bind "s" { ToggleActiveSyncTab; SwitchToMode "normal"; }
-        bind "Ctrl t" { SwitchToMode "normal"; }
-        bind "x" { CloseTab; SwitchToMode "normal"; }
-        bind "tab" { ToggleTab; }
-    }
-    resize {
-        bind "left" { Resize "Increase left"; }
-        bind "down" { Resize "Increase down"; }
-        bind "up" { Resize "Increase up"; }
-        bind "right" { Resize "Increase right"; }
-        bind "+" { Resize "Increase"; }
-        bind "-" { Resize "Decrease"; }
-        bind "=" { Resize "Increase"; }
-        bind "H" { Resize "Decrease left"; }
-        bind "J" { Resize "Decrease down"; }
-        bind "K" { Resize "Decrease up"; }
-        bind "L" { Resize "Decrease right"; }
-        bind "h" { Resize "Increase left"; }
-        bind "j" { Resize "Increase down"; }
-        bind "k" { Resize "Increase up"; }
-        bind "l" { Resize "Increase right"; }
-        bind "Ctrl n" { SwitchToMode "normal"; }
-    }
-    move {
-        bind "left" { MovePane "left"; }
-        bind "down" { MovePane "down"; }
-        bind "up" { MovePane "up"; }
-        bind "right" { MovePane "right"; }
-        bind "h" { MovePane "left"; }
-        bind "Ctrl h" { SwitchToMode "normal"; }
-        bind "j" { MovePane "down"; }
-        bind "k" { MovePane "up"; }
-        bind "l" { MovePane "right"; }
-        bind "n" { MovePane; }
-        bind "p" { MovePaneBackwards; }
-        bind "tab" { MovePane; }
-    }
-    scroll {
-        bind "Alt left" { MoveFocusOrTab "left"; SwitchToMode "normal"; }
-        bind "Alt down" { MoveFocus "down"; SwitchToMode "normal"; }
-        bind "Alt up" { MoveFocus "up"; SwitchToMode "normal"; }
-        bind "Alt right" { MoveFocusOrTab "right"; SwitchToMode "normal"; }
-        bind "e" { EditScrollback; SwitchToMode "normal"; }
-        bind "Alt h" { MoveFocusOrTab "left"; SwitchToMode "normal"; }
-        bind "Alt j" { MoveFocus "down"; SwitchToMode "normal"; }
-        bind "Alt k" { MoveFocus "up"; SwitchToMode "normal"; }
-        bind "Alt l" { MoveFocusOrTab "right"; SwitchToMode "normal"; }
-        bind "s" { SwitchToMode "entersearch"; SearchInput 0; }
-    }
-    search {
-        bind "c" { SearchToggleOption "CaseSensitivity"; }
-        bind "n" { Search "down"; }
-        bind "o" { SearchToggleOption "WholeWord"; }
-        bind "p" { Search "up"; }
-        bind "w" { SearchToggleOption "Wrap"; }
-    }
-    session {
-        bind "a" {
-            LaunchOrFocusPlugin "zellij:about" {
-                floating true
-                move_to_focused_tab true
-            }
-            SwitchToMode "normal"
-        }
-        bind "c" {
-            LaunchOrFocusPlugin "configuration" {
-                floating true
-                move_to_focused_tab true
-            }
-            SwitchToMode "normal"
-        }
-        bind "Ctrl o" { SwitchToMode "normal"; }
-        bind "p" {
-            LaunchOrFocusPlugin "plugin-manager" {
-                floating true
-                move_to_focused_tab true
-            }
-            SwitchToMode "normal"
-        }
-        bind "w" {
-            LaunchOrFocusPlugin "session-manager" {
-                floating true
-                move_to_focused_tab true
-            }
-            SwitchToMode "normal"
-        }
-    }
+    // Only two modes are live: normal and the wezterm leader. Everything zellij
+    // ships behind Ctrl+P/T/O/B/G/Q is gone, so those keys reach Claude Code
+    // (todos, verbose output, background command) instead of being swallowed.
+    // Every letter carries its Cyrillic twin: zellij matches the character the
+    // layout produces, and layout-independent bindings are still unimplemented
+    // upstream (zellij#1355, PR #4542).
     shared_except "locked" {
         bind "Alt +" { Resize "Increase"; }
         bind "Alt -" { Resize "Decrease"; }
         bind "Alt =" { Resize "Increase"; }
         bind "Alt [" { PreviousSwapLayout; }
         bind "Alt ]" { NextSwapLayout; }
-        bind "Alt f" { ToggleFloatingPanes; }
-        bind "Ctrl g" { SwitchToMode "locked"; }
-        bind "Alt i" { MoveTab "left"; }
-        bind "Alt n" { NewPane; }
-        bind "Alt o" { MoveTab "right"; }
-        bind "Ctrl q" { Quit; }
+        bind "Alt f" "Alt а" { ToggleFloatingPanes; }
+        bind "Alt i" "Alt ш" { MoveTab "left"; }
+        bind "Alt n" "Alt т" { NewPane; }
+        bind "Alt o" "Alt щ" { MoveTab "right"; }
+        bind "Alt left" { MoveFocusOrTab "left"; }
+        bind "Alt down" { MoveFocus "down"; }
+        bind "Alt up" { MoveFocus "up"; }
+        bind "Alt right" { MoveFocusOrTab "right"; }
+        bind "Alt h" "Alt р" { MoveFocusOrTab "left"; }
+        bind "Alt j" "Alt о" { MoveFocus "down"; }
+        bind "Alt k" "Alt л" { MoveFocus "up"; }
+        bind "Alt l" "Alt д" { MoveFocusOrTab "right"; }
 
-        // ===== wezterm mirror: Cmd+Shift -> Ctrl+Shift (every mode but locked) =====
+        // ===== wezterm mirror: Cmd+Shift -> Ctrl+Shift =====
         // Letters + arrows match natively. Symbols/digits (splits, tab nav, tab
         // numbers) cannot match as Ctrl+Shift in zellij 0.44 (#4148), so wezterm
         // sends PUA tokens U+E010..E01D (see keybinds.lua) that we bind here.
@@ -160,10 +38,10 @@ keybinds clear-defaults=true {
         bind "Ctrl Shift Down"  { MoveFocus "down"; }
         bind "Ctrl Shift Up"    { MoveFocus "up"; }
         bind "Ctrl Shift Right" { MoveFocus "right"; }
-        bind "Ctrl Shift z" { ToggleFocusFullscreen; }
-        bind "Ctrl Shift x" { CloseFocus; }
-        bind "Ctrl Shift t" { NewTab; }
-        bind "Ctrl Shift w" { CloseTab; }
+        bind "Ctrl Shift z" "Ctrl Shift я" { ToggleFocusFullscreen; }
+        bind "Ctrl Shift x" "Ctrl Shift ч" { CloseFocus; }
+        bind "Ctrl Shift t" "Ctrl Shift е" { NewTab; }
+        bind "Ctrl Shift w" "Ctrl Shift ц" { CloseTab; }
         bind "" { GoToPreviousTab; }
         bind "" { GoToNextTab; }
         bind "" { GoToTab 1; }
@@ -176,93 +54,52 @@ keybinds clear-defaults=true {
         bind "" { GoToTab 8; }
         bind "" { GoToTab 9; }
         bind "" { GoToTab 10; }
-        bind "Ctrl Shift v" { SwitchToMode "scroll"; }
-        bind "Ctrl Shift l" { SwitchToMode "tmux"; }
+        bind "Ctrl Shift l" "Ctrl Shift д" { SwitchToMode "tmux"; }
     }
-    shared_except "locked" "move" {
-        bind "Ctrl h" { SwitchToMode "move"; }
-    }
-    shared_except "locked" "session" {
-        bind "Ctrl o" { SwitchToMode "session"; }
-    }
-    shared_except "locked" "scroll" {
-        bind "Alt left" { MoveFocusOrTab "left"; }
-        bind "Alt down" { MoveFocus "down"; }
-        bind "Alt up" { MoveFocus "up"; }
-        bind "Alt right" { MoveFocusOrTab "right"; }
-        bind "Alt h" { MoveFocusOrTab "left"; }
-        bind "Alt j" { MoveFocus "down"; }
-        bind "Alt k" { MoveFocus "up"; }
-        bind "Alt l" { MoveFocusOrTab "right"; }
-    }
-    shared_except "locked" "scroll" "search" "tmux" {
-        bind "Ctrl b" { SwitchToMode "tmux"; }
-    }
-    shared_except "locked" "scroll" "search" {
-        bind "Ctrl s" { SwitchToMode "scroll"; }
-    }
-    shared_except "locked" "tab" {
-        bind "Ctrl t" { SwitchToMode "tab"; }
-    }
-    shared_except "locked" "pane" {
-        bind "Ctrl p" { SwitchToMode "pane"; }
-    }
-    shared_except "locked" "resize" {
-        bind "Ctrl n" { SwitchToMode "resize"; }
-    }
-    shared_except "normal" "locked" "entersearch" {
+    shared_except "normal" "locked" {
+        bind "esc" { SwitchToMode "normal"; }
         bind "enter" { SwitchToMode "normal"; }
     }
-    shared_except "normal" "locked" "entersearch" "renametab" "renamepane" {
-        bind "esc" { SwitchToMode "normal"; }
-    }
-    shared_among "pane" "tmux" {
-        bind "x" { CloseFocus; SwitchToMode "normal"; }
-    }
-    shared_among "scroll" "search" {
-        bind "PageDown" { PageScrollDown; }
-        bind "PageUp" { PageScrollUp; }
-        bind "left" { PageScrollUp; }
-        bind "down" { ScrollDown; }
-        bind "up" { ScrollUp; }
-        bind "right" { PageScrollDown; }
-        bind "Ctrl b" { PageScrollUp; }
-        bind "Ctrl c" { ScrollToBottom; SwitchToMode "normal"; }
-        bind "d" { HalfPageScrollDown; }
-        bind "Ctrl f" { PageScrollDown; }
-        bind "h" { PageScrollUp; }
-        bind "j" { ScrollDown; }
-        bind "k" { ScrollUp; }
-        bind "l" { PageScrollDown; }
-        bind "Ctrl s" { SwitchToMode "normal"; }
-        bind "u" { HalfPageScrollUp; }
-    }
-    entersearch {
-        bind "Ctrl c" { SwitchToMode "scroll"; }
-        bind "esc" { SwitchToMode "scroll"; }
-        bind "enter" { SwitchToMode "search"; }
-    }
-    renametab {
-        bind "esc" { UndoRenameTab; SwitchToMode "tab"; }
-    }
-    shared_among "renametab" "renamepane" {
-        bind "Ctrl c" { SwitchToMode "normal"; }
-    }
-    renamepane {
-        bind "esc" { UndoRenamePane; SwitchToMode "pane"; }
-    }
-    shared_among "session" "tmux" {
-        bind "d" { Detach; }
-    }
-    // wezterm leader submode: entered via Ctrl+Shift+L (mirrors wezterm's
-    // Cmd+Shift+L leader). Sub-keys match the wezterm leader.
+    // wezterm leader submode, entered via Ctrl+Shift+L
     tmux {
-        bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
-        bind "c" { CloseFocus; SwitchToMode "normal"; }
-        bind "f" { SwitchToMode "entersearch"; SearchInput 0; }
-        bind "t" { BreakPane; SwitchToMode "normal"; }
-        bind "w" { BreakPane; SwitchToMode "normal"; }
-        bind "=" { SwitchToMode "resize"; }
+        // the status bar is gone (its hints are hardcoded to zellij's own
+        // defaults and never showed these), so h opens the forgot plugin -
+        // a searchable list of every binding, built from this config
+        bind "h" "р" {
+            LaunchOrFocusPlugin "file:~/.config/zellij/plugins/zellij_forgot.wasm" {
+                floating true
+            }
+            SwitchToMode "normal"
+        }
+        // mirror one more agterm session into a tab here. The picker runs in a
+        // throwaway floating pane that closes itself, so no scratch tab is left
+        // behind just to type the command
+        bind "m" "ь" {
+            Run "fish" "-c" "ccz --one" {
+                floating true
+                close_on_exit true
+                name "mirror agterm session"
+                width "70%"
+                height "60%"
+            }
+            SwitchToMode "normal"
+        }
+        bind "s" "ы" {
+            LaunchOrFocusPlugin "session-manager" {
+                floating true
+                move_to_focused_tab true
+            }
+            SwitchToMode "normal"
+        }
+        // leave the session running (what you want when switching Macs)
+        bind "d" "в" { Detach; }
+        // tear the whole session down, killing everything in it
+        bind "q" "й" { Quit; }
+        bind "z" "я" { ToggleFocusFullscreen; SwitchToMode "normal"; }
+        bind "c" "с" { CloseFocus; SwitchToMode "normal"; }
+        bind "x" "ч" { CloseFocus; SwitchToMode "normal"; }
+        bind "t" "е" { BreakPane; SwitchToMode "normal"; }
+        bind "w" "ц" { BreakPane; SwitchToMode "normal"; }
         bind "esc" { SwitchToMode "normal"; }
     }
 }
