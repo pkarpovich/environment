@@ -8,6 +8,15 @@ model_name=$(echo "$input" | jq -r '.model.display_name')
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir')
 effort=$(echo "$input" | jq -r '.effort.level // empty')
 
+# Which account this session belongs to. The transcript path carries the config
+# dir, so it is right from the first render - rate_limits only appear after the
+# first API call, and keying off them showed the API spend on a fresh
+# subscription session until the first message.
+profile=personal
+case "$(echo "$input" | jq -r '.transcript_path // empty')" in
+    */.claude-work/*) profile=work ;;
+esac
+
 # Get git branch info (skip locks for safety)
 cd "$current_dir" 2>/dev/null || cd "$(echo "$input" | jq -r '.cwd')" 2>/dev/null || true
 
@@ -57,6 +66,25 @@ count_wd() {
         i=$((i + 1))
     done
     echo "$c"
+}
+
+# Burn pace vs the ideal straight line: always shown, but gray within +/-5% so a
+# small drift does not read as an alarm
+pace_badge() {
+    local d="$1" color arrow
+    if [ "$d" -gt 5 ]; then
+        color="$FX_RED"; arrow="↑"
+    elif [ "$d" -lt -5 ]; then
+        color="$FX_GREEN"; arrow="↓"
+    elif [ "$d" -gt 0 ]; then
+        color="$GRAY"; arrow="↑"
+    elif [ "$d" -lt 0 ]; then
+        color="$GRAY"; arrow="↓"
+    else
+        color="$GRAY"; arrow="="
+    fi
+    [ "$d" -lt 0 ] && d=$((-d))
+    printf " ${color}%s%d%%${RESET}" "$arrow" "$d"
 }
 
 # Get context info from API (used_percentage is pre-calculated by Claude)
@@ -130,12 +158,7 @@ if [ -n "$weekly_pct" ] && [ -n "$weekly_reset" ]; then
     ideal_pct=$((elapsed * 100 / week_seconds))
     pace_delta=$((weekly_pct_int - ideal_pct))
 
-    if [ "$pace_delta" -gt 5 ]; then
-        printf " ${FX_RED}↑%d%%${RESET}" "$pace_delta"
-    elif [ "$pace_delta" -lt -5 ]; then
-        abs_pace=$(( -pace_delta ))
-        printf " ${FX_GREEN}↓%d%%${RESET}" "$abs_pace"
-    fi
+    pace_badge "$pace_delta"
 
     sep=" ${WHITE}|${RESET} "
 fi
@@ -158,8 +181,8 @@ if [ -n "$fivehour_pct" ] && [ -n "$fivehour_reset" ]; then
     fi
 fi
 
-# Monthly API spend - only on the API-billed account (no weekly/5h rate limits)
-if [ -z "$weekly_pct" ] && [ -z "$fivehour_pct" ] && [ -d "$SPEND_DATA_DIR" ]; then
+# Monthly API spend - only on the API-billed account
+if [ "$profile" = work ] && [ -d "$SPEND_DATA_DIR" ]; then
     now=$(date +%s)
 
     # Refresh the cache in the background if stale - never blocks the render
@@ -219,11 +242,7 @@ if [ -z "$weekly_pct" ] && [ -z "$fivehour_pct" ] && [ -d "$SPEND_DATA_DIR" ]; t
 
             printf "${sep}${GRAY}mo${RESET} ${SP_COLOR}\$%d${RESET}${GRAY}/\$%d${RESET} ${GRAY}(${RESET}${SP_COLOR}%d%%${RESET}${GRAY})${RESET} ${GRAY}·${RESET} ${GRAY}%dd${RESET}" "$spent_int" "$SPEND_CAP" "$spend_pct" "$left_wd"
 
-            if [ "$pace" -gt 5 ]; then
-                printf " ${FX_RED}↑%d%%${RESET}" "$pace"
-            elif [ "$pace" -lt -5 ]; then
-                printf " ${FX_GREEN}↓%d%%${RESET}" "$((-pace))"
-            fi
+            pace_badge "$pace"
 
             sep=" ${WHITE}|${RESET} "
         fi
