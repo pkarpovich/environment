@@ -60,7 +60,6 @@ function ccz --description "mirror agterm Claude sessions into tmux windows (sin
 
     set -l created ""
     set -l dir ""
-    set -l placeholder ""
 
     if test $inside -eq 0
         if test (count $argv) -ge 1
@@ -73,12 +72,12 @@ function ccz --description "mirror agterm Claude sessions into tmux windows (sin
             set created (string replace -ra '[^a-z0-9_.-]' '-' (string lower (path basename $dir)))-(string lower (string sub -l 4 $entries[1]))
             set sess $created
             if not contains -- "$created" $alive
-                # a new session always comes with a shell window; it is a
-                # placeholder, killed once the mirrored window exists
-                set placeholder (tmux new-session -d -P -F '#{window_id}' -s $created -c $dir 2>/dev/null)
-                # no status line: one agent needs no window list, and on the
-                # phone Moshi draws its own row anyway
-                tmux set-option -t $created status off >/dev/null 2>&1
+                # the shell window a new session is born with is kept on
+                # purpose. With only the mirrored window in it, the session dies
+                # the moment that window goes - recycled on the next --one, or
+                # closed when Claude exits - and its death takes the tmux server,
+                # the attached client and the terminal tab it lives in with it.
+                tmux new-session -d -s $created -n shell -c $dir >/dev/null 2>&1
             end
         else
             if test (count $alive) -eq 0
@@ -110,7 +109,6 @@ function ccz --description "mirror agterm Claude sessions into tmux windows (sin
         end
     end
 
-    set -l mirrored 0
     for id in $entries
         set -l f $map/$id
         set -l line (printf '%s' $tree | jq -r --arg id "$id" '[.result.tree.workspaces[].sessions[]] | .[] | select(.id == $id) | .name + "\t" + (.cwd // "")')
@@ -147,15 +145,11 @@ function ccz --description "mirror agterm Claude sessions into tmux windows (sin
 
         set -l wid (tmux new-window -t $sess: -n $wname -c $cwd -P -F '#{window_id}' -- fish -c $cmd)
         test -n "$wid"; or continue
-        set mirrored 1
 
         set -l tmp (mktemp $map/.tmp.XXXXXX)
         and jq --arg s "$sess" --arg w "$wid" '.tsession = $s | .twindow = $w' $f > $tmp
         and mv -f $tmp $f
     end
-
-    test -n "$placeholder"; and test $mirrored -eq 1
-    and tmux kill-window -t $placeholder >/dev/null 2>&1
 
     # name and project directory of the session that was created, tab-separated:
     # the ssh menu cds into that directory before attaching, so the Moshi gateway
