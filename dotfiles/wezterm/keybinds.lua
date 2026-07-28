@@ -289,12 +289,30 @@ local function configure_keys(resurrect)
         table.insert(keys, { key = m[1], mods = "CTRL|SHIFT", action = act.SendString(m[2]) })
     end
 
-    -- The rest of the Ctrl+Shift mirror is letters + arrows, which zellij matches
-    -- natively. Just suppress wezterm's own defaults on them (ShowDebugOverlay on
-    -- L, ActivateCopyMode on X, TogglePaneZoom on Z, SpawnTab on T, CloseTab on W,
-    -- Paste on V, pane-nav on arrows) so the keys fall through to zellij.
+    -- The letters need tokens too, for a different reason than the symbols above.
+    -- wezterm speaks the kitty keyboard protocol (which zellij asked for), while
+    -- tmux only ever requests xterm's modifyOtherKeys - wezterm ignores that, the
+    -- Shift is dropped, and Ctrl+Shift+L reaches the pane as a plain Ctrl+L that
+    -- Claude Code swallows instead of the tmux leader firing.
+    -- phys:, not the character: the token must be the same on both layouts, and
+    -- a Cyrillic layout reports "д" rather than "l".
+    local pua_letters = {
+        { "phys:L", "\u{E01E}" },   -- leader
+        { "phys:Z", "\u{E01F}" },   -- zoom pane
+        { "phys:X", "\u{E020}" },   -- close pane
+        { "phys:T", "\u{E021}" },   -- new window
+        { "phys:W", "\u{E022}" },   -- close window
+    }
+    for _, m in ipairs(pua_letters) do
+        table.insert(keys, { key = m[1], mods = "CTRL|SHIFT", action = act.SendString(m[2]) })
+    end
+
+    -- Paste and the arrows keep their old treatment: arrows already encode their
+    -- modifiers the classic way (CSI 1;6D), so tmux sees them without any of the
+    -- above. Just suppress wezterm's own defaults (Paste on V, pane-nav on the
+    -- arrows) so they fall through.
     local mirror_passthrough = {
-        "z", "x", "t", "w", "v", "l",
+        "v",
         "LeftArrow", "RightArrow", "UpArrow", "DownArrow",
     }
     for _, k in ipairs(mirror_passthrough) do
