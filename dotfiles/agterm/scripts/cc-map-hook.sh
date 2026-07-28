@@ -1,7 +1,7 @@
 #!/bin/bash
 # Claude Code SessionStart hook: record which conversation lives in which agterm
 # session. One file per agterm session (atomic mv - no races), consumed by
-# ccz (zellij tabs on the second Mac) and reopen-cc.sh.
+# ccz (tmux windows on the second Mac) and reopen-cc.sh.
 JQ=/opt/homebrew/bin/jq
 
 [ -n "$AGTERM_SESSION_ID" ] || exit 0
@@ -46,10 +46,10 @@ mkdir -p "$dir"
 tmp=$(mktemp "$dir/.tmp.XXXXXX") || exit 0
 prev='{}'
 [ -f "$dir/$AGTERM_SESSION_ID" ] && prev=$(cat "$dir/$AGTERM_SESSION_ID")
-# merged, not rebuilt: ccz records which zellij tab mirrors this session
-# (zsession/ztab) and must survive a hook fire; a changed conversation drops it
+# merged, not rebuilt: ccz records which tmux window mirrors this session
+# (tsession/twindow) and must survive a hook fire; a changed conversation drops it
 printf '%s' "$prev" | "$JQ" --arg conv "$conv" --arg profile "$profile" --arg cwd "$cwd" --arg pid "$pid" \
-    'if .conv == $conv then . else del(.zsession, .ztab) end
+    'if .conv == $conv then . else del(.tsession, .twindow) end
      | . + {conv: $conv, profile: $profile, cwd: $cwd, ts: (now | floor),
             pid: (if $pid == "" then null else ($pid | tonumber) end)}' > "$tmp"
 mv -f "$tmp" "$dir/$AGTERM_SESSION_ID"

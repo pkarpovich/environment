@@ -1,15 +1,15 @@
 #!/bin/bash
-# Bring Claude conversations home to agterm (single-client model): kill zellij-side
-# tab claudes and stale agterm TUIs, then resume each mapped session's conversation
+# Bring Claude conversations home to agterm (single-client model): kill tmux-side
+# window claudes and stale agterm TUIs, then resume each mapped session's conversation
 # in its agterm session. With an argument - only that session (id or prefix): just
-# its own zellij-side claude is parked, the rest of both sides is left alone.
+# its own tmux-side claude is parked, the rest of both sides is left alone.
 AGTERMCTL=/opt/homebrew/bin/agtermctl
 JQ=/opt/homebrew/bin/jq
 MAP="$HOME/.local/state/agterm/cc-map"
 PARK="$HOME/.config/agterm/scripts/cc-park.sh"
 
 if [ -z "$1" ]; then
-  "$PARK" zellij
+  "$PARK" tmux
   "$PARK" agterm
 fi
 
@@ -39,9 +39,9 @@ for id in $sids; do
 
   conv=$("$JQ" -r '.conv // empty' "$entry")
   [ -n "$conv" ] || continue
-  # a mirrored conversation is still live in its zellij tab; resuming it here
+  # a mirrored conversation is still live in its tmux window; resuming it here
   # without parking that one first would put two clients on it
-  [ -n "$1" ] && "$PARK" zellij "$id" >/dev/null 2>&1
+  [ -n "$1" ] && "$PARK" tmux "$id" >/dev/null 2>&1
   cmd="CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume $conv"
   [ "$("$JQ" -r '.profile // "personal"' "$entry")" = "work" ] && cmd="CLAUDE_CONFIG_DIR=~/.claude-work $cmd"
   printf '%s\n' "$cmd" | "$AGTERMCTL" session type --stdin --target "$id"

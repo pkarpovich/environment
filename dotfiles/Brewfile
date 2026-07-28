@@ -17,13 +17,25 @@ brew "imagemagick"
 cask "font-symbols-only-nerd-font"
 brew "yazi"
 
+# containers: colima VM instead of Docker Desktop; autostart via
+# colima/com.pavel-karpovich.colima.plist (NOT brew services - its
+# `colima start -f` resets colima.yaml to defaults on every start)
+brew "colima"
+brew "docker"
+brew "docker-compose"
+
 brew "curlie"
 brew "gping"
 brew "doggo"
 brew "glances"
 brew "ctop"
 brew "btop"
-brew "zellij"
+# tmux: the mux ccz mirrors agterm's Claude sessions into, and the only one
+# Moshi's chat can read (preview, agent status, session tree are tmux-only)
+brew "tmux"
+# mosh: the phone (Moshi) attaches to the tmux sessions over it - the link
+# survives sleep, network switches and app kills, unlike plain ssh
+brew "mosh"
 brew "zoxide"
 brew "fzf"
 brew "terminal-notifier"

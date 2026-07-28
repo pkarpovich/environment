@@ -1,3 +1,9 @@
+# tmux paints every non-ASCII glyph as "_" when the client that attached has no
+# UTF-8 locale, and ssh forwards LANG only when the client sends it - mosh always
+# does (LANG=C.UTF-8), wezterm over ssh does not. Set before local.fish's login
+# menu execs the tmux client.
+test -n "$LANG"; or set -gx LANG en_US.UTF-8
+
 # pnpm is provided by `mise activate` below - do NOT fish_add_path a versioned
 # mise pnpm bin here: fish_add_path writes to the persistent universal
 # fish_user_paths and accumulates stale pnpm version dirs that shadow mise.

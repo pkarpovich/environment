@@ -1,7 +1,7 @@
 #!/bin/sh
-# Kill interactive Claude TUIs on one side of the MBP<->zellij pair (single-client model):
+# Kill interactive Claude TUIs on one side of the MBP<->tmux pair (single-client model):
 #   agterm - claudes whose ancestry includes the agterm app
-#   zellij - claudes whose ancestry includes a zellij server
+#   tmux   - claudes whose ancestry includes a tmux server
 # Only interactive TUIs match (argv has --enable-auto-mode) - ralphex/headless runs untouched.
 # macOS forbids reading other processes' env, so side detection walks the parent chain.
 # With a second argument (an agterm session id) only that session's claude is parked,
@@ -18,16 +18,25 @@ PARKED_SHAPE=diamond
 side="$1"
 target="$2"
 case "$side" in
-  agterm|zellij) ;;
-  *) echo "usage: cc-park.sh agterm|zellij [session-id]" >&2; exit 1 ;;
+  agterm|tmux) ;;
+  *) echo "usage: cc-park.sh agterm|tmux [session-id]" >&2; exit 1 ;;
 esac
+
+# macOS ps shows the tmux server under the argv that spawned it (`tmux
+# new-session … claude --enable-auto-mode`), never as a "tmux: server" title
+is_tmux() {
+  case "$1" in
+    tmux|"tmux "*|*"/tmux"|*"/tmux "*|"tmux: server"*) return 0 ;;
+  esac
+  return 1
+}
 
 side_of() {
   p="$1"
   while [ -n "$p" ] && [ "$p" -gt 1 ] 2>/dev/null; do
     cmd=$(ps -o command= -p "$p" 2>/dev/null)
+    if is_tmux "$cmd"; then echo tmux; return; fi
     case "$cmd" in
-      *zellij*--server*) echo zellij; return ;;
       *agterm.app/Contents/MacOS/agterm*) echo agterm; return ;;
     esac
     p=$(ps -o ppid= -p "$p" 2>/dev/null | tr -d ' ')
@@ -36,15 +45,23 @@ side_of() {
 }
 
 # -a: without it pgrep hides its own ancestors, so a park invoked from inside a
-# Claude session would silently skip that very claude
-all_pids=$(pgrep -a -f -- '--enable-auto-mode' 2>/dev/null)
+# Claude session would silently skip that very claude.
+# The tmux server itself is dropped: a session started as `tmux new-session …
+# claude --enable-auto-mode …` carries that argv, so the server matches both the
+# pgrep filter and the *claude* one below - killing it would take down every
+# session on that side instead of one client.
+all_pids=""
+for pid in $(pgrep -a -f -- '--enable-auto-mode' 2>/dev/null); do
+  is_tmux "$(ps -o command= -p "$pid" 2>/dev/null)" && continue
+  all_pids="$all_pids $pid"
+done
 
 if [ -z "$target" ]; then
   pids=$all_pids
 else
   pids=$("$JQ" -r '.pid // empty' "$MAP/$target" 2>/dev/null)
   # the recorded pid is whichever claude ran the hook, i.e. the agterm-side one;
-  # parking the zellij side of the same session falls through to the directory
+  # parking the tmux side of the same session falls through to the directory
   # match below
   [ -n "$pids" ] && [ "$(side_of "$pids")" != "$side" ] && pids=""
 fi

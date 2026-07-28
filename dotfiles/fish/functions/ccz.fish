@@ -1,4 +1,4 @@
-function ccz --description "mirror agterm Claude sessions into zellij tabs (single-client: kills agterm-side TUIs first). Inside zellij - current session; outside - the single live one (or: ccz <session>). -o/--one: pick a single agterm session, mirror it into its own zellij session (name printed on stdout) and leave the rest running on the Mac"
+function ccz --description "mirror agterm Claude sessions into tmux windows (single-client: kills agterm-side TUIs first). Inside tmux - current session; outside - the single live one (or: ccz <session>). -o/--one: pick a single agterm session, mirror it into its own tmux session (name printed on stdout) and leave the rest running on the Mac"
     argparse o/one -- $argv; or return 1
 
     if not command -q agtermctl; or not command -q jq
@@ -47,43 +47,50 @@ function ccz --description "mirror agterm Claude sessions into zellij tabs (sing
         set entries $picked
     end
 
-    set -l alive (zellij list-sessions --no-formatting 2>/dev/null | string match -rv 'EXITED' | string replace -r ' .*$' '')
+    set -l alive (tmux list-sessions -F '#{session_name}' 2>/dev/null)
 
-    # ZELLIJ/ZELLIJ_SESSION_NAME can be inherited rather than real: agterm passes
-    # its own environment to every session shell, so an agterm launched from a
-    # zellij pane makes every pane under it look like it is inside zellij. Trust
-    # the vars only when that session is actually alive.
-    set -l zj zellij
-    set -l zname $ZELLIJ_SESSION_NAME
-    set -l created ""
+    # $TMUX can be inherited rather than real: agterm passes its own environment
+    # to every session shell, so an agterm launched from a tmux pane makes every
+    # pane under it look like it is inside tmux. Trust it only when the session
+    # it names is actually alive.
+    set -l sess ""
+    set -q TMUX; and set sess (tmux display-message -p '#{session_name}' 2>/dev/null)
     set -l inside 0
-    if set -q ZELLIJ; and contains -- "$zname" $alive
-        set inside 1
-    end
+    contains -- "$sess" $alive; and set inside 1
+
+    set -l created ""
+    set -l dir ""
+    set -l placeholder ""
 
     if test $inside -eq 0
         if test (count $argv) -ge 1
-            set zname $argv[1]
+            set sess $argv[1]
         else if set -q _flag_one
-            # one agent, one zellij session of its own: <project>-<id prefix>,
+            # one agent, one tmux session of its own: <project>-<id prefix>,
             # stable across trips so the next connect reattaches the same one
-            set -l dir (jq -r '.cwd // empty' $map/$entries[1])
-            test -n "$dir"; or set dir $HOME
+            set dir (jq -r '.cwd // empty' $map/$entries[1])
+            test -d "$dir"; or set dir $HOME
             set created (string replace -ra '[^a-z0-9_.-]' '-' (string lower (path basename $dir)))-(string lower (string sub -l 4 $entries[1]))
-            set zname $created
-            zellij attach --create-background $created >/dev/null 2>&1
+            set sess $created
+            if not contains -- "$created" $alive
+                # a new session always comes with a shell window; it is a
+                # placeholder, killed once the mirrored window exists
+                set placeholder (tmux new-session -d -P -F '#{window_id}' -s $created -c $dir 2>/dev/null)
+                # no status line: one agent needs no window list, and on the
+                # phone Moshi draws its own row anyway
+                tmux set-option -t $created status off >/dev/null 2>&1
+            end
         else
             if test (count $alive) -eq 0
-                echo "ccz: no live zellij session to fill - start/attach one first" >&2
+                echo "ccz: no live tmux session to fill - start/attach one first" >&2
                 return 1
             end
             if test (count $alive) -gt 1
-                echo "ccz: several zellij sessions ("(string join ', ' $alive)") - pick one: ccz <session>" >&2
+                echo "ccz: several tmux sessions ("(string join ', ' $alive)") - pick one: ccz <session>" >&2
                 return 1
             end
-            set zname $alive[1]
+            set sess $alive[1]
         end
-        set zj zellij --session $zname
     end
 
     if set -q _flag_one
@@ -94,17 +101,16 @@ function ccz --description "mirror agterm Claude sessions into zellij tabs (sing
         end
     else
         ~/.config/agterm/scripts/cc-park.sh agterm
-        # replacing every mirrored session: drop all Claude tabs in one pass.
-        # The flags stay in the pane's argv, unlike the conversation id, which a
-        # resumed Claude drops when it rewrites its process title
-        for t in ($zj action dump-layout 2>/dev/null | awk '
-            /^ *tab / { if (t != "" && has) print t; t = ""; if (match($0, /name="[^"]*"/)) t = substr($0, RSTART+6, RLENGTH-7); has = 0 }
-            index($0, "--enable-auto-mode") { has = 1 }
-            END { if (t != "" && has) print t }')
-            __ccz_close_tab "$t" $zj
+        # replacing every mirrored session: drop all Claude windows in one pass.
+        # The flags stay in the window's start command, unlike the conversation
+        # id, which a resumed Claude drops when it rewrites its process title
+        for line in (tmux list-panes -s -t $sess -F '#{window_id}|#{pane_start_command}' 2>/dev/null)
+            string match -q '*--enable-auto-mode*' -- $line; or continue
+            tmux kill-window -t (string split -m1 -f1 '|' -- $line) >/dev/null 2>&1
         end
     end
 
+    set -l mirrored 0
     for id in $entries
         set -l f $map/$id
         set -l line (printf '%s' $tree | jq -r --arg id "$id" '[.result.tree.workspaces[].sessions[]] | .[] | select(.id == $id) | .name + "\t" + (.cwd // "")')
@@ -123,30 +129,37 @@ function ccz --description "mirror agterm Claude sessions into zellij tabs (sing
             set cmd "CLAUDE_CONFIG_DIR=~/.claude-work $cmd"
         end
 
-        set -l tabs ($zj action dump-layout 2>/dev/null | awk '/^ *tab / { if (match($0, /name="[^"]*"/)) print substr($0, RSTART+6, RLENGTH-7) }')
-
-        # a tab this session already mirrors into is recycled, so re-picking a
-        # session replaces its tab instead of opening a second client on the
-        # same conversation (which makes Claude kill one of them)
-        set -l prev (jq -r --arg z "$zname" 'select(.zsession == $z) | .ztab // empty' $f)
-        if test -n "$prev"; and contains -- "$prev" $tabs
-            __ccz_close_tab "$prev" $zj
-            set tabs (string match -v -- "$prev" $tabs)
+        # a window this session already mirrors into is recycled, so re-picking a
+        # session replaces its window instead of opening a second client on the
+        # same conversation (which makes Claude kill one of them). Window ids are
+        # unique server-wide and never reused, so this targets exactly that one.
+        set -l prev (jq -r --arg s "$sess" 'select(.tsession == $s) | .twindow // empty' $f)
+        if test -n "$prev"; and contains -- "$prev" (tmux list-windows -t $sess -F '#{window_id}' 2>/dev/null)
+            tmux kill-window -t $prev >/dev/null 2>&1
         end
 
-        # tab names come from the Claude title and repeat across sessions (a fork
-        # and its parent, two tabs in one project) - go-to-tab-name would then
-        # target the wrong tab, so collisions get the session id as a suffix
-        set -l tabname $name
-        contains -- "$tabname" $tabs; and set tabname "$name "(string lower (string sub -l 4 $id))
+        # window names come from the Claude title and repeat across sessions (a
+        # fork and its parent, two windows in one project) - the id suffix is
+        # what tells those rows apart in the status line and in choose-tree
+        set -l wname $name
+        contains -- "$wname" (tmux list-windows -t $sess -F '#{window_name}' 2>/dev/null)
+        and set wname "$name "(string lower (string sub -l 4 $id))
 
-        $zj action new-tab --name "$tabname" --cwd "$cwd" -- fish -c "cd "(string escape -- $cwd)"; and $cmd" >/dev/null
+        set -l wid (tmux new-window -t $sess: -n $wname -c $cwd -P -F '#{window_id}' -- fish -c $cmd)
+        test -n "$wid"; or continue
+        set mirrored 1
 
         set -l tmp (mktemp $map/.tmp.XXXXXX)
-        and jq --arg z "$zname" --arg t "$tabname" '.zsession = $z | .ztab = $t' $f > $tmp
+        and jq --arg s "$sess" --arg w "$wid" '.tsession = $s | .twindow = $w' $f > $tmp
         and mv -f $tmp $f
     end
 
-    test -n "$created"; and echo $created
+    test -n "$placeholder"; and test $mirrored -eq 1
+    and tmux kill-window -t $placeholder >/dev/null 2>&1
+
+    # name and project directory of the session that was created, tab-separated:
+    # the ssh menu cds into that directory before attaching, so the Moshi gateway
+    # resolves the session to the project instead of $HOME
+    test -n "$created"; and printf '%s\t%s\n' $created $dir
     return 0
 end

@@ -17,11 +17,12 @@ mise run link_dotfiles     # from the repo root; or: dotbot -c ./dotfiles/instal
   reopen for the two-Mac flow. **Start with
   [`agterm/README.md`](agterm/README.md)** - it documents the whole
   Claude-session system, whose parts are spread across `agterm/`, `fish/`,
-  `claude/` and `zellij/`.
+  `claude/` and `tmux/`.
 - **`fish/`** - `config.fish` plus one autoloaded function per file in
   `fish/functions/` (`wt`, `ccl`, `ccz`, the `claude` wrapper, `zw`, `gcrb`, ...).
-- **`zellij/`** - config and the vertical-tabs layout; zellij is the SSH
-  attach point when working from the second Mac.
+- **`tmux/`** - the SSH/mosh attach point for the second Mac and the phone;
+  `ccz` mirrors agterm's Claude sessions into its windows. It replaced zellij
+  because Moshi's chat integration is tmux-only.
 - **`claude/`** - Claude Code settings, hooks, agents, and custom skills;
   linked into both `~/.claude` and `~/.claude-work` profiles.
 - **`zed/`**, **`tuna/`**, **`yashiki/`**, **`revdiff/`** - editor, launcher,
