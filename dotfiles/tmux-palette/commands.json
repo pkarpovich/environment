@@ -1,0 +1,34 @@
+[
+  {
+    "icon": "⇄",
+    "title": "Mirror agterm session",
+    "description": "pick one Claude session on the Mac and open it as a window here",
+    "category": "agterm",
+    "aliases": ["ccz", "one", "mirror"],
+    "action": { "popup": "fish -c 'ccz --one'" }
+  },
+  {
+    "icon": "⇉",
+    "title": "Mirror all agterm sessions",
+    "description": "replace every mirrored window in this session",
+    "category": "agterm",
+    "aliases": ["ccz", "all"],
+    "action": { "popup": "fish -c ccz" }
+  },
+  {
+    "icon": "⌂",
+    "title": "Send this window home",
+    "description": "park the client here, resume the conversation in its agterm session",
+    "category": "agterm",
+    "aliases": ["reopen", "home", "back"],
+    "action": { "shell": "~/.config/agterm/scripts/cc-home.sh" }
+  },
+  {
+    "icon": "⏸",
+    "title": "Park every Claude on this side",
+    "description": "kill the tmux-side clients and leave the Mac side running",
+    "category": "agterm",
+    "aliases": ["park"],
+    "action": { "shell": "~/.config/agterm/scripts/cc-park.sh tmux" }
+  }
+]

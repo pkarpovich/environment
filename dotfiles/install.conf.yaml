@@ -21,6 +21,7 @@
     ~/.config/fish/functions/: fish/functions/**
     ~/.config/zed/: zed/**
     ~/.config/tmux/: tmux/**
+    ~/.config/tmux-palette/: tmux-palette/**
     ~/.config/agterm/: agterm/**
     ~/.config/yashiki/: yashiki/**
 
