@@ -65,19 +65,33 @@ label = 'Screenshot'
 
     [[comboMode.bindings.children]]
     key = 'a'
-    url = 'tuna://run?subject=TunaCleanShot.CleanShotCommandsCatalog.Capture%20Area&action=tuna.common-actions/run'
+    label = 'area'
+    url = 'tuna://run?subject=cleanshot.commands/capture-area&action=tuna.common-actions/run'
 
     [[comboMode.bindings.children]]
     key = 'w'
-    url = 'tuna://run?subject=TunaCleanShot.CleanShotCommandsCatalog.Capture%20Window&action=tuna.common-actions/run'
+    label = 'window'
+    url = 'tuna://run?subject=cleanshot.commands/capture-window&action=tuna.common-actions/run'
 
     [[comboMode.bindings.children]]
     key = 't'
-    url = 'tuna://run?subject=TunaCleanShot.CleanShotCommandsCatalog.Capture%20Text%20(OCR)&action=tuna.common-actions/run'
+    label = 'text'
+    url = 'tuna://run?subject=cleanshot.commands/capture-text-ocr&action=tuna.common-actions/run'
 
     [[comboMode.bindings.children]]
     key = 'v'
-    url = 'tuna://run?subject=TunaCleanShot.CleanShotCommandsCatalog.Record%20Screen&action=tuna.common-actions/run'
+    label = 'video'
+    url = 'tuna://run?subject=cleanshot.commands/record-screen&action=tuna.common-actions/run'
+
+    [[comboMode.bindings.children]]
+    key = 'm'
+    label = 'move'
+    url = 'tuna://run?subject=cleanshot.commands/scrolling-capture&action=tuna.common-actions/run'
+
+    [[comboMode.bindings.children]]
+    key = 's'
+    label = 'timer'
+    url = 'tuna://run?subject=cleanshot.commands/self-timer-capture&action=tuna.common-actions/run'
 
 [[comboMode.bindings]]
 iconPath = 'message'
