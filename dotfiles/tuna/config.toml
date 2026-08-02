@@ -1,4 +1,4 @@
-schemaVersion = 1
+schemaVersion = 4
 
 [catalogConfiguration]
 customFolders = []
@@ -10,17 +10,20 @@ folderDepthOverrides = []
     path = '~/Projects/environment/dotfiles/tuna-scripts'
 
 [catalogs]
+searchPriorities = []
 sortOrders = []
 
     [[catalogs.globalScopes]]
-    catalogIdentifier = 'Tuna.EffectsCatalog'
-    mode = 'none'
-    selectedItemKeys = []
+    catalogIdentifier = 'tuna.effects'
+
+        [catalogs.globalScopes.scope]
+        kind = 'none'
 
     [[catalogs.globalScopes]]
-    catalogIdentifier = 'TunaEmoji.EmojiCatalog'
-    mode = 'none'
-    selectedItemKeys = []
+    catalogIdentifier = 'tuna.emoji'
+
+        [catalogs.globalScopes.scope]
+        kind = 'none'
 
 [[comboMode.bindings]]
 iconPath = 'star.fill'
@@ -30,17 +33,17 @@ label = 'Prompts'
     [[comboMode.bindings.children]]
     key = 'r'
     label = 'ru'
-    url = 'tuna://run/text.shortcuts%2520run%2520%2522Edith%2520-%2520Fix%2520RU%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:shortcuts%20run%20%22Edith%20-%20Fix%20RU%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'e'
     label = 'en'
-    url = 'tuna://run/text.shortcuts%2520run%2520%2522Edith%2520-%2520Fix%2520EN%25E2%2580%259D/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:shortcuts%20run%20%22Edith%20-%20Fix%20EN%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'c'
     label = 'next'
-    url = 'tuna://run/text.shortcuts%2520run%2520%2522Edith%2520-%2520Continue%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:shortcuts%20run%20%22Edith%20-%20Continue%22&action=tuna.common-actions/run-text-as-shell-command'
 
 [[comboMode.bindings]]
 iconPath = 'folder'
@@ -49,11 +52,11 @@ label = 'folders'
 
     [[comboMode.bindings.children]]
     key = 'h'
-    url = 'tuna://run/path.%252FUsers%252Fpavel.karpovich/Open'
+    url = 'tuna://run?subject=path.%252FUsers%252Fpavel.karpovich&action=Open'
 
     [[comboMode.bindings.children]]
     key = 'f'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%25E2%2580%259CFinder%25E2%2580%259D%2520%2522open%2520-b%2520com.apple.finder%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%E2%80%9CFinder%E2%80%9D%20%22open%20-b%20com.apple.finder%22&action=tuna.common-actions/run-text-as-shell-command'
 
 [[comboMode.bindings]]
 iconPath = 'cursorarrow.and.square.on.square.dashed'
@@ -62,19 +65,19 @@ label = 'Screenshot'
 
     [[comboMode.bindings.children]]
     key = 'a'
-    url = 'tuna://run/TunaCleanShot.CleanShotCommandsCatalog.Capture%20Area/TunaCore.CommonActionsCatalog.Run'
+    url = 'tuna://run?subject=TunaCleanShot.CleanShotCommandsCatalog.Capture%20Area&action=tuna.common-actions/run'
 
     [[comboMode.bindings.children]]
     key = 'w'
-    url = 'tuna://run/TunaCleanShot.CleanShotCommandsCatalog.Capture%20Window/TunaCore.CommonActionsCatalog.Run'
+    url = 'tuna://run?subject=TunaCleanShot.CleanShotCommandsCatalog.Capture%20Window&action=tuna.common-actions/run'
 
     [[comboMode.bindings.children]]
     key = 't'
-    url = 'tuna://run/TunaCleanShot.CleanShotCommandsCatalog.Capture%20Text%20(OCR)/TunaCore.CommonActionsCatalog.Run'
+    url = 'tuna://run?subject=TunaCleanShot.CleanShotCommandsCatalog.Capture%20Text%20(OCR)&action=tuna.common-actions/run'
 
     [[comboMode.bindings.children]]
     key = 'v'
-    url = 'tuna://run/TunaCleanShot.CleanShotCommandsCatalog.Record%20Screen/TunaCore.CommonActionsCatalog.Run'
+    url = 'tuna://run?subject=TunaCleanShot.CleanShotCommandsCatalog.Record%20Screen&action=tuna.common-actions/run'
 
 [[comboMode.bindings]]
 iconPath = 'message'
@@ -84,32 +87,32 @@ label = 'Messaging'
     [[comboMode.bindings.children]]
     key = 's'
     label = 'slack'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Slack%2522%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%2522open%2520-b%2520com.tinyspeck.slackmacgap%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Slack%22%20%20%20%20%20%20%20%20%20%20%20%22open%20-b%20com.tinyspeck.slackmacgap%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 't'
     label = 'telegram'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Telegram%2522%2520%2520%2520%2520%2520%2520%2520%2520%2522open%2520-b%2520ru.keepcoder.Telegram%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Telegram%22%20%20%20%20%20%20%20%20%22open%20-b%20ru.keepcoder.Telegram%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'm'
     label = 'teams'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Microsoft%2520Teams%2522%2520%2522open%2520-b%2520com.microsoft.teams2%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Microsoft%20Teams%22%20%22open%20-b%20com.microsoft.teams2%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'w'
     label = 'whatsapp'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522WhatsApp%2522%2520%2520%2520%2520%2520%2520%2520%2520%2522open%2520-b%2520net.whatsapp.WhatsApp%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22WhatsApp%22%20%20%20%20%20%20%20%20%22open%20-b%20net.whatsapp.WhatsApp%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'e'
     label = 'mail'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Mail%2522%2520%2522open%2520-b%2520com.apple.mail%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Mail%22%20%22open%20-b%20com.apple.mail%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'c'
     label = 'calendar'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Calendar%2522%2520%2522open%2520-b%2520com.apple.iCal%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Calendar%22%20%22open%20-b%20com.apple.iCal%22&action=tuna.common-actions/run-text-as-shell-command'
 
 [[comboMode.bindings]]
 iconPath = 'square.grid.2x2'
@@ -119,51 +122,56 @@ label = 'Apps'
     [[comboMode.bindings.children]]
     key = 'a'
     label = 'simulator'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Simulator%2522%2520%2522open%2520-b%2520com.apple.iphonesimulator%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Simulator%22%20%22open%20-b%20com.apple.iphonesimulator%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'g'
     label = 'sublime merge'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Sublime%2520Merge%2522%2520%2522open%2520-b%2520com.sublimemerge%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Sublime%20Merge%22%20%22open%20-b%20com.sublimemerge%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'm'
     label = 'spotify'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Spotify%2522%2520%2522open%2520-b%2520com.spotify.client%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Spotify%22%20%22open%20-b%20com.spotify.client%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'v'
     label = 'parallels'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Parallels%2520Desktop%2522%2520%2522open%2520-b%2520com.parallels.desktop.console%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Parallels%20Desktop%22%20%22open%20-b%20com.parallels.desktop.console%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'h'
     label = 'bruno'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%2522Bruno%2522%2520%2522open%2520-a%2520%252FApplications%252FBruno.app%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Bruno%22%20%22open%20-a%20%2FApplications%2FBruno.app%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'o'
     label = 'output device'
-    url = 'tuna://run/TunaMedia.AudioOutputDevicesCatalog.Audio%20Output%20Devices/TunaCore.CommonActionsCatalog.Browse'
+    url = 'tuna://run?subject=tuna.audio-output-devices/audio-devices.output&action=tuna.common-actions/browse'
 
     [[comboMode.bindings.children]]
     key = 'i'
     label = 'input device'
-    url = 'tuna://run/TunaMedia.AudioInputDevicesCatalog.Audio%20Input%20Devices/TunaCore.CommonActionsCatalog.Browse'
+    url = 'tuna://run?subject=tuna.audio-input-devices/audio-devices.input&action=tuna.common-actions/browse'
 
     [[comboMode.bindings.children]]
     key = 't'
     label = 'wezterm'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%25E2%2580%259CWezterm%25E2%2580%259D%2520%2522open%2520-b%2520com.github.wez.wezterm%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%E2%80%9CWezterm%E2%80%9D%20%22open%20-b%20com.github.wez.wezterm%22&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'c'
     label = 'claude desktop'
-    url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%25E2%2580%259CClaude%25E2%2580%259D%2520%2522open%2520-b%2520com.anthropic.claudefordesktop%2522/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%E2%80%9CClaude%E2%80%9D%20%22open%20-b%20com.anthropic.claudefordesktop%22&action=tuna.common-actions/run-text-as-shell-command'
+
+    [[comboMode.bindings.children]]
+    key = 'z'
+    label = 'test'
+    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%E2%80%9CWezTerm%E2%80%9D%20%22open%20-b%20com.github.wez.wezterm%22&action=tuna.common-actions/run-text-as-shell-command'
 
 [[comboMode.bindings]]
 key = 'b'
-url = 'tuna://run/TunaCore.ApplicationsCatalog.Dia/TunaCore.CommonActionsCatalog.Open'
+url = 'tuna://run?subject=tuna.applications//Applications/Dia.app&action=tuna.common-actions/open'
 
 [[comboMode.bindings]]
 iconPath = 'folder.fill.badge.gearshape'
@@ -173,44 +181,44 @@ label = 'Developer'
     [[comboMode.bindings.children]]
     key = 'e'
     label = 'env'
-    url = "tuna://run/text.fish%2520-c%2520'zw%2520~%252FProjects%252Fworkspaces%252Fenv.code-workspace'/Run%20Text%20as%20Shell%20Command"
+    url = "tuna://run?subject=text:fish%20-c%20'zw%20~%2FProjects%2Fworkspaces%2Fenv.code-workspace'&action=tuna.common-actions/run-text-as-shell-command"
 
     [[comboMode.bindings.children]]
     key = 'a'
     label = 'dc'
-    url = "tuna://run/text.fish%2520-c%2520'zw%2520~%252FProjects%252Fworkspaces%252Fdc.code-workspace'/Run%20Text%20as%20Shell%20Command"
+    url = "tuna://run?subject=text:fish%20-c%20'zw%20~%2FProjects%2Fworkspaces%2Fdc.code-workspace'&action=tuna.common-actions/run-text-as-shell-command"
 
     [[comboMode.bindings.children]]
     key = 't'
     label = 'turtle hub'
-    url = "tuna://run/text.fish%2520-c%2520'zw%2520~%252FProjects%252Fworkspaces%252Fturtle-hub.code-workspace'/Run%20Text%20as%20Shell%20Command"
+    url = "tuna://run?subject=text:fish%20-c%20'zw%20~%2FProjects%2Fworkspaces%2Fturtle-hub.code-workspace'&action=tuna.common-actions/run-text-as-shell-command"
 
 [[comboMode.bindings]]
 key = 'space'
-url = 'tuna://run/TunaSystem.AllWindowsSearchCatalog.Windows/Tuna.BasicActionsCatalog.Browse'
+url = 'tuna://run?subject=tuna.windows.search/allWindows.search&action=tuna.common-actions/browse'
 
 [[comboMode.bindings]]
 key = 'k'
-url = "tuna://stage/TunaSmartLinks.SmartLinksCatalog.Kagi/TunaSmartLinks.SmartLinksActionsCatalog.Open Smart Link\u2026/text.something"
+url = 'tuna://stage?subject=TunaSmartLinks.SmartLinksCatalog.Kagi&action=tuna.smart-links.actions/open-smart-link&target=text.something'
 
 [[comboMode.bindings]]
 key = 'c'
-url = 'tuna://run/Tuna.Internal.ClipboardProxyCatalog.Clipboard%20History/TunaCore.CommonActionsCatalog.Browse'
+url = 'tuna://run?subject=tuna.clipboard/clipboard.history.root&action=tuna.common-actions/browse'
 
 [[comboMode.bindings]]
 key = 'z'
 label = 'zed'
-url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--cycle%2520--app-name%2520%2522Zed%2522%2520%2522open%2520-b%2520dev.zed.Zed%2522/Run%20Text%20as%20Shell%20Command'
+url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--cycle%20--app-name%20%22Zed%22%20%22open%20-b%20dev.zed.Zed%22&action=tuna.common-actions/run-text-as-shell-command'
 
 [[comboMode.bindings]]
 key = 't'
 label = 'wezterm'
-url = 'tuna://run/text.yashiki%2520exec-or-focus%2520--app-name%2520%25E2%2580%259CAgterm%25E2%2580%259D%2520%2522open%2520-b%2520com.umputun.agterm%2522/Run%20Text%20as%20Shell%20Command'
+url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%E2%80%9CAgterm%E2%80%9D%20%22open%20-b%20com.umputun.agterm%22&action=tuna.common-actions/run-text-as-shell-command'
 
 [[comboMode.bindings]]
 key = 'n'
 label = 'obsidian'
-url = 'tuna://run/TunaCore.ApplicationsCatalog.Obsidian/TunaCore.CommonActionsCatalog.Open'
+url = 'tuna://run?subject=tuna.applications//Applications/Obsidian.app&action=tuna.common-actions/open'
 
 [[comboMode.bindings]]
 iconPath = 'macwindow'
@@ -220,57 +228,57 @@ label = 'Yashiki'
     [[comboMode.bindings.children]]
     key = 'f'
     label = 'fullscreen'
-    url = 'tuna://run/text.yashiki%2520window-toggle-fullscreen/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20window-toggle-fullscreen&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'l'
     label = 'float'
-    url = 'tuna://run/text.yashiki%2520window-toggle-float/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20window-toggle-float&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'c'
     label = 'close'
-    url = 'tuna://run/text.yashiki%2520window-close/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20window-close&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'm'
     label = 'zoom master'
-    url = 'tuna://run/text.yashiki%2520layout-cmd%2520zoom/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20layout-cmd%20zoom&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'r'
     label = 'retile'
-    url = 'tuna://run/text.yashiki%2520retile/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20retile&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'e'
     label = 'resync'
-    url = 'tuna://run/text.yashiki%2520tag-toggle%25200/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20tag-toggle%200&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 't'
     label = 'tatami'
-    url = 'tuna://run/text.yashiki%2520layout-set%2520tatami/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20layout-set%20tatami&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'b'
     label = 'byobu'
-    url = 'tuna://run/text.yashiki%2520layout-set%2520byobu/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20layout-set%20byobu&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'j'
     label = 'focus next'
-    url = 'tuna://run/text.yashiki%2520window-focus%2520next/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20window-focus%20next&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'k'
     label = 'focus prev'
-    url = 'tuna://run/text.yashiki%2520window-focus%2520prev/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20window-focus%20prev&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     key = 'p'
     label = 'present'
-    url = 'tuna://run/text.yashiki%2520tag-view%2520512/Run%20Text%20as%20Shell%20Command'
+    url = 'tuna://run?subject=text:yashiki%20tag-view%20512&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     iconPath = 'square.grid.3x3'
@@ -280,47 +288,47 @@ label = 'Yashiki'
         [[comboMode.bindings.children.children]]
         key = '1'
         label = 'tag 1'
-        url = 'tuna://run/text.yashiki%2520tag-view%25201/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20tag-view%201&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '2'
         label = 'tag 2'
-        url = 'tuna://run/text.yashiki%2520tag-view%25202/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20tag-view%202&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '3'
         label = 'tag 3'
-        url = 'tuna://run/text.yashiki%2520tag-view%25204/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20tag-view%204&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '4'
         label = 'tag 4'
-        url = 'tuna://run/text.yashiki%2520tag-view%25208/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20tag-view%208&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '5'
         label = 'tag 5'
-        url = 'tuna://run/text.yashiki%2520tag-view%252016/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20tag-view%2016&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '6'
         label = 'tag 6'
-        url = 'tuna://run/text.yashiki%2520tag-view%252032/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20tag-view%2032&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '7'
         label = 'tag 7'
-        url = 'tuna://run/text.yashiki%2520tag-view%252064/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20tag-view%2064&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '8'
         label = 'tag 8'
-        url = 'tuna://run/text.yashiki%2520tag-view%2520128/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20tag-view%20128&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '9'
         label = 'tag 9'
-        url = 'tuna://run/text.yashiki%2520tag-view%2520256/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20tag-view%20256&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     iconPath = 'paperplane'
@@ -330,52 +338,52 @@ label = 'Yashiki'
         [[comboMode.bindings.children.children]]
         key = '1'
         label = 'tag 1'
-        url = 'tuna://run/text.yashiki%2520window-move-to-tag%25201/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%201&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '2'
         label = 'tag 2'
-        url = 'tuna://run/text.yashiki%2520window-move-to-tag%25202/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%202&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '3'
         label = 'tag 3'
-        url = 'tuna://run/text.yashiki%2520window-move-to-tag%25204/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%204&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '4'
         label = 'tag 4'
-        url = 'tuna://run/text.yashiki%2520window-move-to-tag%25208/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%208&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '5'
         label = 'tag 5'
-        url = 'tuna://run/text.yashiki%2520window-move-to-tag%252016/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%2016&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '6'
         label = 'tag 6'
-        url = 'tuna://run/text.yashiki%2520window-move-to-tag%252032/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%2032&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '7'
         label = 'tag 7'
-        url = 'tuna://run/text.yashiki%2520window-move-to-tag%252064/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%2064&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '8'
         label = 'tag 8'
-        url = 'tuna://run/text.yashiki%2520window-move-to-tag%2520128/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%20128&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '9'
         label = 'tag 9'
-        url = 'tuna://run/text.yashiki%2520window-move-to-tag%2520256/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%20256&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '0'
         label = 'hide'
-        url = 'tuna://run/text.yashiki%2520window-move-to-tag%25200/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%200&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     iconPath = 'plusminus'
@@ -385,52 +393,52 @@ label = 'Yashiki'
         [[comboMode.bindings.children.children]]
         key = '1'
         label = 'tag 1'
-        url = 'tuna://run/text.yashiki%2520window-toggle-tag%25201/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%201&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '2'
         label = 'tag 2'
-        url = 'tuna://run/text.yashiki%2520window-toggle-tag%25202/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%202&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '3'
         label = 'tag 3'
-        url = 'tuna://run/text.yashiki%2520window-toggle-tag%25204/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%204&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '4'
         label = 'tag 4'
-        url = 'tuna://run/text.yashiki%2520window-toggle-tag%25208/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%208&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '5'
         label = 'tag 5'
-        url = 'tuna://run/text.yashiki%2520window-toggle-tag%252016/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%2016&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '6'
         label = 'tag 6'
-        url = 'tuna://run/text.yashiki%2520window-toggle-tag%252032/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%2032&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '7'
         label = 'tag 7'
-        url = 'tuna://run/text.yashiki%2520window-toggle-tag%252064/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%2064&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '8'
         label = 'tag 8'
-        url = 'tuna://run/text.yashiki%2520window-toggle-tag%2520128/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%20128&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = '9'
         label = 'tag 9'
-        url = 'tuna://run/text.yashiki%2520window-toggle-tag%2520256/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%20256&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = 'p'
         label = 'present'
-        url = 'tuna://run/text.yashiki%2520window-toggle-tag%2520512/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%20512&action=tuna.common-actions/run-text-as-shell-command'
 
     [[comboMode.bindings.children]]
     iconPath = 'display'
@@ -440,20 +448,20 @@ label = 'Yashiki'
         [[comboMode.bindings.children.children]]
         key = 'j'
         label = 'focus next'
-        url = 'tuna://run/text.yashiki%2520output-focus%2520next/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20output-focus%20next&action=tuna.common-actions/run-text-as-shell-command'
 
         [[comboMode.bindings.children.children]]
         key = 'k'
         label = 'focus prev'
-        url = 'tuna://run/text.yashiki%2520output-focus%2520prev/Run%20Text%20as%20Shell%20Command'
+        url = 'tuna://run?subject=text:yashiki%20output-focus%20prev&action=tuna.common-actions/run-text-as-shell-command'
 
 [[comboMode.bindings]]
 key = 'l'
-url = 'tuna://run/TunaCore.ApplicationsCatalog.FineTune/TunaCore.CommonActionsCatalog.Activate'
+url = 'tuna://run?subject=tuna.applications//Applications/FineTune.app&action=tuna.common-actions/activate'
 
 [[comboMode.bindings]]
 key = 'p'
-url = 'tuna://run/TunaAutomation.ScriptsCatalog.1Password%20Quick%20Access/TunaCore.CommonActionsCatalog.Run'
+url = 'tuna://run?subject=TunaAutomation.ScriptsCatalog.1Password%20Quick%20Access&action=tuna.common-actions/run'
 
 [hotkeys]
 custom = []
@@ -467,13 +475,13 @@ custom = []
     carbonModifiers = 0
 
 [settings]
+comboModeCheatsheetBehavior = 'always'
 comboModeDoublePressTrigger = 'leftOption'
 comboModeModifierTrigger = 'hyper'
 comboModeTriggerType = 'modifier'
 physicalHyperKeySource = 'capsLock'
 shelfAutoCloseWhenTasksComplete = true
 textModeTriggerType = 'disabled'
-themeIdentifier = 'com.brnbw.tuna.themes.default'
 
 [[smartLinks.entries]]
 enabled = true
