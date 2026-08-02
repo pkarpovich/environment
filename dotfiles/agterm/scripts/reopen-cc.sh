@@ -1,4 +1,8 @@
 #!/bin/bash
+# @agt.name Reopen every CC session
+# @agt.desc park the tmux side and resume every mapped conversation here
+# @agt.name Reopen this CC session -- "$AGT_SESSION_ID"
+# @agt.desc park just this conversation on the tmux side and resume it here
 # Bring Claude conversations home to agterm (single-client model): kill tmux-side
 # window claudes and stale agterm TUIs, then resume each mapped session's conversation
 # in its agterm session. With an argument - only that session (id or prefix): just

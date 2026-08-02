@@ -1,4 +1,6 @@
 #!/bin/bash
+# @agt.name Fork this Claude conversation
+# @agt.desc new session below this one, both copies continue independently
 # Fork this session's Claude conversation into a new session right after it (cmd+b):
 # same directory, `claude --resume <conv> --fork-session`, so both copies continue
 # independently. Needs a cc-map entry for the source session (written by cc-map-hook).

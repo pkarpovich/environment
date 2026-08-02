@@ -1,4 +1,8 @@
 #!/bin/sh
+# @agt.name Park every Claude on the Mac -- agterm
+# @agt.desc kill the agterm-side clients, leave the mirrored ones running
+# @agt.name Park every Claude on the tmux side -- tmux
+# @agt.desc kill the mirrored clients, the Mac side keeps working
 # Kill interactive Claude TUIs on one side of the MBP<->tmux pair (single-client model):
 #   agterm - claudes whose ancestry includes the agterm app
 #   tmux   - claudes whose ancestry includes a tmux server
