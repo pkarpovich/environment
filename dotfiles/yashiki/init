@@ -142,6 +142,11 @@ yashiki rule-add --app-id com.colliderli.iina output "$DELL_PORTRAIT"
 
 yashiki rule-add --app-id com.brnbw.Tuna float
 yashiki rule-add --app-name Finder float
+# ...and on every tag. Without this a Finder window keeps whatever tag was active
+# when it opened, so exec-or-focus activates the app while its windows stay
+# hidden on a tag you are not looking at - the launcher binding does nothing.
+# There is no sticky action; the full bitmask is how a window is made to follow.
+yashiki rule-add --app-name Finder tags 4294967295
 yashiki rule-add --app-name "System Settings" float
 yashiki rule-add --app-name "System Preferences" float
 yashiki rule-add --subrole Dialog float
