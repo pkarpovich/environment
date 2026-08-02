@@ -82,6 +82,15 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
+            "async": false
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -102,6 +111,26 @@
             "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-agent-status.sh' active --blink"
           }
         ]
+      },
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
+            "async": true
+          }
+        ]
       }
     ],
     "PreToolUse": [
@@ -112,6 +141,26 @@
             "type": "command",
             "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh thinking",
             "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
+            "async": true
           }
         ]
       }
@@ -132,7 +181,16 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.config/agterm/scripts/cc-map-unmap.sh"
+            "command": "~/.config/agterm/scripts/cc-map-unmap.fish"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
+            "async": true
           }
         ]
       }
@@ -162,7 +220,16 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.config/agterm/scripts/cc-map-hook.sh"
+            "command": "~/.config/agterm/scripts/cc-map-hook.fish"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
+            "async": true
           }
         ]
       }
@@ -173,7 +240,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.config/agterm/scripts/cc-map-hook.sh"
+            "command": "~/.config/agterm/scripts/cc-map-hook.fish"
           }
         ]
       },
@@ -204,6 +271,15 @@
             "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-agent-status.sh' completed --auto-reset"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
+            "async": true
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -221,7 +297,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.config/agterm/scripts/cc-map-hook.sh"
+            "command": "~/.config/agterm/scripts/cc-map-hook.fish"
           }
         ]
       },
@@ -252,6 +328,15 @@
             "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-agent-status.sh' active --blink"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
+            "async": true
+          }
+        ]
       }
     ]
   },
@@ -267,6 +352,7 @@
     "frontend-design@claude-plugins-official": true,
     "grafana-core@grafana-skills": true,
     "grafana-lgtm@grafana-skills": true,
+    "mattpocock-skills@mattpocock": true,
     "pg@aiguide": true,
     "planning@umputun-cc-thingz": true,
     "ralphex@ralphex": true,
@@ -283,8 +369,7 @@
     "swiftui-expert@swiftui-expert-skill": true,
     "thinking-tools@umputun-cc-thingz": true,
     "workflow@umputun-cc-thingz": true,
-    "xcode-build-skills@xcode-build-skills": true,
-    "mattpocock-skills@mattpocock": true
+    "xcode-build-skills@xcode-build-skills": true
   },
   "extraKnownMarketplaces": {
     "aiguide": {
@@ -309,6 +394,12 @@
       "source": {
         "source": "github",
         "repo": "grafana/skills"
+      }
+    },
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
       }
     },
     "ralphex": {
@@ -352,12 +443,6 @@
       "source": {
         "source": "github",
         "repo": "AvdLee/Xcode-Build-Optimization-Agent-Skill"
-      }
-    },
-    "mattpocock": {
-      "source": {
-        "source": "github",
-        "repo": "mattpocock/skills"
       }
     }
   },
