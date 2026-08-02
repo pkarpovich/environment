@@ -1,12 +1,12 @@
-function ccz --description "mirror agterm Claude sessions into tmux windows (single-client: kills agterm-side TUIs first). Inside tmux - current session; outside - the single live one (or: ccz <session>). -o/--one: pick a single agterm session, mirror it into its own tmux session (name printed on stdout) and leave the rest running on the Mac"
+function ccm --description "mirror agterm Claude sessions into tmux windows (single-client: kills agterm-side TUIs first). Inside tmux - current session; outside - the single live one (or: ccm <session>). -o/--one: pick a single agterm session, mirror it into its own tmux session (name printed on stdout) and leave the rest running on the Mac"
     argparse o/one -- $argv; or return 1
 
     if not command -q agtermctl; or not command -q jq
-        echo "ccz: needs agtermctl and jq (run on the agterm Mac)" >&2
+        echo "ccm: needs agtermctl and jq (run on the agterm Mac)" >&2
         return 1
     end
     if set -q _flag_one; and not command -q sk
-        echo "ccz: --one needs sk" >&2
+        echo "ccm: --one needs sk" >&2
         return 1
     end
 
@@ -18,7 +18,7 @@ function ccz --description "mirror agterm Claude sessions into tmux windows (sin
         test -f "$f"; and set -a mapped (path basename $f)
     end
     if test (count $mapped) -eq 0
-        echo "ccz: no mapped agterm sessions to mirror" >&2
+        echo "ccm: no mapped agterm sessions to mirror" >&2
         return 1
     end
 
@@ -32,7 +32,7 @@ function ccz --description "mirror agterm Claude sessions into tmux windows (sin
         | map(select(.value.id as $i | $mapped | index($i)))
         | .[] | "\(.value.id)\t\(.key + 1)  \(.value.name)  [\(.value.ws)]"')
     if test (count $rows) -eq 0
-        echo "ccz: no mapped agterm sessions to mirror" >&2
+        echo "ccm: no mapped agterm sessions to mirror" >&2
         return 1
     end
 
@@ -81,11 +81,11 @@ function ccz --description "mirror agterm Claude sessions into tmux windows (sin
             end
         else
             if test (count $alive) -eq 0
-                echo "ccz: no live tmux session to fill - start/attach one first" >&2
+                echo "ccm: no live tmux session to fill - start/attach one first" >&2
                 return 1
             end
             if test (count $alive) -gt 1
-                echo "ccz: several tmux sessions ("(string join ', ' $alive)") - pick one: ccz <session>" >&2
+                echo "ccm: several tmux sessions ("(string join ', ' $alive)") - pick one: ccm <session>" >&2
                 return 1
             end
             set sess $alive[1]
@@ -96,10 +96,10 @@ function ccz --description "mirror agterm Claude sessions into tmux windows (sin
         # park only when that session really holds a live Claude on the Mac
         set -l fg (printf '%s' $tree | jq -r --arg id "$entries[1]" '[.result.tree.workspaces[].sessions[]] | .[] | select(.id == $id) | (.foreground // []) | join(" ")')
         if string match -q '*claude*' -- $fg
-            ~/.config/agterm/scripts/cc-park.sh agterm $entries[1]; or return 1
+            ~/.config/agterm/scripts/cc-park.fish agterm $entries[1]; or return 1
         end
     else
-        ~/.config/agterm/scripts/cc-park.sh agterm
+        ~/.config/agterm/scripts/cc-park.fish agterm
         # replacing every mirrored session: drop all Claude windows in one pass.
         # The flags stay in the window's start command, unlike the conversation
         # id, which a resumed Claude drops when it rewrites its process title

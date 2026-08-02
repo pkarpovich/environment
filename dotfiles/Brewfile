@@ -30,7 +30,7 @@ brew "doggo"
 brew "glances"
 brew "ctop"
 brew "btop"
-# tmux: the mux ccz mirrors agterm's Claude sessions into, and the only one
+# tmux: the mux ccm mirrors agterm's Claude sessions into, and the only one
 # Moshi's chat can read (preview, agent status, session tree are tmux-only)
 brew "tmux"
 # mosh: the phone (Moshi) attaches to the tmux sessions over it - the link

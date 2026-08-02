@@ -19,9 +19,9 @@ mise run link_dotfiles     # from the repo root; or: dotbot -c ./dotfiles/instal
   Claude-session system, whose parts are spread across `agterm/`, `fish/`,
   `claude/` and `tmux/`.
 - **`fish/`** - `config.fish` plus one autoloaded function per file in
-  `fish/functions/` (`wt`, `ccl`, `ccz`, the `claude` wrapper, `zw`, `gcrb`, ...).
+  `fish/functions/` (`wt`, `ccl`, `ccm`, the `claude` wrapper, `zw`, `gcrb`, ...).
 - **`tmux/`** - the SSH/mosh attach point for the second Mac and the phone;
-  `ccz` mirrors agterm's Claude sessions into its windows. It replaced zellij
+  `ccm` mirrors agterm's Claude sessions into its windows. It replaced zellij
   because Moshi's chat integration is tmux-only.
 - **`claude/`** - Claude Code settings, hooks, agents, and custom skills;
   linked into both `~/.claude` and `~/.claude-work` profiles.
