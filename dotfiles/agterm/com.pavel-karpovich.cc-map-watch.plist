@@ -6,8 +6,8 @@
     <string>com.pavel-karpovich.cc-map-watch</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/sh</string>
-        <string>/Users/pavel.karpovich/.config/agterm/scripts/cc-map-watch.sh</string>
+        <string>/opt/homebrew/bin/fish</string>
+        <string>/Users/pavel.karpovich/.config/agterm/scripts/cc-map-watch.fish</string>
     </array>
     <key>RunAtLoad</key>
     <true/>

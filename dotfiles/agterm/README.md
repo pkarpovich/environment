@@ -32,7 +32,7 @@ session, the single source of truth for "which conversation belongs where":
   "cwd": "/Users/…/Projects/env", // where to resume it
   "pid": 81084,                   // the claude process, recorded from inside it
   "ts": 1785106870,
-  "tsession": "tuclaw-c697",      // set by ccz when it mirrors this session
+  "tsession": "tuclaw-c697",      // set by ccm when it mirrors this session
   "twindow": "@3"                 // …and the window id it created there
 }
 ```
@@ -45,15 +45,15 @@ else reads it.
 
 | File | Role | Runs when |
 |---|---|---|
-| `scripts/cc-map-hook.sh` | records conv/profile/cwd/pid, pins the session's restore command | Claude Code SessionStart, UserPromptSubmit, Stop |
-| `scripts/cc-map-unmap.sh` | forgets the entry + pin when you deliberately quit Claude | Claude Code SessionEnd (only `prompt_input_exit`/`logout`/`exit`) |
-| `scripts/cc-map-watch.sh` | deletes the entry when its agterm session is closed | launchd, subscribed to `agtermctl events --kind session.closed` |
+| `scripts/cc-map-hook.fish` | records conv/profile/cwd/pid, pins the session's restore command | Claude Code SessionStart, UserPromptSubmit, Stop |
+| `scripts/cc-map-unmap.fish` | forgets the entry + pin when you deliberately quit Claude | Claude Code SessionEnd (only `prompt_input_exit`/`logout`/`exit`) |
+| `scripts/cc-map-watch.fish` | deletes the entry when its agterm session is closed | launchd, subscribed to `agtermctl events --kind session.closed` |
 | `com.pavel-karpovich.cc-map-watch.plist` | keeps that watcher alive | login, `KeepAlive` |
-| `scripts/cc-park.sh` | kills the Claude client on one side (all sessions, or one) | called by ccz and reopen-cc |
-| `scripts/reopen-cc.sh` | brings conversations home: park, then resume each in its agterm session | `Cmd+Shift+L`>`r`, or palette "Reopen this CC session" |
-| `scripts/fork-cc.sh` | forks this session's conversation into a new session below it | `Cmd+B` |
-| `scripts/go-session.sh` | jump to the Nth sidebar row | `Cmd+Shift+1..9` |
-| `../fish/functions/ccz.fish` | mirrors agterm sessions into tmux windows (all, or `--one`) | by hand, ssh login menu, tmux leader |
+| `scripts/cc-park.fish` | kills the Claude client on one side (all sessions, or one) | called by ccm and reopen-cc |
+| `scripts/reopen-cc.fish` | brings conversations home: park, then resume each in its agterm session | `Cmd+Shift+L`>`r`, or palette "Reopen this CC session" |
+| `scripts/fork-cc.fish` | forks this session's conversation into a new session below it | `Cmd+B` |
+| `scripts/go-session.fish` | jump to the Nth sidebar row | `Cmd+Shift+1..9` |
+| `../fish/functions/ccm.fish` | mirrors agterm sessions into tmux windows (all, or `--one`) | by hand, ssh login menu, tmux leader |
 | `../fish/functions/ccl.fish` | resume this session's recorded conversation | by hand |
 | `../fish/functions/claude.fish` | tags a fresh run with an explicit session id | every `claude` invocation |
 | `../claude/settings.json` | registers the four hooks above | - |
@@ -73,13 +73,13 @@ captured argv - see the traps below for why the argv cannot be trusted.
 
 SSH in; the menu in `local.fish` offers:
 
-- `[Enter]` - mirror **everything** into tmux session `main` (`ccz main`)
+- `[Enter]` - mirror **everything** into tmux session `main` (`ccm main`)
 - `[o]` - pick **one** session; it gets its own tmux session named
-  `<project>-<id prefix>` (`ccz --one`), stable across trips, with the status
+  `<project>-<id prefix>` (`ccm --one`), stable across trips, with the status
   line off (Moshi draws its own row on the phone)
 - `[p]` / `[s]` - a plain tmux session / a bare shell
 
-Either way `ccz` parks the Mac-side Claude first (`cc-park.sh agterm …`), clears
+Either way `ccm` parks the Mac-side Claude first (`cc-park.fish agterm …`), clears
 its restore pin (so a reboot cannot resurrect it behind your back), marks the
 sidebar row with a purple diamond, and only then opens the window that resumes
 the conversation. Inside tmux, `Ctrl+Shift+L` `m` adds one more session as
@@ -105,7 +105,7 @@ must restore.
   rebuilt at any time.
 - A pin exists only while the conversation is meant to live on the Mac. Parking
   clears it; the hook re-adds it on the next start.
-- `ccz` never opens a window it could not park first - it aborts instead, because
+- `ccm` never opens a window it could not park first - it aborts instead, because
   a second client is worse than no mirror.
 - Session names are never pinned (`session rename`), otherwise Claude's live
   title stops updating in the sidebar.
@@ -127,7 +127,7 @@ These are empirical, each cost a debugging session:
 - **Sessions created with `--no-select` are lazy**: no pty, no process, until
   they are selected. `session type` into one fails with "session not realized".
 - **tmux owns the terminal title**, so a Claude running inside a tmux window
-  cannot show its live title in the agterm sidebar. `ccz` therefore stamps the
+  cannot show its live title in the agterm sidebar. `ccm` therefore stamps the
   window name once, at mirror time (`allow-rename` stays off).
 - **fish splits command substitution on newlines** - a multi-line value passed as
   one argument (`--arg mapped (…)`) silently becomes many arguments.
@@ -145,7 +145,7 @@ These are empirical, each cost a debugging session:
 ls ~/.local/state/agterm/cc-map/                    # who is mapped
 jq . ~/.local/state/agterm/cc-map/<session-id>      # one entry
 agtermctl tree --json | jq '[.result.tree.workspaces[].sessions[]]'   # foreground, restoreCommand, status
-CC_PARK_DRYRUN=1 cc-park.sh agterm <session-id>     # what a park would kill
+CC_PARK_DRYRUN=1 cc-park.fish agterm <session-id>     # what a park would kill
 tmux list-sessions                                  # the other side
 tmux list-panes -s -t <session> -F '#{window_id}|#{pane_start_command}'  # what is mirrored
 tail -f /tmp/cc-map-watch.log                       # the events watcher
