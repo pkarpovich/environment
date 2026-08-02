@@ -33,3 +33,27 @@ retribution.localhost {
 content-oracle.localhost {
     reverse_proxy localhost:50201
 }
+
+sahara.localhost {
+    reverse_proxy localhost:50310
+}
+
+sahara-api.localhost {
+    reverse_proxy localhost:50311
+}
+
+sahara-llm-proxy.localhost {
+    reverse_proxy localhost:50312
+}
+
+agent-sdk-runtime.localhost {
+    reverse_proxy localhost:50320
+}
+
+agent-sdk-runtime-llm-proxy.localhost {
+    reverse_proxy localhost:50321
+}
+
+pkarpovich-dev.localhost {
+    reverse_proxy localhost:50400
+}
