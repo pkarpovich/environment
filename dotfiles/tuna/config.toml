@@ -1,5 +1,3 @@
-schemaVersion = 4
-
 [catalogConfiguration]
 customFolders = []
 customItems = []
@@ -27,455 +25,1377 @@ sortOrders = []
 
 [[comboMode.bindings]]
 iconPath = 'star.fill'
+id = 'F87F7F5C-A453-4F15-8BB5-8D40D7D1997B'
 key = 'a'
 label = 'Prompts'
 
-    [[comboMode.bindings.children]]
-    key = 'r'
-    label = 'ru'
-    url = 'tuna://run?subject=text:shortcuts%20run%20%22Edith%20-%20Fix%20RU%22&action=tuna.common-actions/run-text-as-shell-command'
+    [comboMode.bindings.destination]
+    type = 'group'
 
-    [[comboMode.bindings.children]]
-    key = 'e'
-    label = 'en'
-    url = 'tuna://run?subject=text:shortcuts%20run%20%22Edith%20-%20Fix%20EN%22&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'textformat'
+        id = 'C50979AC-15F2-4FF1-979D-079A11B53511'
+        key = 'r'
+        label = 'ru'
 
-    [[comboMode.bindings.children]]
-    key = 'c'
-    label = 'next'
-    url = 'tuna://run?subject=text:shortcuts%20run%20%22Edith%20-%20Continue%22&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:shortcuts run "Edith - Fix RU"' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'character'
+        id = 'DF7316E8-AD27-4F4B-A3FF-8ACD31C1AA06'
+        key = 'e'
+        label = 'en'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:shortcuts run "Edith - Fix EN"' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'arrow.forward.circle'
+        id = '96A9A76B-44F0-4914-ADC8-DB6891665C66'
+        key = 'c'
+        label = 'next'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:shortcuts run "Edith - Continue"' ]
+                type = 'savedCommand'
 
 [[comboMode.bindings]]
 iconPath = 'folder'
+id = 'E6AD5242-7830-4A6A-A003-B24EC4A5E5AF'
 key = 'f'
 label = 'folders'
 
-    [[comboMode.bindings.children]]
-    key = 'h'
-    url = 'tuna://run?subject=path.%252FUsers%252Fpavel.karpovich&action=Open'
+    [comboMode.bindings.destination]
+    type = 'group'
 
-    [[comboMode.bindings.children]]
-    key = 'f'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%E2%80%9CFinder%E2%80%9D%20%22open%20-b%20com.apple.finder%22&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'house'
+        id = '38442821-DDCE-47F8-9A79-306A654083D0'
+        key = 'h'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/open'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'path:/Users/pavel.karpovich' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/System/Library/CoreServices/Finder.app'
+        id = 'D92CC8FD-75AB-4CC0-BD5A-F9D019FDEDDD'
+        key = 'f'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ "text:yashiki exec-or-focus --app-name \u201CFinder\u201D \"open -b com.apple.finder\"" ]
+                type = 'savedCommand'
 
 [[comboMode.bindings]]
 iconPath = 'cursorarrow.and.square.on.square.dashed'
+id = 'ABE717DE-27C3-400D-9961-F05030E19EC9'
 key = 's'
 label = 'Screenshot'
 
-    [[comboMode.bindings.children]]
-    key = 'a'
-    label = 'area'
-    url = 'tuna://run?subject=cleanshot.commands/capture-area&action=tuna.common-actions/run'
+    [comboMode.bindings.destination]
+    type = 'group'
 
-    [[comboMode.bindings.children]]
-    key = 'w'
-    label = 'window'
-    url = 'tuna://run?subject=cleanshot.commands/capture-window&action=tuna.common-actions/run'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'rectangle.dashed'
+        id = '06A6DE61-2248-461A-8E9B-1726428C53C6'
+        key = 'a'
+        label = 'area'
 
-    [[comboMode.bindings.children]]
-    key = 't'
-    label = 'text'
-    url = 'tuna://run?subject=cleanshot.commands/capture-text-ocr&action=tuna.common-actions/run'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-    [[comboMode.bindings.children]]
-    key = 'v'
-    label = 'video'
-    url = 'tuna://run?subject=cleanshot.commands/record-screen&action=tuna.common-actions/run'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'cleanshot.commands/capture-area' ]
+                type = 'savedCommand'
 
-    [[comboMode.bindings.children]]
-    key = 'm'
-    label = 'move'
-    url = 'tuna://run?subject=cleanshot.commands/scrolling-capture&action=tuna.common-actions/run'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'macwindow'
+        id = 'B2716459-DFD1-4070-92A3-9CBA95643077'
+        key = 'w'
+        label = 'window'
 
-    [[comboMode.bindings.children]]
-    key = 's'
-    label = 'timer'
-    url = 'tuna://run?subject=cleanshot.commands/self-timer-capture&action=tuna.common-actions/run'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'cleanshot.commands/capture-window' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'text.viewfinder'
+        id = 'DB98D46E-0C87-4B2D-85BF-FE25330BC3A6'
+        key = 't'
+        label = 'text'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'cleanshot.commands/capture-text-ocr' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'record.circle'
+        id = '93387263-4166-4F97-A6BF-6F3013EACD06'
+        key = 'v'
+        label = 'video'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'cleanshot.commands/record-screen' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'scroll'
+        id = 'B141A06E-839A-4FB1-8203-79EF483CC2B9'
+        key = 'm'
+        label = 'move'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'cleanshot.commands/scrolling-capture' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'timer'
+        id = '70C56103-FE63-4B2D-8532-15A8AE410875'
+        key = 's'
+        label = 'timer'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'cleanshot.commands/self-timer-capture' ]
+                type = 'savedCommand'
 
 [[comboMode.bindings]]
 iconPath = 'message'
+id = '2D7BB66F-6147-4C05-A473-080C4DDFEC85'
 key = 'm'
 label = 'Messaging'
 
-    [[comboMode.bindings.children]]
-    key = 's'
-    label = 'slack'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Slack%22%20%20%20%20%20%20%20%20%20%20%20%22open%20-b%20com.tinyspeck.slackmacgap%22&action=tuna.common-actions/run-text-as-shell-command'
+    [comboMode.bindings.destination]
+    type = 'group'
 
-    [[comboMode.bindings.children]]
-    key = 't'
-    label = 'telegram'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Telegram%22%20%20%20%20%20%20%20%20%22open%20-b%20ru.keepcoder.Telegram%22&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Slack.app'
+        id = 'AE524AFC-E6F9-4C53-BDF1-B33EADCB7175'
+        key = 's'
+        label = 'slack'
 
-    [[comboMode.bindings.children]]
-    key = 'm'
-    label = 'teams'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Microsoft%20Teams%22%20%22open%20-b%20com.microsoft.teams2%22&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-    [[comboMode.bindings.children]]
-    key = 'w'
-    label = 'whatsapp'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22WhatsApp%22%20%20%20%20%20%20%20%20%22open%20-b%20net.whatsapp.WhatsApp%22&action=tuna.common-actions/run-text-as-shell-command'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "Slack"           "open -b com.tinyspeck.slackmacgap"' ]
+                type = 'savedCommand'
 
-    [[comboMode.bindings.children]]
-    key = 'e'
-    label = 'mail'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Mail%22%20%22open%20-b%20com.apple.mail%22&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Telegram.app'
+        id = '67C7C301-B5C0-44DB-8039-D4573B4D67CB'
+        key = 't'
+        label = 'telegram'
 
-    [[comboMode.bindings.children]]
-    key = 'c'
-    label = 'calendar'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Calendar%22%20%22open%20-b%20com.apple.iCal%22&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "Telegram"        "open -b ru.keepcoder.Telegram"' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Microsoft Teams.app'
+        id = '5F8A57CA-DC1A-4479-A7DF-A0C07AD0C12A'
+        key = 'm'
+        label = 'teams'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "Microsoft Teams" "open -b com.microsoft.teams2"' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/WhatsApp.app'
+        id = '3FD923EB-9576-47F9-A2BC-34F0D163363D'
+        key = 'w'
+        label = 'whatsapp'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "WhatsApp"        "open -b net.whatsapp.WhatsApp"' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/System/Applications/Mail.app'
+        id = 'FD17DBCA-E8E5-4856-A7CE-171C675DA91B'
+        key = 'e'
+        label = 'mail'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "Mail" "open -b com.apple.mail"' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/System/Applications/Calendar.app'
+        id = '71A80577-0A81-4F47-ACC4-01FCB23B1005'
+        key = 'c'
+        label = 'calendar'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "Calendar" "open -b com.apple.iCal"' ]
+                type = 'savedCommand'
 
 [[comboMode.bindings]]
 iconPath = 'square.grid.2x2'
+id = '81D57FAA-5A69-4EA1-82CB-AA2E13C4EA37'
 key = 'o'
 label = 'Apps'
 
-    [[comboMode.bindings.children]]
-    key = 'a'
-    label = 'simulator'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Simulator%22%20%22open%20-b%20com.apple.iphonesimulator%22&action=tuna.common-actions/run-text-as-shell-command'
+    [comboMode.bindings.destination]
+    type = 'group'
 
-    [[comboMode.bindings.children]]
-    key = 'g'
-    label = 'sublime merge'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Sublime%20Merge%22%20%22open%20-b%20com.sublimemerge%22&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'
+        id = '0F8C9BAF-F8BE-4761-B013-7EBCF90095A6'
+        key = 'a'
+        label = 'simulator'
 
-    [[comboMode.bindings.children]]
-    key = 'm'
-    label = 'spotify'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Spotify%22%20%22open%20-b%20com.spotify.client%22&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-    [[comboMode.bindings.children]]
-    key = 'v'
-    label = 'parallels'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Parallels%20Desktop%22%20%22open%20-b%20com.parallels.desktop.console%22&action=tuna.common-actions/run-text-as-shell-command'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "Simulator" "open -b com.apple.iphonesimulator"' ]
+                type = 'savedCommand'
 
-    [[comboMode.bindings.children]]
-    key = 'h'
-    label = 'bruno'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%22Bruno%22%20%22open%20-a%20%2FApplications%2FBruno.app%22&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Sublime Merge.app'
+        id = 'E21A8B3F-92F3-4104-B6C6-FBAAB7C2E2BA'
+        key = 'g'
+        label = 'sublime merge'
 
-    [[comboMode.bindings.children]]
-    key = 'o'
-    label = 'output device'
-    url = 'tuna://run?subject=tuna.audio-output-devices/audio-devices.output&action=tuna.common-actions/browse'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-    [[comboMode.bindings.children]]
-    key = 'i'
-    label = 'input device'
-    url = 'tuna://run?subject=tuna.audio-input-devices/audio-devices.input&action=tuna.common-actions/browse'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "Sublime Merge" "open -b com.sublimemerge"' ]
+                type = 'savedCommand'
 
-    [[comboMode.bindings.children]]
-    key = 't'
-    label = 'wezterm'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%E2%80%9CWezterm%E2%80%9D%20%22open%20-b%20com.github.wez.wezterm%22&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Spotify.app'
+        id = '55E7FB52-FB1A-4088-8C62-BD21218F868D'
+        key = 'm'
+        label = 'spotify'
 
-    [[comboMode.bindings.children]]
-    key = 'c'
-    label = 'claude desktop'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%E2%80%9CClaude%E2%80%9D%20%22open%20-b%20com.anthropic.claudefordesktop%22&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-    [[comboMode.bindings.children]]
-    key = 'z'
-    label = 'test'
-    url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%E2%80%9CWezTerm%E2%80%9D%20%22open%20-b%20com.github.wez.wezterm%22&action=tuna.common-actions/run-text-as-shell-command'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "Spotify" "open -b com.spotify.client"' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Parallels Desktop.app'
+        id = '161B4CD9-24B2-416A-827B-9E5B8A1F8970'
+        key = 'v'
+        label = 'parallels'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [
+                    'text:yashiki exec-or-focus --app-name "Parallels Desktop" "open -b com.parallels.desktop.console"'
+                ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Bruno.app'
+        id = '2B1A09F9-C176-4910-8301-2BC4E5150DD9'
+        key = 'h'
+        label = 'bruno'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "Bruno" "open -a /Applications/Bruno.app"' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'speaker.wave.2'
+        id = 'E3FF94B9-AD16-4FE8-B858-DBA138097201'
+        key = 'o'
+        label = 'output device'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/browse'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'tuna.audio-output-devices/audio-devices.output' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'mic'
+        id = '1AE34C9A-8331-49BE-9C83-6BC49253C6CC'
+        key = 'i'
+        label = 'input device'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/browse'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'tuna.audio-input-devices/audio-devices.input' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/WezTerm.app'
+        id = '91DF8F40-2E07-41A2-9C57-661A620458D1'
+        key = 't'
+        label = 'wezterm'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ "text:yashiki exec-or-focus --app-name \u201CWezterm\u201D \"open -b com.github.wez.wezterm\"" ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Claude.app'
+        id = '33CA220E-1381-473F-8553-99A9AB7610D0'
+        key = 'c'
+        label = 'claude desktop'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ "text:yashiki exec-or-focus --app-name \u201CClaude\u201D \"open -b com.anthropic.claudefordesktop\"" ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/WezTerm.app'
+        id = '37A3C18B-C300-4D17-B1C7-22BF09FD7397'
+        key = 'z'
+        label = 'test'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ "text:yashiki exec-or-focus --app-name \u201CWezTerm\u201D \"open -b com.github.wez.wezterm\"" ]
+                type = 'savedCommand'
 
 [[comboMode.bindings]]
+iconPath = '/Applications/Dia.app'
+id = '649FC15A-CE3C-4FB1-86D1-CE695B5EBF89'
 key = 'b'
-url = 'tuna://run?subject=tuna.applications//Applications/Dia.app&action=tuna.common-actions/open'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/open'
+        behavior = 'run'
+        presentation = 'automatic'
+        subjectIdentifiers = [ 'path:/Applications/Dia.app' ]
+        type = 'savedCommand'
 
 [[comboMode.bindings]]
 iconPath = 'folder.fill.badge.gearshape'
+id = 'F3328D2E-0F8B-4CEE-A39D-FF7DA02CD9B6'
 key = 'd'
 label = 'Developer'
 
-    [[comboMode.bindings.children]]
-    key = 'e'
-    label = 'env'
-    url = "tuna://run?subject=text:fish%20-c%20'zw%20~%2FProjects%2Fworkspaces%2Fenv.code-workspace'&action=tuna.common-actions/run-text-as-shell-command"
+    [comboMode.bindings.destination]
+    type = 'group'
 
-    [[comboMode.bindings.children]]
-    key = 'a'
-    label = 'dc'
-    url = "tuna://run?subject=text:fish%20-c%20'zw%20~%2FProjects%2Fworkspaces%2Fdc.code-workspace'&action=tuna.common-actions/run-text-as-shell-command"
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Zed.app'
+        id = 'D0C15BB9-B424-49F4-BC72-F34FFEBC1ADB'
+        key = 'e'
+        label = 'env'
 
-    [[comboMode.bindings.children]]
-    key = 't'
-    label = 'turtle hub'
-    url = "tuna://run?subject=text:fish%20-c%20'zw%20~%2FProjects%2Fworkspaces%2Fturtle-hub.code-workspace'&action=tuna.common-actions/run-text-as-shell-command"
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ "text:fish -c 'zw ~/Projects/workspaces/env.code-workspace'" ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Zed.app'
+        id = 'AFBE3613-7932-4DD8-A136-933B1784B639'
+        key = 'a'
+        label = 'dc'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ "text:fish -c 'zw ~/Projects/workspaces/dc.code-workspace'" ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/Zed.app'
+        id = '2C50644E-B1B6-40E8-8C3E-01B127FD776C'
+        key = 't'
+        label = 'turtle hub'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ "text:fish -c 'zw ~/Projects/workspaces/turtle-hub.code-workspace'" ]
+                type = 'savedCommand'
 
 [[comboMode.bindings]]
+iconPath = 'macwindow.on.rectangle'
+id = '4747578A-6083-484D-AE08-67D015AD51EE'
 key = 'space'
-url = 'tuna://run?subject=tuna.windows.search/allWindows.search&action=tuna.common-actions/browse'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/browse'
+        behavior = 'run'
+        presentation = 'automatic'
+        subjectIdentifiers = [ 'tuna.windows.search/allWindows.search' ]
+        type = 'savedCommand'
 
 [[comboMode.bindings]]
-key = 'k'
-url = 'tuna://stage?subject=TunaSmartLinks.SmartLinksCatalog.Kagi&action=tuna.smart-links.actions/open-smart-link&target=text.something'
-
-[[comboMode.bindings]]
+iconPath = 'doc.on.clipboard'
+id = '9A9A837E-0F5B-4BF8-AC2E-DB729D40E8ED'
 key = 'c'
-url = 'tuna://run?subject=tuna.clipboard/clipboard.history.root&action=tuna.common-actions/browse'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/browse'
+        behavior = 'run'
+        presentation = 'automatic'
+        subjectIdentifiers = [ 'tuna.clipboard/clipboard.history.root' ]
+        type = 'savedCommand'
 
 [[comboMode.bindings]]
+iconPath = '/Applications/Zed.app'
+id = '0B25E72D-F1F2-4976-9E53-04956BD42C9C'
 key = 'z'
 label = 'zed'
-url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--cycle%20--app-name%20%22Zed%22%20%22open%20-b%20dev.zed.Zed%22&action=tuna.common-actions/run-text-as-shell-command'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+        behavior = 'run'
+        presentation = 'automatic'
+        subjectIdentifiers = [ 'text:yashiki exec-or-focus --cycle --app-name "Zed" "open -b dev.zed.Zed"' ]
+        type = 'savedCommand'
 
 [[comboMode.bindings]]
+iconPath = '/Applications/agterm.app'
+id = '848CF6F0-8152-4BAF-A15A-CE33B106D21B'
 key = 't'
 label = 'wezterm'
-url = 'tuna://run?subject=text:yashiki%20exec-or-focus%20--app-name%20%E2%80%9CAgterm%E2%80%9D%20%22open%20-b%20com.umputun.agterm%22&action=tuna.common-actions/run-text-as-shell-command'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+        behavior = 'run'
+        presentation = 'automatic'
+        subjectIdentifiers = [ "text:yashiki exec-or-focus --app-name \u201CAgterm\u201D \"open -b com.umputun.agterm\"" ]
+        type = 'savedCommand'
 
 [[comboMode.bindings]]
+iconPath = '/Applications/Obsidian.app'
+id = '10B3052D-B05B-4892-845D-60948E8D1FDB'
 key = 'n'
 label = 'obsidian'
-url = 'tuna://run?subject=tuna.applications//Applications/Obsidian.app&action=tuna.common-actions/open'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/open'
+        behavior = 'run'
+        presentation = 'automatic'
+        subjectIdentifiers = [ 'path:/Applications/Obsidian.app' ]
+        type = 'savedCommand'
 
 [[comboMode.bindings]]
 iconPath = 'macwindow'
+id = '7A8A0567-F3D9-4B57-8D31-33E36D925D92'
 key = 'w'
 label = 'Yashiki'
 
-    [[comboMode.bindings.children]]
-    key = 'f'
-    label = 'fullscreen'
-    url = 'tuna://run?subject=text:yashiki%20window-toggle-fullscreen&action=tuna.common-actions/run-text-as-shell-command'
+    [comboMode.bindings.destination]
+    type = 'group'
 
-    [[comboMode.bindings.children]]
-    key = 'l'
-    label = 'float'
-    url = 'tuna://run?subject=text:yashiki%20window-toggle-float&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'arrow.up.left.and.arrow.down.right'
+        id = '940DE3FD-8FC9-4CF8-A9D9-92856633AC4D'
+        key = 'f'
+        label = 'fullscreen'
 
-    [[comboMode.bindings.children]]
-    key = 'c'
-    label = 'close'
-    url = 'tuna://run?subject=text:yashiki%20window-close&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-    [[comboMode.bindings.children]]
-    key = 'm'
-    label = 'zoom master'
-    url = 'tuna://run?subject=text:yashiki%20layout-cmd%20zoom&action=tuna.common-actions/run-text-as-shell-command'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki window-toggle-fullscreen' ]
+                type = 'savedCommand'
 
-    [[comboMode.bindings.children]]
-    key = 'r'
-    label = 'retile'
-    url = 'tuna://run?subject=text:yashiki%20retile&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'rectangle.on.rectangle'
+        id = '5058E6AE-8DA8-4E29-8105-A05ACA11104F'
+        key = 'l'
+        label = 'float'
 
-    [[comboMode.bindings.children]]
-    key = 'e'
-    label = 'resync'
-    url = 'tuna://run?subject=text:yashiki%20tag-toggle%200&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-    [[comboMode.bindings.children]]
-    key = 't'
-    label = 'tatami'
-    url = 'tuna://run?subject=text:yashiki%20layout-set%20tatami&action=tuna.common-actions/run-text-as-shell-command'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki window-toggle-float' ]
+                type = 'savedCommand'
 
-    [[comboMode.bindings.children]]
-    key = 'b'
-    label = 'byobu'
-    url = 'tuna://run?subject=text:yashiki%20layout-set%20byobu&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'xmark'
+        id = 'C6DE567A-2B96-4A89-A0E0-1E12057B6788'
+        key = 'c'
+        label = 'close'
 
-    [[comboMode.bindings.children]]
-    key = 'j'
-    label = 'focus next'
-    url = 'tuna://run?subject=text:yashiki%20window-focus%20next&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-    [[comboMode.bindings.children]]
-    key = 'k'
-    label = 'focus prev'
-    url = 'tuna://run?subject=text:yashiki%20window-focus%20prev&action=tuna.common-actions/run-text-as-shell-command'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki window-close' ]
+                type = 'savedCommand'
 
-    [[comboMode.bindings.children]]
-    key = 'p'
-    label = 'present'
-    url = 'tuna://run?subject=text:yashiki%20tag-view%20512&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'square.split.2x1'
+        id = '5877E331-5305-4425-A6D6-1499AC0167B2'
+        key = 'm'
+        label = 'zoom master'
 
-    [[comboMode.bindings.children]]
-    iconPath = 'square.grid.3x3'
-    key = 'v'
-    label = 'view tag'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-        [[comboMode.bindings.children.children]]
-        key = '1'
-        label = 'tag 1'
-        url = 'tuna://run?subject=text:yashiki%20tag-view%201&action=tuna.common-actions/run-text-as-shell-command'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki layout-cmd zoom' ]
+                type = 'savedCommand'
 
-        [[comboMode.bindings.children.children]]
-        key = '2'
-        label = 'tag 2'
-        url = 'tuna://run?subject=text:yashiki%20tag-view%202&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'arrow.triangle.2.circlepath'
+        id = 'A0D86FB2-C791-4BD6-89FC-71ACC14770B4'
+        key = 'r'
+        label = 'retile'
 
-        [[comboMode.bindings.children.children]]
-        key = '3'
-        label = 'tag 3'
-        url = 'tuna://run?subject=text:yashiki%20tag-view%204&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-        [[comboMode.bindings.children.children]]
-        key = '4'
-        label = 'tag 4'
-        url = 'tuna://run?subject=text:yashiki%20tag-view%208&action=tuna.common-actions/run-text-as-shell-command'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki retile' ]
+                type = 'savedCommand'
 
-        [[comboMode.bindings.children.children]]
-        key = '5'
-        label = 'tag 5'
-        url = 'tuna://run?subject=text:yashiki%20tag-view%2016&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'arrow.clockwise'
+        id = '3BD8B677-2724-49E3-993D-8585AD742BDB'
+        key = 'e'
+        label = 'resync'
 
-        [[comboMode.bindings.children.children]]
-        key = '6'
-        label = 'tag 6'
-        url = 'tuna://run?subject=text:yashiki%20tag-view%2032&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-        [[comboMode.bindings.children.children]]
-        key = '7'
-        label = 'tag 7'
-        url = 'tuna://run?subject=text:yashiki%20tag-view%2064&action=tuna.common-actions/run-text-as-shell-command'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki tag-toggle 0' ]
+                type = 'savedCommand'
 
-        [[comboMode.bindings.children.children]]
-        key = '8'
-        label = 'tag 8'
-        url = 'tuna://run?subject=text:yashiki%20tag-view%20128&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'rectangle.split.3x1'
+        id = '16F9597D-4B57-4B0C-BE6A-11F3FD379D14'
+        key = 't'
+        label = 'tatami'
 
-        [[comboMode.bindings.children.children]]
-        key = '9'
-        label = 'tag 9'
-        url = 'tuna://run?subject=text:yashiki%20tag-view%20256&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-    [[comboMode.bindings.children]]
-    iconPath = 'paperplane'
-    key = 's'
-    label = 'send to tag'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki layout-set tatami' ]
+                type = 'savedCommand'
 
-        [[comboMode.bindings.children.children]]
-        key = '1'
-        label = 'tag 1'
-        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%201&action=tuna.common-actions/run-text-as-shell-command'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'rectangle.split.2x1'
+        id = 'BB120290-3047-4212-82F4-79AD4D589BFC'
+        key = 'b'
+        label = 'byobu'
 
-        [[comboMode.bindings.children.children]]
-        key = '2'
-        label = 'tag 2'
-        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%202&action=tuna.common-actions/run-text-as-shell-command'
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
 
-        [[comboMode.bindings.children.children]]
-        key = '3'
-        label = 'tag 3'
-        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%204&action=tuna.common-actions/run-text-as-shell-command'
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki layout-set byobu' ]
+                type = 'savedCommand'
 
-        [[comboMode.bindings.children.children]]
-        key = '4'
-        label = 'tag 4'
-        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%208&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '5'
-        label = 'tag 5'
-        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%2016&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '6'
-        label = 'tag 6'
-        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%2032&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '7'
-        label = 'tag 7'
-        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%2064&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '8'
-        label = 'tag 8'
-        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%20128&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '9'
-        label = 'tag 9'
-        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%20256&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '0'
-        label = 'hide'
-        url = 'tuna://run?subject=text:yashiki%20window-move-to-tag%200&action=tuna.common-actions/run-text-as-shell-command'
-
-    [[comboMode.bindings.children]]
-    iconPath = 'plusminus'
-    key = 'g'
-    label = 'toggle tag'
-
-        [[comboMode.bindings.children.children]]
-        key = '1'
-        label = 'tag 1'
-        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%201&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '2'
-        label = 'tag 2'
-        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%202&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '3'
-        label = 'tag 3'
-        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%204&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '4'
-        label = 'tag 4'
-        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%208&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '5'
-        label = 'tag 5'
-        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%2016&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '6'
-        label = 'tag 6'
-        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%2032&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '7'
-        label = 'tag 7'
-        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%2064&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '8'
-        label = 'tag 8'
-        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%20128&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = '9'
-        label = 'tag 9'
-        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%20256&action=tuna.common-actions/run-text-as-shell-command'
-
-        [[comboMode.bindings.children.children]]
-        key = 'p'
-        label = 'present'
-        url = 'tuna://run?subject=text:yashiki%20window-toggle-tag%20512&action=tuna.common-actions/run-text-as-shell-command'
-
-    [[comboMode.bindings.children]]
-    iconPath = 'display'
-    key = 'o'
-    label = 'monitor'
-
-        [[comboMode.bindings.children.children]]
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'arrow.right'
+        id = '9C29EF37-3FF0-45B7-9BDE-CC5A95E67DEA'
         key = 'j'
         label = 'focus next'
-        url = 'tuna://run?subject=text:yashiki%20output-focus%20next&action=tuna.common-actions/run-text-as-shell-command'
 
-        [[comboMode.bindings.children.children]]
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki window-focus next' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'arrow.left'
+        id = '6DF5B81E-D3BE-45A8-98E1-56D13FE397BC'
         key = 'k'
         label = 'focus prev'
-        url = 'tuna://run?subject=text:yashiki%20output-focus%20prev&action=tuna.common-actions/run-text-as-shell-command'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki window-focus prev' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'play.rectangle'
+        id = 'F4220403-6C4E-4BE3-9E6A-ABE0DC9FEC63'
+        key = 'p'
+        label = 'present'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:yashiki tag-view 512' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'square.grid.3x3'
+        id = '0878CBDF-B65A-4265-8379-3500BFF94F79'
+        key = 'v'
+        label = 'view tag'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'group'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '1.square'
+                id = '9547878D-5B45-44F2-9ED6-D1BFF84F7A2E'
+                key = '1'
+                label = 'tag 1'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki tag-view 1' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '2.square'
+                id = '10BF6419-1BF8-4353-AC99-FCB4E939B584'
+                key = '2'
+                label = 'tag 2'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki tag-view 2' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '3.square'
+                id = '49C3AFF9-8D72-4E2D-83DF-68F9EB142B4A'
+                key = '3'
+                label = 'tag 3'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki tag-view 4' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '4.square'
+                id = '55D7E090-7F47-45CD-AB2A-86C6827D87F0'
+                key = '4'
+                label = 'tag 4'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki tag-view 8' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '5.square'
+                id = '3D9E5524-380C-45E4-8950-8B8678D2DC10'
+                key = '5'
+                label = 'tag 5'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki tag-view 16' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '6.square'
+                id = 'EA8E43AA-1678-49EA-B369-11A0A5511DC8'
+                key = '6'
+                label = 'tag 6'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki tag-view 32' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '7.square'
+                id = 'D8A5B175-A722-424E-98F3-69E2245F78E0'
+                key = '7'
+                label = 'tag 7'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki tag-view 64' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '8.square'
+                id = 'F4E90E83-4297-4DD5-905D-BB52AD239801'
+                key = '8'
+                label = 'tag 8'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki tag-view 128' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '9.square'
+                id = '0EFDF2C5-DCC6-4454-98AF-E28A03621DA9'
+                key = '9'
+                label = 'tag 9'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki tag-view 256' ]
+                        type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'paperplane'
+        id = '032BDDB5-11BF-4466-AC7B-0F012CF6AE18'
+        key = 's'
+        label = 'send to tag'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'group'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '1.circle'
+                id = '3F591656-34FE-4D59-8F76-F3D0A86FA73C'
+                key = '1'
+                label = 'tag 1'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-move-to-tag 1' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '2.circle'
+                id = 'C2452C22-517A-4CF1-B9C6-D69E8B52A84C'
+                key = '2'
+                label = 'tag 2'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-move-to-tag 2' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '3.circle'
+                id = '05A47E3C-41BD-4956-92F1-BE306D93678E'
+                key = '3'
+                label = 'tag 3'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-move-to-tag 4' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '4.circle'
+                id = '5F9575D2-0FAE-467B-A6B5-0D2EABF87994'
+                key = '4'
+                label = 'tag 4'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-move-to-tag 8' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '5.circle'
+                id = '74CA745C-3228-4374-B98D-D44B3734F536'
+                key = '5'
+                label = 'tag 5'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-move-to-tag 16' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '6.circle'
+                id = 'B063C4DD-10F5-4762-ADF0-789848D9D0DA'
+                key = '6'
+                label = 'tag 6'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-move-to-tag 32' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '7.circle'
+                id = '36D5B78F-7677-4539-9BA1-513687C30B0C'
+                key = '7'
+                label = 'tag 7'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-move-to-tag 64' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '8.circle'
+                id = 'A286AA4F-83D6-4158-8E5D-048ABEE7938C'
+                key = '8'
+                label = 'tag 8'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-move-to-tag 128' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '9.circle'
+                id = 'F9FA37F7-C35C-4B85-BF12-4C93F3FC943D'
+                key = '9'
+                label = 'tag 9'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-move-to-tag 256' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = 'eye.slash'
+                id = '971753DD-CE08-43FB-9045-7B73C59F6CAF'
+                key = '0'
+                label = 'hide'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-move-to-tag 0' ]
+                        type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'plusminus'
+        id = '24B367C3-435A-4942-9AE8-2F3DD22A38E6'
+        key = 'g'
+        label = 'toggle tag'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'group'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '1.square.fill'
+                id = 'F4F8FB6D-A447-4574-B596-D4670864D856'
+                key = '1'
+                label = 'tag 1'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-toggle-tag 1' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '2.square.fill'
+                id = '908F04D4-F2AF-43A7-B708-135C9AE2D676'
+                key = '2'
+                label = 'tag 2'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-toggle-tag 2' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '3.square.fill'
+                id = '3E040DCA-95B1-4F99-9BD2-AF7FFA773202'
+                key = '3'
+                label = 'tag 3'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-toggle-tag 4' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '4.square.fill'
+                id = '3EB45292-96F1-4ED3-8B1F-A3A2A02D2448'
+                key = '4'
+                label = 'tag 4'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-toggle-tag 8' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '5.square.fill'
+                id = 'F2AD5C93-0DFB-4221-AA3C-A62C3295C2D6'
+                key = '5'
+                label = 'tag 5'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-toggle-tag 16' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '6.square.fill'
+                id = 'F9C6DEAA-6E84-4524-98ED-CD7806155C6D'
+                key = '6'
+                label = 'tag 6'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-toggle-tag 32' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '7.square.fill'
+                id = '41FED798-1C2D-4F19-BAE1-B35E62164C43'
+                key = '7'
+                label = 'tag 7'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-toggle-tag 64' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '8.square.fill'
+                id = '8D97C9D0-1A43-41E3-9BD7-5C0C2EB8ACA2'
+                key = '8'
+                label = 'tag 8'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-toggle-tag 128' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = '9.square.fill'
+                id = '02DE18CD-83F1-410F-B0E0-2E0A881EA249'
+                key = '9'
+                label = 'tag 9'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-toggle-tag 256' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = 'plus.rectangle.on.rectangle'
+                id = '6A19E5B5-971C-4314-B18D-B8F2303A281F'
+                key = 'p'
+                label = 'present'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki window-toggle-tag 512' ]
+                        type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'display'
+        id = 'B8E5F53B-A1FD-487F-9AC2-342425B90202'
+        key = 'o'
+        label = 'monitor'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'group'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = 'arrow.right.to.line'
+                id = '113F74BB-E126-4F8F-9E87-42401F37014E'
+                key = 'j'
+                label = 'focus next'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki output-focus next' ]
+                        type = 'savedCommand'
+
+                [[comboMode.bindings.destination.bindings.destination.bindings]]
+                iconPath = 'arrow.left.to.line'
+                id = 'F24A75CF-F981-4BF9-9134-A1744AB538FF'
+                key = 'k'
+                label = 'focus prev'
+
+                    [comboMode.bindings.destination.bindings.destination.bindings.destination]
+                    type = 'command'
+
+                        [comboMode.bindings.destination.bindings.destination.bindings.destination.command]
+                        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                        behavior = 'run'
+                        presentation = 'automatic'
+                        subjectIdentifiers = [ 'text:yashiki output-focus prev' ]
+                        type = 'savedCommand'
 
 [[comboMode.bindings]]
+iconPath = '/Applications/FineTune.app'
+id = 'EACA4142-396F-4EC1-B760-CF0D902F75F7'
 key = 'l'
-url = 'tuna://run?subject=tuna.applications//Applications/FineTune.app&action=tuna.common-actions/activate'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/activate'
+        behavior = 'run'
+        presentation = 'automatic'
+        subjectIdentifiers = [ 'path:/Applications/FineTune.app' ]
+        type = 'savedCommand'
 
 [[comboMode.bindings]]
+iconPath = '/Applications/1Password.app'
+id = 'A56D3723-5E89-4B9B-B7B7-511CCEB1B9D6'
 key = 'p'
-url = 'tuna://run?subject=TunaAutomation.ScriptsCatalog.1Password%20Quick%20Access&action=tuna.common-actions/run'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/run'
+        behavior = 'run'
+        presentation = 'automatic'
+        subjectIdentifiers = [ 'tuna.scripts/1Password Quick Access' ]
+        type = 'savedCommand'
 
 [hotkeys]
 custom = []
@@ -489,7 +1409,6 @@ custom = []
     carbonModifiers = 0
 
 [settings]
-comboModeCheatsheetBehavior = 'always'
 comboModeDoublePressTrigger = 'leftOption'
 comboModeModifierTrigger = 'hyper'
 comboModeTriggerType = 'modifier'
@@ -499,54 +1418,62 @@ textModeTriggerType = 'disabled'
 
 [[smartLinks.entries]]
 enabled = true
+id = '6C549C9E-33E9-4948-BA2A-A0878E947F97'
 name = 'Bing'
 requiresInput = true
 template = 'https://www.bing.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
+id = '8531DE5F-02DD-413F-94B0-7C32AA3E8481'
 name = 'DuckDuckGo'
 requiresInput = true
 template = 'https://duckduckgo.com/?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
+id = 'B29761EF-F193-4D56-8FC4-7F5813D836C0'
 name = 'GitHub'
 requiresInput = true
 template = 'https://github.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
+id = '85491A8E-2B72-498E-AAB9-D0C75912DB9A'
 name = 'Google'
 requiresInput = true
 template = 'https://www.google.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
+id = '4FAED7CA-BB77-4A9C-A221-09C60507C0EC'
 name = 'Kagi'
 requiresInput = true
 template = 'https://kagi.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
+id = '633CC004-F6F0-41FA-B91B-D48444B9352D'
 name = 'Stack Overflow'
 requiresInput = true
 template = 'https://stackoverflow.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
+id = '6B1F205C-BF23-4278-BAFF-1216A6E618CA'
 name = 'Wikipedia'
 requiresInput = true
 template = 'https://en.wikipedia.org/wiki/Special:Search?search={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
+id = 'B17CDBBC-65C9-45E2-B5B0-538F734A3C5E'
 name = 'YouTube'
 requiresInput = true
 template = 'https://www.youtube.com/results?search_query={{input}}'
 
 [[catalogSettings]]
-catalogIdentifier = 'TunaPrompts.AIPromptCatalog'
+catalogIdentifier = 'tuna.prompts'
 
     [catalogSettings.values]
     BaseURL = 'https://api.anthropic.com'
