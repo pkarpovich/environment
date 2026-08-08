@@ -57,3 +57,13 @@ agent-sdk-runtime-llm-proxy.localhost {
 pkarpovich-dev.localhost {
     reverse_proxy localhost:50400
 }
+
+corne.localhost {
+    reverse_proxy localhost:50500
+}
+
+corne-keytap.localhost {
+    reverse_proxy localhost:50501 {
+        flush_interval -1
+    }
+}
