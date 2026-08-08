@@ -25,7 +25,6 @@ sortOrders = []
 
 [[comboMode.bindings]]
 iconPath = 'star.fill'
-id = 'F87F7F5C-A453-4F15-8BB5-8D40D7D1997B'
 key = 'a'
 label = 'Prompts'
 
@@ -34,7 +33,6 @@ label = 'Prompts'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'textformat'
-        id = 'C50979AC-15F2-4FF1-979D-079A11B53511'
         key = 'r'
         label = 'ru'
 
@@ -50,7 +48,6 @@ label = 'Prompts'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'character'
-        id = 'DF7316E8-AD27-4F4B-A3FF-8ACD31C1AA06'
         key = 'e'
         label = 'en'
 
@@ -66,7 +63,6 @@ label = 'Prompts'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'arrow.forward.circle'
-        id = '96A9A76B-44F0-4914-ADC8-DB6891665C66'
         key = 'c'
         label = 'next'
 
@@ -82,7 +78,6 @@ label = 'Prompts'
 
 [[comboMode.bindings]]
 iconPath = 'folder'
-id = 'E6AD5242-7830-4A6A-A003-B24EC4A5E5AF'
 key = 'f'
 label = 'folders'
 
@@ -91,7 +86,6 @@ label = 'folders'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'house'
-        id = '38442821-DDCE-47F8-9A79-306A654083D0'
         key = 'h'
 
             [comboMode.bindings.destination.bindings.destination]
@@ -106,7 +100,6 @@ label = 'folders'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/System/Library/CoreServices/Finder.app'
-        id = 'D92CC8FD-75AB-4CC0-BD5A-F9D019FDEDDD'
         key = 'f'
 
             [comboMode.bindings.destination.bindings.destination]
@@ -121,7 +114,6 @@ label = 'folders'
 
 [[comboMode.bindings]]
 iconPath = 'cursorarrow.and.square.on.square.dashed'
-id = 'ABE717DE-27C3-400D-9961-F05030E19EC9'
 key = 's'
 label = 'Screenshot'
 
@@ -130,7 +122,6 @@ label = 'Screenshot'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'rectangle.dashed'
-        id = '06A6DE61-2248-461A-8E9B-1726428C53C6'
         key = 'a'
         label = 'area'
 
@@ -146,7 +137,6 @@ label = 'Screenshot'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'macwindow'
-        id = 'B2716459-DFD1-4070-92A3-9CBA95643077'
         key = 'w'
         label = 'window'
 
@@ -162,7 +152,6 @@ label = 'Screenshot'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'text.viewfinder'
-        id = 'DB98D46E-0C87-4B2D-85BF-FE25330BC3A6'
         key = 't'
         label = 'text'
 
@@ -178,7 +167,6 @@ label = 'Screenshot'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'record.circle'
-        id = '93387263-4166-4F97-A6BF-6F3013EACD06'
         key = 'v'
         label = 'video'
 
@@ -194,7 +182,6 @@ label = 'Screenshot'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'scroll'
-        id = 'B141A06E-839A-4FB1-8203-79EF483CC2B9'
         key = 'm'
         label = 'move'
 
@@ -210,7 +197,6 @@ label = 'Screenshot'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'timer'
-        id = '70C56103-FE63-4B2D-8532-15A8AE410875'
         key = 's'
         label = 'timer'
 
@@ -226,7 +212,6 @@ label = 'Screenshot'
 
 [[comboMode.bindings]]
 iconPath = 'message'
-id = '2D7BB66F-6147-4C05-A473-080C4DDFEC85'
 key = 'm'
 label = 'Messaging'
 
@@ -235,7 +220,6 @@ label = 'Messaging'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Slack.app'
-        id = 'AE524AFC-E6F9-4C53-BDF1-B33EADCB7175'
         key = 's'
         label = 'slack'
 
@@ -251,7 +235,6 @@ label = 'Messaging'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Telegram.app'
-        id = '67C7C301-B5C0-44DB-8039-D4573B4D67CB'
         key = 't'
         label = 'telegram'
 
@@ -267,7 +250,6 @@ label = 'Messaging'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Microsoft Teams.app'
-        id = '5F8A57CA-DC1A-4479-A7DF-A0C07AD0C12A'
         key = 'm'
         label = 'teams'
 
@@ -283,7 +265,6 @@ label = 'Messaging'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/WhatsApp.app'
-        id = '3FD923EB-9576-47F9-A2BC-34F0D163363D'
         key = 'w'
         label = 'whatsapp'
 
@@ -299,7 +280,6 @@ label = 'Messaging'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/System/Applications/Mail.app'
-        id = 'FD17DBCA-E8E5-4856-A7CE-171C675DA91B'
         key = 'e'
         label = 'mail'
 
@@ -315,7 +295,6 @@ label = 'Messaging'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/System/Applications/Calendar.app'
-        id = '71A80577-0A81-4F47-ACC4-01FCB23B1005'
         key = 'c'
         label = 'calendar'
 
@@ -331,7 +310,6 @@ label = 'Messaging'
 
 [[comboMode.bindings]]
 iconPath = 'square.grid.2x2'
-id = '81D57FAA-5A69-4EA1-82CB-AA2E13C4EA37'
 key = 'o'
 label = 'Apps'
 
@@ -340,7 +318,6 @@ label = 'Apps'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'
-        id = '0F8C9BAF-F8BE-4761-B013-7EBCF90095A6'
         key = 'a'
         label = 'simulator'
 
@@ -356,7 +333,6 @@ label = 'Apps'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Sublime Merge.app'
-        id = 'E21A8B3F-92F3-4104-B6C6-FBAAB7C2E2BA'
         key = 'g'
         label = 'sublime merge'
 
@@ -372,7 +348,6 @@ label = 'Apps'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Spotify.app'
-        id = '55E7FB52-FB1A-4088-8C62-BD21218F868D'
         key = 'm'
         label = 'spotify'
 
@@ -388,7 +363,6 @@ label = 'Apps'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Parallels Desktop.app'
-        id = '161B4CD9-24B2-416A-827B-9E5B8A1F8970'
         key = 'v'
         label = 'parallels'
 
@@ -406,7 +380,6 @@ label = 'Apps'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Bruno.app'
-        id = '2B1A09F9-C176-4910-8301-2BC4E5150DD9'
         key = 'h'
         label = 'bruno'
 
@@ -422,7 +395,6 @@ label = 'Apps'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'speaker.wave.2'
-        id = 'E3FF94B9-AD16-4FE8-B858-DBA138097201'
         key = 'o'
         label = 'output device'
 
@@ -438,7 +410,6 @@ label = 'Apps'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'mic'
-        id = '1AE34C9A-8331-49BE-9C83-6BC49253C6CC'
         key = 'i'
         label = 'input device'
 
@@ -454,7 +425,6 @@ label = 'Apps'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/WezTerm.app'
-        id = '91DF8F40-2E07-41A2-9C57-661A620458D1'
         key = 't'
         label = 'wezterm'
 
@@ -470,7 +440,6 @@ label = 'Apps'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Claude.app'
-        id = '33CA220E-1381-473F-8553-99A9AB7610D0'
         key = 'c'
         label = 'claude desktop'
 
@@ -486,7 +455,6 @@ label = 'Apps'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/WezTerm.app'
-        id = '37A3C18B-C300-4D17-B1C7-22BF09FD7397'
         key = 'z'
         label = 'test'
 
@@ -502,7 +470,6 @@ label = 'Apps'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/Dia.app'
-id = '649FC15A-CE3C-4FB1-86D1-CE695B5EBF89'
 key = 'b'
 
     [comboMode.bindings.destination]
@@ -517,7 +484,6 @@ key = 'b'
 
 [[comboMode.bindings]]
 iconPath = 'folder.fill.badge.gearshape'
-id = 'F3328D2E-0F8B-4CEE-A39D-FF7DA02CD9B6'
 key = 'd'
 label = 'Developer'
 
@@ -526,7 +492,6 @@ label = 'Developer'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Zed.app'
-        id = 'D0C15BB9-B424-49F4-BC72-F34FFEBC1ADB'
         key = 'e'
         label = 'env'
 
@@ -542,7 +507,6 @@ label = 'Developer'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Zed.app'
-        id = 'AFBE3613-7932-4DD8-A136-933B1784B639'
         key = 'a'
         label = 'dc'
 
@@ -558,7 +522,6 @@ label = 'Developer'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = '/Applications/Zed.app'
-        id = '2C50644E-B1B6-40E8-8C3E-01B127FD776C'
         key = 't'
         label = 'turtle hub'
 
@@ -574,7 +537,6 @@ label = 'Developer'
 
 [[comboMode.bindings]]
 iconPath = 'macwindow.on.rectangle'
-id = '4747578A-6083-484D-AE08-67D015AD51EE'
 key = 'space'
 
     [comboMode.bindings.destination]
@@ -589,7 +551,6 @@ key = 'space'
 
 [[comboMode.bindings]]
 iconPath = 'doc.on.clipboard'
-id = '9A9A837E-0F5B-4BF8-AC2E-DB729D40E8ED'
 key = 'c'
 
     [comboMode.bindings.destination]
@@ -604,7 +565,6 @@ key = 'c'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/Zed.app'
-id = '0B25E72D-F1F2-4976-9E53-04956BD42C9C'
 key = 'z'
 label = 'zed'
 
@@ -620,7 +580,6 @@ label = 'zed'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/agterm.app'
-id = '848CF6F0-8152-4BAF-A15A-CE33B106D21B'
 key = 't'
 label = 'wezterm'
 
@@ -636,7 +595,6 @@ label = 'wezterm'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/Obsidian.app'
-id = '10B3052D-B05B-4892-845D-60948E8D1FDB'
 key = 'n'
 label = 'obsidian'
 
@@ -652,7 +610,6 @@ label = 'obsidian'
 
 [[comboMode.bindings]]
 iconPath = 'macwindow'
-id = '7A8A0567-F3D9-4B57-8D31-33E36D925D92'
 key = 'w'
 label = 'Yashiki'
 
@@ -661,7 +618,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'arrow.up.left.and.arrow.down.right'
-        id = '940DE3FD-8FC9-4CF8-A9D9-92856633AC4D'
         key = 'f'
         label = 'fullscreen'
 
@@ -677,7 +633,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'rectangle.on.rectangle'
-        id = '5058E6AE-8DA8-4E29-8105-A05ACA11104F'
         key = 'l'
         label = 'float'
 
@@ -693,7 +648,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'xmark'
-        id = 'C6DE567A-2B96-4A89-A0E0-1E12057B6788'
         key = 'c'
         label = 'close'
 
@@ -709,7 +663,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'square.split.2x1'
-        id = '5877E331-5305-4425-A6D6-1499AC0167B2'
         key = 'm'
         label = 'zoom master'
 
@@ -725,7 +678,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'arrow.triangle.2.circlepath'
-        id = 'A0D86FB2-C791-4BD6-89FC-71ACC14770B4'
         key = 'r'
         label = 'retile'
 
@@ -741,7 +693,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'arrow.clockwise'
-        id = '3BD8B677-2724-49E3-993D-8585AD742BDB'
         key = 'e'
         label = 'resync'
 
@@ -757,7 +708,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'rectangle.split.3x1'
-        id = '16F9597D-4B57-4B0C-BE6A-11F3FD379D14'
         key = 't'
         label = 'tatami'
 
@@ -773,7 +723,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'rectangle.split.2x1'
-        id = 'BB120290-3047-4212-82F4-79AD4D589BFC'
         key = 'b'
         label = 'byobu'
 
@@ -789,7 +738,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'arrow.right'
-        id = '9C29EF37-3FF0-45B7-9BDE-CC5A95E67DEA'
         key = 'j'
         label = 'focus next'
 
@@ -805,7 +753,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'arrow.left'
-        id = '6DF5B81E-D3BE-45A8-98E1-56D13FE397BC'
         key = 'k'
         label = 'focus prev'
 
@@ -821,7 +768,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'play.rectangle'
-        id = 'F4220403-6C4E-4BE3-9E6A-ABE0DC9FEC63'
         key = 'p'
         label = 'present'
 
@@ -837,7 +783,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'square.grid.3x3'
-        id = '0878CBDF-B65A-4265-8379-3500BFF94F79'
         key = 'v'
         label = 'view tag'
 
@@ -846,7 +791,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '1.square'
-                id = '9547878D-5B45-44F2-9ED6-D1BFF84F7A2E'
                 key = '1'
                 label = 'tag 1'
 
@@ -862,7 +806,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '2.square'
-                id = '10BF6419-1BF8-4353-AC99-FCB4E939B584'
                 key = '2'
                 label = 'tag 2'
 
@@ -878,7 +821,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '3.square'
-                id = '49C3AFF9-8D72-4E2D-83DF-68F9EB142B4A'
                 key = '3'
                 label = 'tag 3'
 
@@ -894,7 +836,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '4.square'
-                id = '55D7E090-7F47-45CD-AB2A-86C6827D87F0'
                 key = '4'
                 label = 'tag 4'
 
@@ -910,7 +851,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '5.square'
-                id = '3D9E5524-380C-45E4-8950-8B8678D2DC10'
                 key = '5'
                 label = 'tag 5'
 
@@ -926,7 +866,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '6.square'
-                id = 'EA8E43AA-1678-49EA-B369-11A0A5511DC8'
                 key = '6'
                 label = 'tag 6'
 
@@ -942,7 +881,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '7.square'
-                id = 'D8A5B175-A722-424E-98F3-69E2245F78E0'
                 key = '7'
                 label = 'tag 7'
 
@@ -958,7 +896,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '8.square'
-                id = 'F4E90E83-4297-4DD5-905D-BB52AD239801'
                 key = '8'
                 label = 'tag 8'
 
@@ -974,7 +911,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '9.square'
-                id = '0EFDF2C5-DCC6-4454-98AF-E28A03621DA9'
                 key = '9'
                 label = 'tag 9'
 
@@ -990,7 +926,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'paperplane'
-        id = '032BDDB5-11BF-4466-AC7B-0F012CF6AE18'
         key = 's'
         label = 'send to tag'
 
@@ -999,7 +934,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '1.circle'
-                id = '3F591656-34FE-4D59-8F76-F3D0A86FA73C'
                 key = '1'
                 label = 'tag 1'
 
@@ -1015,7 +949,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '2.circle'
-                id = 'C2452C22-517A-4CF1-B9C6-D69E8B52A84C'
                 key = '2'
                 label = 'tag 2'
 
@@ -1031,7 +964,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '3.circle'
-                id = '05A47E3C-41BD-4956-92F1-BE306D93678E'
                 key = '3'
                 label = 'tag 3'
 
@@ -1047,7 +979,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '4.circle'
-                id = '5F9575D2-0FAE-467B-A6B5-0D2EABF87994'
                 key = '4'
                 label = 'tag 4'
 
@@ -1063,7 +994,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '5.circle'
-                id = '74CA745C-3228-4374-B98D-D44B3734F536'
                 key = '5'
                 label = 'tag 5'
 
@@ -1079,7 +1009,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '6.circle'
-                id = 'B063C4DD-10F5-4762-ADF0-789848D9D0DA'
                 key = '6'
                 label = 'tag 6'
 
@@ -1095,7 +1024,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '7.circle'
-                id = '36D5B78F-7677-4539-9BA1-513687C30B0C'
                 key = '7'
                 label = 'tag 7'
 
@@ -1111,7 +1039,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '8.circle'
-                id = 'A286AA4F-83D6-4158-8E5D-048ABEE7938C'
                 key = '8'
                 label = 'tag 8'
 
@@ -1127,7 +1054,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '9.circle'
-                id = 'F9FA37F7-C35C-4B85-BF12-4C93F3FC943D'
                 key = '9'
                 label = 'tag 9'
 
@@ -1143,7 +1069,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = 'eye.slash'
-                id = '971753DD-CE08-43FB-9045-7B73C59F6CAF'
                 key = '0'
                 label = 'hide'
 
@@ -1159,7 +1084,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'plusminus'
-        id = '24B367C3-435A-4942-9AE8-2F3DD22A38E6'
         key = 'g'
         label = 'toggle tag'
 
@@ -1168,7 +1092,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '1.square.fill'
-                id = 'F4F8FB6D-A447-4574-B596-D4670864D856'
                 key = '1'
                 label = 'tag 1'
 
@@ -1184,7 +1107,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '2.square.fill'
-                id = '908F04D4-F2AF-43A7-B708-135C9AE2D676'
                 key = '2'
                 label = 'tag 2'
 
@@ -1200,7 +1122,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '3.square.fill'
-                id = '3E040DCA-95B1-4F99-9BD2-AF7FFA773202'
                 key = '3'
                 label = 'tag 3'
 
@@ -1216,7 +1137,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '4.square.fill'
-                id = '3EB45292-96F1-4ED3-8B1F-A3A2A02D2448'
                 key = '4'
                 label = 'tag 4'
 
@@ -1232,7 +1152,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '5.square.fill'
-                id = 'F2AD5C93-0DFB-4221-AA3C-A62C3295C2D6'
                 key = '5'
                 label = 'tag 5'
 
@@ -1248,7 +1167,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '6.square.fill'
-                id = 'F9C6DEAA-6E84-4524-98ED-CD7806155C6D'
                 key = '6'
                 label = 'tag 6'
 
@@ -1264,7 +1182,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '7.square.fill'
-                id = '41FED798-1C2D-4F19-BAE1-B35E62164C43'
                 key = '7'
                 label = 'tag 7'
 
@@ -1280,7 +1197,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '8.square.fill'
-                id = '8D97C9D0-1A43-41E3-9BD7-5C0C2EB8ACA2'
                 key = '8'
                 label = 'tag 8'
 
@@ -1296,7 +1212,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = '9.square.fill'
-                id = '02DE18CD-83F1-410F-B0E0-2E0A881EA249'
                 key = '9'
                 label = 'tag 9'
 
@@ -1312,7 +1227,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = 'plus.rectangle.on.rectangle'
-                id = '6A19E5B5-971C-4314-B18D-B8F2303A281F'
                 key = 'p'
                 label = 'present'
 
@@ -1328,7 +1242,6 @@ label = 'Yashiki'
 
         [[comboMode.bindings.destination.bindings]]
         iconPath = 'display'
-        id = 'B8E5F53B-A1FD-487F-9AC2-342425B90202'
         key = 'o'
         label = 'monitor'
 
@@ -1337,7 +1250,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = 'arrow.right.to.line'
-                id = '113F74BB-E126-4F8F-9E87-42401F37014E'
                 key = 'j'
                 label = 'focus next'
 
@@ -1353,7 +1265,6 @@ label = 'Yashiki'
 
                 [[comboMode.bindings.destination.bindings.destination.bindings]]
                 iconPath = 'arrow.left.to.line'
-                id = 'F24A75CF-F981-4BF9-9134-A1744AB538FF'
                 key = 'k'
                 label = 'focus prev'
 
@@ -1369,7 +1280,6 @@ label = 'Yashiki'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/FineTune.app'
-id = 'EACA4142-396F-4EC1-B760-CF0D902F75F7'
 key = 'l'
 
     [comboMode.bindings.destination]
@@ -1384,7 +1294,6 @@ key = 'l'
 
 [[comboMode.bindings]]
 iconPath = '/Applications/1Password.app'
-id = 'A56D3723-5E89-4B9B-B7B7-511CCEB1B9D6'
 key = 'p'
 
     [comboMode.bindings.destination]
@@ -1418,56 +1327,48 @@ textModeTriggerType = 'disabled'
 
 [[smartLinks.entries]]
 enabled = true
-id = '6C549C9E-33E9-4948-BA2A-A0878E947F97'
 name = 'Bing'
 requiresInput = true
 template = 'https://www.bing.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = '8531DE5F-02DD-413F-94B0-7C32AA3E8481'
 name = 'DuckDuckGo'
 requiresInput = true
 template = 'https://duckduckgo.com/?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = 'B29761EF-F193-4D56-8FC4-7F5813D836C0'
 name = 'GitHub'
 requiresInput = true
 template = 'https://github.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = '85491A8E-2B72-498E-AAB9-D0C75912DB9A'
 name = 'Google'
 requiresInput = true
 template = 'https://www.google.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = '4FAED7CA-BB77-4A9C-A221-09C60507C0EC'
 name = 'Kagi'
 requiresInput = true
 template = 'https://kagi.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = '633CC004-F6F0-41FA-B91B-D48444B9352D'
 name = 'Stack Overflow'
 requiresInput = true
 template = 'https://stackoverflow.com/search?q={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = '6B1F205C-BF23-4278-BAFF-1216A6E618CA'
 name = 'Wikipedia'
 requiresInput = true
 template = 'https://en.wikipedia.org/wiki/Special:Search?search={{input}}'
 
 [[smartLinks.entries]]
 enabled = true
-id = 'B17CDBBC-65C9-45E2-B5B0-538F734A3C5E'
 name = 'YouTube'
 requiresInput = true
 template = 'https://www.youtube.com/results?search_query={{input}}'
@@ -1476,6 +1377,6 @@ template = 'https://www.youtube.com/results?search_query={{input}}'
 catalogIdentifier = 'tuna.prompts'
 
     [catalogSettings.values]
-    BaseURL = 'https://api.anthropic.com'
-    Model = 'claude-sonnet-4-6'
-    Provider = 'openaiCompatible'
+    Provider = 'custom'
+    'Provider.custom.BaseURL' = 'https://api.anthropic.com'
+    'Provider.custom.Model' = 'claude-sonnet-4-6'
