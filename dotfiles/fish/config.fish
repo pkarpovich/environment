@@ -17,6 +17,9 @@ set -gx EDITOR "zed --wait"
 fish_add_path ~/.local/bin
 fish_add_path ~/.local/share/mise/shims
 fish_add_path ~/.dotnet/tools
+# libpq is keg-only (it conflicts with a full PostgreSQL), so psql and pg_dump
+# only exist inside its own keg
+fish_add_path /opt/homebrew/opt/libpq/bin
 
 if type -q mise
     mise activate fish | source

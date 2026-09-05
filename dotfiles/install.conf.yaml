@@ -9,6 +9,11 @@
     ~/.gitignore_global: .gitignore_global
     ~/.gitconfig: .gitconfig
 
+    # the global Brewfile, so `brew bundle` works from any directory. The
+    # install_tools task still reads dotfiles/Brewfile directly: it runs before
+    # this link exists on a fresh machine
+    ~/.Brewfile: Brewfile
+
     ~/.config/mise/config.toml: mise.config.toml
     ~/.config/starship.toml: starship.toml
     ~/.config/yazi/yazi.toml: yazi.toml
