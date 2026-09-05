@@ -57,23 +57,23 @@ export const LAYERS = [
     'TAB', 'q', 'w', 'e', 'r', 't', 'LCTL', '[', 'y', 'u', 'i', 'o', 'p', 'BSPC',
     'HYPER', 'a', 's', 'd', 'f', 'g', 'LALT', ']', 'h', 'j', 'k', 'l', ';', "'",
     'LSFT', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'ESC',
-    'LGUI', 'MO1', 'SPC', 'ENT', 'MO2', 'RGUI',
+    'LGUI', 'MO1', 'SPC', 'ENT', 'MO2', 'RALT',
   ],
   [
     'TAB', '1', '2', '3', '4', '5', 'LCTL', 'RCTL', '6', '7', '8', '9', '0', 'BSPC',
-    'HYPER', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'LALT', 'RALT', 'LEFT', 'DOWN', 'UP', 'RIGHT', 'NONE', 'NONE',
+    'LCTL', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'LALT', 'RALT', 'LEFT', 'DOWN', 'UP', 'RIGHT', 'NONE', 'NONE',
     'LSFT', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE',
-    'LGUI', 'TRNS', 'SPC', 'ENT', 'MO3', 'RGUI',
+    'LGUI', 'TRNS', 'SPC', 'ENT', 'TRNS', 'RGUI',
   ],
   [
     'TAB', 'S:1', 'S:2', 'S:3', 'S:4', 'S:5', 'LCTL', 'RCTL', 'S:6', 'S:7', 'S:8', 'S:9', 'S:0', 'BSPC',
-    'HYPER', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'LALT', 'RALT', '-', '=', '[', ']', '\\', '`',
+    'LCTL', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'LALT', 'RALT', '-', '=', '[', ']', '\\', '`',
     'LSFT', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'S:-', 'S:=', 'S:[', 'S:]', 'S:\\', 'S:`',
-    'LGUI', 'MO3', 'SPC', 'ENT', 'TRNS', 'RGUI',
+    'LGUI', 'TRNS', 'SPC', 'ENT', 'TRNS', 'RGUI',
   ],
   [
-    'BOOT', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'LCTL', 'RCTL', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE',
-    'RGB_TOG', 'RGB_HUI', 'RGB_SAI', 'RGB_VAI', 'NONE', 'NONE', 'LALT', 'RALT', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE',
+    'BOOT', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE',
+    'RGB_TOG', 'RGB_HUI', 'RGB_SAI', 'RGB_VAI', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE',
     'RGB_MOD', 'RGB_HUD', 'RGB_SAD', 'RGB_VAD', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE', 'NONE',
     'LGUI', 'TRNS', 'SPC', 'ENT', 'TRNS', 'RGUI',
   ],
@@ -86,14 +86,15 @@ export const LAYER_META = [
   { title: 'Adjust', note: 'Lower + Raise together. Backlight and BOOT for flashing.' },
 ]
 
-const ICONS = { TAB: 'ghost', BSPC: 'pacman', ESC: 'ghost', LGUI: 'ghost', RGUI: 'ghost' }
+// icons are printed on physical caps, so they follow the position and not the keycode
+const ICON_AT = { 0: 'ghost', 13: 'pacman', 39: 'ghost', 40: 'ghost', 45: 'ghost' }
 
 const WORDS = {
   TAB: ['tab', 'Tab'], BSPC: ['bksp', 'Backspace'], HYPER: ['Hyper', 'CapsLock'],
   LSFT: ['Shift', 'ShiftLeft'], ESC: ['esc', 'Escape'], LGUI: ['cmd', 'MetaLeft'],
   SPC: ['Space', 'Space'], ENT: ['Enter', 'Enter'], RGUI: ['cmd', 'MetaRight'],
   LCTL: ['LCtrl', 'ControlLeft'], RCTL: ['RCtrl', 'ControlRight'],
-  LALT: ['LAlt', 'AltLeft'], RALT: ['RAlt', 'AltRight'],
+  LALT: ['LAlt', 'AltLeft'], RALT: ['alt', 'AltRight'],
   MO1: ['Lower', null], MO2: ['Raise', null], MO3: ['Adjust', null], BOOT: ['BOOT', null],
   RGB_TOG: ['rgb', null], RGB_MOD: ['mode', null],
   RGB_HUI: ['hue +', null], RGB_HUD: ['hue -', null],
@@ -166,7 +167,7 @@ export function parseToken(token, index) {
   if (ARROWS[token]) return { kind: 'glyph', glyph: ARROWS[token][0], code: ARROWS[token][1] }
   if (WORDS[token]) {
     const [glyph, code] = WORDS[token]
-    return { kind: 'word', glyph, code, layerKey: token.startsWith('MO'), icon: ICONS[token] }
+    return { kind: 'word', glyph, code, layerKey: token.startsWith('MO'), icon: ICON_AT[index] }
   }
   const shifted = token.startsWith('S:')
   const us = shifted ? token.slice(2) : token
