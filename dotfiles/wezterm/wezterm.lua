@@ -30,7 +30,7 @@ local function mosh_domain(name, host)
 end
 
 local function configure_mosh(config)
-    config.exec_domains = { mosh_domain("mosh-mbp", "pavels-macbook-pro-2021") }
+    config.exec_domains = { mosh_domain("mosh-mbp", "mbp-2021") }
 end
 
 local function configure_status(config)
