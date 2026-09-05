@@ -1,0 +1,58 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: fix-ru - repair a Russian chat message without rewriting it
+
+prompts:
+  - id: file://render.js:baseline
+    label: baseline
+  - id: file://render.js:current
+    label: current
+
+providers:
+  - id: anthropic:messages:claude-sonnet-5
+    label: sonnet-5
+    config:
+      temperature: 0
+      max_tokens: 1024
+
+defaultTest:
+  options:
+    provider: anthropic:messages:claude-opus-5
+  assert:
+    - type: javascript
+      value: file://asserts.js:noYo
+    - type: javascript
+      value: file://asserts.js:plainHyphen
+    - type: javascript
+      value: file://asserts.js:noTrailingPeriod
+    - type: javascript
+      value: file://asserts.js:firstCharCase
+    - type: javascript
+      value: file://asserts.js:caseNotRaised
+    - type: javascript
+      value: file://asserts.js:textOnly
+    - type: javascript
+      value: file://asserts.js:unchangedWhenValid
+    - type: llm-rubric
+      value: |
+        A Russian chat message was handed to an assistant whose job is to repair it while changing
+        nothing else. Judge the output against the original.
+
+        Original message:
+        {{input}}
+
+        What had to be repaired:
+        {{must_fix}}
+
+        Grade PASS only when both hold:
+
+        1. Every item listed above is repaired in the output.
+        2. Nothing else moved. Word choice, word order, slang, anglicisms, abbreviations,
+           latin-script technical terms, product names, paths and the author's register are the
+           same as in the original. Swapping a colloquial word for a literary one, reordering
+           clauses, adding or dropping words, or otherwise improving the phrasing is a FAIL even
+           when the result reads better.
+
+        When the list above says the message is already correct, PASS requires the output to be
+        character-identical to the original.
+
+tests: file://cases.yaml

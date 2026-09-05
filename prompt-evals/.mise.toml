@@ -1,0 +1,22 @@
+[tools]
+node = "24"
+pnpm = "11"
+
+[env]
+_.file = { path = ".env", redact = true }
+
+[tasks.install]
+description = "Install the promptfoo runner"
+run = "pnpm install"
+
+[tasks.eval]
+description = "Score every version of the fix-ru prompt against the corpus"
+depends = ['install']
+dir = "fix-ru"
+run = "pnpm exec promptfoo eval"
+
+[tasks.view]
+description = "Browse the last eval run in the promptfoo web UI"
+depends = ['install']
+dir = "fix-ru"
+run = "pnpm exec promptfoo view"
