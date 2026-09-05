@@ -251,3 +251,6 @@ __pycache__/
 
 # vendored agent skills: .skill-lock.json is the record, the content is not ours
 dotfiles/agents/skills/
+
+# revmux review archive: half a megabyte per round, and revmux prunes nothing itself
+.revmux/

@@ -34,6 +34,7 @@
     ~/.claude-work/: claude/**
     ~/.agents: agents
     ~/.config/revdiff/: revdiff/**
+    ~/.config/revmux/: revmux/**
     ~/.config/1Password/ssh/agent.toml: 1password/agent.toml
 
     ~/.config/yafetch/init.lua: yafetch.lua
