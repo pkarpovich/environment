@@ -17,6 +17,22 @@ local function configure_ssh(config)
     end
 end
 
+local function mosh_domain(name, host)
+    return wezterm.exec_domain(name, function(cmd)
+        cmd.args = { "/opt/homebrew/bin/mosh", host }
+        -- the GUI inherits launchd's PATH, which has no /opt/homebrew/bin; mosh is a
+        -- perl script that has to find mosh-client on it
+        local env = cmd.set_environment_variables or {}
+        env.PATH = "/opt/homebrew/bin:" .. (env.PATH or "/usr/bin:/bin")
+        cmd.set_environment_variables = env
+        return cmd
+    end, "mosh " .. host)
+end
+
+local function configure_mosh(config)
+    config.exec_domains = { mosh_domain("mosh-mbp", "pavels-macbook-pro-2021") }
+end
+
 local function configure_status(config)
     status.apply(config, {})
 end
@@ -74,6 +90,7 @@ local function main()
 
     workspaces.configure_workspaces(plugins.resurrect)
     configure_ssh(config)
+    configure_mosh(config)
     configure_status(config)
     plugins.domains.apply_to_config(config, {
         keys = {
