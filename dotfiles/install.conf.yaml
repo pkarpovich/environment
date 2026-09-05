@@ -42,4 +42,5 @@
     ~/Library/LaunchAgents/com.pavel-karpovich.cc-map-watch.plist: agterm/com.pavel-karpovich.cc-map-watch.plist
     ~/Library/Application Support/Claude/claude_desktop_config.json: claude_desktop_config.json
     ~/Library/Application Support/Tuna/config.toml: tuna/config.toml
+    ~/Library/Application Support/Tuna/Prompts: tuna-prompts/**
     /opt/homebrew/etc/Caddyfile: Caddyfile
