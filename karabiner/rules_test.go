@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"testing"
 )
 
@@ -37,36 +38,73 @@ func TestKeyCodeIsBareKeyCode(t *testing.T) {
 }
 
 func TestLanguageSwitchManipulators(t *testing.T) {
-	r := languageSwitch()
-
-	if len(r.Manipulators) != 4 {
-		t.Fatalf("expected 4 manipulators, got %d", len(r.Manipulators))
+	want := []struct {
+		name    string
+		fromKey string
+		fromFn  string
+		device  string
+	}{
+		{name: "built-in fn en->ru", fromFn: "keyboard_fn"},
+		{name: "built-in fn ru->en", fromFn: "keyboard_fn"},
+		{name: "external ctrl en->ru", fromKey: "left_control", device: "device_unless"},
+		{name: "external ctrl ru->en", fromKey: "left_control", device: "device_unless"},
+		{name: "corne shift en->ru", fromKey: "left_shift", device: "device_if"},
+		{name: "corne shift ru->en", fromKey: "left_shift", device: "device_if"},
 	}
 
-	hasDeviceUnless := func(m manipulator) bool {
+	r := languageSwitch()
+	if len(r.Manipulators) != len(want) {
+		t.Fatalf("expected %d manipulators, got %d", len(want), len(r.Manipulators))
+	}
+
+	deviceCondition := func(m manipulator) string {
 		for _, c := range m.Conditions {
-			if c.Type == "device_unless" {
-				return true
+			if c.Type == "device_if" || c.Type == "device_unless" {
+				return c.Type
 			}
 		}
-		return false
+		return ""
 	}
 
-	for i, m := range r.Manipulators {
-		builtIn := i < 2
-		if builtIn && hasDeviceUnless(m) {
-			t.Errorf("built-in manipulator %d must not carry a device_unless condition", i)
+	for i, w := range want {
+		m := r.Manipulators[i]
+		if m.From.KeyCode != w.fromKey {
+			t.Errorf("%s: expected key_code %q, got %q", w.name, w.fromKey, m.From.KeyCode)
 		}
-		if !builtIn && !hasDeviceUnless(m) {
-			t.Errorf("external manipulator %d must carry a device_unless condition", i)
+		if m.From.AppleVendorTopCaseKeyCode != w.fromFn {
+			t.Errorf("%s: expected apple_vendor_top_case_key_code %q, got %q", w.name, w.fromFn, m.From.AppleVendorTopCaseKeyCode)
+		}
+		if got := deviceCondition(m); got != w.device {
+			t.Errorf("%s: expected device condition %q, got %q", w.name, w.device, got)
+		}
+	}
+}
+
+func TestShiftLanguageSwitchIsScopedAndTimeBoxed(t *testing.T) {
+	r := languageSwitch()
+
+	var shifts int
+	for _, m := range r.Manipulators {
+		if m.From.KeyCode != "left_shift" {
+			continue
+		}
+		shifts++
+
+		if m.Parameters == nil || m.Parameters.ToIfAloneTimeout != shiftTapTimeout {
+			t.Errorf("shift variant must cap to_if_alone at %dms, otherwise a held-then-released shift switches the layout; got %+v", shiftTapTimeout, m.Parameters)
+		}
+		out, err := json.Marshal(m)
+		if err != nil {
+			t.Fatalf("marshal shift manipulator: %v", err)
+		}
+		want := fmt.Sprintf(`"identifiers":[{"vendor_id":%d,"product_id":%d}]`, corneVendorID, corneProductID)
+		if !bytes.Contains(out, []byte(want)) {
+			t.Errorf("shift variant must stay scoped to the Corne, got %s", out)
 		}
 	}
 
-	if r.Manipulators[0].From.AppleVendorTopCaseKeyCode != "keyboard_fn" {
-		t.Errorf("built-in variant should key off keyboard_fn, got %+v", r.Manipulators[0].From)
-	}
-	if r.Manipulators[2].From.KeyCode != "left_control" {
-		t.Errorf("external variant should key off left_control, got %+v", r.Manipulators[2].From)
+	if shifts != 2 {
+		t.Fatalf("expected 2 shift manipulators, got %d", shifts)
 	}
 }
 

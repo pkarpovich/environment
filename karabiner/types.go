@@ -32,6 +32,11 @@ type manipulator struct {
 	ToIfAlone       []to           `json:"to_if_alone,omitempty"`
 	ToDelayedAction *delayedAction `json:"to_delayed_action,omitempty"`
 	Conditions      []condition    `json:"conditions,omitempty"`
+	Parameters      *parameters    `json:"parameters,omitempty"`
+}
+
+type parameters struct {
+	ToIfAloneTimeout int `json:"basic.to_if_alone_timeout_milliseconds,omitempty"`
 }
 
 type from struct {
@@ -77,4 +82,6 @@ type inputSource struct {
 
 type identifiers struct {
 	IsBuiltInKeyboard bool `json:"is_built_in_keyboard,omitempty"`
+	VendorID          int  `json:"vendor_id,omitempty"`
+	ProductID         int  `json:"product_id,omitempty"`
 }

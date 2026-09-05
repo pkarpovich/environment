@@ -76,10 +76,19 @@ const (
 	ruSourceID = "me.tonsky.keyboardlayout.universal.russian-universal"
 )
 
+const (
+	corneVendorID  = 18003
+	corneProductID = 4
+)
+
+// shift is held constantly while typing, so only a deliberate short tap may switch the layout
+const shiftTapTimeout = 180
+
 type langVariant struct {
 	from   from
 	to     []to
 	device *condition
+	params *parameters
 }
 
 type langDirection struct {
@@ -100,6 +109,7 @@ func (v langVariant) toggle(dir langDirection) manipulator {
 		Conditions: conditions,
 		ToIfAlone:  []to{{SelectInputSource: &inputSource{InputSourceID: dir.switchTo}}},
 		To:         v.to,
+		Parameters: v.params,
 	}
 }
 
@@ -113,6 +123,12 @@ func languageSwitch() rule {
 			from:   from{KeyCode: "left_control"},
 			to:     []to{{KeyCode: "left_control"}},
 			device: &condition{Type: "device_unless", Identifiers: []identifiers{{IsBuiltInKeyboard: true}}},
+		},
+		{
+			from:   from{KeyCode: "left_shift"},
+			to:     []to{{KeyCode: "left_shift"}},
+			device: &condition{Type: "device_if", Identifiers: []identifiers{{VendorID: corneVendorID, ProductID: corneProductID}}},
+			params: &parameters{ToIfAloneTimeout: shiftTapTimeout},
 		},
 	}
 	var manipulators []manipulator
