@@ -248,3 +248,6 @@ __pycache__/
 .claude/worktrees/
 **/.claude/settings.local.json
 .claude/settings.local.json
+
+# vendored agent skills: .skill-lock.json is the record, the content is not ours
+dotfiles/agents/skills/

@@ -23,8 +23,20 @@ mise run link_dotfiles     # from the repo root; or: dotbot -c ./dotfiles/instal
 - **`tmux/`** - the SSH/mosh attach point for the second Mac and the phone;
   `ccm` mirrors agterm's Claude sessions into its windows. It replaced zellij
   because Moshi's chat integration is tmux-only.
-- **`claude/`** - Claude Code settings, hooks, agents, and custom skills;
+- **`claude/`** - Claude Code settings, hooks, agents, and our own skills;
   linked into both `~/.claude` and `~/.claude-work` profiles.
+- **`agents/`** - linked whole as `~/.agents`: the store for skills written by
+  *other people*, managed by [`npx skills`](https://skills.sh). Only
+  `.skill-lock.json` is committed; `agents/skills/` is gitignored the way
+  `node_modules/` is, so this repo never republishes someone else's docs. Run
+  `skills-restore` on a new machine to replay the lock. Claude Code sees the
+  skills because the installer drops a symlink per skill into
+  `~/.claude/skills`. Install with
+  `npx skills add <source> -g -a claude-code -a zed` - naming a second agent is
+  what makes it symlink rather than copy, and Zed reads `~/.agents/skills`
+  natively. Add `CLAUDE_CONFIG_DIR=~/.claude-work` in front for the work
+  profile. `npx skills update -g` refreshes everything; the `skillFolderHash`
+  lines in the lock diff say which skills actually moved.
 - **`zed/`**, **`tuna/`**, **`yashiki/`**, **`revdiff/`** - editor, launcher,
   tiling WM, and diff-review configs.
 - **`starship.toml`** / **`starship-narrow.toml`** - two prompt presets,

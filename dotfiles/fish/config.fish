@@ -13,6 +13,10 @@ set -gx GOROOT (mise where go)
 
 set -gx EDITOR "zed --wait"
 
+# `skills` reports every add/update to add-skill.vercel.sh; DO_NOT_TRACK is the
+# convention it and a good number of other CLIs honour
+set -gx DO_NOT_TRACK 1
+
 # Load PATH
 fish_add_path ~/.local/bin
 fish_add_path ~/.local/share/mise/shims

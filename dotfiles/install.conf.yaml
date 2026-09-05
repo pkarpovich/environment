@@ -32,6 +32,7 @@
 
     ~/.claude/: claude/**
     ~/.claude-work/: claude/**
+    ~/.agents: agents
     ~/.config/revdiff/: revdiff/**
     ~/.config/1Password/ssh/agent.toml: 1password/agent.toml
 
