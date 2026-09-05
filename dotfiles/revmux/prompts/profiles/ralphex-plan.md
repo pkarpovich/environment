@@ -1,14 +1,13 @@
 ---
-description: farm-readiness pass over an implementation plan before it is queued to ralphex. Three jobs run twice, once on each vendor - can a cold session execute it, do its claims about the tree hold, what breaks it - so agreement between two sources means two models reached the same thing independently rather than one lens firing twice. The seventh reads the plan's shape and runs the plan's own commands to find out what the repository is today; it is single because two agents building and testing in one working directory would race, and shape rides with it since deciding whether a missing command is the plan's own doing needs the structure anyway. Run it with --verify-group-by source, since a plan is one file and directory grouping puts every finding in one group, and with --max-parallel 7 so the roster goes in one wave
+description: farm-readiness pass over an implementation plan before it is queued to ralphex. Four claude readers with a job each - can a cold session execute it, do its claims about the tree hold, is every boundary it crosses written down as a contract, and what did editing it break - plus a codex peer that attacks it and a cheap second vendor carrying the load-bearing lens again. Corroboration is counted per finding rather than per lens, so a job held by one agent still gets confirmed by whoever reaches it another way. Run it with --verify-group-by source, since a plan is one file and directory grouping puts every finding in one group, and with --max-parallel 6 so the roster goes in one wave
 model: claude/opus:xhigh
 agents:
   - {name: farm,     lenses: [farm-readiness, impl],           color: cyan}
-  - {name: farm-x,   lenses: [farm-readiness, impl],           model: codex/gpt-5.6-sol:xhigh, color: bright-cyan}
   - {name: ground,   lenses: [grounding, architecture, tests], color: magenta}
-  - {name: ground-x, lenses: [grounding, architecture, tests], model: codex/gpt-5.6-sol:xhigh, color: bright-magenta}
-  - {name: peer,     lenses: [adversarial],                    color: yellow}
-  - {name: peer-x,   lenses: [adversarial],                    model: codex/gpt-5.6-sol:xhigh, color: bright-yellow}
-  - {name: start,    lenses: [plan-shape, plan-baseline],      color: blue}
+  - {name: contract, lenses: [plan-contract],                  color: green}
+  - {name: start,    lenses: [plan-drift, plan-baseline],      color: blue}
+  - {name: peer,     lenses: [adversarial],     model: codex/gpt-5.6-sol:xhigh, color: yellow}
+  - {name: second,   lenses: [farm-readiness],  model: codex/gpt-5.6-sol:high,  color: bright-yellow}
 stages:
   synthesis: claude/opus:xhigh
   verify:    claude/opus:high
