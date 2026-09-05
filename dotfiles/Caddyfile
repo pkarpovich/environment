@@ -34,6 +34,10 @@ content-oracle.localhost {
     reverse_proxy localhost:50201
 }
 
+nikki.localhost {
+    reverse_proxy localhost:50300
+}
+
 sahara.localhost {
     reverse_proxy localhost:50310
 }
@@ -60,6 +64,12 @@ pkarpovich-dev.localhost {
 
 corne.localhost {
     reverse_proxy localhost:50500
+}
+
+ralphex-farm.localhost {
+    reverse_proxy localhost:50600 {
+        flush_interval -1
+    }
 }
 
 corne-keytap.localhost {
