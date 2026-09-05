@@ -1,80 +1,206 @@
-brew "eza"
-brew "moar"
-brew "atuin"
-brew "ical-buddy"
-brew "choose-gui"
+# vim: ft=ruby
+#
+# Linked to ~/.Brewfile, so `brew bundle` works from any directory. Grouped by what a
+# thing is FOR, not by when it was added - a package nobody can place in a group here
+# is usually a package nobody needs.
 
-# yazi
-brew "ffmpeg"
-brew "sevenzip"
-brew "jq"
-brew "poppler"
-brew "fd"
-brew "ripgrep"
-brew "fzf"
-brew "zoxide"
-brew "imagemagick"
-cask "font-symbols-only-nerd-font"
-brew "yazi"
+tap("pkarpovich/apps")
 
-# containers: colima VM instead of Docker Desktop; autostart via
-# colima/com.pavel-karpovich.colima.plist (NOT brew services - its
-# `colima start -f` resets colima.yaml to defaults on every start)
-brew "colima"
-brew "docker"
-brew "docker-compose"
+### shell, prompt, and what loads on every command
 
-brew "curlie"
-brew "gping"
-brew "doggo"
-brew "glances"
-brew "ctop"
-brew "btop"
+brew("fish")
+# the brew git is what actually runs (/opt/homebrew/bin/git), not Apple's
+brew("git")
+brew("mise")
+brew("starship")
+brew("atuin")
+
+### the coreutils the shell actually reaches for
+
+brew("eza")
+brew("bat")
+brew("fd")
+brew("ripgrep")
+brew("fzf")
+brew("sk")
+brew("zoxide")
+brew("jq")
+brew("broot")
+# moor is aliased to cat in config.fish
+brew("moor")
+
+### terminals, multiplexers, and the phone link
+
+cask("umputun/apps/agterm")
+# still the terminal on the MBA; agterm took over on this machine, but the
+# wezterm/ config is linked on both
+cask("wezterm@nightly")
 # tmux: the mux ccm mirrors agterm's Claude sessions into, and the only one
 # Moshi's chat can read (preview, agent status, session tree are tmux-only)
-brew "tmux"
+brew("tmux")
 # mosh: the phone (Moshi) attaches to the tmux sessions over it - the link
 # survives sleep, network switches and app kills, unlike plain ssh
-brew "mosh"
-brew "zoxide"
-brew "fzf"
-brew "terminal-notifier"
-brew "duti"
-brew "lazygit"
-brew "melonamin/formulae/gt"
-brew "jnsahaj/lumen/lumen"
-brew "tabiew"
-brew "lnav"
-brew "goreleaser"
-brew "golangci-lint"
-brew "sk"
-cask "1password-cli"
-cask "codex"
-brew "PeonPing/tap/peon-ping"
+brew("mosh")
+brew("zellij")
 
-brew "umputun/apps/revdiff"
-brew "umputun/apps/spot"
-brew "umputun/apps/ralphex"
-brew "umputun/apps/fya"
-cask "umputun/apps/agterm"
+### yazi and the previewers it shells out to
 
-tap "pkarpovich/apps"
-cask "yafetch"
-brew "turtle-harbor"
-brew "shortcuts-remote-server"
-brew "commit-author-refresher"
-brew "ovq"
-brew "bruq"
-brew "yashiki-layout-kakejiku"
-brew "FelixKratz/formulae/borders"
-cask "edith"
+brew("yazi")
+brew("ffmpeg")
+brew("poppler")
+brew("imagemagick")
+brew("sevenzip")
 
-brew "caddy"
-brew "agent-browser"
+### git, review, and the coding agents
 
-cask "font-maple-mono"
-cask "font-maple-mono-nf"
-cask "font-iosevka-nerd-font"
-cask "font-jetbrains-mono-nerd-font"
+brew("lazygit")
+brew("gh")
+brew("tea")
+brew("umputun/apps/revdiff")
+cask("umputun/apps/revmux")
+brew("melonamin/formulae/gt")
+brew("jnsahaj/lumen/lumen")
+brew("commit-author-refresher")
+cask("codex")
+brew("umputun/apps/ralphex")
+brew("umputun/apps/fya")
+brew("agent-browser")
+# moshi-hook bridges the coding agents to the Moshi daemon
+brew("rjyo/moshi/moshi-hook")
 
-cask "finetune"
+### containers: colima VM instead of Docker Desktop; autostart via
+### colima/com.pavel-karpovich.colima.plist (NOT brew services - its
+### `colima start -f` resets colima.yaml to defaults on every start)
+
+brew("colima")
+brew("docker")
+brew("docker-compose")
+
+### network, and the tools for when it misbehaves
+
+brew("curlie")
+brew("gping")
+brew("doggo")
+# mtr shows per-hop loss live, which is how the nhop NAT drops got found
+brew("mtr")
+brew("wget")
+brew("nhop")
+# runs under brew services, so an upgrade has to restart it - otherwise the old
+# binary keeps serving until someone notices
+brew("caddy", restart_service: :changed)
+
+### what is this machine doing right now
+
+brew("btop")
+brew("glances")
+brew("ctop")
+
+### building and shipping
+
+brew("goreleaser")
+brew("golangci-lint")
+brew("act")
+brew("xcodegen")
+brew("cameroncooke/axe/axe")
+brew("umputun/apps/spot")
+
+### data: files to look into, and databases to query
+
+brew("tabiew")
+brew("lnav")
+# psql and pg_dump without a local server. keg-only, so config.fish puts
+# /opt/homebrew/opt/libpq/bin on PATH
+brew("libpq")
+# NATS CLI, for looking into the queues
+brew("nats-io/nats-tools/nats")
+
+### the desktop: window management, menu bar, and the small utilities
+
+cask("typester/yashiki/yashiki")
+brew("yashiki-layout-kakejiku")
+# ranma draws the menu bar overlay, reap kills its children when it dies
+brew("typester/ranma/ranma")
+brew("typester/reap/reap")
+brew("FelixKratz/formulae/borders")
+cask("openlogi")
+cask("keepingyouawake")
+cask("timemachineeditor")
+cask("1password-cli")
+brew("duti")
+brew("terminal-notifier")
+brew("choose-gui")
+brew("ical-buddy")
+brew("PeonPing/tap/peon-ping")
+cask("yafetch")
+cask("finetune")
+cask("edith")
+
+### my own tools
+
+brew("turtle-harbor")
+brew("shortcuts-remote-server")
+brew("ovq")
+brew("bruq")
+brew("ralphex-macos-runner")
+# casks, not formulae, and not under brew services: macOS ties the permissions
+# each daemon needs - Accessibility for nikki, the microphone for mimi - to the
+# app's bundle id at a fixed path, while a formula moves the binary into a
+# versioned Cellar path on every upgrade and the grant is lost with it. Both
+# install their own launchd agent: `nikki install`, `mimi install`, once.
+cask("pkarpovich/apps/nikki")
+cask("pkarpovich/apps/mimi")
+
+### media, backup, work
+
+brew("mpv")
+brew("restic")
+brew("azure-cli")
+
+### fonts. Every one but the last is referenced by a config: Iosevka Term is the
+### terminal face in agterm/ghostty-settings.conf, wezterm.lua and corne's --mono;
+### Maple Mono NF is Zed's buffer and UI face; Hack Nerd Font is ranma's menu bar;
+### symbols-only is wezterm's icon fallback. Nothing else earns a permanent install
+### on that rule alone
+
+cask("font-iosevka")
+cask("font-maple-mono-nf")
+cask("font-hack-nerd-font")
+cask("font-symbols-only-nerd-font")
+
+### Roboto is the exception: no config here names it, it is here so somebody else's
+### HTML renders. Marketing and transactional mail templates open their font stacks
+### with Roboto, macOS ships no such face, and the usual second name in those stacks
+### is Helvetica - which carries no Latin Extended-A, so Polish and Czech diacritics
+### have nowhere to land and whole paragraphs come out as tofu in Mail. Removing it
+### costs nothing visible until a receipt arrives unreadable weeks later
+cask("font-roboto")
+
+### Mac App Store. brew bundle installs these by id, the name is only a label.
+### Keynote and Numbers appear twice on purpose: the 36xxxxxxx ids are the iPad
+### builds that Apple Silicon can run, the 40xxxxxxx ones are the mac apps
+
+brew("mas")
+
+mas("1Password for Safari", id: 1569813296)
+mas("Apple Configurator", id: 1037126344)
+mas("Audiobook Builder", id: 1437681957)
+mas("DaVinci Resolve", id: 571213070)
+mas("Developer", id: 640199958)
+mas("Dropover", id: 1355679052)
+mas("Endel", id: 1346247457)
+mas("GameTrack", id: 1136800740)
+mas("GarageBand", id: 682658836)
+mas("HandyPalette", id: 1515022667)
+mas("iMovie", id: 408981434)
+mas("Keynote", id: 409183694)
+mas("Keynote (iPad)", id: 361285480)
+mas("Mp3tag", id: 1532597159)
+mas("Numbers", id: 409203825)
+mas("Numbers (iPad)", id: 361304891)
+mas("OpenIn", id: 1643649331)
+mas("Pages", id: 409201541)
+mas("Pixelmator Pro", id: 1289583905)
+mas("The Unarchiver", id: 425424353)
+mas("Toggl Track", id: 1291898086)
+mas("WhatsApp", id: 310633997)
+mas("Xcode", id: 497799835)

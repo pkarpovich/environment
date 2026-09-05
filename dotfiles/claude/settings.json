@@ -30,7 +30,6 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
   "hooks": {
     "Notification": [
       {
@@ -369,7 +368,8 @@
     "swiftui-expert@swiftui-expert-skill": true,
     "thinking-tools@umputun-cc-thingz": true,
     "workflow@umputun-cc-thingz": true,
-    "xcode-build-skills@xcode-build-skills": true
+    "xcode-build-skills@xcode-build-skills": true,
+    "revmux@revmux": true
   },
   "extraKnownMarketplaces": {
     "aiguide": {
@@ -443,6 +443,12 @@
       "source": {
         "source": "github",
         "repo": "AvdLee/Xcode-Build-Optimization-Agent-Skill"
+      }
+    },
+    "revmux": {
+      "source": {
+        "source": "github",
+        "repo": "umputun/revmux"
       }
     }
   },

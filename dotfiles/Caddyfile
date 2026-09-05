@@ -34,6 +34,10 @@ content-oracle.localhost {
     reverse_proxy localhost:50201
 }
 
+nikki.localhost {
+    reverse_proxy localhost:50300
+}
+
 sahara.localhost {
     reverse_proxy localhost:50310
 }
@@ -56,4 +60,20 @@ agent-sdk-runtime-llm-proxy.localhost {
 
 pkarpovich-dev.localhost {
     reverse_proxy localhost:50400
+}
+
+corne.localhost {
+    reverse_proxy localhost:50500
+}
+
+ralphex-farm.localhost {
+    reverse_proxy localhost:50600 {
+        flush_interval -1
+    }
+}
+
+corne-keytap.localhost {
+    reverse_proxy localhost:50501 {
+        flush_interval -1
+    }
 }

@@ -2,6 +2,16 @@
 set -eu
 PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
+# a VM the Virtualization framework kills outright leaves ha.pid/ha.sock/vz.pid
+# behind. `colima start` inspects the instance through that dead socket, gets a
+# connection refused, calls it a configuration error and exits before booting
+# anything - so the 5-minute retry below can never clear it on its own. Only
+# `colima stop -f` removes the stale files; on a healthy or stopped VM this
+# branch is never taken.
+if colima list 2>/dev/null | awk '$1 == "default" && $2 == "Broken" { found = 1 } END { exit !found }'; then
+    colima stop -f
+fi
+
 colima start --vm-type vz --vz-rosetta --cpus 6 --memory 12 --disk 80
 
 # colima's Ubuntu image ships without systemd-resolved and /etc/resolv.conf is a

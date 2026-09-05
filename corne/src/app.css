@@ -1,0 +1,119 @@
+@layer reset, tokens, base;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+  body, h1, h2, p, ul, figure, fieldset, legend { margin: 0; padding: 0; }
+  ul { list-style: none; }
+  fieldset { border: 0; }
+}
+
+@layer tokens {
+  :root {
+    color-scheme: light dark;
+
+    --mono: "Iosevka Term", "Iosevka", ui-monospace, "SF Mono", monospace;
+    --sans: system-ui, -apple-system, sans-serif;
+
+    --paper: light-dark(oklch(97.4% 0.004 258), oklch(15% 0.011 258));
+    --paper-raised: light-dark(oklch(100% 0 0), oklch(21% 0.013 258));
+    --ink: light-dark(oklch(23% 0.028 258), oklch(93% 0.008 258));
+    --ink-soft: light-dark(oklch(50% 0.02 258), oklch(72% 0.012 258));
+    --ink-faint: light-dark(oklch(66% 0.014 258), oklch(56% 0.012 258));
+    --rule: light-dark(oklch(90% 0.008 258), oklch(34% 0.012 258));
+    --live: light-dark(oklch(56% 0.19 17), oklch(67% 0.19 17));
+    --key-shadow: light-dark(oklch(30% 0.03 258 / 0.14), oklch(0% 0 0 / 0.45));
+
+    --key-ink: oklch(23% 0.028 258);
+    --key-sub: oklch(66% 0.014 258);
+    --key-mark: oklch(50% 0.02 258);
+
+    --cap-blue: oklch(73.3% 0.129 236.8);
+    --cap-red: oklch(59.9% 0.184 12.9);
+    --cap-green: oklch(76.9% 0.152 160.6);
+    --cap-grey: oklch(69.2% 0.023 241.5);
+    --cap-white: oklch(94.5% 0.012 235);
+    --cap-dark: oklch(82% 0.022 260);
+    --cap-cyan: oklch(89% 0.087 204.8);
+    --cap-yellow: oklch(94.2% 0.072 106.9);
+    --cap-purple: oklch(66.1% 0.117 295.2);
+    --cap-steel: oklch(67.4% 0.120 241);
+    --cap-orange: oklch(73.7% 0.155 68.8);
+    --cap-wine: oklch(50.2% 0.126 12.4);
+    --cap-black: oklch(27.4% 0.010 242.1);
+    --cap-none: oklch(96% 0.004 258);
+
+    --sub-on-blue: oklch(38% 0.06 246);
+    --sub-on-red: oklch(89% 0.03 13);
+    --sub-on-green: oklch(40% 0.07 161);
+    --sub-on-grey: oklch(33% 0.02 244);
+    --sub-on-cyan: oklch(38% 0.07 205);
+    --sub-on-yellow: oklch(40% 0.08 107);
+    --sub-on-purple: oklch(30% 0.08 295);
+    --sub-on-black: oklch(72% 0.02 258);
+    --sub-on-steel: oklch(30% 0.07 241);
+    --sub-on-orange: oklch(30% 0.07 69);
+    --sub-on-wine: oklch(95% 0.03 12);
+
+    --space-2xs: 0.25rem;
+    --space-xs: 0.5rem;
+    --space-sm: 0.75rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2.5rem;
+
+    --radius-sm: 0.2rem;
+    --radius-md: 0.42rem;
+
+    --tick: 140ms;
+  }
+
+  @property --lift {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+  }
+}
+
+@layer base {
+  body {
+    font-family: var(--sans);
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--paper);
+    padding-inline: clamp(var(--space-md), 3vw, var(--space-xl));
+    padding-block: var(--space-lg) var(--space-xl);
+  }
+
+  body.is-live {
+    overflow: hidden;
+    padding-block: var(--space-sm);
+  }
+
+  h1, h2 {
+    font-family: var(--mono);
+    font-weight: 600;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+
+  code, kbd {
+    font-family: var(--mono);
+    font-size: 0.92em;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "calt" 0;
+  }
+
+  kbd {
+    border: 1px solid var(--rule);
+    border-block-end-width: 2px;
+    border-radius: var(--radius-sm);
+    padding-inline: 0.35em;
+    background: var(--paper-raised);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--live);
+    outline-offset: 2px;
+  }
+}

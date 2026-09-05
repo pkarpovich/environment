@@ -12,6 +12,12 @@ searchPriorities = []
 sortOrders = []
 
     [[catalogs.globalScopes]]
+    catalogIdentifier = 'obsidian.notes'
+
+        [catalogs.globalScopes.scope]
+        kind = 'none'
+
+    [[catalogs.globalScopes]]
     catalogIdentifier = 'tuna.effects'
 
         [catalogs.globalScopes.scope]
@@ -19,6 +25,12 @@ sortOrders = []
 
     [[catalogs.globalScopes]]
     catalogIdentifier = 'tuna.emoji'
+
+        [catalogs.globalScopes.scope]
+        kind = 'none'
+
+    [[catalogs.globalScopes]]
+    catalogIdentifier = 'tuna.smart-folders'
 
         [catalogs.globalScopes.scope]
         kind = 'none'
@@ -74,6 +86,20 @@ label = 'Prompts'
                 behavior = 'run'
                 presentation = 'automatic'
                 subjectIdentifiers = [ 'text:shortcuts run "Edith - Continue"' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        key = 'f'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.prompts.actions/send-to-prompt'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'tuna.current-selection/Current Text Selection' ]
+                targetIdentifier = 'tuna.prompts//Users/pavel.karpovich/Library/Application Support/Tuna/Prompts/fix-ru.md'
                 type = 'savedCommand'
 
 [[comboMode.bindings]]
@@ -1377,6 +1403,5 @@ template = 'https://www.youtube.com/results?search_query={{input}}'
 catalogIdentifier = 'tuna.prompts'
 
     [catalogSettings.values]
-    Provider = 'custom'
-    'Provider.custom.BaseURL' = 'https://api.anthropic.com'
-    'Provider.custom.Model' = 'claude-sonnet-4-6'
+    Provider = 'anthropic'
+    'Provider.anthropic.Model' = 'claude-sonnet-5'

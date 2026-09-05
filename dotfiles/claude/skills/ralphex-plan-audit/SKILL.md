@@ -1,8 +1,9 @@
 ---
 name: ralphex-plan-audit
 description: >-
-  Audit a ralphex/farm implementation plan (docs/plans/*.md) for self-containment and
-  task concreteness before running it through ralphex or queuing it on ralphex-farm.
+  Audit a ralphex/farm implementation plan (docs/plans/*.md) for self-containment, task
+  concreteness, and verification that can actually run in the task container, before
+  running it through ralphex or queuing it on ralphex-farm.
   ralphex runs every task and review in a FRESH session that re-reads only the plan
   (plus the committed repo and a progress log), so anything that tells the agent to "go
   read elsewhere", "match 1:1 with an external codebase", or just names a big outcome
@@ -54,6 +55,13 @@ A secondary consequence: because the review phases loop until clean, any accepta
 criterion a fresh reviewer cannot definitively judge keeps the loop finding "issues"
 and burning iterations (rule A3).
 
+There is a third, quieter failure that is neither about the spec nor the loop: those
+sessions run **inside a task container**, not on the author's machine. A plan can be
+perfectly self-contained and perfectly concrete and still name a verification the
+container cannot perform. Nothing fails when that happens - the agent substitutes
+whatever it can run, ticks the box, and the criterion is silently never checked
+(rule A5).
+
 ## Inputs
 
 - **Plan file:** the path if given; otherwise the newest `docs/plans/*.md` in the
@@ -87,7 +95,7 @@ Do these directly before spending agents:
 
 ### Step 3 - Semantic fan-out (parallel auditor agents)
 
-Launch one auditor subagent per rule (A1-A4) in parallel (Agent tool,
+Launch one auditor subagent per rule (A1-A5) in parallel (Agent tool,
 `subagent_type: general-purpose`). Give each: the **full plan text**, the target repo
 path, its single rule's rubric (below), and the output contract. One rule per agent
 keeps each focused and lets them run concurrently.
@@ -260,6 +268,63 @@ Flag references that only resolve in a conversation the cold session never saw:
 Each task must stand alone given the plan and the repo state at that point. A plan
 referencing its OWN earlier sections ("see Technical Details below") is fine - the whole
 plan is re-read. Flag only reliance on context that is NOT in the plan or repo.
+
+### A5 - Verification the run can actually execute
+
+Validation commands and acceptance criteria are executed by a cold session inside the
+**task container**, not on the author's machine. That container is deliberately narrow:
+the repo at `/workspace`, a language toolchain, and the CLIs - no docker daemon, no
+deployed stack, no third-party credentials, no access to private hosts.
+
+The failure mode is quiet, which is what makes it worth auditing. A command the
+container cannot run does not stop the task: the agent picks a substitute it can run,
+records it, and moves on. The checkbox ends up ticked and the criterion was never
+actually verified - and because the substitute is usually reasonable-sounding, nothing
+downstream reads as suspicious.
+
+Flag verification that needs something the container does not have:
+
+- **the Docker daemon** - `docker build`, `docker buildx bake`, `docker compose config`
+  or `up`, `docker run`, anything gated on `docker info`. Note the trap: the docker
+  **CLI** is installed in the image, so this fails as a daemon connection error rather
+  than "command not found", which reads like a transient environment hiccup instead of
+  a permanent capability gap. The `docker compose` plugin is absent too, separately.
+- **a tool the image does not carry and the repo's `.mise.toml` does not declare** -
+  `pnpm` is the recurring one. Dangerous indirectly: a `make` target that shells out to
+  a missing tool looks runnable in the plan and is not.
+- **a live system** - a deployed stack, a real third-party account, a running broadcast,
+  production credentials, a private network host.
+
+Not a finding: anything mise installs from the repo's own `.mise.toml`, and anything
+needing only the repo plus its language toolchain (`go test`, `gofmt`, `golangci-lint`,
+unit and in-process integration tests). Those are the normal case and must not be
+discouraged.
+
+Fix, in order of preference: (1) replace it with an equivalent check that does run in
+the container - parse the compose file rather than `docker compose config`, assert on
+the Dockerfile's text rather than building it, cover the behavior with a test rather
+than exercising the deployment; (2) if the criterion genuinely must stay, write the
+fallback into the plan inline AND say the criterion is unverified, so the finished plan
+does not read as fully checked.
+
+Severity: **blocker** when the unrunnable command is the only evidence a task is
+correct and the plan offers no fallback - the agent will improvise one silently.
+**Warning** when the plan already states a fallback: the work still is not verified,
+but the plan is honest about it and the gap is visible afterwards.
+
+Real failures that motivate this, all from farm runs that reported success:
+
+- a plan whose Docker acceptance checks were skipped twice in one run (`docker info`
+  fails), and again in another where `docker buildx bake` never ran - both recorded as
+  "⚠ docker unavailable" and accepted on the diff looking right;
+- a plan asking for `docker compose config`, where the agent fell back to parsing the
+  compose file with PyYAML - a syntax check standing in for a semantic one;
+- a `make test-ui` criterion in a repo with no `pnpm` in the container: the agent ran
+  the recipe's steps by hand via `npx pnpm@10`, a different major than the
+  `packageManager: pnpm@11.1.1` the repo pins, and the make target itself was never
+  exercised;
+- live acceptance criteria needing a real broadcast, a credential and a deployed stack:
+  not run at all, traced to the tests asserting the same behavior instead.
 
 ## Coordination with sibling skills
 

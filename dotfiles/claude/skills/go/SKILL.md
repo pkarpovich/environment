@@ -67,7 +67,7 @@ Non-negotiable; the gate for marking any task complete. If a rule is violated th
 
 **Comments (default: none):**
 - Default to no comments; add one only when the WHY is non-obvious (a hidden invariant, a workaround, surprising behavior).
-- Exported items get godoc comments starting with the name; unexported get a lowercase comment or none.
+- Being exported is NOT a reason to comment. The visibility rule above exports methods for inter-component clarity, so "godoc on everything exported" turns every export into a comment and fills a package with restated field lists. A godoc comment is for an identifier with a caller in another package AND something to say that the name does not; it starts with the name.
 - Never describe WHAT self-evident code does; no multi-paragraph comments on routine helpers.
 
 **Per-task gate (before marking a checkbox `[x]`):**

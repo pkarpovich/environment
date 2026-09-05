@@ -1,0 +1,10 @@
+[
+  {
+    "label": "corne: dev (page + key tap)",
+    "command": "mise run dev",
+    "cwd": "$ZED_WORKTREE_ROOT/corne",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "reveal": "always"
+  }
+]

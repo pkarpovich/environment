@@ -1,0 +1,27 @@
+[tools]
+node = "22"
+pnpm = "9"
+rust = "1.93"
+
+[tasks.install]
+description = "Install page dependencies"
+run = "pnpm install"
+
+[tasks.web]
+description = "Vite dev server on corne.localhost"
+run = "pnpm dev"
+
+[tasks.tap]
+description = "Key tap daemon on corne-keytap.localhost"
+run = [
+    "cargo build --release --manifest-path keytap/Cargo.toml",
+    "./keytap/target/release/keytap",
+]
+
+[tasks.dev]
+description = "Page and key tap daemon together"
+run = "mise run tap ::: web"
+
+[tasks.build]
+description = "Build the page into dist/"
+run = "pnpm build"

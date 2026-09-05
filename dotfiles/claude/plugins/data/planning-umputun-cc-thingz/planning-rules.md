@@ -86,6 +86,8 @@ Capture both near the top (Overview or Solution Overview):
 - **Non-goals** - the narrow boundary of this change ("v1: JSON output only, no retry, no stream-json mode"). Anything outside is explicitly later or never.
 - **Rejected alternatives** - the obvious approach NOT taken, plus one line of why ("native pass-through rejected because it bypasses the PTY/transcript path").
 
+This reasoning lives in the plan and in the PR description - it does NOT get transcribed into the code. A plan that pins WHY per task gives the executor a lot of prose with nowhere obvious to put it, and it lands as comments on every new symbol and as fresh paragraphs in CLAUDE.md. The code keeps only what the language skill's comment rule allows: a WHY that a reader of that file cannot recover without it.
+
 **Flag as important** when:
 
 - A plan touches an area with obvious adjacent features or a tempting larger refactor but states no non-goals, so scope is unbounded

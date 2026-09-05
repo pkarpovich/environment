@@ -1,0 +1,9 @@
+{
+  "name": "prompt-evals",
+  "description": "Evals for the Tuna prompts in dotfiles/tuna-prompts",
+  "private": true,
+  "version": "0.1.0",
+  "devDependencies": {
+    "promptfoo": "^0.122.0"
+  }
+}

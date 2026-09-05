@@ -1,0 +1,151 @@
+{
+  "version": 3,
+  "skills": {
+    "agents-sdk": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/agents-sdk/SKILL.md",
+      "skillFolderHash": "fe7c98385541543a62abf65090654fcbc181c8b7",
+      "installedAt": "2026-08-02T23:09:50.396Z",
+      "updatedAt": "2026-08-03T11:31:03.365Z"
+    },
+    "cloudflare": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/cloudflare/SKILL.md",
+      "skillFolderHash": "a92bec38b7b5ff5e634b509c7ff3c289d9d61290",
+      "installedAt": "2026-08-02T23:09:50.397Z",
+      "updatedAt": "2026-08-03T11:31:03.367Z"
+    },
+    "cloudflare-email-service": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/cloudflare-email-service/SKILL.md",
+      "skillFolderHash": "af7bd16246149247d4b699382d951dc376491bac",
+      "installedAt": "2026-08-02T23:09:50.398Z",
+      "updatedAt": "2026-08-03T11:31:03.368Z"
+    },
+    "cloudflare-one": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/cloudflare-one/SKILL.md",
+      "skillFolderHash": "c692b9ddaf8ac60485b758a22100be27e4ec782e",
+      "installedAt": "2026-08-02T23:09:50.398Z",
+      "updatedAt": "2026-08-03T11:31:03.368Z"
+    },
+    "cloudflare-one-migrations": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/cloudflare-one-migrations/SKILL.md",
+      "skillFolderHash": "6ab7a1f3220dae699b5cb1325ec86b952ccf6a3e",
+      "installedAt": "2026-08-02T23:09:50.398Z",
+      "updatedAt": "2026-08-03T11:31:03.369Z"
+    },
+    "durable-objects": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/durable-objects/SKILL.md",
+      "skillFolderHash": "72810f48414f2e68d0aa65a8895f749c959dea91",
+      "installedAt": "2026-08-02T23:09:50.399Z",
+      "updatedAt": "2026-08-03T11:31:03.369Z"
+    },
+    "sandbox-sdk": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/sandbox-sdk/SKILL.md",
+      "skillFolderHash": "4d90eab74b6f49050c92b95ba635bc99c41671e9",
+      "installedAt": "2026-08-02T23:09:50.399Z",
+      "updatedAt": "2026-08-03T11:31:03.370Z"
+    },
+    "turnstile-spin": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/turnstile-spin/SKILL.md",
+      "skillFolderHash": "8f135e415060480d73aeb8f0170c3e9cfb31c3ec",
+      "installedAt": "2026-08-02T23:09:50.399Z",
+      "updatedAt": "2026-08-03T11:31:03.378Z"
+    },
+    "web-perf": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/web-perf/SKILL.md",
+      "skillFolderHash": "e8e8c50ca6abf0849a4d9d69c1bed8b98b5d7411",
+      "installedAt": "2026-08-02T23:09:50.400Z",
+      "updatedAt": "2026-08-03T11:31:03.380Z"
+    },
+    "workers-best-practices": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/workers-best-practices/SKILL.md",
+      "skillFolderHash": "7dd384e79c76d3e388dfe53e12e93642679ff1fd",
+      "installedAt": "2026-08-02T23:09:50.400Z",
+      "updatedAt": "2026-08-03T11:31:03.381Z"
+    },
+    "wrangler": {
+      "source": "cloudflare/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/skills.git",
+      "skillPath": "skills/wrangler/SKILL.md",
+      "skillFolderHash": "45cc198b2aad3f06e8abf91333f55fbe7579f659",
+      "installedAt": "2026-08-02T23:09:50.401Z",
+      "updatedAt": "2026-08-03T11:31:03.382Z"
+    },
+    "obsidian-bases": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/kepano/obsidian-skills.git",
+      "skillPath": "skills/obsidian-bases/SKILL.md",
+      "skillFolderHash": "f3330f27de4d7907ead57d0f48672f4d3280bb77",
+      "installedAt": "2026-08-02T23:12:03.257Z",
+      "updatedAt": "2026-08-03T11:31:05.368Z"
+    },
+    "obsidian-markdown": {
+      "source": "kepano/obsidian-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/kepano/obsidian-skills.git",
+      "skillPath": "skills/obsidian-markdown/SKILL.md",
+      "skillFolderHash": "4723197c6dc59abc29819da87863b1ac20b96095",
+      "installedAt": "2026-08-02T23:12:03.259Z",
+      "updatedAt": "2026-08-03T11:31:05.369Z"
+    },
+    "neon-postgres-egress-optimizer": {
+      "source": "neondatabase/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/neondatabase/agent-skills.git",
+      "skillPath": "skills/neon-postgres-egress-optimizer/SKILL.md",
+      "skillFolderHash": "a90a6d9f386a0f7938c167ff8f6af4874953383e",
+      "installedAt": "2026-08-02T23:12:05.313Z",
+      "updatedAt": "2026-08-03T11:31:07.551Z"
+    },
+    "agterm": {
+      "source": "umputun/agterm",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/agterm.git",
+      "ref": "v0.20.2",
+      "skillPath": "plugins/agterm/skills/agterm/SKILL.md",
+      "skillFolderHash": "24c0711e79b7c567761135efd4b233a5b361d875",
+      "installedAt": "2026-08-02T23:13:13.573Z",
+      "updatedAt": "2026-08-06T11:36:13.899Z"
+    },
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "skillFolderHash": "82def67855a0d2aad7794207951820fa5422fdb0",
+      "installedAt": "2026-09-05T21:01:47.163Z",
+      "updatedAt": "2026-09-05T21:01:48.022Z"
+    }
+  },
+  "dismissed": {}
+}

@@ -1,0 +1,12 @@
+packages:
+  - .
+
+# Text evals need none of promptfoo's optional native extras: no browser provider, no local
+# embeddings, no image processing, no TS transpilation of eval files.
+allowBuilds:
+  '@playwright/browser-chromium': false
+  '@swc/core': false
+  esbuild: false
+  onnxruntime-node: false
+  protobufjs: false
+  sharp: false

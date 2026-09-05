@@ -248,3 +248,12 @@ __pycache__/
 .claude/worktrees/
 **/.claude/settings.local.json
 .claude/settings.local.json
+
+# vendored agent skills: .skill-lock.json is the record, the content is not ours
+dotfiles/agents/skills/
+
+# revmux review archive: half a megabyte per round, and revmux prunes nothing itself
+.revmux/
+
+# prompt eval corpus: sampled from private Claude Code transcripts, only the harness ships
+prompt-evals/*/cases.yaml

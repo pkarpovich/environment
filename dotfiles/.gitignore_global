@@ -9,3 +9,8 @@ dist
 
 .local
 **/.claude/.cc-writes/
+
+# revmux review rounds: half a megabyte per round, and revmux prunes nothing itself
+.revmux/
+
+**/.claude/settings.local.json
