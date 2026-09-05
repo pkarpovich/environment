@@ -65,6 +65,7 @@ Goal: fill the `### Content` section with one-line hooks for each piece of conte
 7. Format every bullet as `- <hook> - [[<wikilink>]]`. The wikilink is the file name without `.md` (e.g., `[[Project Hail Mary (2026)]]`).
 8. Show the proposed Content block to Pavel **as plain text in chat first**, before writing to the file. Ask if grouping/order/wording is OK.
 9. After confirmation, Edit the file to replace the empty `### Content\n\n- ` placeholder (followed by `### Projects` or end of file).
+10. **Pavel's edits to a hook are final.** If he rewrites or shortens one, take his version verbatim - do not reintroduce a detail he cut when you touch that line again. He notices ("я же специально это убрал").
 
 Reference - example Content block (from episode 029):
 ```markdown
@@ -90,19 +91,26 @@ Goal: propose 4-5 episode title candidates in the style of recent episodes. Pave
 
 2. Inputs to the title:
    - The `### Content` you just filled (look for dominant content themes)
-   - The `### Projects` section in the same file (Pavel fills this himself before invoking the skill - if it's empty, ask him to fill it first; the projects section drives the title's central image more than content does)
+   - The `### Projects` and `### General` sections in the same file (Pavel fills these himself - if they're empty, ask him to fill them first; they drive the title's central image more than content does)
 
-3. Brainstorm angles:
+3. **Research the month before brainstorming - do not title from the bullet text alone.** The bullets are one-line shorthand and give no sense of scale: "Реализовали с 0 процесс бекапов" was the month's biggest engineering effort (nothing had ever been backed up; a full 3-2-1 system with an offsite copy of the entire podcast archive), while "У Ralphex Farm теперь есть свои раннеры" was a minor increment. You cannot tell them apart without looking. So:
+   - Open the notes wikilinked from `### Projects` / `### General`. Many resolve to evergreen notes at the vault root (`Home Backups.md`, `nhop proxy router.md`); some do not exist yet - that itself is a signal the item is small.
+   - Read the weekly notes covering the period - `Periodic/Weekly/2026-WNN.md`. Their "Highlights of the week" say plainly what Pavel was excited about, what he bought, what he struggled with, and what he skipped.
+   - Rank the items by weight, then anchor the title on something from the top. Pavel pushes back hard when the title is built on a minor item ("ты выбираешь мелочь") or on something he already called small.
+
+4. Brainstorm angles:
    - One central project name or metaphor as the anchor
-   - One content reference as the secondary layer
+   - One content reference as the secondary layer - and prefer the **newest / headline** release over an older entry in the same marathon (with a Spider-Man marathon, the anchor is `Brand New Day`, not `Homecoming`)
    - Look for double-meaning words: "артефакт" (tech bug + magic relic), "фантом" (Star Wars + glitched data), "сбой" (malfunction + disruption), "трещина" (crack in mask + crack in code)
    - Avoid in-your-face references - Pavel prefers subtle and metaphorical over literal
+   - **Do not reuse a motif from the last 2-3 episodes.** Check the recent titles you just read and retire those words: after 030 "Автономная ферма выходит на форсаж" and 031 "Сны молодого агента", the words "агент", "ферма", "сны" are burned.
+   - The title must read as **one coherent phrase**. A liked opening plus a bolted-on technical tail ("Совершенно новый день на новой раскладке") reads as two halves glued together - keep rewriting until the whole line means one thing.
 
-4. Present 4-5 candidates **with one-line reasoning each** explaining what's woven in. Group them by angle (project-anchored vs content-anchored vs hybrid) so Pavel can quickly see the spread.
+5. Present 4-5 candidates **with one-line reasoning each** explaining what's woven in. Group them by angle (project-anchored vs content-anchored vs hybrid) so Pavel can quickly see the spread.
 
-5. If Pavel likes the start but not the end (or vice versa), keep the part he likes and brainstorm only the variable half. Push toward double meanings and cinematic phrasing - Pavel responded well to those in past sessions.
+6. If Pavel likes the start but not the end (or vice versa), keep the part he likes and brainstorm only the variable half. Push toward double meanings and cinematic phrasing - Pavel responded well to those in past sessions.
 
-6. After Pavel picks, instruct him to:
+7. After Pavel picks, instruct him to:
    - Rename the file: change `Lego Cubes NNN -.md` to `Lego Cubes NNN - <Chosen Title>.md` (in Obsidian, just rename the note - Obsidian will update wikilinks automatically)
    - Set `title: <Chosen Title>` in frontmatter (just the title, no episode prefix)
 
@@ -120,6 +128,7 @@ Goal: fill the `## Links` section with IMDB/Steam/Goodreads URLs for each Conten
 3. Run WebSearch in parallel for all items - one search per item with the title and year, e.g. `"Dream Scenario" 2023 IMDB`. Spawn all WebSearches in a single tool message to keep latency low.
 4. From the results, pick the canonical title page URL (not mediaviewer/cast/reviews subpages).
 5. Edit the `## Links` section, replacing the placeholder `- ` with the bullet list. Maintain the same order as Content. No descriptions on the links - just bare URLs as bullets, matching the style of episodes 024-028.
+6. Links are positional - nothing labels which URL belongs to which item, so the two lists drift silently if `### Content` is reordered afterwards. Pavel does reorder it. Before Stage 6, re-read both sections and realign Links to the current Content order.
 
 Reference - example Links block:
 ```markdown
@@ -141,6 +150,9 @@ Workflow:
 
 1. Extract the **central image** from the chosen title - the cover should literalize the title's main figure or concept.
 2. Decide composition (single coherent scene vs multi-zone diorama) using the decision tree in the reference file. Default single-scene unless Pavel says otherwise.
+   - **Give the scene a real place and a sense of scale.** A bare interior rendered on empty background reads as a room floating in a void - Pavel's first note on such a draft was "нет масштаба и деталей, комната не понятно где". Anchor it: put the room somewhere specific, open a wall or a window onto a wider view (a skyline, a horizon, terrain below), and add scale cues in that view - distant buildings, a helicopter, an antenna mast, rooftop details.
+   - Where the content allows, borrow the location from the dominant Content item: for a Spider-Man month the room became the top floor of a New York skyscraper, styled as the "guy in the chair" control room that guides Peter through the earpiece.
+   - Push density explicitly. Sparse renders come back when the prompt lists too few objects - name the equipment, the cabling, the desk clutter, and raise the piece count in the style anchor (5000+ rather than 3000) for interiors that should feel packed.
 3. Build the prompt by filling the assembly template in the reference file. Include all required ingredients (subject, composition, action, location, style + lighting + text + aspect ratio).
 4. Apply Nano Banana Pro best practices: prose over tag soup, explicit text rendering instructions, named LEGO brick colors, full sentences.
 5. Weave in 2-3 subtle Easter eggs referencing other Content items - small props with named labels, posters, silhouettes. Not dominating the scene.
@@ -178,12 +190,21 @@ Steps:
    ```bash
    cp "<image-source>" "/System/Volumes/Data/mnt/nas/media/me/LEGO Cubes/LEGO Cubes E<N>.jpg"
    cp "<image-source>" "/System/Volumes/Data/mnt/nas/media/me/LEGO Cubes/LEGO Cubes E<N>-thumb.jpg"
-   # mp4 in background - takes 5-10 minutes over the network mount:
+   # mp4 in background - expect 40-75 minutes over the network mount (~5 MB/s observed):
    cp "/Users/pavel.karpovich/Movies/LEGO Cubes E<N>.mp4" "/System/Volumes/Data/mnt/nas/media/me/LEGO Cubes/LEGO Cubes E<N>.mp4"
    ```
    The two .jpg copies are byte-identical content; both names exist because Plex/Kodi look for either, mirroring the pattern of past episodes (E24+ have both `E<N>.jpg` and `E<N>-thumb.jpg`).
 
-   The cover image source is usually `~/Downloads/Generated Image *.jpg` from Nano Banana Pro - Pavel will paste a path or attach the image. If he attached an image, ask for the local path.
+   The cover image source: by the time Stage 6 runs Pavel has usually already embedded it, so it lives in the vault at `Attachments/LEGO Cubes E0NN.jpg` (zero-padded there, unlike the NAS names). Obsidian often leaves **two** files, `LEGO Cubes E0NN.jpg` and `LEGO Cubes E0NN 1.jpg`, with frontmatter `cover:` pointing at one and the `## Logo` embed at the other - `md5` them, and when they match (they have every time) just use either. Otherwise the source is `~/Downloads/Generated Image *.jpg` from Nano Banana Pro; if Pavel attached an image in chat, ask for the local path.
+
+   **Long background copies get killed here.** Multi-GB `cp` runs have been stopped mid-flight repeatedly (session teardown leaves no completion record), leaving a truncated file on the NAS. Do not restart from zero - an interrupted `cp` writes a correct prefix, so resume:
+   ```bash
+   L="/Users/pavel.karpovich/Movies/LEGO Cubes E<N>.mp4"
+   NAS="/System/Volumes/Data/mnt/nas/media/me/LEGO Cubes/LEGO Cubes E<N>.mp4"
+   nn=$(stat -f %z "$NAS"); echo "aligned: $((nn % 1048576))  blocks: $((nn / 1048576))"
+   dd if="$L" of="$NAS" bs=1m skip=<blocks> seek=<blocks> conv=notrunc
+   ```
+   The partial size has been an exact multiple of 1 MiB every time, so `bs=1m` with equal `skip`/`seek` splices cleanly; `conv=notrunc` is what keeps it an append instead of a rewrite. macOS ships openrsync, which has no `--append-verify`, so `dd` is the tool. Repeat as needed - each round keeps the progress. If Pavel is around, suggest he run the copy himself from his own shell (`! cp ...`), which is not subject to agent teardown.
 
 4. Build the nfo. **Read the previous episode's nfo** (`LEGO Cubes E<N-1>.nfo`) before writing - it is the canonical layout to mirror exactly. Source the title and plot from the vault note (`Lego Cubes NNN - <Title>.md`).
 
@@ -207,6 +228,16 @@ Steps:
    ls -la "/System/Volumes/Data/mnt/nas/media/me/LEGO Cubes/LEGO Cubes E<N>"*
    ```
    The .mp4 size on NAS must match the local source byte-for-byte (network copies can stall).
+
+   **If the copy was ever interrupted and resumed, size alone is not proof.** Note the trap: `+faststart` puts the moov atom at the front, so a truncated file still reports the full duration under `ffprobe` - that check cannot detect a missing tail. Spot-check the actual bytes instead, reading only ~150 MB back over the mount:
+   ```bash
+   chk() { dd if="$1" bs=1m skip=$2 count=$3 2>/dev/null | md5 -q; }
+   # head (moov), a window around each splice offset, and the tail
+   for r in "0 8" "<splice_blocks-25> 50" "<last_blocks-40> 41"; do
+     set -- $r; [ "$(chk "$L" $1 $2)" = "$(chk "$NAS" $1 $2)" ] && echo "OK $1" || echo "FAIL $1"
+   done
+   ```
+   Compare a window centred on every offset where a copy was resumed, plus the head and the tail. Matching size + matching splice windows + matching tail is enough; a full 22 GB `md5` over the mount would take as long as the copy itself.
 
 Stop after this stage. The local Movies copy stays as a backup; don't delete it. The original raw `YYYY-MM-DD_HH-MM-SS.mp4` from OBS also stays - Pavel cleans those up himself later.
 
