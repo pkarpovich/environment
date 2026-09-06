@@ -4,7 +4,7 @@
 # thing is FOR, not by when it was added - a package nobody can place in a group here
 # is usually a package nobody needs.
 
-tap("pkarpovich/apps")
+tap("pkarpovich/apps", trusted: true)
 
 ### shell, prompt, and what loads on every command
 
@@ -31,7 +31,7 @@ brew("moor")
 
 ### terminals, multiplexers, and the phone link
 
-cask("umputun/apps/agterm")
+cask("umputun/apps/agterm", trusted: true)
 # still the terminal on the MBA; agterm took over on this machine, but the
 # wezterm/ config is linked on both
 cask("wezterm@nightly")
@@ -56,17 +56,17 @@ brew("sevenzip")
 brew("lazygit")
 brew("gh")
 brew("tea")
-brew("umputun/apps/revdiff")
-cask("umputun/apps/revmux")
-brew("melonamin/formulae/gt")
-brew("jnsahaj/lumen/lumen")
+brew("umputun/apps/revdiff", trusted: true)
+cask("umputun/apps/revmux", trusted: true)
+brew("melonamin/formulae/gt", trusted: true)
+brew("jnsahaj/lumen/lumen", trusted: true)
 brew("commit-author-refresher")
 cask("codex")
-brew("umputun/apps/ralphex")
-brew("umputun/apps/fya")
+brew("umputun/apps/ralphex", trusted: true)
+brew("umputun/apps/fya", trusted: true)
 brew("agent-browser")
 # moshi-hook bridges the coding agents to the Moshi daemon
-brew("rjyo/moshi/moshi-hook")
+brew("rjyo/moshi/moshi-hook", trusted: true)
 
 ### containers: colima VM instead of Docker Desktop; autostart via
 ### colima/com.pavel-karpovich.colima.plist (NOT brew services - its
@@ -75,6 +75,8 @@ brew("rjyo/moshi/moshi-hook")
 brew("colima")
 brew("docker")
 brew("docker-compose")
+# osxkeychain credsStore for docker login, Docker Desktop's helper is gone
+brew("docker-credential-helper")
 
 ### network, and the tools for when it misbehaves
 
@@ -101,8 +103,8 @@ brew("goreleaser")
 brew("golangci-lint")
 brew("act")
 brew("xcodegen")
-brew("cameroncooke/axe/axe")
-brew("umputun/apps/spot")
+brew("cameroncooke/axe/axe", trusted: true)
+brew("umputun/apps/spot", trusted: true)
 
 ### data: files to look into, and databases to query
 
@@ -112,16 +114,16 @@ brew("lnav")
 # /opt/homebrew/opt/libpq/bin on PATH
 brew("libpq")
 # NATS CLI, for looking into the queues
-brew("nats-io/nats-tools/nats")
+brew("nats-io/nats-tools/nats", trusted: true)
 
 ### the desktop: window management, menu bar, and the small utilities
 
-cask("typester/yashiki/yashiki")
+cask("typester/yashiki/yashiki", trusted: true)
 brew("yashiki-layout-kakejiku")
 # ranma draws the menu bar overlay, reap kills its children when it dies
-brew("typester/ranma/ranma")
-brew("typester/reap/reap")
-brew("FelixKratz/formulae/borders")
+brew("typester/ranma/ranma", trusted: true)
+brew("typester/reap/reap", trusted: true)
+brew("FelixKratz/formulae/borders", trusted: true)
 cask("openlogi")
 cask("keepingyouawake")
 cask("timemachineeditor")
@@ -130,7 +132,7 @@ brew("duti")
 brew("terminal-notifier")
 brew("choose-gui")
 brew("ical-buddy")
-brew("PeonPing/tap/peon-ping")
+brew("PeonPing/tap/peon-ping", trusted: true)
 cask("yafetch")
 cask("finetune")
 cask("edith")
@@ -147,8 +149,8 @@ brew("ralphex-macos-runner")
 # app's bundle id at a fixed path, while a formula moves the binary into a
 # versioned Cellar path on every upgrade and the grant is lost with it. Both
 # install their own launchd agent: `nikki install`, `mimi install`, once.
-cask("pkarpovich/apps/nikki")
-cask("pkarpovich/apps/mimi")
+cask("pkarpovich/apps/nikki", trusted: true)
+cask("pkarpovich/apps/mimi", trusted: true)
 
 ### media, backup, work
 
