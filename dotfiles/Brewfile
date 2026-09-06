@@ -182,7 +182,6 @@ cask("vlc")
 cask("spotify")
 cask("sony-ps-remote-play")
 cask("calibre")
-cask("kindle-previewer")
 brew("restic")
 brew("azure-cli")
 
@@ -199,8 +198,6 @@ cask("thebrowsercompany-dia")
 cask("slack")
 cask("discord")
 cask("telegram")
-cask("zoom")
-cask("microsoft-teams")
 
 ### notes and docs
 
