@@ -90,6 +90,9 @@ brew("nhop")
 # runs under brew services, so an upgrade has to restart it - otherwise the old
 # binary keeps serving until someone notices
 brew("caddy", restart_service: :changed)
+# the Standalone variant (system extension), never the App Store one: the two
+# cannot coexist and Tailscale itself recommends Standalone. Sparkle updates it.
+cask("tailscale-app")
 
 ### what is this machine doing right now
 
