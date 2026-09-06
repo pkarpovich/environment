@@ -12,13 +12,6 @@ function envup --description "refresh the full dev environment: brew, fisher, mi
         end
     end
 
-    # missing Brewfile entries next, for the same reason mas goes first: a new mas()
-    # entry needs root. This is also the step that applies the Brewfile's trusted:
-    # flags. Upgrades stay with brewup, which runs brew update first
-    echo "==> brew bundle install --global --no-upgrade"
-    brew bundle install --global --no-upgrade
-    echo
-
     echo "==> brewup"
     brewup
     echo
