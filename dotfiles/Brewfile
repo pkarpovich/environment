@@ -93,6 +93,9 @@ brew("caddy", restart_service: :changed)
 # the Standalone variant (system extension), never the App Store one: the two
 # cannot coexist and Tailscale itself recommends Standalone. Sparkle updates it.
 cask("tailscale-app")
+# API client; bruq (below) runs its .bru collections from the CLI. Adopted on the
+# Air 2026-09-06 as the first hand-installed app moved under brew
+cask("bruno")
 
 ### what is this machine doing right now
 
