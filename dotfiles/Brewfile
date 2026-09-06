@@ -35,6 +35,7 @@ cask("umputun/apps/agterm", trusted: true)
 # still the terminal on the MBA; agterm took over on this machine, but the
 # wezterm/ config is linked on both
 cask("wezterm@nightly")
+cask("kitty")
 # tmux: the mux ccm mirrors agterm's Claude sessions into, and the only one
 # Moshi's chat can read (preview, agent status, session tree are tmux-only)
 brew("tmux")
@@ -54,6 +55,7 @@ brew("sevenzip")
 ### git, review, and the coding agents
 
 brew("lazygit")
+cask("sublime-merge")
 brew("gh")
 brew("tea")
 brew("umputun/apps/revdiff", trusted: true)
@@ -62,6 +64,8 @@ brew("melonamin/formulae/gt", trusted: true)
 brew("jnsahaj/lumen/lumen", trusted: true)
 brew("commit-author-refresher")
 cask("codex")
+# the desktop app; Claude Code itself is the native installer, not brew
+cask("claude")
 brew("umputun/apps/ralphex", trusted: true)
 brew("umputun/apps/fya", trusted: true)
 brew("agent-browser")
@@ -96,6 +100,8 @@ cask("tailscale-app")
 # API client; bruq (below) runs its .bru collections from the CLI. Adopted on the
 # Air 2026-09-06 as the first hand-installed app moved under brew
 cask("bruno")
+cask("little-snitch")
+cask("pritunl")
 
 ### what is this machine doing right now
 
@@ -142,10 +148,22 @@ brew("PeonPing/tap/peon-ping", trusted: true)
 cask("yafetch")
 cask("finetune")
 cask("edith")
+cask("1password")
+cask("appcleaner")
+cask("cleanshot")
+cask("hazel")
+# Thaw is the maintained GPL fork of Ice, which stopped at 0.11.12 in 2024-10
+cask("thaw")
+cask("karabiner-elements")
+cask("tuna")
+# Blimp-Labs ships it ad-hoc signed, so homebrew/cask would not take it; the cask lives in my tap
+cask("pkarpovich/apps/claude-usage-bar", trusted: true)
 
 ### my own tools
 
-brew("turtle-harbor")
+# the daemon runs from ~/Library/Application Support/turtle-harbor so Full Disk
+# Access survives upgrades; th install copies the fresh binary there and restarts it
+brew("turtle-harbor", postinstall: "th install")
 brew("shortcuts-remote-server")
 brew("ovq")
 brew("bruq")
@@ -161,8 +179,34 @@ cask("pkarpovich/apps/mimi", trusted: true)
 ### media, backup, work
 
 brew("mpv")
+cask("vlc")
+cask("spotify")
+cask("sony-ps-remote-play")
+cask("calibre")
+cask("kindle-previewer")
 brew("restic")
 brew("azure-cli")
+
+### editors and IDEs. The JetBrains IDEs themselves come from Toolbox into
+### ~/Applications; casks for them would put second copies into /Applications
+
+cask("zed")
+cask("jetbrains-toolbox")
+
+### browsers, chat, and calls
+
+cask("google-chrome")
+cask("thebrowsercompany-dia")
+cask("slack")
+cask("discord")
+cask("telegram")
+cask("zoom")
+cask("microsoft-teams")
+
+### notes and docs
+
+cask("obsidian")
+cask("notion")
 
 ### fonts. Every one but the last is referenced by a config: Iosevka Term is the
 ### terminal face in agterm/ghostty-settings.conf, wezterm.lua and corne's --mono;
@@ -211,3 +255,8 @@ mas("The Unarchiver", id: 425424353)
 mas("Toggl Track", id: 1291898086)
 mas("WhatsApp", id: 310633997)
 mas("Xcode", id: 497799835)
+
+### per-machine extras live next to this file in brewfiles/<LocalHostName>.rb,
+### same DSL. brew reaches this file through the ~/.Brewfile symlink, hence realpath
+host_file = File.join(File.dirname(File.realpath(__FILE__)), "brewfiles", "#{`scutil --get LocalHostName`.strip}.rb")
+instance_eval(File.read(host_file), host_file) if File.exist?(host_file)
