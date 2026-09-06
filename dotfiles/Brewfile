@@ -181,8 +181,9 @@ cask("font-symbols-only-nerd-font")
 cask("font-roboto")
 
 ### Mac App Store. brew bundle installs these by id, the name is only a label.
-### Keynote and Numbers appear twice on purpose: the 36xxxxxxx ids are the iPad
-### builds that Apple Silicon can run, the 40xxxxxxx ones are the mac apps
+### iWork: since 15.1 (2026-01) Apple ships Keynote/Numbers/Pages as NEW apps
+### ("Creator Studio") under the ids shared with the iOS listings; the old
+### 40xxxxxxx mac apps stopped at 14.5 and are delisted, so they are not here
 
 brew("mas")
 
@@ -197,13 +198,11 @@ mas("GameTrack", id: 1136800740)
 mas("GarageBand", id: 682658836)
 mas("HandyPalette", id: 1515022667)
 mas("iMovie", id: 408981434)
-mas("Keynote", id: 409183694)
-mas("Keynote (iPad)", id: 361285480)
+mas("Keynote Creator Studio", id: 361285480)
 mas("Mp3tag", id: 1532597159)
-mas("Numbers", id: 409203825)
-mas("Numbers (iPad)", id: 361304891)
+mas("Numbers Creator Studio", id: 361304891)
 mas("OpenIn", id: 1643649331)
-mas("Pages", id: 409201541)
+mas("Pages Creator Studio", id: 361309726)
 mas("Pixelmator Pro", id: 1289583905)
 mas("The Unarchiver", id: 425424353)
 mas("Toggl Track", id: 1291898086)
