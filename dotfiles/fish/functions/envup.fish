@@ -30,7 +30,7 @@ function envup --description "refresh the full dev environment: brew, fisher, mi
         echo
         # upgrade leaves every superseded version behind; 25 had piled up on the Air
         echo "==> mise prune"
-        mise prune
+        mise prune --yes
         echo
     end
 

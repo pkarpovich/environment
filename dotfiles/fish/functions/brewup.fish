@@ -1,4 +1,8 @@
 function brewup --description "refresh Homebrew against the Brewfile: update, bundle install, upgrade, bundle cleanup, cleanup"
+    # brew 6 ask mode stops to confirm any upgrade plan that touches dependencies;
+    # this runs unattended, the plan is still printed
+    set -lx HOMEBREW_NO_ASK 1
+
     echo "==> brew update"
     brew update
     echo
@@ -17,10 +21,11 @@ function brewup --description "refresh Homebrew against the Brewfile: update, bu
     brew upgrade --greedy-latest
     echo
 
-    # lists what is installed but not in the Brewfile and asks. y removes it and
-    # resets the trust store to the Brewfile, n keeps everything: the drift report
+    # the drift report: what is installed but not in the Brewfile. Without a tty on
+    # stdin it prints the plan and exits 0 instead of asking; nothing is removed here.
+    # To act on it: brew bundle cleanup --global --force (also resets the trust store)
     echo "==> brew bundle cleanup --global"
-    brew bundle cleanup --global
+    brew bundle cleanup --global </dev/null
     echo
 
     # cache older than 120 days; autoremove is part of cleanup since brew 6
