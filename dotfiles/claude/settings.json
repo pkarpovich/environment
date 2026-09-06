@@ -1,6 +1,428 @@
 {
-  "permissions": {
-    "allow": [
+  "agentPushNotifEnabled" : true,
+  "alwaysThinkingEnabled" : true,
+  "autoCompactEnabled" : true,
+  "effortLevel" : "xhigh",
+  "enabledPlugins" : {
+    "axiom@axiom-marketplace" : true,
+    "brainstorm@umputun-cc-thingz" : true,
+    "code-simplifier@claude-plugins-official" : true,
+    "core-data-expert@core-data-agent-skill" : true,
+    "frontend-design@claude-plugins-official" : true,
+    "grafana-core@grafana-skills" : true,
+    "grafana-lgtm@grafana-skills" : true,
+    "mattpocock-skills@mattpocock" : true,
+    "pg@aiguide" : true,
+    "planning@umputun-cc-thingz" : true,
+    "ralphex@ralphex" : true,
+    "release-tools@umputun-cc-thingz" : true,
+    "revdiff-planning@revdiff" : true,
+    "revdiff@revdiff" : true,
+    "review@umputun-cc-thingz" : true,
+    "revmux@revmux" : true,
+    "rust-analyzer-lsp@claude-plugins-official" : true,
+    "skill-creator@claude-plugins-official" : true,
+    "skill-eval@umputun-cc-thingz" : true,
+    "swift-concurrency@swift-concurrency-agent-skill" : true,
+    "swift-lsp@claude-plugins-official" : true,
+    "swift-testing-expert@swift-testing-agent-skill" : true,
+    "swiftui-expert@swiftui-expert-skill" : true,
+    "thinking-tools@umputun-cc-thingz" : true,
+    "workflow@umputun-cc-thingz" : true,
+    "xcode-build-skills@xcode-build-skills" : true
+  },
+  "extraKnownMarketplaces" : {
+    "aiguide" : {
+      "source" : {
+        "repo" : "timescale\/pg-aiguide",
+        "source" : "github"
+      }
+    },
+    "axiom-marketplace" : {
+      "source" : {
+        "repo" : "CharlesWiltgen\/Axiom",
+        "source" : "github"
+      }
+    },
+    "core-data-agent-skill" : {
+      "source" : {
+        "repo" : "AvdLee\/Core-Data-Agent-Skill",
+        "source" : "github"
+      }
+    },
+    "grafana-skills" : {
+      "source" : {
+        "repo" : "grafana\/skills",
+        "source" : "github"
+      }
+    },
+    "mattpocock" : {
+      "source" : {
+        "repo" : "mattpocock\/skills",
+        "source" : "github"
+      }
+    },
+    "ralphex" : {
+      "source" : {
+        "repo" : "umputun\/ralphex",
+        "source" : "github"
+      }
+    },
+    "revdiff" : {
+      "autoUpdate" : true,
+      "source" : {
+        "repo" : "umputun\/revdiff",
+        "source" : "github"
+      }
+    },
+    "revmux" : {
+      "source" : {
+        "repo" : "umputun\/revmux",
+        "source" : "github"
+      }
+    },
+    "swift-concurrency-agent-skill" : {
+      "source" : {
+        "repo" : "AvdLee\/Swift-Concurrency-Agent-Skill",
+        "source" : "github"
+      }
+    },
+    "swift-testing-agent-skill" : {
+      "source" : {
+        "repo" : "AvdLee\/Swift-Testing-Agent-Skill",
+        "source" : "github"
+      }
+    },
+    "swiftui-expert-skill" : {
+      "source" : {
+        "repo" : "AvdLee\/SwiftUI-Agent-Skill",
+        "source" : "github"
+      }
+    },
+    "umputun-cc-thingz" : {
+      "source" : {
+        "repo" : "umputun\/cc-thingz",
+        "source" : "github"
+      }
+    },
+    "xcode-build-skills" : {
+      "source" : {
+        "repo" : "AvdLee\/Xcode-Build-Optimization-Agent-Skill",
+        "source" : "github"
+      }
+    }
+  },
+  "hooks" : {
+    "Notification" : [
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/notify\/notify.sh",
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/peon-ping\/peon.sh",
+            "timeout" : 10,
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/wezterm-status\/mark.sh notify",
+            "timeout" : 5,
+            "type" : "command"
+          }
+        ],
+        "matcher" : "permission_prompt"
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "'\/Users\/pavel.karpovich\/.config\/agterm\/agent-status\/agterm-claude-status.sh' blocked",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "permission_prompt"
+      }
+    ],
+    "PermissionRequest" : [
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/peon-ping\/peon.sh",
+            "timeout" : 10,
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "async" : false,
+            "command" : "'\/opt\/homebrew\/bin\/moshi-hook' claude-hook",
+            "type" : "command"
+          }
+        ]
+      }
+    ],
+    "PostToolUse" : [
+      {
+        "hooks" : [
+          {
+            "command" : "python3 ~\/.claude\/hooks\/revdiff-plan-review.py",
+            "timeout" : 345600,
+            "type" : "command"
+          }
+        ],
+        "matcher" : "Write"
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "'\/Users\/pavel.karpovich\/.config\/agterm\/agent-status\/agterm-claude-status.sh' active --blink",
+            "type" : "command"
+          }
+        ]
+      },
+      {
+        "hooks" : [
+          {
+            "async" : true,
+            "command" : "'\/opt\/homebrew\/bin\/moshi-hook' claude-hook",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "AskUserQuestion"
+      },
+      {
+        "hooks" : [
+          {
+            "async" : true,
+            "command" : "'\/opt\/homebrew\/bin\/moshi-hook' claude-hook",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "ExitPlanMode"
+      }
+    ],
+    "PreToolUse" : [
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/wezterm-status\/mark.sh thinking",
+            "timeout" : 5,
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "async" : true,
+            "command" : "'\/opt\/homebrew\/bin\/moshi-hook' claude-hook",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "AskUserQuestion"
+      },
+      {
+        "hooks" : [
+          {
+            "async" : true,
+            "command" : "'\/opt\/homebrew\/bin\/moshi-hook' claude-hook",
+            "type" : "command"
+          }
+        ],
+        "matcher" : "ExitPlanMode"
+      }
+    ],
+    "SessionEnd" : [
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/wezterm-status\/clear.sh",
+            "timeout" : 5,
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "~\/.config\/agterm\/scripts\/cc-map-unmap.fish",
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "async" : true,
+            "command" : "'\/opt\/homebrew\/bin\/moshi-hook' claude-hook",
+            "type" : "command"
+          }
+        ]
+      }
+    ],
+    "SessionStart" : [
+      {
+        "hooks" : [
+          {
+            "command" : "~\/.claude\/hooks\/temporal-context.sh",
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/peon-ping\/peon.sh",
+            "timeout" : 10,
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "~\/.config\/agterm\/scripts\/cc-map-hook.fish",
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "async" : true,
+            "command" : "'\/opt\/homebrew\/bin\/moshi-hook' claude-hook",
+            "type" : "command"
+          }
+        ]
+      }
+    ],
+    "Stop" : [
+      {
+        "hooks" : [
+          {
+            "command" : "~\/.config\/agterm\/scripts\/cc-map-hook.fish",
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/peon-ping\/peon.sh",
+            "timeout" : 10,
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/wezterm-status\/mark.sh stop",
+            "timeout" : 5,
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "'\/Users\/pavel.karpovich\/.config\/agterm\/agent-status\/agterm-claude-status.sh' completed --auto-reset",
+            "type" : "command"
+          }
+        ]
+      },
+      {
+        "hooks" : [
+          {
+            "async" : true,
+            "command" : "'\/opt\/homebrew\/bin\/moshi-hook' claude-hook",
+            "type" : "command"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit" : [
+      {
+        "hooks" : [
+          {
+            "command" : "~\/.claude\/hooks\/skill-activation.sh",
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "~\/.config\/agterm\/scripts\/cc-map-hook.fish",
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/peon-ping\/peon.sh",
+            "timeout" : 10,
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "\/Users\/pavel.karpovich\/.claude\/hooks\/wezterm-status\/mark.sh thinking",
+            "timeout" : 5,
+            "type" : "command"
+          }
+        ],
+        "matcher" : ""
+      },
+      {
+        "hooks" : [
+          {
+            "command" : "'\/Users\/pavel.karpovich\/.config\/agterm\/agent-status\/agterm-claude-status.sh' active --blink",
+            "type" : "command"
+          }
+        ]
+      },
+      {
+        "hooks" : [
+          {
+            "async" : true,
+            "command" : "'\/opt\/homebrew\/bin\/moshi-hook' claude-hook",
+            "type" : "command"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions" : {
+    "allow" : [
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
@@ -21,447 +443,25 @@
       "WebSearch",
       "WebFetch"
     ],
-    "deny": [
+    "defaultMode" : "auto",
+    "deny" : [
       "Bash(rm -rf:*)",
       "Bash(sudo:*)",
       "Read(.env)",
       "Read(.env.*)",
-      "Read(**/secrets/**)"
-    ],
-    "defaultMode": "auto"
-  },
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/notify/notify.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "permission_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh notify",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "permission_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-agent-status.sh' blocked"
-          }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
-            "async": false
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/hooks/revdiff-plan-review.py",
-            "timeout": 345600
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-agent-status.sh' active --blink"
-          }
-        ]
-      },
-      {
-        "matcher": "AskUserQuestion",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
-            "async": true
-          }
-        ]
-      },
-      {
-        "matcher": "ExitPlanMode",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh thinking",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "AskUserQuestion",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
-            "async": true
-          }
-        ]
-      },
-      {
-        "matcher": "ExitPlanMode",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/clear.sh",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.config/agterm/scripts/cc-map-unmap.fish"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/temporal-context.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.config/agterm/scripts/cc-map-hook.fish"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.config/agterm/scripts/cc-map-hook.fish"
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh stop",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-agent-status.sh' completed --auto-reset"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/skill-activation.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.config/agterm/scripts/cc-map-hook.fish"
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh thinking",
-            "timeout": 5
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-agent-status.sh' active --blink"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "'/opt/homebrew/bin/moshi-hook' claude-hook",
-            "async": true
-          }
-        ]
-      }
+      "Read(**\/secrets\/**)"
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bash /Users/pavel.karpovich/.claude/statusline-script.sh"
+  "preferredNotifChannel" : "terminal_bell",
+  "skipAutoPermissionPrompt" : true,
+  "skipDangerousModePermissionPrompt" : true,
+  "skipWorkflowUsageWarning" : true,
+  "statusLine" : {
+    "command" : "bash \/Users\/pavel.karpovich\/.claude\/statusline-script.sh",
+    "type" : "command"
   },
-  "enabledPlugins": {
-    "axiom@axiom-marketplace": true,
-    "brainstorm@umputun-cc-thingz": true,
-    "code-simplifier@claude-plugins-official": true,
-    "core-data-expert@core-data-agent-skill": true,
-    "frontend-design@claude-plugins-official": true,
-    "grafana-core@grafana-skills": true,
-    "grafana-lgtm@grafana-skills": true,
-    "mattpocock-skills@mattpocock": true,
-    "pg@aiguide": true,
-    "planning@umputun-cc-thingz": true,
-    "ralphex@ralphex": true,
-    "release-tools@umputun-cc-thingz": true,
-    "revdiff-planning@revdiff": true,
-    "revdiff@revdiff": true,
-    "review@umputun-cc-thingz": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
-    "skill-eval@umputun-cc-thingz": true,
-    "swift-concurrency@swift-concurrency-agent-skill": true,
-    "swift-lsp@claude-plugins-official": true,
-    "swift-testing-expert@swift-testing-agent-skill": true,
-    "swiftui-expert@swiftui-expert-skill": true,
-    "thinking-tools@umputun-cc-thingz": true,
-    "workflow@umputun-cc-thingz": true,
-    "xcode-build-skills@xcode-build-skills": true,
-    "revmux@revmux": true
-  },
-  "extraKnownMarketplaces": {
-    "aiguide": {
-      "source": {
-        "source": "github",
-        "repo": "timescale/pg-aiguide"
-      }
-    },
-    "axiom-marketplace": {
-      "source": {
-        "source": "github",
-        "repo": "CharlesWiltgen/Axiom"
-      }
-    },
-    "core-data-agent-skill": {
-      "source": {
-        "source": "github",
-        "repo": "AvdLee/Core-Data-Agent-Skill"
-      }
-    },
-    "grafana-skills": {
-      "source": {
-        "source": "github",
-        "repo": "grafana/skills"
-      }
-    },
-    "mattpocock": {
-      "source": {
-        "source": "github",
-        "repo": "mattpocock/skills"
-      }
-    },
-    "ralphex": {
-      "source": {
-        "source": "github",
-        "repo": "umputun/ralphex"
-      }
-    },
-    "revdiff": {
-      "source": {
-        "source": "github",
-        "repo": "umputun/revdiff"
-      },
-      "autoUpdate": true
-    },
-    "swift-concurrency-agent-skill": {
-      "source": {
-        "source": "github",
-        "repo": "AvdLee/Swift-Concurrency-Agent-Skill"
-      }
-    },
-    "swift-testing-agent-skill": {
-      "source": {
-        "source": "github",
-        "repo": "AvdLee/Swift-Testing-Agent-Skill"
-      }
-    },
-    "swiftui-expert-skill": {
-      "source": {
-        "source": "github",
-        "repo": "AvdLee/SwiftUI-Agent-Skill"
-      }
-    },
-    "umputun-cc-thingz": {
-      "source": {
-        "source": "github",
-        "repo": "umputun/cc-thingz"
-      }
-    },
-    "xcode-build-skills": {
-      "source": {
-        "source": "github",
-        "repo": "AvdLee/Xcode-Build-Optimization-Agent-Skill"
-      }
-    },
-    "revmux": {
-      "source": {
-        "source": "github",
-        "repo": "umputun/revmux"
-      }
-    }
-  },
-  "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
-  "tui": "fullscreen",
-  "skipDangerousModePermissionPrompt": true,
-  "skipWorkflowUsageWarning": true,
-  "theme": "dark",
-  "preferredNotifChannel": "terminal_bell",
-  "autoCompactEnabled": true,
-  "terminalProgressBarEnabled": false,
-  "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "terminalProgressBarEnabled" : false,
+  "theme" : "dark",
+  "tui" : "fullscreen",
+  "voiceEnabled" : true
 }
