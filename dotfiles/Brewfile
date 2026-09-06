@@ -152,7 +152,8 @@ cask("1password")
 cask("appcleaner")
 cask("cleanshot")
 cask("hazel")
-cask("jordanbaird-ice")
+# Thaw is the maintained GPL fork of Ice, which stopped at 0.11.12 in 2024-10
+cask("thaw")
 cask("karabiner-elements")
 cask("tuna")
 # Blimp-Labs ships it ad-hoc signed, so homebrew/cask would not take it; the cask lives in my tap
