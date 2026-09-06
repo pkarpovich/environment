@@ -8,13 +8,13 @@ cask("elgato-control-center")
 cask("elgato-stream-deck")
 cask("firefox")
 cask("iina")
-cask("kindle-comic-converter")
 cask("obs")
 cask("parallels")
 cask("qflipper")
 cask("raspberry-pi-imager")
 cask("rode-central")
 cask("sublime-text")
-cask("teeworlds")
-cask("via")
 cask("visual-studio-code")
+
+# not here: kindle-comic-converter, teeworlds and via. Their casks were disabled
+# on 2026-09-01 for failing the Gatekeeper check; the apps stay hand-installed
