@@ -16,7 +16,9 @@ function envup --description "refresh the full dev environment: brew, fisher, mi
     brewup
     echo
 
-    if command -q fisher
+    # fisher is a function, not a binary: command -q never saw it and this step
+    # silently skipped on every run until 2026-09-07
+    if functions -q fisher
         echo "==> fisher update"
         fisher update
         echo
@@ -38,15 +40,18 @@ function envup --description "refresh the full dev environment: brew, fisher, mi
         echo
         # plugins live per config dir, so the work profile needs its own pass. Without
         # it that side just falls behind silently - it sat on planning 3.4.0 while this
-        # one was on 3.8.5. Passing the path explicitly for both keeps the two
-        # iterations identical, and nothing leaks into the calling shell
+        # one was on 3.8.5. The default profile must NOT get CLAUDE_CONFIG_DIR: with it
+        # set, claude looks for .claude.json inside the dir instead of ~/.claude.json,
+        # warns, and writes a stray empty one. Only the work profile needs the variable
         for cfg in ~/.claude ~/.claude-work
             test -d $cfg; or continue
+            set -l run env
+            test $cfg = ~/.claude; or set run env CLAUDE_CONFIG_DIR=$cfg
             echo "==> claude plugins ("(basename $cfg)")"
-            env CLAUDE_CONFIG_DIR=$cfg claude plugin marketplace update
-            for plugin in (env CLAUDE_CONFIG_DIR=$cfg claude plugin list --json | jq -r '.[].id')
+            $run claude plugin marketplace update
+            for plugin in ($run claude plugin list --json | jq -r '.[].id')
                 echo "    -> $plugin"
-                env CLAUDE_CONFIG_DIR=$cfg claude plugin update $plugin
+                $run claude plugin update $plugin
             end
             echo
         end
