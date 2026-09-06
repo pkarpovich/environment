@@ -7,8 +7,8 @@ defaults (2 CPU / 2 GiB, no DNS) on every start - discovered the hard way.
 
 Pieces:
 
-- `colima-up.sh` - starts the VM with explicit flags (vz, rosetta, 6 CPU,
-  12 GiB, 80 GiB disk) and then repairs `/etc/resolv.conf` inside the VM:
+- `colima-up.sh` - starts the VM with explicit flags (vz, rosetta, 80 GiB
+  disk; CPU/RAM picked by hostname: MBP 6/12, Air 4/8) and then repairs `/etc/resolv.conf` inside the VM:
   colima's Ubuntu image has no systemd-resolved, the symlink dangles, and
   dockerd falls back to [::1]:53 so every image pull fails with DNS errors.
   resolv.conf points at the lima gateway (192.168.5.2) which proxies to the

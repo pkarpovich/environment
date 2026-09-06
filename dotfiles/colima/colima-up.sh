@@ -12,7 +12,14 @@ if colima list 2>/dev/null | awk '$1 == "default" && $2 == "Broken" { found = 1 
     colima stop -f
 fi
 
-colima start --vm-type vz --vz-rosetta --cpus 6 --memory 12 --disk 80
+# sized per machine: the MBP (10 cores / 64 GiB) gets 6/12, the Air (8 cores /
+# 24 GiB) 4/8. vz allocates memory lazily, the number is a ceiling.
+case "$(scutil --get LocalHostName)" in
+    Pavels-MacBook-Air) cpus=4; memory=8 ;;
+    *) cpus=6; memory=12 ;;
+esac
+
+colima start --vm-type vz --vz-rosetta --cpus "$cpus" --memory "$memory" --disk 80
 
 # colima's Ubuntu image ships without systemd-resolved and /etc/resolv.conf is a
 # dangling symlink, so dockerd falls back to [::1]:53 and every pull fails.
