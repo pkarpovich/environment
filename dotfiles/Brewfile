@@ -155,6 +155,8 @@ cask("hazel")
 cask("jordanbaird-ice")
 cask("karabiner-elements")
 cask("tuna")
+# Blimp-Labs ships it ad-hoc signed, so homebrew/cask would not take it; the cask lives in my tap
+cask("pkarpovich/apps/claude-usage-bar", trusted: true)
 
 ### my own tools
 
