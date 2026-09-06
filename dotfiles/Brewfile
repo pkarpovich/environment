@@ -160,7 +160,9 @@ cask("pkarpovich/apps/claude-usage-bar", trusted: true)
 
 ### my own tools
 
-brew("turtle-harbor")
+# the daemon runs from ~/Library/Application Support/turtle-harbor so Full Disk
+# Access survives upgrades; th install copies the fresh binary there and restarts it
+brew("turtle-harbor", postinstall: "th install")
 brew("shortcuts-remote-server")
 brew("ovq")
 brew("bruq")
