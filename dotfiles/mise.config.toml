@@ -7,6 +7,7 @@ rust = "1.93"
 deno = "2.7"
 bun = "1.2"
 "pipx:claude-swap" = "latest"
+uv = "latest"
 
 [settings]
 experimental = true

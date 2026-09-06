@@ -1,4 +1,4 @@
-function envup --description "refresh the full dev environment: brew, fisher, mise tools, uv tools, claude"
+function envup --description "refresh the full dev environment: brew, fisher, mise tools, claude"
     # first, because `mas upgrade` needs root: the password gets asked at the start of
     # the run rather than minutes into it. Skipped entirely when nothing is stale, so
     # the usual run never prompts
@@ -12,18 +12,17 @@ function envup --description "refresh the full dev environment: brew, fisher, mi
         end
     end
 
+    # missing Brewfile entries next, for the same reason mas goes first: a new mas()
+    # entry needs root. This is also the step that applies the Brewfile's trusted:
+    # flags. Upgrades stay with brewup, which runs brew update first
+    echo "==> brew bundle install --global --no-upgrade"
+    brew bundle install --global --no-upgrade
+    echo
+
     echo "==> brewup"
     brewup
     echo
 
-    if command -q agent-browser
-        echo "==> agent-browser-skill-sync"
-        agent-browser-skill-sync
-        echo
-    end
-
-    # report only: `mas upgrade` needs root, and a sudo prompt in the middle of a
-    # refresh run is worse than being told to run it yourself
     if command -q fisher
         echo "==> fisher update"
         fisher update
@@ -34,14 +33,9 @@ function envup --description "refresh the full dev environment: brew, fisher, mi
         echo "==> mise upgrade"
         mise upgrade
         echo
-    end
-
-    if command -q uv
-        echo "==> uv self update"
-        uv self update
-        echo
-        echo "==> uv tool upgrade --all"
-        uv tool upgrade --all
+        # upgrade leaves every superseded version behind; 25 had piled up on the Air
+        echo "==> mise prune"
+        mise prune
         echo
     end
 
