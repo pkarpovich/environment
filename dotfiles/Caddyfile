@@ -2,6 +2,10 @@ dorag-mcp.localhost {
     reverse_proxy localhost:8001
 }
 
+spider-web.localhost {
+    reverse_proxy localhost:50700
+}
+
 ask-agent.localhost {
     reverse_proxy localhost:5173
 }
