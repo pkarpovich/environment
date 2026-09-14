@@ -1,7 +1,6 @@
 # MacBook Pro only; loaded by ../Brewfile
 
 cask("audacity")
-cask("battle-net")
 cask("bettermouse")
 cask("elgato-capture-device-utility")
 cask("elgato-control-center")
