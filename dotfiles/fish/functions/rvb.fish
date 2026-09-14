@@ -19,6 +19,6 @@ function rvb --description "revdiff: review own branch changes since divergence 
         return 1
     end
 
-    revdiff $base $argv
+    revdiff --theme auto $base $argv
 end
 
