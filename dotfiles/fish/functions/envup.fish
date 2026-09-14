@@ -49,7 +49,7 @@ function envup --description "refresh the full dev environment: brew, fisher, mi
             test $cfg = ~/.claude; or set run env CLAUDE_CONFIG_DIR=$cfg
             echo "==> claude plugins ("(basename $cfg)")"
             $run claude plugin marketplace update
-            for plugin in ($run claude plugin list --json | jq -r '.[].id')
+            for plugin in ($run claude plugin list --json | jq -r '.[] | select(.scope == "user") | .id')
                 echo "    -> $plugin"
                 $run claude plugin update $plugin
             end
