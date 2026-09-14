@@ -29,12 +29,6 @@ sortOrders = []
         [catalogs.globalScopes.scope]
         kind = 'none'
 
-    [[catalogs.globalScopes]]
-    catalogIdentifier = 'tuna.smart-folders'
-
-        [catalogs.globalScopes.scope]
-        kind = 'none'
-
 [[comboMode.bindings]]
 iconPath = 'star.fill'
 key = 'a'
