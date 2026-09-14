@@ -101,7 +101,6 @@ cask("tailscale-app")
 # Air 2026-09-06 as the first hand-installed app moved under brew
 cask("bruno")
 cask("little-snitch")
-cask("pritunl")
 
 ### what is this machine doing right now
 
