@@ -71,10 +71,9 @@ func doubleCommandQ() rule {
 	}
 }
 
-const (
-	enSourceID = "me.tonsky.keyboardlayout.universal.english-universal"
-	ruSourceID = "me.tonsky.keyboardlayout.universal.russian-universal"
-)
+// moji owns the layout: Karabiner only decides tap versus hold per device and emits f19 on a
+// tap, which moji swallows, switching the layout and holding the keys typed behind the switch.
+const signalKey = "f19"
 
 const (
 	corneVendorID  = 18003
@@ -91,15 +90,8 @@ type langVariant struct {
 	params *parameters
 }
 
-type langDirection struct {
-	when     string
-	switchTo string
-}
-
-func (v langVariant) toggle(dir langDirection) manipulator {
-	conditions := []condition{
-		{Type: "input_source_if", InputSources: []inputSource{{InputSourceID: dir.when}}},
-	}
+func (v langVariant) manipulator() manipulator {
+	var conditions []condition
 	if v.device != nil {
 		conditions = append(conditions, *v.device)
 	}
@@ -107,18 +99,20 @@ func (v langVariant) toggle(dir langDirection) manipulator {
 		Type:       "basic",
 		From:       v.from,
 		Conditions: conditions,
-		ToIfAlone:  []to{{SelectInputSource: &inputSource{InputSourceID: dir.switchTo}}},
+		ToIfAlone:  []to{{KeyCode: signalKey}},
 		To:         v.to,
 		Parameters: v.params,
 	}
 }
 
 func languageSwitch() rule {
+	noRepeat := false
+	globe := manipulator{
+		Type: "basic",
+		From: from{AppleVendorTopCaseKeyCode: "keyboard_fn"},
+		To:   []to{{KeyCode: signalKey, Repeat: &noRepeat}},
+	}
 	variants := []langVariant{
-		{
-			from: from{AppleVendorTopCaseKeyCode: "keyboard_fn"},
-			to:   []to{{KeyCode: "vk_none"}},
-		},
 		{
 			from:   from{KeyCode: "left_control"},
 			to:     []to{{KeyCode: "left_control"}},
@@ -131,14 +125,11 @@ func languageSwitch() rule {
 			params: &parameters{ToIfAloneTimeout: shiftTapTimeout},
 		},
 	}
-	var manipulators []manipulator
+	manipulators := []manipulator{globe}
 	for _, v := range variants {
-		manipulators = append(manipulators,
-			v.toggle(langDirection{when: enSourceID, switchTo: ruSourceID}),
-			v.toggle(langDirection{when: ruSourceID, switchTo: enSourceID}),
-		)
+		manipulators = append(manipulators, v.manipulator())
 	}
-	return rule{Description: "Switch to English or Russian", Manipulators: manipulators}
+	return rule{Description: "Switch the keyboard layout through moji", Manipulators: manipulators}
 }
 
 func f5ToF13() rule {

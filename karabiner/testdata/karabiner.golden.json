@@ -77,7 +77,7 @@
             ]
           },
           {
-            "description": "Switch to English or Russian",
+            "description": "Switch the keyboard layout through moji",
             "manipulators": [
               {
                 "type": "basic",
@@ -86,52 +86,8 @@
                 },
                 "to": [
                   {
-                    "key_code": "vk_none"
-                  }
-                ],
-                "to_if_alone": [
-                  {
-                    "select_input_source": {
-                      "input_source_id": "me.tonsky.keyboardlayout.universal.russian-universal"
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "input_source_if",
-                    "input_sources": [
-                      {
-                        "input_source_id": "me.tonsky.keyboardlayout.universal.english-universal"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "basic",
-                "from": {
-                  "apple_vendor_top_case_key_code": "keyboard_fn"
-                },
-                "to": [
-                  {
-                    "key_code": "vk_none"
-                  }
-                ],
-                "to_if_alone": [
-                  {
-                    "select_input_source": {
-                      "input_source_id": "me.tonsky.keyboardlayout.universal.english-universal"
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "input_source_if",
-                    "input_sources": [
-                      {
-                        "input_source_id": "me.tonsky.keyboardlayout.universal.russian-universal"
-                      }
-                    ]
+                    "key_code": "f19",
+                    "repeat": false
                   }
                 ]
               },
@@ -147,56 +103,10 @@
                 ],
                 "to_if_alone": [
                   {
-                    "select_input_source": {
-                      "input_source_id": "me.tonsky.keyboardlayout.universal.russian-universal"
-                    }
+                    "key_code": "f19"
                   }
                 ],
                 "conditions": [
-                  {
-                    "type": "input_source_if",
-                    "input_sources": [
-                      {
-                        "input_source_id": "me.tonsky.keyboardlayout.universal.english-universal"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "device_unless",
-                    "identifiers": [
-                      {
-                        "is_built_in_keyboard": true
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "type": "basic",
-                "from": {
-                  "key_code": "left_control"
-                },
-                "to": [
-                  {
-                    "key_code": "left_control"
-                  }
-                ],
-                "to_if_alone": [
-                  {
-                    "select_input_source": {
-                      "input_source_id": "me.tonsky.keyboardlayout.universal.english-universal"
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "input_source_if",
-                    "input_sources": [
-                      {
-                        "input_source_id": "me.tonsky.keyboardlayout.universal.russian-universal"
-                      }
-                    ]
-                  },
                   {
                     "type": "device_unless",
                     "identifiers": [
@@ -219,60 +129,10 @@
                 ],
                 "to_if_alone": [
                   {
-                    "select_input_source": {
-                      "input_source_id": "me.tonsky.keyboardlayout.universal.russian-universal"
-                    }
+                    "key_code": "f19"
                   }
                 ],
                 "conditions": [
-                  {
-                    "type": "input_source_if",
-                    "input_sources": [
-                      {
-                        "input_source_id": "me.tonsky.keyboardlayout.universal.english-universal"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "device_if",
-                    "identifiers": [
-                      {
-                        "vendor_id": 18003,
-                        "product_id": 4
-                      }
-                    ]
-                  }
-                ],
-                "parameters": {
-                  "basic.to_if_alone_timeout_milliseconds": 180
-                }
-              },
-              {
-                "type": "basic",
-                "from": {
-                  "key_code": "left_shift"
-                },
-                "to": [
-                  {
-                    "key_code": "left_shift"
-                  }
-                ],
-                "to_if_alone": [
-                  {
-                    "select_input_source": {
-                      "input_source_id": "me.tonsky.keyboardlayout.universal.english-universal"
-                    }
-                  }
-                ],
-                "conditions": [
-                  {
-                    "type": "input_source_if",
-                    "input_sources": [
-                      {
-                        "input_source_id": "me.tonsky.keyboardlayout.universal.russian-universal"
-                      }
-                    ]
-                  },
                   {
                     "type": "device_if",
                     "identifiers": [

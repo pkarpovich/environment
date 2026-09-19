@@ -39,17 +39,16 @@ func TestKeyCodeIsBareKeyCode(t *testing.T) {
 
 func TestLanguageSwitchManipulators(t *testing.T) {
 	want := []struct {
-		name    string
-		fromKey string
-		fromFn  string
-		device  string
+		name      string
+		fromKey   string
+		fromFn    string
+		device    string
+		onPress   bool
+		heldAsKey string
 	}{
-		{name: "built-in fn en->ru", fromFn: "keyboard_fn"},
-		{name: "built-in fn ru->en", fromFn: "keyboard_fn"},
-		{name: "external ctrl en->ru", fromKey: "left_control", device: "device_unless"},
-		{name: "external ctrl ru->en", fromKey: "left_control", device: "device_unless"},
-		{name: "corne shift en->ru", fromKey: "left_shift", device: "device_if"},
-		{name: "corne shift ru->en", fromKey: "left_shift", device: "device_if"},
+		{name: "built-in globe", fromFn: "keyboard_fn", onPress: true},
+		{name: "external ctrl", fromKey: "left_control", device: "device_unless", heldAsKey: "left_control"},
+		{name: "corne shift", fromKey: "left_shift", device: "device_if", heldAsKey: "left_shift"},
 	}
 
 	r := languageSwitch()
@@ -77,6 +76,34 @@ func TestLanguageSwitchManipulators(t *testing.T) {
 		if got := deviceCondition(m); got != w.device {
 			t.Errorf("%s: expected device condition %q, got %q", w.name, w.device, got)
 		}
+		for _, c := range m.Conditions {
+			if c.Type == "input_source_if" || c.Type == "input_source_unless" {
+				t.Errorf("%s: moji decides the direction, Karabiner must not condition on the input source, got %+v", w.name, c)
+			}
+		}
+		for _, to := range append(append([]to{}, m.To...), m.ToIfAlone...) {
+			if to.SelectInputSource != nil {
+				t.Errorf("%s: Karabiner must not select the input source itself, got %+v", w.name, to)
+			}
+		}
+		if w.onPress {
+			if len(m.To) != 1 || m.To[0].KeyCode != signalKey {
+				t.Errorf("%s: a dedicated key emits %s on press, got to=%+v", w.name, signalKey, m.To)
+			}
+			if m.To[0].Repeat == nil || *m.To[0].Repeat {
+				t.Errorf("%s: a held globe must not autorepeat %s, or every repeat toggles the layout again", w.name, signalKey)
+			}
+			if len(m.ToIfAlone) != 0 {
+				t.Errorf("%s: a dedicated key has nothing to do on release, got to_if_alone=%+v", w.name, m.ToIfAlone)
+			}
+			continue
+		}
+		if len(m.To) != 1 || m.To[0].KeyCode != w.heldAsKey {
+			t.Errorf("%s: a real modifier stays itself while held, got to=%+v", w.name, m.To)
+		}
+		if len(m.ToIfAlone) != 1 || m.ToIfAlone[0].KeyCode != signalKey {
+			t.Errorf("%s: a tap on a real modifier emits %s on release, got to_if_alone=%+v", w.name, signalKey, m.ToIfAlone)
+		}
 	}
 }
 
@@ -103,40 +130,31 @@ func TestShiftLanguageSwitchIsScopedAndTimeBoxed(t *testing.T) {
 		}
 	}
 
-	if shifts != 2 {
-		t.Fatalf("expected 2 shift manipulators, got %d", shifts)
+	if shifts != 1 {
+		t.Fatalf("expected 1 shift manipulator, got %d", shifts)
 	}
 }
 
 func TestDeviceConditionSerializesIdentifiersAsArray(t *testing.T) {
 	r := languageSwitch()
 
-	var deviceConds int
-	for _, i := range []int{2, 3} {
-		m := r.Manipulators[i]
-		if m.From.KeyCode != "left_control" {
-			t.Fatalf("manipulator %d: expected left_control from, got %+v", i, m.From)
-		}
-		out, err := json.Marshal(m)
-		if err != nil {
-			t.Fatalf("marshal manipulator %d: %v", i, err)
-		}
-		if bytes.Contains(out, []byte(`"identifiers":{`)) {
-			t.Errorf("manipulator %d: identifiers must be a JSON array, not an object (Karabiner rejects the object form), got %s", i, out)
-		}
-		if !bytes.Contains(out, []byte(`"identifiers":[{"is_built_in_keyboard":true}]`)) {
-			t.Errorf("manipulator %d: expected device_unless identifiers array, got %s", i, out)
-		}
-		deviceConds++
+	m := r.Manipulators[1]
+	if m.From.KeyCode != "left_control" {
+		t.Fatalf("manipulator 1: expected left_control from, got %+v", m.From)
 	}
-	if deviceConds != 2 {
-		t.Fatalf("expected 2 external ctrl manipulators, got %d", deviceConds)
+	out, err := json.Marshal(m)
+	if err != nil {
+		t.Fatalf("marshal manipulator 1: %v", err)
+	}
+	if bytes.Contains(out, []byte(`"identifiers":{`)) {
+		t.Errorf("manipulator 1: identifiers must be a JSON array, not an object (Karabiner rejects the object form), got %s", out)
+	}
+	if !bytes.Contains(out, []byte(`"identifiers":[{"is_built_in_keyboard":true}]`)) {
+		t.Errorf("manipulator 1: expected device_unless identifiers array, got %s", out)
 	}
 
-	for _, i := range []int{0, 1} {
-		if len(r.Manipulators[i].Conditions) != 1 {
-			t.Errorf("built-in fn manipulator %d must only have the input_source_if condition, got %+v", i, r.Manipulators[i].Conditions)
-		}
+	if len(r.Manipulators[0].Conditions) != 0 {
+		t.Errorf("built-in globe manipulator must carry no condition, got %+v", r.Manipulators[0].Conditions)
 	}
 }
 

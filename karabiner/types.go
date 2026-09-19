@@ -52,6 +52,7 @@ type modifiers struct {
 
 type to struct {
 	KeyCode           string       `json:"key_code,omitempty"`
+	Repeat            *bool        `json:"repeat,omitempty"`
 	Modifiers         []string     `json:"modifiers,omitempty"`
 	ShellCommand      string       `json:"shell_command,omitempty"`
 	SetVariable       *setVariable `json:"set_variable,omitempty"`
