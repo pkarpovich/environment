@@ -68,10 +68,11 @@ yashiki bind alt-l window-focus right
 
 # Multi-monitor (desktop only - no-op on a single screen)
 if test "$SINGLE_SCREEN" != 1
-    yashiki bind alt-n output-focus next
-    yashiki bind alt-p output-focus prev
-    yashiki bind alt-shift-n output-send next
-    yashiki bind alt-shift-p output-send prev
+    set -l odir $HOME/.config/yashiki/output-dir.fish
+    yashiki bind alt-n exec "$odir focus right"
+    yashiki bind alt-p exec "$odir focus left"
+    yashiki bind alt-shift-n exec "$odir send right"
+    yashiki bind alt-shift-p exec "$odir send left"
 end
 
 yashiki bind alt-t layout-set tatami     # tile (master-stack)
