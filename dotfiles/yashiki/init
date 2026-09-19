@@ -134,9 +134,9 @@ yashiki rule-add --app-id com.spotify.client tags (dptag 8)
 yashiki rule-add --app-id com.spotify.client output "$DELL_PORTRAIT"
 yashiki rule-add --app-id com.anthropic.claudefordesktop tags (dptag 6)
 yashiki rule-add --app-id com.anthropic.claudefordesktop output "$DELL_PORTRAIT"
-yashiki rule-add --app-id com.apple.iphonesimulator tags (dltag 2)
-yashiki rule-add --app-id com.apple.iphonesimulator output "$DELL_LANDSCAPE"
-yashiki rule-add --app-id com.apple.iphonesimulator float
+yashiki rule-add --app-id com.apple.dt.Devices tags (dltag 7)
+yashiki rule-add --app-id com.apple.dt.Devices output "$DELL_LANDSCAPE"
+yashiki rule-add --app-id com.apple.dt.Devices float
 yashiki rule-add --app-id com.colliderli.iina tags (dptag 5)
 yashiki rule-add --app-id com.colliderli.iina output "$DELL_PORTRAIT"
 
