@@ -20,6 +20,7 @@ func buildConfig() config {
 						languageSwitch(),
 						hyperKey(),
 						f5ToF13(),
+						f6ToF18(),
 						escapeSleepFix(),
 						mediaSubLayer(),
 					},

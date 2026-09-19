@@ -193,6 +193,24 @@ func TestHyperKeyIsAllFourModifiers(t *testing.T) {
 	}
 }
 
+func TestF6BecomesF18WithAnyModifier(t *testing.T) {
+	r := f6ToF18()
+
+	if len(r.Manipulators) != 1 {
+		t.Fatalf("expected 1 manipulator, got %d", len(r.Manipulators))
+	}
+	m := r.Manipulators[0]
+	if m.From.KeyCode != "f6" {
+		t.Errorf("expected from f6, got %q", m.From.KeyCode)
+	}
+	if m.From.Modifiers == nil || len(m.From.Modifiers.Optional) != 1 || m.From.Modifiers.Optional[0] != "any" {
+		t.Errorf("expected optional [any], got %+v", m.From.Modifiers)
+	}
+	if len(m.To) != 1 || m.To[0].KeyCode != "f18" {
+		t.Errorf("expected to f18, got %+v", m.To)
+	}
+}
+
 func TestMediaSubLayerKeyOrder(t *testing.T) {
 	want := []string{"s", "d", "a"}
 	r := mediaSubLayer()

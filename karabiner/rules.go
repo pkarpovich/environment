@@ -142,6 +142,19 @@ func f5ToF13() rule {
 	}
 }
 
+func f6ToF18() rule {
+	return rule{
+		Description: "F6 -> F18",
+		Manipulators: []manipulator{
+			{
+				Type: "basic",
+				From: from{KeyCode: "f6", Modifiers: &modifiers{Optional: []string{"any"}}},
+				To:   []to{{KeyCode: "f18"}},
+			},
+		},
+	}
+}
+
 func escapeSleepFix() rule {
 	return rule{
 		Description: "Temporary Fix for sleep issue",
