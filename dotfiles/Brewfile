@@ -167,12 +167,14 @@ brew("ovq")
 brew("bruq")
 brew("ralphex-macos-runner")
 # casks, not formulae, and not under brew services: macOS ties the permissions
-# each daemon needs - Accessibility for nikki, the microphone for mimi - to the
-# app's bundle id at a fixed path, while a formula moves the binary into a
-# versioned Cellar path on every upgrade and the grant is lost with it. Both
-# install their own launchd agent: `nikki install`, `mimi install`, once.
+# each daemon needs - Accessibility for nikki, the microphone for mimi, Input
+# Monitoring and Accessibility for moji - to the app's bundle id at a fixed path,
+# while a formula moves the binary into a versioned Cellar path on every upgrade
+# and the grant is lost with it. Each installs its own launchd agent once:
+# `nikki install`, `mimi install`, `moji install`.
 cask("pkarpovich/apps/nikki", trusted: true)
 cask("pkarpovich/apps/mimi", trusted: true)
+cask("pkarpovich/apps/moji", trusted: true)
 
 ### media, backup, work
 
