@@ -7,21 +7,6 @@ import (
 	"testing"
 )
 
-func TestAppShellCommand(t *testing.T) {
-	cmd := app("Finder")
-
-	if len(cmd.to) != 1 {
-		t.Fatalf("expected 1 to entry, got %d", len(cmd.to))
-	}
-	want := `open -a "Finder" && sleep 0.1 && osascript -e 'tell application "System Events" to set frontmost of process "Finder" to true'`
-	if cmd.to[0].ShellCommand != want {
-		t.Errorf("shell_command mismatch:\n got %q\nwant %q", cmd.to[0].ShellCommand, want)
-	}
-	if cmd.description != "Open and focus Finder" {
-		t.Errorf("description mismatch: got %q", cmd.description)
-	}
-}
-
 func TestKeyCodeIsBareKeyCode(t *testing.T) {
 	cmd := keyCode("play_or_pause")
 
@@ -178,9 +163,9 @@ func TestDoubleCommandQResetEmitsValueZero(t *testing.T) {
 	}
 }
 
-func TestMediaAppsSubLayerKeyOrder(t *testing.T) {
-	want := []string{"s", "d", "a", "t", "g", "w", "b", "z", "l", "m", "h", "n", "f", "c", "4"}
-	r := mediaAppsSubLayer()
+func TestMediaSubLayerKeyOrder(t *testing.T) {
+	want := []string{"s", "d", "a"}
+	r := mediaSubLayer()
 
 	if len(r.Manipulators) != len(want) {
 		t.Fatalf("expected %d manipulators, got %d", len(want), len(r.Manipulators))
@@ -199,9 +184,9 @@ func TestSubLayerPreservesEntryOrder(t *testing.T) {
 		entries[i] = layerEntry{key: k, cmd: keyCode("f13")}
 	}
 
-	r := subLayer("right_option", "Media Commands Sublayer + Apps", entries)
+	r := subLayer("right_option", "Media Commands Sublayer", entries)
 
-	if r.Description != "Media Commands Sublayer + Apps" {
+	if r.Description != "Media Commands Sublayer" {
 		t.Errorf("description mismatch: got %q", r.Description)
 	}
 	if len(r.Manipulators) != len(order) {

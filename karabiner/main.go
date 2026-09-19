@@ -20,7 +20,7 @@ func buildConfig() config {
 						languageSwitch(),
 						f5ToF13(),
 						escapeSleepFix(),
-						mediaAppsSubLayer(),
+						mediaSubLayer(),
 					},
 				},
 			},

@@ -1,10 +1,7 @@
 package main
 
-import "fmt"
-
 type layerCmd struct {
-	to          []to
-	description string
+	to []to
 }
 
 type layerEntry struct {
@@ -16,24 +13,11 @@ func keyCode(code string) layerCmd {
 	return layerCmd{to: []to{{KeyCode: code}}}
 }
 
-func app(name string) layerCmd {
-	return layerCmd{
-		to: []to{{
-			ShellCommand: fmt.Sprintf(
-				`open -a "%s" && sleep 0.1 && osascript -e 'tell application "System Events" to set frontmost of process "%s" to true'`,
-				name, name,
-			),
-		}},
-		description: "Open and focus " + name,
-	}
-}
-
 func subLayer(modifier, description string, entries []layerEntry) rule {
 	manipulators := make([]manipulator, len(entries))
 	for i, e := range entries {
 		manipulators[i] = manipulator{
-			Type:        "basic",
-			Description: e.cmd.description,
+			Type: "basic",
 			From: from{
 				KeyCode:   e.key,
 				Modifiers: &modifiers{Mandatory: []string{modifier}},
@@ -158,22 +142,10 @@ func escapeSleepFix() rule {
 	}
 }
 
-func mediaAppsSubLayer() rule {
-	return subLayer("right_option", "Media Commands Sublayer + Apps", []layerEntry{
+func mediaSubLayer() rule {
+	return subLayer("right_option", "Media Commands Sublayer", []layerEntry{
 		{key: "s", cmd: keyCode("play_or_pause")},
 		{key: "d", cmd: keyCode("fastforward")},
 		{key: "a", cmd: keyCode("rewind")},
-		{key: "t", cmd: app("WezTerm")},
-		{key: "g", cmd: app("GoLand")},
-		{key: "w", cmd: app("WebStorm")},
-		{key: "b", cmd: app("Dia")},
-		{key: "z", cmd: app("Zed")},
-		{key: "l", cmd: app("Logseq")},
-		{key: "m", cmd: app("Telegram")},
-		{key: "h", cmd: app("Bruno v3 Preview")},
-		{key: "n", cmd: app("Obsidian")},
-		{key: "f", cmd: app("Finder")},
-		{key: "c", cmd: app("Claude")},
-		{key: "4", cmd: app("Sublime Merge")},
 	})
 }
