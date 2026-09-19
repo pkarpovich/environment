@@ -150,6 +150,32 @@
             ]
           },
           {
+            "description": "Caps Lock is Hyper",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "left_shift",
+                    "modifiers": [
+                      "left_command",
+                      "left_option",
+                      "left_control"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "description": "F5 -\u003e F13",
             "manipulators": [
               {

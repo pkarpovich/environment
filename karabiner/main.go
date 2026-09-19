@@ -18,6 +18,7 @@ func buildConfig() config {
 					Rules: []rule{
 						doubleCommandQ(),
 						languageSwitch(),
+						hyperKey(),
 						f5ToF13(),
 						escapeSleepFix(),
 						mediaSubLayer(),

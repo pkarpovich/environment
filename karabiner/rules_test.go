@@ -163,6 +163,36 @@ func TestDoubleCommandQResetEmitsValueZero(t *testing.T) {
 	}
 }
 
+func TestHyperKeyIsAllFourModifiers(t *testing.T) {
+	r := hyperKey()
+
+	if len(r.Manipulators) != 1 {
+		t.Fatalf("expected 1 manipulator, got %d", len(r.Manipulators))
+	}
+	m := r.Manipulators[0]
+	if m.From.KeyCode != "caps_lock" {
+		t.Errorf("expected from caps_lock, got %q", m.From.KeyCode)
+	}
+	if m.From.Modifiers == nil || len(m.From.Modifiers.Optional) != 1 || m.From.Modifiers.Optional[0] != "any" {
+		t.Errorf("expected optional [any] so caps lock chords with held modifiers, got %+v", m.From.Modifiers)
+	}
+	if len(m.To) != 1 || m.To[0].KeyCode != "left_shift" {
+		t.Fatalf("expected to left_shift, got %+v", m.To)
+	}
+	want := []string{"left_command", "left_option", "left_control"}
+	if len(m.To[0].Modifiers) != len(want) {
+		t.Fatalf("expected modifiers %v, got %v", want, m.To[0].Modifiers)
+	}
+	for i, mod := range want {
+		if m.To[0].Modifiers[i] != mod {
+			t.Errorf("modifier %d: expected %q, got %q", i, mod, m.To[0].Modifiers[i])
+		}
+	}
+	if m.ToIfAlone != nil {
+		t.Errorf("caps lock is always hyper, got to_if_alone %+v", m.ToIfAlone)
+	}
+}
+
 func TestMediaSubLayerKeyOrder(t *testing.T) {
 	want := []string{"s", "d", "a"}
 	r := mediaSubLayer()

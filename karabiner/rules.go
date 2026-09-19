@@ -116,6 +116,19 @@ func languageSwitch() rule {
 	return rule{Description: "Switch the keyboard layout through moji", Manipulators: manipulators}
 }
 
+func hyperKey() rule {
+	return rule{
+		Description: "Caps Lock is Hyper",
+		Manipulators: []manipulator{
+			{
+				Type: "basic",
+				From: from{KeyCode: "caps_lock", Modifiers: &modifiers{Optional: []string{"any"}}},
+				To:   []to{{KeyCode: "left_shift", Modifiers: []string{"left_command", "left_option", "left_control"}}},
+			},
+		},
+	}
+}
+
 func f5ToF13() rule {
 	return rule{
 		Description: "F5 -> F13",

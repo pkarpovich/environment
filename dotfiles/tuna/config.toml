@@ -1338,10 +1338,10 @@ custom = []
     carbonModifiers = 0
 
 [settings]
+comboModeCheatsheetDelayMS = 1000
 comboModeDoublePressTrigger = 'leftOption'
 comboModeModifierTrigger = 'hyper'
 comboModeTriggerType = 'modifier'
-physicalHyperKeySource = 'capsLock'
 shelfAutoCloseWhenTasksComplete = true
 textModeTriggerType = 'disabled'
 
