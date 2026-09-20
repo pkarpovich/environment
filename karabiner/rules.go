@@ -116,14 +116,18 @@ func languageSwitch() rule {
 	return rule{Description: "Switch the keyboard layout through moji", Manipulators: manipulators}
 }
 
+// Tuna only sees a hyper it produces itself, so a tap sends it a key of its own to open combo mode
+const comboKey = "f17"
+
 func hyperKey() rule {
 	return rule{
-		Description: "Caps Lock is Hyper",
+		Description: "Caps Lock held is Hyper, tapped opens Tuna's combo mode",
 		Manipulators: []manipulator{
 			{
-				Type: "basic",
-				From: from{KeyCode: "caps_lock", Modifiers: &modifiers{Optional: []string{"any"}}},
-				To:   []to{{KeyCode: "left_shift", Modifiers: []string{"left_command", "left_option", "left_control"}}},
+				Type:      "basic",
+				From:      from{KeyCode: "caps_lock", Modifiers: &modifiers{Optional: []string{"any"}}},
+				To:        []to{{KeyCode: "left_shift", Modifiers: []string{"left_command", "left_option", "left_control"}}},
+				ToIfAlone: []to{{KeyCode: comboKey}},
 			},
 		},
 	}

@@ -188,8 +188,8 @@ func TestHyperKeyIsAllFourModifiers(t *testing.T) {
 			t.Errorf("modifier %d: expected %q, got %q", i, mod, m.To[0].Modifiers[i])
 		}
 	}
-	if m.ToIfAlone != nil {
-		t.Errorf("caps lock is always hyper, got to_if_alone %+v", m.ToIfAlone)
+	if len(m.ToIfAlone) != 1 || m.ToIfAlone[0].KeyCode != comboKey {
+		t.Errorf("expected a tap to send %q for Tuna's combo mode, got %+v", comboKey, m.ToIfAlone)
 	}
 }
 

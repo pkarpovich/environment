@@ -1333,6 +1333,10 @@ custom = []
     carbonKeyCode = 49
     carbonModifiers = 256
 
+    [hotkeys.app.comboMode]
+    carbonKeyCode = 64
+    carbonModifiers = 0
+
     [hotkeys.app.dictation]
     carbonKeyCode = 105
     carbonModifiers = 0
@@ -1341,7 +1345,6 @@ custom = []
 comboModeCheatsheetDelayMS = 1000
 comboModeDoublePressTrigger = 'leftOption'
 comboModeModifierTrigger = 'hyper'
-comboModeTriggerType = 'modifier'
 shelfAutoCloseWhenTasksComplete = true
 textModeTriggerType = 'disabled'
 

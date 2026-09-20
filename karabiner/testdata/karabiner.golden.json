@@ -150,7 +150,7 @@
             ]
           },
           {
-            "description": "Caps Lock is Hyper",
+            "description": "Caps Lock held is Hyper, tapped opens Tuna's combo mode",
             "manipulators": [
               {
                 "type": "basic",
@@ -170,6 +170,11 @@
                       "left_option",
                       "left_control"
                     ]
+                  }
+                ],
+                "to_if_alone": [
+                  {
+                    "key_code": "f17"
                   }
                 ]
               }
