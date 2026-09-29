@@ -2,11 +2,13 @@
 ## Installation
 
 1. Install & start [Karabiner Elements](https://karabiner-elements.pqrs.org/)
-2. Clone this repository
-3. Generate `output/karabiner.json` (it is not committed) with `go run .` (see "Generating the configuration" below)
-4. Delete the default `~/.config/karabiner` folder
-5. Symlink the generated folder: `ln -s "$PWD/output" ~/.config/karabiner` (run from this directory)
-6. [Restart karabiner_console_user_server](https://karabiner-elements.pqrs.org/docs/manual/misc/configuration-file-path/) with `` launchctl kickstart -k gui/$(id -u)/org.pqrs.karabiner.karabiner_console_user_server ``
+2. Delete the default `~/.config/karabiner` folder Karabiner creates on first launch
+3. `mise run link_dotfiles` from the repo root. chezmoi links `~/.config/karabiner` to
+   `output/` (`dotfiles/dot_config/symlink_karabiner.tmpl`), generates
+   `output/karabiner.json` (it is not committed) and restarts the console user server
+   (`dotfiles/.chezmoiscripts/run_onchange_after_52-darwin-karabiner.sh.tmpl`). The same
+   script runs again on any `chezmoi apply` after a `*.go` file here changed, so a
+   rule edit pulled on another Mac reaches its Karabiner without a manual rebuild.
 
 ## Generating the configuration
 

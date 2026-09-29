@@ -16,9 +16,10 @@ carry no OS or `type -q` conditions. Its first block lists what here is not a
 launchd runs from the repo), `Caddyfile` (linked into the Homebrew prefix by a
 script), `brewfiles/`, and a few configs nothing links anymore.
 
-Three things chezmoi does not do by itself are scripts in
+What chezmoi does not do by itself is scripts in
 [`.chezmoiscripts/`](.chezmoiscripts/): `~/.claude-work` gets the same links as
-`~/.claude`, the Caddyfile link outside `$HOME`, and the Linux bootstrap below.
+`~/.claude`, the Caddyfile link outside `$HOME`, the Karabiner rebuild, and the
+Linux bootstrap below.
 
 Tools come from Homebrew on both OSes: [`dot_Brewfile`](dot_Brewfile)
 lists the shell and everything its aliases resolve to, and loads
@@ -83,7 +84,7 @@ last, so it wins; a missing file is fine).
   tiling WM, and diff-review configs.
 - **`dot_config/starship.toml`** / **`starship-narrow.toml`** - two
   prompt presets, switchable at runtime.
-- `~/.config/karabinder.json` links to `../karabiner/dist/karabiner.json`
-  (`dot_config/symlink_karabinder.json.tmpl`) - it is generated, see
-  the karabiner generator in the repo root.
+- `~/.config/karabiner` links to `../karabiner/output/`
+  (`dot_config/symlink_karabiner.tmpl`); a script rebuilds it with the Go
+  generator in the repo root whenever its rules change.
 - `dot_config/wezterm/` is the pre-agterm setup, kept for reference.

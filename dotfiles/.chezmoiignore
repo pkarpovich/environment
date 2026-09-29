@@ -24,7 +24,7 @@ zellij
 Library
 .config/1Password
 .config/agterm
-.config/karabinder.json
+.config/karabiner
 .config/mise/config.toml
 .config/revdiff
 .config/revmux

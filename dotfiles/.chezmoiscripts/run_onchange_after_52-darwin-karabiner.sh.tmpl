@@ -1,0 +1,10 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+# ~/.config/karabiner links to karabiner/output, which the Go generator writes and
+# git ignores. Rebuild it whenever the rules change and make Karabiner reload.
+# {{ range (glob (joinPath .chezmoi.workingTree "karabiner/*.go")) }}{{ include . | sha256sum | trunc 12 }} {{ end }}
+set -eu
+cd {{ joinPath .chezmoi.workingTree "karabiner" | quote }}
+mise exec -- go run .
+launchctl kickstart -k "gui/$(id -u)/org.pqrs.service.agent.Karabiner-Console-User-Server"
+{{ end -}}
