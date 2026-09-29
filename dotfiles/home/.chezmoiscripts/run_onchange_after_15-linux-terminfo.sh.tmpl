@@ -1,0 +1,6 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+# xterm-ghostty {{ include ".terminfo-src/xterm-ghostty" | sha256sum }}
+set -eu
+tic -x -o ~/.terminfo {{ joinPath .chezmoi.sourceDir ".terminfo-src/xterm-ghostty" | quote }}
+{{ end -}}
