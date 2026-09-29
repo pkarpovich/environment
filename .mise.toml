@@ -1,12 +1,10 @@
 [tools]
 go = "1.26"
-pipx = "latest"
-"pipx:dotbot" = "1.23"
 
 [tasks.install_tools]
 description = "Install dev tools with brew"
 run = "brew bundle install --file dot_Brewfile"
-dir = "dotfiles/home"
+dir = "dotfiles"
 
 [tasks.setup_keyboard]
 description = "Setup keyboard via karabiner"
@@ -17,12 +15,9 @@ launchctl kickstart -k gui/$(id -u)/org.pqrs.service.agent.Karabiner-Console-Use
 dir = "karabiner"
 
 [tasks.link_dotfiles]
-description = "Link dotfiles"
+description = "Link dotfiles with chezmoi"
 depends = ['install_tools']
-run = """
-dotbot -c ./dotfiles/install.conf.yaml
-chezmoi --source "$PWD" init --apply
-"""
+run = 'chezmoi --source "$PWD" init --apply'
 
 [tasks.apply_duti]
 description = "Apply duti settings"

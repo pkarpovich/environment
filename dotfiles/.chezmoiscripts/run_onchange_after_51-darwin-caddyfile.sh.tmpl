@@ -1,0 +1,7 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+# caddy reads its config from the Homebrew prefix, outside the home directory
+# chezmoi manages
+set -eu
+ln -sfn {{ joinPath .chezmoi.sourceDir "Caddyfile" | quote }} /opt/homebrew/etc/Caddyfile
+{{ end -}}

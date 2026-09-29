@@ -130,8 +130,8 @@ Run `cc-vendor apply` after any of these:
 
 #### Manifest
 
-Lives at `~/.claude-work/cc-vendor.txt` (managed via dotbot from
-`dotfiles/claude/cc-vendor.txt`, so it travels with the repo).
+Lives at `~/.claude-work/cc-vendor.txt` (linked by chezmoi from
+`dotfiles/dot_claude/cc-vendor.txt`, so it travels with the repo).
 
 Two line formats:
 ```

@@ -2,7 +2,7 @@
 set -u
 
 repo=$(cd "$(dirname "$0")/.." && pwd)
-src="$repo/dotfiles/home"
+src="$repo/dotfiles"
 failed=0
 
 check() {
@@ -63,5 +63,17 @@ check "ls is eza" fish -l -c 'functions ls | string match -q "*eza*"'
 check "rx is defined" fish -l -c 'functions -q rx'
 check "mise never installs on its own" test "$(mise settings get not_found_auto_install)" = false
 check "EDITOR is zed" test "$(fish -l -c 'echo $EDITOR')" = "zed --wait"
+
+for f in .claude/settings.json .zshrc .config/agterm/keymap.conf .config/zed/settings.json \
+    "Library/Application Support/Tuna/config.toml" Library/LaunchAgents/com.pavel-karpovich.colima.plist; do
+    check "~/$f links into the source" linked_into_source "$HOME/$f"
+done
+check "~/.claude-work/settings.json links into the source" linked_into_source "$HOME/.claude-work/settings.json"
+check "~/.agents links to the skill store" test "$(readlink "$HOME/.agents")" = "$src/agents"
+check "Caddyfile in the Homebrew prefix links into the source" test "$(readlink /opt/homebrew/etc/Caddyfile)" = "$src/Caddyfile"
+check "an agterm script runs through its link" test -x "$HOME/.config/agterm/scripts/attach-remote.fish"
+dangling=$(find "$HOME/.config" "$HOME/.claude" "$HOME/.claude-work" "$HOME/Library/LaunchAgents" -maxdepth 7 \
+    -lname "$repo/*" ! -exec test -e {} \; -print 2>/dev/null | grep -v '/karabinder.json$')
+check "no link in \$HOME points at a missing repo file" test -z "$dangling"
 
 exit $failed

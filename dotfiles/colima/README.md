@@ -16,7 +16,7 @@ Pieces:
   LAN IP), without which docker login/push to the home registry times out.
   Do NOT hardcode public resolvers here.
 - `com.pavel-karpovich.colima.plist` - LaunchAgent running the script at
-  login; linked into `~/Library/LaunchAgents` by dotbot. Logs:
+  login; linked into `~/Library/LaunchAgents` by chezmoi (`dotfiles/Library/LaunchAgents/`). Logs:
   `/tmp/colima-up.log`.
 
 New machine notes:

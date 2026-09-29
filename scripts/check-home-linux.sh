@@ -18,12 +18,12 @@ docker exec -u pk -w /home/pk "$name" bash -c '
     set -e
     mkdir -p ~/.local/share/chezmoi/dotfiles
     cp /src/.chezmoiroot ~/.local/share/chezmoi/
-    cp -a /src/dotfiles/home ~/.local/share/chezmoi/dotfiles/
+    cp -a /src/dotfiles ~/.local/share/chezmoi/
     sh -c "$(curl -fsLS get.chezmoi.io)" -- -b ~/.local/bin init --apply --source ~/.local/share/chezmoi' || exit 1
 
 docker exec -i -u pk -w /home/pk "$name" bash -s <<'EOF'
 failed=0
-src=~/.local/share/chezmoi/dotfiles/home
+src=~/.local/share/chezmoi/dotfiles
 brew=/home/linuxbrew/.linuxbrew/bin
 
 check() {

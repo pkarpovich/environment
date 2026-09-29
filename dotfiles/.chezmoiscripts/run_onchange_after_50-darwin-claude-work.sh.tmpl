@@ -1,0 +1,20 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+# ~/.claude-work is the work profile and gets the same files as ~/.claude. chezmoi
+# installs a source file to one target only, so its links are made here; this
+# re-runs whenever the file list changes.
+# {{ glob (joinPath .chezmoi.sourceDir "dot_claude/**") | join " " | sha256sum }}
+set -eu
+src={{ joinPath .chezmoi.sourceDir "dot_claude" | quote }}
+cd "$src"
+find . -mindepth 1 \( -name '.*' -o -name __pycache__ \) -prune -o -type f -print | while IFS= read -r f; do
+    rel=${f#./}
+    dst="$HOME/.claude-work/$rel"
+    if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+        echo "claude-work: $dst is a real file, left alone" >&2
+        continue
+    fi
+    mkdir -p "$(dirname "$dst")"
+    ln -sfn "$src/$rel" "$dst"
+done
+{{ end -}}
