@@ -24,6 +24,10 @@
     ~/.config/fish/config.fish: fish/config.fish
     ~/.config/fish/fish_plugins: fish/fish_plugins
     ~/.config/fish/functions/: fish/functions/**
+
+    # zsh is the login shell only for agterm's Live sessions gate; zshrc execs fish
+    ~/.zshrc: zsh/zshrc
+    ~/.zprofile: zsh/zprofile
     ~/.config/zed/: zed/**
     ~/.config/tmux/: tmux/**
     ~/.config/tmux-palette/: tmux-palette/**

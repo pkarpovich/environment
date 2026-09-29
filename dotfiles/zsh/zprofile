@@ -1,0 +1,7 @@
+# zsh is the password-database login shell only because agterm's Live sessions
+# gate requires it; every interactive terminal hands over to fish from zshrc.
+# What still runs under zsh is non-interactive: agterm replays a Live pane's
+# restore command through `zsh -lic` before fish exists, so this PATH must
+# reach the same binaries fish's config puts first (claude, mise shims, brew).
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"

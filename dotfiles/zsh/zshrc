@@ -1,0 +1,8 @@
+# Interactive zsh exists only to satisfy agterm's Live sessions login-shell
+# gate (ZmxSupport: password-database shell must be zsh). A real terminal gets
+# fish at once. Left alone on purpose: `zsh -c` payloads (agterm's Live replay
+# runs `zsh -lic '<restore command>'`, Claude Code snapshots its shell the same
+# way), anything without a tty, and a shell started with ZSH_STAY=1.
+if [[ -o interactive && -t 0 && -t 1 && -z "$ZSH_EXECUTION_STRING" && -z "$ZSH_STAY" ]]; then
+    exec env SHELL=/opt/homebrew/bin/fish /opt/homebrew/bin/fish -l
+fi
