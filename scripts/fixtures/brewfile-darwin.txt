@@ -34,6 +34,7 @@ DaVinci Resolve
 Developer
 discord
 docker
+docker-buildx
 docker-compose
 docker-credential-helper
 doggo
@@ -80,6 +81,8 @@ Keynote Creator Studio
 kindle-previewer
 kitty
 lazygit
+libkrun/krun
+libkrun/krun/krunkit
 libpq
 little-snitch
 lnav

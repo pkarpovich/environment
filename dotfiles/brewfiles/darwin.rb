@@ -68,8 +68,14 @@ brew("rjyo/moshi/moshi-hook", trusted: true)
 ### `colima start -f` resets colima.yaml to defaults on every start)
 
 brew("colima")
+# the VM runs on krunkit, which hands memory the guest frees back to macOS (vz
+# never does). Untrusted, brew skips the whole tap and counts krunkit's libraries
+# (libepoxy, virglrenderer, mesa) as orphans that bundle cleanup removes
+tap("libkrun/krun", trusted: true)
+brew("libkrun/krun/krunkit")
 brew("docker")
 brew("docker-compose")
+brew("docker-buildx")
 # osxkeychain credsStore for docker login, Docker Desktop's helper is gone
 brew("docker-credential-helper")
 
