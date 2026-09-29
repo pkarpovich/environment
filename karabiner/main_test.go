@@ -14,7 +14,7 @@ var update = flag.Bool("update", false, "regenerate the golden file")
 const goldenPath = "testdata/karabiner.golden.json"
 
 func TestBuildConfigMatchesGolden(t *testing.T) {
-	got, err := json.MarshalIndent(buildConfig(), "", "  ")
+	got, err := json.MarshalIndent(buildConfig("ansi"), "", "  ")
 	if err != nil {
 		t.Fatalf("marshal config: %v", err)
 	}
@@ -56,7 +56,7 @@ func TestRunWritesGoldenToOutput(t *testing.T) {
 		t.Fatalf("chdir: %v", err)
 	}
 
-	if err := run(); err != nil {
+	if err := run("ansi"); err != nil {
 		t.Fatalf("run: %v", err)
 	}
 
@@ -66,5 +66,30 @@ func TestRunWritesGoldenToOutput(t *testing.T) {
 	}
 	if !bytes.Equal(got, want) {
 		t.Errorf("run() wrote output that does not match %s", goldenPath)
+	}
+}
+
+func TestKeyboardTypeFor(t *testing.T) {
+	tests := []struct {
+		host string
+		want string
+	}{
+		{host: "Pavels-MacBook-Air", want: "iso"},
+		{host: "Pavels-MacBook-Pro-2021", want: "ansi"},
+		{host: "some-other-mac", want: "ansi"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.host, func(t *testing.T) {
+			if got := keyboardTypeFor(tt.host); got != tt.want {
+				t.Errorf("keyboardTypeFor(%q) = %q, want %q", tt.host, got, tt.want)
+			}
+		})
+	}
+}
+
+func TestBuildConfigCarriesKeyboardType(t *testing.T) {
+	got := buildConfig("iso").Profiles[0].VirtualHIDKeyboard.KeyboardTypeV2
+	if got != "iso" {
+		t.Errorf("keyboard type = %q, want iso", got)
 	}
 }

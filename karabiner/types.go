@@ -12,7 +12,12 @@ type global struct {
 type profile struct {
 	Name                 string               `json:"name"`
 	Selected             bool                 `json:"selected"`
+	VirtualHIDKeyboard   virtualHIDKeyboard   `json:"virtual_hid_keyboard"`
 	ComplexModifications complexModifications `json:"complex_modifications"`
+}
+
+type virtualHIDKeyboard struct {
+	KeyboardTypeV2 string `json:"keyboard_type_v2"`
 }
 
 type complexModifications struct {

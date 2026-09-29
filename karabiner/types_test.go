@@ -39,3 +39,13 @@ func TestConditionValueEmittedWhenSet(t *testing.T) {
 		t.Errorf("expected value 0 to be emitted for variable_if, got %s", out)
 	}
 }
+
+func TestVirtualHIDKeyboardTypeEmitted(t *testing.T) {
+	out, err := json.Marshal(profile{Name: "Default", VirtualHIDKeyboard: virtualHIDKeyboard{KeyboardTypeV2: "ansi"}})
+	if err != nil {
+		t.Fatalf("marshal profile: %v", err)
+	}
+	if !strings.Contains(string(out), `"virtual_hid_keyboard":{"keyboard_type_v2":"ansi"}`) {
+		t.Errorf("expected keyboard_type_v2 in profile, got %s", out)
+	}
+}
