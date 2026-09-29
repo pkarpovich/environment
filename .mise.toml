@@ -5,8 +5,8 @@ pipx = "latest"
 
 [tasks.install_tools]
 description = "Install dev tools with brew"
-run = "brew bundle install"
-dir = "dotfiles"
+run = "brew bundle install --file dot_Brewfile"
+dir = "dotfiles/home"
 
 [tasks.setup_keyboard]
 description = "Setup keyboard via karabiner"
@@ -19,7 +19,10 @@ dir = "karabiner"
 [tasks.link_dotfiles]
 description = "Link dotfiles"
 depends = ['install_tools']
-run = "dotbot -c ./dotfiles/install.conf.yaml"
+run = """
+dotbot -c ./dotfiles/install.conf.yaml
+chezmoi --source "$PWD" init --apply
+"""
 
 [tasks.apply_duti]
 description = "Apply duti settings"

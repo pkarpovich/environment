@@ -1,0 +1,8 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+# Brewfile {{ include "dot_Brewfile" | sha256sum }}
+{{- range (glob (joinPath .chezmoi.sourceDir "brewfiles/linux*.rb")) }} {{ include . | sha256sum }}{{ end }}
+set -eu
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+HOMEBREW_NO_ASK=1 brew bundle install --global
+{{ end -}}

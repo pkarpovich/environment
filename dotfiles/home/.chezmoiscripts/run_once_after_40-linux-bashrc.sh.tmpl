@@ -1,0 +1,7 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+set -eu
+line='[ -f ~/.config/bash/exec-fish.bash ] && . ~/.config/bash/exec-fish.bash'
+touch ~/.bashrc
+grep -qxF "$line" ~/.bashrc || printf '\n%s\n' "$line" >> ~/.bashrc
+{{ end -}}

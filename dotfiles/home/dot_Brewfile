@@ -1,0 +1,42 @@
+# vim: ft=ruby
+#
+# Linked to ~/.Brewfile, so `brew bundle` works from any directory. Grouped by what a
+# thing is FOR, not by when it was added - a package nobody can place in a group here
+# is usually a package nobody needs.
+#
+# This file is what every machine gets, the Linux boxes included: the shell and every
+# tool its aliases resolve to, so config.fish needs no `type -q` guards. What only
+# one OS needs lives in brewfiles/<os>.rb, loaded at the bottom.
+
+### shell, prompt, and what loads on every command
+
+brew("fish")
+brew("starship")
+brew("atuin")
+brew("chezmoi")
+
+### the coreutils the shell actually reaches for
+
+brew("eza")
+brew("zoxide")
+# moor is aliased to cat in config.fish
+brew("moor")
+
+### git, review, and the coding agents
+
+brew("lazygit")
+
+### network, and the tools for when it misbehaves
+
+brew("curlie")
+brew("gping")
+brew("doggo")
+
+### what is this machine doing right now
+
+brew("glances")
+
+### brewfiles/darwin.rb or brewfiles/linux.rb, same DSL. brew reaches this file
+### through the ~/.Brewfile symlink, hence realpath
+os_file = File.join(File.dirname(File.realpath(__FILE__)), "brewfiles", "#{OS.kernel_name.downcase}.rb")
+instance_eval(File.read(os_file), os_file) if File.exist?(os_file)

@@ -1,33 +1,25 @@
 # vim: ft=ruby
 #
-# Linked to ~/.Brewfile, so `brew bundle` works from any directory. Grouped by what a
-# thing is FOR, not by when it was added - a package nobody can place in a group here
-# is usually a package nobody needs.
+# macOS only; loaded by ../dot_Brewfile. Same groups as there, holding what a Mac
+# needs beyond the shell every machine gets.
 
 tap("pkarpovich/apps", trusted: true)
 
 ### shell, prompt, and what loads on every command
 
-brew("fish")
 # the brew git is what actually runs (/opt/homebrew/bin/git), not Apple's
 brew("git")
 brew("mise")
-brew("starship")
-brew("atuin")
 
 ### the coreutils the shell actually reaches for
 
-brew("eza")
 brew("bat")
 brew("fd")
 brew("ripgrep")
 brew("fzf")
 brew("sk")
-brew("zoxide")
 brew("jq")
 brew("broot")
-# moor is aliased to cat in config.fish
-brew("moor")
 
 ### terminals, multiplexers, and the phone link
 
@@ -54,7 +46,6 @@ brew("sevenzip")
 
 ### git, review, and the coding agents
 
-brew("lazygit")
 cask("sublime-merge")
 brew("gh")
 brew("tea")
@@ -84,9 +75,6 @@ brew("docker-credential-helper")
 
 ### network, and the tools for when it misbehaves
 
-brew("curlie")
-brew("gping")
-brew("doggo")
 # mtr shows per-hop loss live, which is how the nhop NAT drops got found
 brew("mtr")
 brew("wget")
@@ -105,7 +93,6 @@ cask("little-snitch")
 ### what is this machine doing right now
 
 brew("btop")
-brew("glances")
 brew("ctop")
 
 ### building and shipping
@@ -121,7 +108,7 @@ brew("umputun/apps/spot", trusted: true)
 
 brew("tabiew")
 brew("lnav")
-# psql and pg_dump without a local server. keg-only, so config.fish puts
+# psql and pg_dump without a local server. keg-only, so conf.d/darwin.fish puts
 # /opt/homebrew/opt/libpq/bin on PATH
 brew("libpq")
 # NATS CLI, for looking into the queues
@@ -175,6 +162,8 @@ brew("ralphex-macos-runner")
 cask("pkarpovich/apps/nikki", trusted: true)
 cask("pkarpovich/apps/mimi", trusted: true)
 cask("pkarpovich/apps/moji", trusted: true)
+# a bare notarized binary with no permissions to keep; `claude-siesta install` loads its agent once
+cask("pkarpovich/apps/claude-siesta", trusted: true)
 
 ### media, backup, work
 
@@ -256,7 +245,6 @@ mas("Toggl Track", id: 1291898086)
 mas("WhatsApp", id: 310633997)
 mas("Xcode", id: 497799835)
 
-### per-machine extras live next to this file in brewfiles/<LocalHostName>.rb,
-### same DSL. brew reaches this file through the ~/.Brewfile symlink, hence realpath
-host_file = File.join(File.dirname(File.realpath(__FILE__)), "brewfiles", "#{`scutil --get LocalHostName`.strip}.rb")
+### per-machine extras live next to this file in <LocalHostName>.rb, same DSL
+host_file = File.join(File.dirname(__FILE__), "#{`scutil --get LocalHostName`.strip}.rb")
 instance_eval(File.read(host_file), host_file) if File.exist?(host_file)

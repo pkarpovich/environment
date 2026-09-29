@@ -1,7 +1,6 @@
 [user]
     name = Pavel Karpovich
     email = pavel.karpovich@outlook.com
-    signingkey = ~/.ssh/keys/github-signing
 
 [filter "lfs"]
     clean = git-lfs clean -- %f
@@ -9,17 +8,11 @@
     process = git-lfs filter-process
     required = true
 
-[gpg]
-    format = ssh
-
-[commit]
-    gpgsign = true
-
 [pull]
     rebase = false
 
 [core]
-    excludesfile = /Users/pavel.karpovich/.gitignore_global
+    excludesfile = ~/.gitignore_global
 
 [alias]
     s = status --short --branch
@@ -33,9 +26,5 @@
 [pager]
     difftool = true
 
-[merge]
-    tool = smerge
-
-[mergetool "smerge"]
-    cmd = smerge mergetool "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"
-    trustExitCode = true
+[include]
+    path = ~/.gitconfig.darwin

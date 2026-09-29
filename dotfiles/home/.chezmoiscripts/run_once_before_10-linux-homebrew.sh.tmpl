@@ -1,0 +1,8 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+set -eu
+[ -x /home/linuxbrew/.linuxbrew/bin/brew ] && exit 0
+sudo apt-get update
+sudo apt-get install -y build-essential procps curl file git
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+{{ end -}}

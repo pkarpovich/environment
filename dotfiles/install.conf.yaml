@@ -6,24 +6,12 @@
       glob: true
 
 - link:
-    ~/.gitignore_global: .gitignore_global
-    ~/.gitconfig: .gitconfig
-
-    # the global Brewfile, so `brew bundle` works from any directory. The
-    # install_tools task still reads dotfiles/Brewfile directly: it runs before
-    # this link exists on a fresh machine
-    ~/.Brewfile: Brewfile
-
     ~/.config/mise/config.toml: mise.config.toml
-    ~/.config/starship.toml: starship.toml
     ~/.config/yazi/yazi.toml: yazi.toml
 
     ~/.config/karabinder.json: ../karabiner/dist/karabiner.json
 
     ~/.config/wezterm/: wezterm/**
-    ~/.config/fish/config.fish: fish/config.fish
-    ~/.config/fish/fish_plugins: fish/fish_plugins
-    ~/.config/fish/functions/: fish/functions/**
 
     # zsh is the login shell only for agterm's Live sessions gate; zshrc execs fish
     ~/.zshrc: zsh/zshrc

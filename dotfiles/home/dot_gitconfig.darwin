@@ -1,0 +1,15 @@
+[user]
+    signingkey = ~/.ssh/keys/github-signing
+
+[gpg]
+    format = ssh
+
+[commit]
+    gpgsign = true
+
+[merge]
+    tool = smerge
+
+[mergetool "smerge"]
+    cmd = smerge mergetool "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"
+    trustExitCode = true

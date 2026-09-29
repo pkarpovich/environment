@@ -2,7 +2,8 @@
 
 My macOS development environment as a monorepo: terminal, shell, window
 management, keyboard, and a growing layer of Claude Code automation - all
-symlinked into place by [dotbot](https://github.com/anishathalye/dotbot) and
+symlinked into place by [chezmoi](https://www.chezmoi.io/) (the part Linux boxes
+share) and [dotbot](https://github.com/anishathalye/dotbot) (the macOS rest),
 orchestrated by [mise](https://mise.jdx.dev/) tasks.
 
 ## Layout
@@ -10,7 +11,7 @@ orchestrated by [mise](https://mise.jdx.dev/) tasks.
 | Path | What lives there |
 |---|---|
 | `dotfiles/agterm/` | [agterm](https://github.com/umputun/agterm) terminal: keymap, ghostty overrides, control scripts (session jumps, Claude conversation map, side parking) |
-| `dotfiles/fish/` | fish config + autoloaded functions, one file per function |
+| `dotfiles/home/` | chezmoi source shared with Linux: fish (config + one file per function), git, starship, the Brewfile |
 | `dotfiles/zellij/` | zellij config and layouts - the attach point for working from a second Mac over SSH |
 | `dotfiles/claude/` | Claude Code settings, hooks, and ~30 custom skills |
 | `dotfiles/zed/`, `dotfiles/wezterm/`, ... | editor and terminal configs |
@@ -39,7 +40,7 @@ orchestrated by [mise](https://mise.jdx.dev/) tasks.
 ## Setup
 
 ```sh
-mise run setup_env   # brew bundle + karabiner + dotbot links + duti
+mise run setup_env   # brew bundle + karabiner + dotbot and chezmoi links + duti
 ```
 
 Individual steps: `install_tools`, `setup_keyboard`, `link_dotfiles`,

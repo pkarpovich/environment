@@ -1,4 +1,4 @@
-# MacBook Pro only; loaded by ../Brewfile
+# MacBook Pro only; loaded by darwin.rb
 
 cask("audacity")
 cask("bettermouse")
