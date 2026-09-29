@@ -25,13 +25,37 @@ case "$vm_state" in
 esac
 
 # sized per machine: the MBP (10 cores / 64 GiB) gets 6/12, the Air (8 cores /
-# 24 GiB) 4/8. vz allocates memory lazily, the number is a ceiling.
+# 24 GiB) 4/8. The number is a ceiling, not a reservation.
 case "$(scutil --get LocalHostName)" in
     Pavels-MacBook-Air) cpus=4; memory=8 ;;
     *) cpus=6; memory=12 ;;
 esac
 
-colima start --vm-type vz --vz-rosetta --cpus "$cpus" --memory "$memory" --disk 80
+# krunkit (libkrun >= 1.19) hands memory the guest frees back to macOS when the
+# host needs it; vz keeps whatever the guest ever touched until the VM exits.
+# Falls back to vz where krunkit is not installed. The type only applies when an
+# instance is created: colima keeps an existing instance on its original type.
+vm_type=vz
+command -v krunkit >/dev/null 2>&1 && vm_type=krunkit
+
+# colima 0.10.3 hands krunkit a 9p mount type it rejects (abiosoft/colima#1607,
+# fix pending in #1641). A Lima override wins over colima's generated config;
+# vz already uses virtiofs, so it changes nothing there.
+mkdir -p "$HOME/.colima/_lima/_config"
+printf 'mountType: virtiofs\n' > "$HOME/.colima/_lima/_config/override.yaml"
+
+# Start only from launchd. A VM started from a terminal inherits that app as
+# the responsible process for its network helper, macOS then gates it behind a
+# Local Network prompt, and guest TCP dies until someone answers it.
+colima start --vm-type "$vm_type" --cpus "$cpus" --memory "$memory" --disk 80
+
+colima ssh -- sudo sh -s < "$(dirname "$0")/colima-datadisk.sh"
+
+# Free page reporting only reports free blocks of 2^order pages (default 9 = 2 MB).
+# After a CI build the guest's free memory is fragmented: 8 GB free, ~0.5 GB of it
+# in 2 MB blocks, so krunkit could hand almost nothing back. 5 = 128 KB blocks.
+# The parameter only exists when the balloon offers reporting (krunkit, not vz).
+colima ssh -- sudo sh -c 'p=/sys/module/page_reporting/parameters/page_reporting_order; [ -w "$p" ] && echo 5 > "$p" || true'
 
 # colima's Ubuntu image ships without systemd-resolved and /etc/resolv.conf is a
 # dangling symlink, so dockerd falls back to [::1]:53 and every pull fails.
