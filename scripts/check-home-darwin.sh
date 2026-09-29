@@ -61,6 +61,7 @@ check "~/.config/fish/conf.d/darwin.fish links into the source" linked_into_sour
 check "conf.d/linux.fish is not installed" absent "$HOME/.config/fish/conf.d/linux.fish"
 check "ls is eza" fish -l -c 'functions ls | string match -q "*eza*"'
 check "rx is defined" fish -l -c 'functions -q rx'
+check "mise never installs on its own" test "$(mise settings get not_found_auto_install)" = false
 check "EDITOR is zed" test "$(fish -l -c 'echo $EDITOR')" = "zed --wait"
 
 exit $failed

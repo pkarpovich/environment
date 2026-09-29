@@ -1,0 +1,6 @@
+# Every machine. mise installs a tool when asked to (mise install, mise run,
+# mise exec), never because a command typed inside some checkout is missing,
+# and a repo's uninstalled tools print nothing on cd.
+[settings]
+not_found_auto_install = false
+status.missing_tools = "never"

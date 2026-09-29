@@ -69,6 +69,7 @@ done
 check "Mac-only aliases are not defined" $brew/fish -l -c 'not functions -q rx; and not functions -q cb'
 check "EDITOR is vim" test "$($brew/fish -l -c 'echo $EDITOR')" = vim
 check "clear works under agterm's TERM" env TERM=xterm-ghostty clear
+check "the mise settings file links into the source" linked_into_source ~/.config/mise/conf.d/no-implicit-installs.toml
 check "commits are not signed" test -z "$(git config --get commit.gpgsign)"
 
 check "an interactive login bash on a tty becomes fish" test "$(tty_shell 'bash -l')" = fish
