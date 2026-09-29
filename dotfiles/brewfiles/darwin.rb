@@ -85,6 +85,10 @@ brew("docker-credential-helper")
 brew("mtr")
 brew("wget")
 brew("nhop")
+# throughput between two machines, the half of "the network is slow" mtr cannot show
+brew("iperf3")
+# macOS ships openrsync as /usr/bin/rsync, which lacks part of rsync 3's flags
+brew("rsync")
 # runs under brew services, so an upgrade has to restart it - otherwise the old
 # binary keeps serving until someone notices
 brew("caddy", restart_service: :changed)

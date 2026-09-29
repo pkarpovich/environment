@@ -72,6 +72,7 @@ ical-buddy
 iina
 imagemagick
 iMovie
+iperf3
 jetbrains-toolbox
 jnsahaj/lumen/lumen
 jq
@@ -122,6 +123,7 @@ revmux
 ripgrep
 rjyo/moshi/moshi-hook
 rode-central
+rsync
 sevenzip
 shortcuts-remote-server
 sk
