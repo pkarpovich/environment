@@ -32,6 +32,10 @@ and its plugins, and one line in `~/.bashrc`: bash stays the login shell, so
 `ssh host '<cmd>'` keeps a POSIX shell, while an interactive terminal execs
 fish (`home/dot_config/bash/exec-fish.bash`; `BASH_STAY=1` opts out).
 
+What one machine needs and no other should see stays out of the repo:
+`~/.config/fish/local.fish` for the shell, `~/.gitconfig.local` for git (included
+last, so it wins; a missing file is fine).
+
 ## Notable pieces
 
 - **`agterm/`** - keymap and ghostty overrides for the

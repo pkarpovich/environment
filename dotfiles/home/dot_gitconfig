@@ -28,3 +28,4 @@
 
 [include]
     path = ~/.gitconfig.darwin
+    path = ~/.gitconfig.local
