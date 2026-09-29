@@ -363,10 +363,7 @@
     "rust-analyzer-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
     "skill-eval@umputun-cc-thingz": true,
-    "swift-concurrency@swift-concurrency-agent-skill": true,
     "swift-lsp@claude-plugins-official": true,
-    "swift-testing-expert@swift-testing-agent-skill": true,
-    "swiftui-expert@swiftui-expert-skill": true,
     "thinking-tools@umputun-cc-thingz": true,
     "workflow@umputun-cc-thingz": true,
     "xcode-build-skills@xcode-build-skills": true
@@ -421,24 +418,6 @@
         "repo": "umputun/revmux"
       }
     },
-    "swift-concurrency-agent-skill": {
-      "source": {
-        "source": "github",
-        "repo": "AvdLee/Swift-Concurrency-Agent-Skill"
-      }
-    },
-    "swift-testing-agent-skill": {
-      "source": {
-        "source": "github",
-        "repo": "AvdLee/Swift-Testing-Agent-Skill"
-      }
-    },
-    "swiftui-expert-skill": {
-      "source": {
-        "source": "github",
-        "repo": "AvdLee/SwiftUI-Agent-Skill"
-      }
-    },
     "umputun-cc-thingz": {
       "source": {
         "source": "github",
@@ -456,6 +435,9 @@
   "effortLevel": "high",
   "modelSettings": {
     "claude-opus-5": {
+      "effortLevel": "high"
+    },
+    "claude-opus-5-5": {
       "effortLevel": "high"
     }
   },

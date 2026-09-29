@@ -127,16 +127,6 @@
       "installedAt": "2026-08-02T23:12:05.313Z",
       "updatedAt": "2026-08-03T11:31:07.551Z"
     },
-    "agterm": {
-      "source": "umputun/agterm",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/umputun/agterm.git",
-      "ref": "v0.20.2",
-      "skillPath": "plugins/agterm/skills/agterm/SKILL.md",
-      "skillFolderHash": "24c0711e79b7c567761135efd4b233a5b361d875",
-      "installedAt": "2026-08-02T23:13:13.573Z",
-      "updatedAt": "2026-08-06T11:36:13.899Z"
-    },
     "agent-browser": {
       "source": "vercel-labs/agent-browser",
       "sourceType": "github",
@@ -145,6 +135,36 @@
       "skillFolderHash": "82def67855a0d2aad7794207951820fa5422fdb0",
       "installedAt": "2026-09-05T21:01:47.163Z",
       "updatedAt": "2026-09-05T21:01:48.022Z"
+    },
+    "swift-testing-expert": {
+      "source": "AvdLee/Swift-Testing-Agent-Skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/AvdLee/Swift-Testing-Agent-Skill.git",
+      "skillPath": "swift-testing-expert/SKILL.md",
+      "skillFolderHash": "3e1acfbe7700872a2b2d4e4fe3441de8ea4e1ea1",
+      "pluginName": "swift-testing-expert",
+      "installedAt": "2026-09-29T13:50:05.922Z",
+      "updatedAt": "2026-09-29T13:50:05.922Z"
+    },
+    "swiftui-expert-skill": {
+      "source": "AvdLee/SwiftUI-Agent-Skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/AvdLee/SwiftUI-Agent-Skill.git",
+      "skillPath": "skills/swiftui-expert-skill/SKILL.md",
+      "skillFolderHash": "b0b5debf5de45375209268a01528f0cf0c8ca359",
+      "pluginName": "swiftui-expert",
+      "installedAt": "2026-09-29T13:50:08.565Z",
+      "updatedAt": "2026-09-29T13:50:08.565Z"
+    },
+    "swift-concurrency": {
+      "source": "AvdLee/Swift-Concurrency-Agent-Skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/AvdLee/Swift-Concurrency-Agent-Skill.git",
+      "skillPath": "skills/swift-concurrency/SKILL.md",
+      "skillFolderHash": "39fa694c2fad228a64d0ffb9b395fac6b856b1ad",
+      "pluginName": "swift-concurrency",
+      "installedAt": "2026-09-29T13:50:11.135Z",
+      "updatedAt": "2026-09-29T13:50:11.135Z"
     }
   },
   "dismissed": {}
