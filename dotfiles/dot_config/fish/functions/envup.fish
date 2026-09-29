@@ -67,6 +67,14 @@ function envup --description "refresh the full dev environment: brew, fisher, mi
         end
     end
 
+    # third-party skills from the lock in ~/.agents; the work profile links into
+    # the same store, so one pass covers both
+    if command -q npx; and test -f ~/.agents/.skill-lock.json
+        echo "==> skills update"
+        npx --yes skills@latest update -g -y
+        echo
+    end
+
     echo "==> envup done"
 end
 
