@@ -81,3 +81,15 @@ corne-keytap.localhost {
         flush_interval -1
     }
 }
+
+private-equity-web.localhost {
+    reverse_proxy localhost:50800
+}
+
+private-equity-web-llm-proxy.localhost {
+    reverse_proxy localhost:50801
+}
+
+heap.localhost {
+    reverse_proxy localhost:50900
+}
