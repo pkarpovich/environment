@@ -147,8 +147,10 @@ cask("1password")
 cask("appcleaner")
 cask("cleanshot")
 cask("hazel")
-# Thaw is the maintained GPL fork of Ice, which stopped at 0.11.12 in 2024-10
-cask("thaw")
+# macOS 27 draws the menu bar as one window, which broke the wide-spacer trick
+# Ice, Thaw and Bartender hide items with; Hidden Bar 1.11.1 has the 27 path.
+# The cask, never the App Store build: that one is sandboxed and hides nothing on 27
+cask("hiddenbar")
 cask("karabiner-elements")
 cask("tuna")
 # Blimp-Labs ships it ad-hoc signed, so homebrew/cask would not take it; the cask lives in my tap
