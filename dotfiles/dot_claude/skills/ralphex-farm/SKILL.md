@@ -19,7 +19,7 @@ allowed-tools:
   - Bash(git commit:*)
   - Bash(git push:*)
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # ralphex-farm
@@ -54,8 +54,11 @@ Dashboard: `https://ralphex-farm.pkarpovich.space/`, one run at `#/run/<run_id>`
 ## The metadata block
 
 The farm matches this with a strict regex and requires `repo`, `plan` and
-`branch`. Omit any one, or get a value wrong, and the issue is **silently
-skipped** - the one failure that surfaces no error anywhere.
+`branch`. The regex is `(?s)<!--\s*ralphex-farm\s*\n(.*?)\n\s*-->`.
+
+If a key is missing or a value is wrong, the issue is **silently skipped**. It
+stays in `Todo`, nothing is posted to Linear, and the only trace is a WARN line
+in the farm log (see "Where things live").
 
 ```
 <!-- ralphex-farm
@@ -108,17 +111,51 @@ gh api "repos/<owner>/<repo>/contents/<plan-path>?ref=<default-branch>" --jq .pa
 
 ### 3. Create the issue
 
-Find the team with `mcp__claude_ai_Linear__list_teams` (it is the one named for
-the farm), then `mcp__claude_ai_Linear__save_issue` with `state: Todo` and the
-metadata block first in the description, followed by a human summary and a link
-to the plan on the default branch. Pass the description as raw markdown with
-literal newlines.
+1. Find the team with `mcp__claude_ai_Linear__list_teams`. It is the one named
+   for the farm.
+2. Call `mcp__claude_ai_Linear__save_issue` with `state: Todo`.
+3. Put the metadata block first in the description, **wrapped in a ``` code
+   fence**. After it come a human summary and a link to the plan on the default
+   branch.
+4. Pass the description as raw markdown with literal newlines.
+
+The fence is required. Linear stores a bare `-->` line as `\-->`, the regex's
+`\n\s*-->` then fails, and the farm drops the issue with `no ralphex-farm
+block`. Linear never escapes code, and the regex finds the block anywhere in the
+description.
+
+````
+```
+<!-- ralphex-farm
+repo: <slug>
+plan: <plan-path>
+branch: <branch>
+-->
+```
+
+<summary>
+
+Plan: https://github.com/<owner>/<repo>/blob/<default-branch>/<plan-path>
+````
+
+Read the saved description back from the `save_issue` result. The line after
+`branch:` must be exactly `-->`, with no backslash in front of it.
 
 ### 4. Pick it up now instead of waiting
 
 ```bash
 curl -s -X POST https://ralphex-farm.pkarpovich.space/api/sync   # -> {"status":"triggered"}
 ```
+
+Confirm a runner claimed it. Within about 30s `in_flight_count` in `GET /health`
+turns 1, and `GET /api/runs?limit=1` shows a run with the ticket's
+`issue_identifier` and `branch`.
+
+If nothing appears, **do not guess**. Read the farm log in Loki through the
+Grafana MCP (`mcp__grafana__query_loki_logs`, Loki datasource) with
+`{service_name="ralphex-farm"}` over the last 15 minutes. A skipped ticket shows up
+as `skipping issue with an unreadable ralphex-farm block`, with the identifier and
+the reason in `issue` and `reason`.
 
 ## Workflow B: add a repository
 
@@ -266,6 +303,10 @@ Every one of these has actually happened, and none surfaces as an obvious error.
    external review then dies mid-run with `401 Missing bearer`.
 10. **Claude seed bootstrapped under a different path.** The path rewrite matches
     nothing, `sed` exits 0, and the run loads zero plugins.
+11. **Metadata block not fenced in a Linear description.** Linear turns the
+    closing `-->` into `\-->`, and the farm logs `no ralphex-farm block`. The
+    ticket then sits in `Todo` forever. Fix it by wrapping the block in a ```
+    fence (Workflow A step 3).
 
 ## Where things live
 
@@ -280,8 +321,8 @@ Every one of these has actually happened, and none surfaces as an obvious error.
 | Repos served | `GET /api/repos` |
 | Force a Linear poll | `POST /api/sync` |
 | Force a declaration re-read | `POST /api/repos/resync` |
-| Farm logs | `docker compose logs farm` in the farm's compose dir |
-| Runner logs | `docker logs ralphex-runner` |
+| Farm logs | Loki via the Grafana MCP, `{service_name="ralphex-farm"}` - no ssh needed |
+| Runner logs | Loki, `{service_name="ralphex-runner"}`, or `docker logs ralphex-runner` on the Mac |
 
 Full reference lives in the repo: `docs/configuration.md` (env tables and the
 declaration format), `docs/runner.md` (job protocol, leases, recovery, the
