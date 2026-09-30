@@ -42,7 +42,6 @@ _BASE = {
 
 SIZES = {
     "default": {**_BASE},
-    "compact": {**_BASE, "padding_h": "2", "gap": "1", "margin_h": "4", "show_mode": False},
 }
 
 
@@ -150,8 +149,12 @@ def kill_old_instances():
 
 
 def assign_slots(state):
-    """Assign display slots (1-MAX_DISPLAYS) to yashiki displays."""
-    current_displays = set(state["displays"].keys())
+    """Assign display slots (1-MAX_DISPLAYS) to yashiki displays.
+
+    The built-in display gets no bar: right of its notch is where the menu bar
+    items live.
+    """
+    current_displays = set(state["displays"].keys()) - {INTERNAL_DISPLAY_ID}
     assignment = state["slot_assignment"]
 
     for slot, did in list(assignment.items()):
@@ -193,11 +196,6 @@ def ranma_remove(name):
     )
 
 
-def sizes_for_display(did):
-    """Return size parameters based on display ID."""
-    return SIZES["compact"] if did == INTERNAL_DISPLAY_ID else SIZES["default"]
-
-
 def query_layout(did):
     """Ask yashiki for a display's current layout (snapshot only carries the default)."""
     try:
@@ -219,7 +217,7 @@ def ensure_display_items(state):
 
     for slot in active_slots - existing_slots:
         did = state["slot_assignment"][slot]
-        sz = sizes_for_display(did)
+        sz = SIZES["default"]
         state["slot_sizes"][slot] = sz
         ranma_add(
             f"ws.d{slot}",
