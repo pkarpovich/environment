@@ -2,6 +2,14 @@
 set -eu
 PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
+# krunkit serves virtio-fs in-process and inherits this script's open-file limit,
+# which launchd sets to 256: colima, limactl and the lima driver are Go, and Go
+# restores the original limit for every child it execs. ~135 of those fds are
+# krunkit's own pipes and kqueues, so a ralphex-runner git + go vet run over the
+# /workspace mount died on EMFILE (RAL-125, 2026-09-30). libkrun leaves raising it
+# to the embedder; nothing between here and krunkit does
+ulimit -n 65536
+
 # two half-dead shapes that the 5-minute retry below can never clear on its own,
 # because `colima start` refuses to touch either of them:
 #
