@@ -71,6 +71,7 @@ done
 check "~/.claude-work/settings.json links into the source" linked_into_source "$HOME/.claude-work/settings.json"
 check "~/.agents links to the skill store" test "$(readlink "$HOME/.agents")" = "$src/agents"
 check "Caddyfile in the Homebrew prefix links into the source" test "$(readlink /opt/homebrew/etc/Caddyfile)" = "$src/Caddyfile"
+check "caddy imports this host's site snippet" test "$(readlink /opt/homebrew/etc/caddy-site.caddy)" = "$src/caddy/default.caddy"
 check "~/.config/karabiner links to the generator output" test "$(readlink "$HOME/.config/karabiner")" = "$repo/karabiner/output"
 check "Karabiner reads what the generator wrote" cmp "$repo/karabiner/output/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
 check "an agterm script runs through its link" test -x "$HOME/.config/agterm/scripts/attach-remote.fish"

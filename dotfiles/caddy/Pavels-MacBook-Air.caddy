@@ -1,0 +1,27 @@
+# the Air serves a site itself when its port is up here, and hands it to the MBP's
+# caddy otherwise: a refused local dial is a 502 error, which handle_errors catches.
+# The MBP answers to the same *.localhost name, so a frontend and its API keep
+# talking to each other on whichever machine runs them
+(site) {
+    reverse_proxy localhost:{args[0]} {
+        flush_interval -1
+        header_down X-Served-By {system.hostname}
+    }
+    handle_errors 502 {
+        import mbp
+    }
+}
+
+# over Tailscale, so it works away from home too. The MBP's caddy presents a cert
+# from its own local CA for the requested name; its root is copied next to the
+# Caddyfile, as it never leaves the two machines
+(mbp) {
+    reverse_proxy https://pavels-macbook-pro-2021 {
+        header_up Host {host}
+        flush_interval -1
+        transport http {
+            tls_server_name {host}
+            tls_trust_pool file /opt/homebrew/etc/caddy-mbp-root.crt
+        }
+    }
+}

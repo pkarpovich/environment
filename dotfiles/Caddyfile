@@ -1,95 +1,96 @@
+# the site snippet differs per machine: caddy/<LocalHostName>.caddy when it exists,
+# caddy/default.caddy otherwise. run_onchange_after_51 links the right one next to
+# this file, since import paths resolve from /opt/homebrew/etc, not from the repo
+import caddy-site.caddy
+
 dorag-mcp.localhost {
-    reverse_proxy localhost:8001
+    import site 8001
 }
 
 spider-web.localhost {
-    reverse_proxy localhost:50700
+    import site 50700
 }
 
 ask-agent.localhost {
-    reverse_proxy localhost:5173
+    import site 5173
 }
 
 th-telegram-mcp.localhost {
-    reverse_proxy localhost:50001
+    import site 50001
 }
 
 continuum.localhost {
-    reverse_proxy localhost:50002
+    import site 50002
 }
 
 continuum-api.localhost {
-    reverse_proxy localhost:50003
+    import site 50003
 }
 
 dc-query-api.localhost {
-    reverse_proxy localhost:50100
+    import site 50100
 }
 
 ask-agent-api.localhost {
-    reverse_proxy localhost:50101
+    import site 50101
 }
 
 retribution.localhost {
-    reverse_proxy localhost:50200
+    import site 50200
 }
 
 content-oracle.localhost {
-    reverse_proxy localhost:50201
+    import site 50201
 }
 
 nikki.localhost {
-    reverse_proxy localhost:50300
+    import site 50300
 }
 
 sahara.localhost {
-    reverse_proxy localhost:50310
+    import site 50310
 }
 
 sahara-api.localhost {
-    reverse_proxy localhost:50311
+    import site 50311
 }
 
 sahara-llm-proxy.localhost {
-    reverse_proxy localhost:50312
+    import site 50312
 }
 
 agent-sdk-runtime.localhost {
-    reverse_proxy localhost:50320
+    import site 50320
 }
 
 agent-sdk-runtime-llm-proxy.localhost {
-    reverse_proxy localhost:50321
+    import site 50321
 }
 
 pkarpovich-dev.localhost {
-    reverse_proxy localhost:50400
+    import site 50400
 }
 
 corne.localhost {
-    reverse_proxy localhost:50500
+    import site 50500
 }
 
 ralphex-farm.localhost {
-    reverse_proxy localhost:50600 {
-        flush_interval -1
-    }
+    import site 50600
 }
 
 corne-keytap.localhost {
-    reverse_proxy localhost:50501 {
-        flush_interval -1
-    }
+    import site 50501
 }
 
 private-equity-web.localhost {
-    reverse_proxy localhost:50800
+    import site 50800
 }
 
 private-equity-web-llm-proxy.localhost {
-    reverse_proxy localhost:50801
+    import site 50801
 }
 
 heap.localhost {
-    reverse_proxy localhost:50900
+    import site 50900
 }
