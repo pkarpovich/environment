@@ -20,6 +20,7 @@
 - Never commit or push without explicit user request (e.g. "commit this", "push", `/commit`).
 - Never use `run_in_background` for TUI/interactive tools (revdiff, fzf) - stdout gets lost silently.
 - Always use ASCII hyphen `-` in ALL content (chat, markdown, comments, commits, PRs) - no em/en dashes.
+- **Lint and test findings are fixed, never silenced** - no new `//nolint`, `# noqa`, `# type: ignore`, linter-config exclusion, disabled linter, skipped test or loosened assertion. Existing suppressions are debt, not precedent - re-check their stated reason when working next to them. A toolchain upgrade includes fixing the findings it surfaces; a test pinning wrong behavior gets rewritten. If a finding genuinely cannot be fixed in code, stop and ask before suppressing it.
 
 ## Shell
 User's interactive shell is **fish** (4.x, macOS). Claude Code's Bash tool itself runs commands in `/bin/zsh` - keep using zsh/POSIX syntax there, that is fine.
