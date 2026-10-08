@@ -8,13 +8,17 @@ cask("elgato-stream-deck")
 cask("firefox")
 cask("iina")
 cask("obs")
-cask("parallels")
-cask("pritunl")
 cask("qflipper")
 cask("raspberry-pi-imager")
 cask("rode-central")
 cask("sublime-text")
 cask("visual-studio-code")
+
+# the Windows VM; qemu brings qemu-img for its disk
+cask("utm")
+brew("qemu")
+# file share for the VM: the macOS SMB server breaks on large directory listings
+brew("samba")
 
 # tuclaw-client carries a .swiftlint.yml
 brew("swiftlint")

@@ -78,7 +78,6 @@ brew("docker-compose")
 brew("docker-buildx")
 # osxkeychain credsStore for docker login, Docker Desktop's helper is gone
 brew("docker-credential-helper")
-
 ### network, and the tools for when it misbehaves
 
 # mtr shows per-hop loss live, which is how the nhop NAT drops got found
@@ -140,6 +139,10 @@ brew("duti")
 brew("terminal-notifier")
 brew("choose-gui")
 brew("ical-buddy")
+# Calendar and Reminders through EventKit with JSON output.
+# The tap's formula builds from source and lags the GitHub releases
+tap("schappim/ekctl", trusted: true)
+brew("schappim/ekctl/ekctl")
 brew("PeonPing/tap/peon-ping", trusted: true)
 cask("yafetch")
 cask("edith")
@@ -148,9 +151,10 @@ cask("appcleaner")
 cask("cleanshot")
 cask("hazel")
 # macOS 27 draws the menu bar as one window, which broke the wide-spacer trick
-# Ice, Thaw and Bartender hide items with; Hidden Bar 1.11.1 has the 27 path.
-# The cask, never the App Store build: that one is sandboxed and hides nothing on 27
-cask("hiddenbar")
+# Ice, Thaw and Bartender hide items with. Thaw 3.0 is the rewrite for 27; plain
+# `thaw` is still 2.x, the 3.0 line ships as thaw@beta. Hidden Bar was the stopgap
+# while 3.0 was in alpha and hid items no better
+cask("thaw@beta")
 cask("karabiner-elements")
 cask("tuna")
 # Blimp-Labs ships it ad-hoc signed, so homebrew/cask would not take it; the cask lives in my tap
@@ -174,8 +178,14 @@ brew("ralphex-macos-runner")
 cask("pkarpovich/apps/nikki", trusted: true)
 cask("pkarpovich/apps/mimi", trusted: true)
 cask("pkarpovich/apps/moji", trusted: true)
+# HTTP API over the calendars through EventKit; an app bundle so the
+# Calendars grant survives upgrades. its config and `eventkit-bridge install` are done by hand
+cask("pkarpovich/apps/eventkit-bridge", trusted: true)
 # a bare notarized binary with no permissions to keep; `claude-siesta install` loads its agent once
 cask("pkarpovich/apps/claude-siesta", trusted: true)
+# desktop client for the tuclaw daemon; local builds are "Tuclaw Preview"
+# under their own bundle id, so they no longer collide with this one
+cask("pkarpovich/apps/tuclaw", trusted: true)
 
 ### media, backup, work
 
@@ -187,6 +197,11 @@ cask("calibre")
 cask("kindle-previewer")
 brew("restic")
 brew("azure-cli")
+# kubectl, a client only. The Entra auth plugin is
+# Azure's kubelogin from its own tap: homebrew-core's kubelogin is int128's OIDC one
+brew("kubernetes-cli")
+tap("Azure/kubelogin", trusted: true)
+brew("Azure/kubelogin/kubelogin")
 
 ### editors and IDEs. The JetBrains IDEs themselves come from Toolbox into
 ### ~/Applications; casks for them would put second copies into /Applications

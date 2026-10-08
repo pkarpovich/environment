@@ -10,6 +10,8 @@ atuin
 audacity
 Audiobook Builder
 azure-cli
+azure/kubelogin
+azure/kubelogin/kubelogin
 bat
 bettermouse
 broot
@@ -45,6 +47,7 @@ elgato-capture-device-utility
 elgato-control-center
 elgato-stream-deck
 Endel
+eventkit-bridge
 eza
 fd
 felixkratz/formulae/borders
@@ -68,7 +71,6 @@ goreleaser
 gping
 HandyPalette
 hazel
-hiddenbar
 ical-buddy
 iina
 imagemagick
@@ -82,6 +84,7 @@ keepingyouawake
 Keynote Creator Studio
 kindle-previewer
 kitty
+kubernetes-cli
 lazygit
 libkrun/krun
 libkrun/krun/krunkit
@@ -110,12 +113,11 @@ OpenIn
 openlogi
 ovq
 Pages Creator Studio
-parallels
 peonping/tap/peon-ping
 Pixelmator Pro
 pkarpovich/apps
 poppler
-pritunl
+qemu
 qflipper
 ralphex-macos-runner
 raspberry-pi-imager
@@ -125,6 +127,9 @@ ripgrep
 rjyo/moshi/moshi-hook
 rode-central
 rsync
+samba
+schappim/ekctl
+schappim/ekctl/ekctl
 sevenzip
 shortcuts-remote-server
 sk
@@ -140,11 +145,13 @@ tailscale-app
 tea
 telegram
 terminal-notifier
+thaw@beta
 The Unarchiver
 thebrowsercompany-dia
 timemachineeditor
 tmux
 Toggl Track
+tuclaw
 tuna
 turtle-harbor
 typester/ranma/ranma
@@ -153,6 +160,7 @@ umputun/apps/fya
 umputun/apps/ralphex
 umputun/apps/revdiff
 umputun/apps/spot
+utm
 visual-studio-code
 vlc
 wezterm@nightly
