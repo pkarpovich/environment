@@ -110,6 +110,12 @@ yashiki rule-add --app-id com.github.wez.wezterm tags (dptag 5)
 yashiki rule-add --app-id com.github.wez.wezterm output "$DELL_PORTRAIT"
 yashiki rule-add --app-id com.umputun.agterm tags (dptag 4)
 yashiki rule-add --app-id com.umputun.agterm output "$DELL_PORTRAIT"
+yashiki rule-add --app-id dev.pkarpovich.tuclaw tags (dptag 4)
+yashiki rule-add --app-id dev.pkarpovich.tuclaw output "$DELL_PORTRAIT"
+yashiki rule-add --app-id dev.pkarpovich.tuclaw.preview tags (dptag 4)
+yashiki rule-add --app-id dev.pkarpovich.tuclaw.preview output "$DELL_PORTRAIT"
+yashiki rule-add --app-name tuclaw-desktop tags (dptag 4)
+yashiki rule-add --app-name tuclaw-desktop output "$DELL_PORTRAIT"
 
 yashiki rule-add --app-id com.tinyspeck.slackmacgap tags (tag 6)
 yashiki rule-add --app-id com.tinyspeck.slackmacgap output "$LAPTOP"
@@ -131,6 +137,8 @@ yashiki rule-add --app-id com.usebruno.app tags (tag 2)
 yashiki rule-add --app-id com.usebruno.app output "$LAPTOP"
 yashiki rule-add --app-id com.parallels.desktop.console tags (dltag 6)
 yashiki rule-add --app-id com.parallels.desktop.console output "$DELL_LANDSCAPE"
+yashiki rule-add --app-id com.utmapp.UTM tags (dltag 6)
+yashiki rule-add --app-id com.utmapp.UTM output "$DELL_LANDSCAPE"
 yashiki rule-add --app-id com.spotify.client tags (dptag 8)
 yashiki rule-add --app-id com.spotify.client output "$DELL_PORTRAIT"
 yashiki rule-add --app-id com.anthropic.claudefordesktop tags (dptag 6)
