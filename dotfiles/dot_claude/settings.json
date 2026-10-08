@@ -30,6 +30,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus",
   "hooks": {
     "Notification": [
       {
@@ -93,16 +94,6 @@
       }
     ],
     "PostToolUse": [
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/hooks/revdiff-plan-review.py",
-            "timeout": 345600
-          }
-        ]
-      },
       {
         "hooks": [
           {
@@ -441,6 +432,7 @@
       "effortLevel": "high"
     }
   },
+  "advisorModel": "fable",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
