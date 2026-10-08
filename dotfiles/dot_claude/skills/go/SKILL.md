@@ -10,6 +10,7 @@ description: Go 1.25+ development standards and coding conventions. Use when wri
 - Read `go.mod` to check Go version and installed dependencies
 - Use existing libraries from `go.mod` instead of reimplementing
 - Never add new dependencies unless directly needed for the task
+- `go.mod` at `go 1.27`, or bumping to it: read `references/go-1.27.md` (generic methods, embedded-field literals, `httptest.NewTestServer` in synctest, stdlib `uuid`, bump checklist)
 
 ## Code Style
 
