@@ -32,11 +32,13 @@ case "$vm_state" in
     Running) colima ssh -- true >/dev/null 2>&1 || colima stop -f ;;
 esac
 
-# sized per machine: the MBP (10 cores / 64 GiB) gets 6/12, the Air (8 cores /
-# 24 GiB) 4/8. The number is a ceiling, not a reservation.
+# sized per machine: the MBP (10 cores / 64 GiB) gets 6/16, the Air (8 cores /
+# 24 GiB) 4/8. Size by the peak, not the idle footprint: a farm run (cargo,
+# clippy, tests, claude) beside a buildkit release build needs ~11 GiB, and 6 GiB
+# got a farm run OOM-killed (2026-10-07). The number is a ceiling, not a reservation.
 case "$(scutil --get LocalHostName)" in
     Pavels-MacBook-Air) cpus=4; memory=8 ;;
-    *) cpus=6; memory=12 ;;
+    *) cpus=6; memory=16 ;;
 esac
 
 # krunkit (libkrun >= 1.19) hands memory the guest frees back to macOS when the
