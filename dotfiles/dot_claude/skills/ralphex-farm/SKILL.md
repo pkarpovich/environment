@@ -314,7 +314,7 @@ Every one of these has actually happened, and none surfaces as an obvious error.
 |---|---|
 | Farm | bravo (`192.168.199.72:7077`), behind `ralphex-farm.pkarpovich.space` |
 | Runner (mbp) | container `ralphex-runner`, compose in `home-environment/compose-ralphex-runner.yml`, env `.env.mbp` |
-| Runner state | `$HOME/ralphex/{repos,config,codex,claude,mise,gocache}` on the Mac |
+| Runner state | `$HOME/.local/share/ralphex/{repos,config,codex,claude,mise-glibc,gocache}` on the Mac |
 | Repository declarations | stash, `ralphex-farm/repos/<slug>` |
 | Run history + logs | `FARM_RUNS_DIR` on the farm host (SQLite + per-run `output.log`) |
 | Health | `GET /health` - poller staleness, error window, connected runners |

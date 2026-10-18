@@ -12,7 +12,6 @@ cask("qflipper")
 cask("raspberry-pi-imager")
 cask("rode-central")
 cask("sublime-text")
-cask("visual-studio-code")
 
 # the Windows VM; qemu brings qemu-img for its disk
 cask("utm")

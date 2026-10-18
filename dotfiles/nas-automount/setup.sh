@@ -13,10 +13,4 @@ sudo launchctl bootstrap system /Library/LaunchDaemons/com.user.fix-nas-automoun
 sudo /usr/local/bin/fix-nas-automount.sh
 sudo automount -vc
 
-# the shares as plain links in the home directory; /mnt is what automountd creates
-for share in archive media; do
-    ln -sfn "/mnt/nas/$share" "$HOME/$share"
-done
-[ -L "$HOME/nas" ] && rm -f "$HOME/nas"
-
 ls /mnt/nas/media >/dev/null && echo "nas automount ok: /mnt/nas/media answers"

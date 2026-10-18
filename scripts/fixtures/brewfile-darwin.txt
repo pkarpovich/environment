@@ -76,7 +76,6 @@ iina
 imagemagick
 iMovie
 iperf3
-jetbrains-toolbox
 jnsahaj/lumen/lumen
 jq
 karabiner-elements
@@ -161,7 +160,6 @@ umputun/apps/ralphex
 umputun/apps/revdiff
 umputun/apps/spot
 utm
-visual-studio-code
 vlc
 wezterm@nightly
 wget

@@ -203,11 +203,9 @@ brew("kubernetes-cli")
 tap("Azure/kubelogin", trusted: true)
 brew("Azure/kubelogin/kubelogin")
 
-### editors and IDEs. The JetBrains IDEs themselves come from Toolbox into
-### ~/Applications; casks for them would put second copies into /Applications
+### editors and IDEs
 
 cask("zed")
-cask("jetbrains-toolbox")
 
 ### browsers, chat, and calls
 

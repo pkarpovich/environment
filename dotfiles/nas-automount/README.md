@@ -1,7 +1,8 @@
 # nas-automount
 
 SMB shares of the Synology (`archive`, `media`) mounted on demand by autofs at
-`/mnt/nas/<share>`, with `~/archive` and `~/media` as plain symlinks to them.
+`/mnt/nas/<share>`; Finder reaches them through sidebar favorites pointing at
+`/mnt/nas/archive` and `/mnt/nas/media`.
 
 Why a daemon: every macOS update rewrites `/etc/auto_master` and drops our map
 line. Without it automountd never creates `/mnt`, and everything pointing at
@@ -13,7 +14,7 @@ Pieces:
 
 - `fix-nas-automount.sh` -> `/usr/local/bin/`, run by the daemon at every boot.
 - `com.user.fix-nas-automount.plist` -> `/Library/LaunchDaemons/`.
-- `setup.sh` - installs both, loads the daemon, fixes the home symlinks.
+- `setup.sh` - installs both, loads the daemon.
   Run as the user, it sudo's where needed: `sh dotfiles/nas-automount/setup.sh`.
 
 Not in the repo: `/etc/auto_nas` holds the SMB credentials. Create it by hand
