@@ -629,6 +629,21 @@ label = 'obsidian'
         type = 'savedCommand'
 
 [[comboMode.bindings]]
+iconPath = '/Applications/KVMZero.app'
+key = 'k'
+label = 'kvmzero'
+
+    [comboMode.bindings.destination]
+    type = 'command'
+
+        [comboMode.bindings.destination.command]
+        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+        behavior = 'run'
+        presentation = 'automatic'
+        subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "KVMZero" "open -b dev.pkarpovich.kvmzero" && curl -s --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:7480/on' ]
+        type = 'savedCommand'
+
+[[comboMode.bindings]]
 iconPath = 'macwindow'
 key = 'w'
 label = 'Yashiki'
