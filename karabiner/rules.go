@@ -126,7 +126,7 @@ func hyperKey() rule {
 			{
 				Type:      "basic",
 				From:      from{KeyCode: "caps_lock", Modifiers: &modifiers{Optional: []string{"any"}}},
-				To:        []to{{KeyCode: "left_shift", Modifiers: []string{"left_command", "left_option", "left_control"}}},
+				To:        []to{{KeyCode: "left_shift", Modifiers: []string{"left_command", "left_option", "left_control"}, Lazy: true}},
 				ToIfAlone: []to{{KeyCode: comboKey}},
 			},
 		},

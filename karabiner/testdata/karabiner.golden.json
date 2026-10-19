@@ -172,7 +172,8 @@
                       "left_command",
                       "left_option",
                       "left_control"
-                    ]
+                    ],
+                    "lazy": true
                   }
                 ],
                 "to_if_alone": [

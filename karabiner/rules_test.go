@@ -191,6 +191,9 @@ func TestHyperKeyIsAllFourModifiers(t *testing.T) {
 	if len(m.ToIfAlone) != 1 || m.ToIfAlone[0].KeyCode != comboKey {
 		t.Errorf("expected a tap to send %q for Tuna's combo mode, got %+v", comboKey, m.ToIfAlone)
 	}
+	if !m.To[0].Lazy {
+		t.Errorf("expected lazy modifiers so a lone tap sends no hyper press, which kvmzero would forward to Windows as the Copilot chord")
+	}
 }
 
 func TestF6BecomesF18WithAnyModifier(t *testing.T) {
