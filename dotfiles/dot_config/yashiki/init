@@ -139,6 +139,8 @@ yashiki rule-add --app-id com.parallels.desktop.console tags (dltag 6)
 yashiki rule-add --app-id com.parallels.desktop.console output "$DELL_LANDSCAPE"
 yashiki rule-add --app-id com.utmapp.UTM tags (dltag 6)
 yashiki rule-add --app-id com.utmapp.UTM output "$DELL_LANDSCAPE"
+yashiki rule-add --app-id dev.pkarpovich.kvmzero tags (dltag 6)
+yashiki rule-add --app-id dev.pkarpovich.kvmzero output "$DELL_LANDSCAPE"
 yashiki rule-add --app-id com.spotify.client tags (dptag 8)
 yashiki rule-add --app-id com.spotify.client output "$DELL_PORTRAIT"
 yashiki rule-add --app-id com.anthropic.claudefordesktop tags (dptag 6)
