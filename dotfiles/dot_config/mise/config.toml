@@ -5,9 +5,8 @@ go = "1.23"
 python = "3.13"
 rust = "1.93"
 deno = "2.7"
-bun = "1.2"
-"npm:cf" = "latest"
-uv = "latest"
+"npm:cf" = "0.15"
+uv = "0.13"
 
 # macOS keeps dev debug info in per-CGU .o files ("unpacked") and cargo never
 # deletes the stale ones: target/ grew to 58 GB. packed writes one .dSYM per
