@@ -119,6 +119,24 @@
       "skillFolderHash": "6ba4a97ed4f114137539fa4dcca3cc73479b9092",
       "installedAt": "2026-10-26T15:16:07.858Z",
       "updatedAt": "2026-10-26T15:16:07.858Z"
+    },
+    "postgres": {
+      "source": "timescale/pg-aiguide",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/timescale/pg-aiguide.git",
+      "skillPath": "skills/postgres/SKILL.md",
+      "skillFolderHash": "37c83d6343deedbcadd9ddf04243d8f7d97443a5",
+      "installedAt": "2026-10-26T21:30:56.440Z",
+      "updatedAt": "2026-10-26T21:30:56.440Z"
+    },
+    "schema-exploration": {
+      "source": "timescale/pg-aiguide",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/timescale/pg-aiguide.git",
+      "skillPath": "skills/schema-exploration/SKILL.md",
+      "skillFolderHash": "d4a6d023cda4c0c292ed567d9fb672a309882b86",
+      "installedAt": "2026-10-26T21:30:56.442Z",
+      "updatedAt": "2026-10-26T21:30:56.442Z"
     }
   },
   "dismissed": {}
