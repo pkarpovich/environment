@@ -9,6 +9,13 @@ bun = "1.2"
 "npm:cf" = "latest"
 uv = "latest"
 
+# macOS keeps dev debug info in per-CGU .o files ("unpacked") and cargo never
+# deletes the stale ones: target/ grew to 58 GB. packed writes one .dSYM per
+# binary instead, backtraces keep file:line.
+[env]
+CARGO_PROFILE_DEV_DEBUG = "line-tables-only"
+CARGO_PROFILE_DEV_SPLIT_DEBUGINFO = "packed"
+
 [settings]
 experimental = true
 # pinned so a shell still carrying the old per-version RUSTUP_HOME cannot pull
