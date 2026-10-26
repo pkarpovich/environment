@@ -102,7 +102,6 @@ notion
 Numbers Creator Studio
 obs
 obsidian
-OpenIn
 openlogi
 orbstack
 ovq
@@ -155,7 +154,6 @@ umputun/apps/ralphex
 umputun/apps/revdiff
 umputun/apps/spot
 utm
-vlc
 wezterm@nightly
 wget
 WhatsApp
