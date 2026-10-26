@@ -191,6 +191,15 @@
       "skillFolderHash": "4740f0bc7089b83876ee4427cab0d81afb2d2459",
       "installedAt": "2026-10-26T14:59:56.710Z",
       "updatedAt": "2026-10-26T14:59:56.710Z"
+    },
+    "foster": {
+      "source": "pkarpovich/foster",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/pkarpovich/foster.git",
+      "skillPath": "plugins/foster/skills/foster/SKILL.md",
+      "skillFolderHash": "6ba4a97ed4f114137539fa4dcca3cc73479b9092",
+      "installedAt": "2026-10-26T15:16:07.858Z",
+      "updatedAt": "2026-10-26T15:16:07.858Z"
     }
   },
   "dismissed": {}
