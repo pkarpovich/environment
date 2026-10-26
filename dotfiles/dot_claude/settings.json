@@ -342,8 +342,6 @@
     "code-simplifier@claude-plugins-official": true,
     "core-data-expert@core-data-agent-skill": true,
     "frontend-design@claude-plugins-official": true,
-    "grafana-core@grafana-skills": true,
-    "grafana-lgtm@grafana-skills": true,
     "mattpocock-skills@mattpocock": true,
     "planning@umputun-cc-thingz": true,
     "ralphex@ralphex": true,
@@ -377,12 +375,6 @@
       "source": {
         "source": "github",
         "repo": "AvdLee/Core-Data-Agent-Skill"
-      }
-    },
-    "grafana-skills": {
-      "source": {
-        "source": "github",
-        "repo": "grafana/skills"
       }
     },
     "mattpocock": {

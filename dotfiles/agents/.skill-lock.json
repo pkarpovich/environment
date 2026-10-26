@@ -137,6 +137,46 @@
       "skillFolderHash": "d4a6d023cda4c0c292ed567d9fb672a309882b86",
       "installedAt": "2026-10-26T21:30:56.442Z",
       "updatedAt": "2026-10-26T21:30:56.442Z"
+    },
+    "dashboarding": {
+      "source": "grafana/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/grafana/skills.git",
+      "skillPath": "skills/grafana-core/dashboarding/SKILL.md",
+      "skillFolderHash": "3bc337b816a47b018d9d428e466b7a6e491d17ff",
+      "pluginName": "grafana-core",
+      "installedAt": "2026-10-26T21:35:50.062Z",
+      "updatedAt": "2026-10-26T21:35:50.062Z"
+    },
+    "promql": {
+      "source": "grafana/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/grafana/skills.git",
+      "skillPath": "skills/grafana-core/promql/SKILL.md",
+      "skillFolderHash": "921be6f98a338a30e0cebede6e899d235df386ca",
+      "pluginName": "grafana-core",
+      "installedAt": "2026-10-26T21:35:50.065Z",
+      "updatedAt": "2026-10-26T21:35:50.065Z"
+    },
+    "loki": {
+      "source": "grafana/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/grafana/skills.git",
+      "skillPath": "skills/grafana-lgtm/loki/SKILL.md",
+      "skillFolderHash": "eb7b299e3a84bc103dbc1ce767a4afd4492ad843",
+      "pluginName": "grafana-lgtm",
+      "installedAt": "2026-10-26T21:35:50.065Z",
+      "updatedAt": "2026-10-26T21:35:50.065Z"
+    },
+    "tempo": {
+      "source": "grafana/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/grafana/skills.git",
+      "skillPath": "skills/grafana-lgtm/tempo/SKILL.md",
+      "skillFolderHash": "8003617369f62d3b9b886c4d9e9ad68c5cdc9dc1",
+      "pluginName": "grafana-lgtm",
+      "installedAt": "2026-10-26T21:35:50.066Z",
+      "updatedAt": "2026-10-26T21:35:50.066Z"
     }
   },
   "dismissed": {}
