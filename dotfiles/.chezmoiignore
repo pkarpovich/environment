@@ -3,7 +3,6 @@ agents
 brewfiles
 caddy
 Caddyfile
-kitty
 nas-automount
 transaction_processor
 tuna-scripts

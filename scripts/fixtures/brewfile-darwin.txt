@@ -80,7 +80,6 @@ karabiner-elements
 keepingyouawake
 Keynote Creator Studio
 kindle-previewer
-kitty
 kubernetes-cli
 lazygit
 libpq

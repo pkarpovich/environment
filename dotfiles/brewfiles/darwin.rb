@@ -27,7 +27,6 @@ cask("umputun/apps/agterm", trusted: true)
 # still the terminal on the MBA; agterm took over on this machine, but the
 # wezterm/ config is linked on both
 cask("wezterm@nightly")
-cask("kitty")
 # tmux: the mux ccm mirrors agterm's Claude sessions into, and the only one
 # Moshi's chat can read (preview, agent status, session tree are tmux-only)
 brew("tmux")
