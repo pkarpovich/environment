@@ -1422,4 +1422,4 @@ catalogIdentifier = 'tuna.prompts'
 
     [catalogSettings.values]
     Provider = 'anthropic'
-    'Provider.anthropic.Model' = 'claude-sonnet-5'
+    'Provider.anthropic.Model' = 'claude-sonnet-5-5'
