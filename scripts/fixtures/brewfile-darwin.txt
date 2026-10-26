@@ -29,7 +29,6 @@ cleanshot
 codex
 commit-author-refresher
 ctop
-curlie
 DaVinci Resolve
 Developer
 discord

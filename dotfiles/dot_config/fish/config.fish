@@ -23,7 +23,6 @@ alias l 'eza --group --header --group-directories-first --long --git --all --bin
 alias tree 'eza --tree'
 alias cat 'moor --no-linenumbers --quit-if-one-screen'
 alias cls 'clear'
-alias curl 'curlie'
 alias ping 'gping'
 alias dig 'doggo'
 alias htop 'glances'

@@ -28,7 +28,6 @@ brew("lazygit")
 
 ### network, and the tools for when it misbehaves
 
-brew("curlie")
 brew("gping")
 brew("doggo")
 
