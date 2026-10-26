@@ -56,6 +56,8 @@ cask("codex")
 # the desktop app; Claude Code itself is the native installer, not brew
 cask("claude")
 brew("umputun/apps/ralphex", trusted: true)
+# foster runs dev servers in persistent PTY sessions the agents attach to
+brew("pkarpovich/apps/foster", trusted: true)
 brew("umputun/apps/fya", trusted: true)
 brew("agent-browser")
 # moshi-hook bridges the coding agents to the Moshi daemon

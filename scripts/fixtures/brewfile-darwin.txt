@@ -109,6 +109,7 @@ Pages Creator Studio
 peonping/tap/peon-ping
 Pixelmator Pro
 pkarpovich/apps
+pkarpovich/apps/foster
 poppler
 qemu
 qflipper
