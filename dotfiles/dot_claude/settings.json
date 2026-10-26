@@ -280,15 +280,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/skill-activation.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
             "command": "~/.config/agterm/scripts/cc-map-hook.fish"
           }
         ]
@@ -338,19 +329,9 @@
   },
   "enabledPlugins": {
     "axiom@axiom-marketplace": false,
-    "brainstorm@umputun-cc-thingz": true,
-    "code-simplifier@claude-plugins-official": true,
-    "core-data-expert@core-data-agent-skill": true,
-    "frontend-design@claude-plugins-official": true,
     "planning@umputun-cc-thingz": true,
     "ralphex@ralphex": true,
-    "release-tools@umputun-cc-thingz": true,
-    "revdiff-planning@revdiff": true,
-    "revdiff@revdiff": true,
-    "review@umputun-cc-thingz": true,
-    "revmux@revmux": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
     "skill-eval@umputun-cc-thingz": true,
     "swift-lsp@claude-plugins-official": true,
     "thinking-tools@umputun-cc-thingz": true
@@ -362,29 +343,10 @@
         "repo": "CharlesWiltgen/Axiom"
       }
     },
-    "core-data-agent-skill": {
-      "source": {
-        "source": "github",
-        "repo": "AvdLee/Core-Data-Agent-Skill"
-      }
-    },
     "ralphex": {
       "source": {
         "source": "github",
         "repo": "umputun/ralphex"
-      }
-    },
-    "revdiff": {
-      "source": {
-        "source": "github",
-        "repo": "umputun/revdiff"
-      },
-      "autoUpdate": true
-    },
-    "revmux": {
-      "source": {
-        "source": "github",
-        "repo": "umputun/revmux"
       }
     },
     "umputun-cc-thingz": {

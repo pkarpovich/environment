@@ -177,6 +177,51 @@
       "pluginName": "grafana-lgtm",
       "installedAt": "2026-10-26T21:35:50.066Z",
       "updatedAt": "2026-10-26T21:35:50.066Z"
+    },
+    "brainstorm": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/brainstorm/skills/brainstorm/SKILL.md",
+      "skillFolderHash": "5c604e0ae6b4f84aa43cdfd3c8ddc84212ebf54b",
+      "installedAt": "2026-10-26T22:31:31.267Z",
+      "updatedAt": "2026-10-26T22:31:31.267Z"
+    },
+    "new": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/release-tools/skills/new/SKILL.md",
+      "skillFolderHash": "1d05ef9bacfd63f6e06cfd20e5d2c908ff08fde4",
+      "installedAt": "2026-10-26T22:47:41.386Z",
+      "updatedAt": "2026-10-26T22:47:41.386Z"
+    },
+    "writing-style": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/review/skills/writing-style/SKILL.md",
+      "skillFolderHash": "b72b2a72f03a34ec1f58b26fdae73524995ac73b",
+      "installedAt": "2026-10-26T22:53:28.030Z",
+      "updatedAt": "2026-10-26T22:53:28.030Z"
+    },
+    "revmux": {
+      "source": "umputun/revmux",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/revmux.git",
+      "skillPath": ".claude-plugin/skills/revmux/SKILL.md",
+      "skillFolderHash": "c73ad8b986336edf9fdc5f57f8bebcd708391599",
+      "installedAt": "2026-10-26T22:57:04.760Z",
+      "updatedAt": "2026-10-26T22:57:04.760Z"
+    },
+    "revdiff": {
+      "source": "umputun/revdiff",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/revdiff.git",
+      "skillPath": ".claude-plugin/skills/revdiff/SKILL.md",
+      "skillFolderHash": "6695a375b993430553b0738d7218cf8a31f16da1",
+      "installedAt": "2026-10-26T22:57:55.526Z",
+      "updatedAt": "2026-10-26T22:57:55.526Z"
     }
   },
   "dismissed": {}
