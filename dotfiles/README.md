@@ -12,8 +12,7 @@ drifted, including an app that replaced its link with a real file.
 One tree serves the Mac and the Linux boxes. What exists on one OS only is
 decided in one place, [`.chezmoiignore`](.chezmoiignore); the shared files
 carry no OS or `type -q` conditions. Its first block lists what here is not a
-`$HOME` file at all: `agents/` (linked whole as `~/.agents`), `colima/` (scripts
-launchd runs from the repo), `Caddyfile` (linked into the Homebrew prefix by a
+`$HOME` file at all: `agents/` (linked whole as `~/.agents`), `Caddyfile` (linked into the Homebrew prefix by a
 script), `brewfiles/`, and a few configs nothing links anymore.
 
 What chezmoi does not do by itself is scripts in

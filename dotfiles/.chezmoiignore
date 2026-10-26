@@ -3,7 +3,6 @@ agents
 brewfiles
 caddy
 Caddyfile
-colima
 kitty
 nas-automount
 transaction_processor

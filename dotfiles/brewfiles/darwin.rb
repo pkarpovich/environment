@@ -62,16 +62,11 @@ brew("agent-browser")
 # moshi-hook bridges the coding agents to the Moshi daemon
 brew("rjyo/moshi/moshi-hook", trusted: true)
 
-### containers: colima VM instead of Docker Desktop; autostart via
-### colima/com.pavel-karpovich.colima.plist (NOT brew services - its
-### `colima start -f` resets colima.yaml to defaults on every start)
+### containers: OrbStack replaced colima; krunkit kept 23 GiB for a guest
+### using 4 (2026-10-08): pages the guest freed went to the host compressor
+### and swap instead of back to macOS
 
-brew("colima")
-# the VM runs on krunkit, which hands memory the guest frees back to macOS (vz
-# never does). Untrusted, brew skips the whole tap and counts krunkit's libraries
-# (libepoxy, virglrenderer, mesa) as orphans that bundle cleanup removes
-tap("libkrun/krun", trusted: true)
-brew("libkrun/krun/krunkit")
+cask("orbstack")
 brew("docker")
 brew("docker-compose")
 brew("docker-buildx")

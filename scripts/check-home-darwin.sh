@@ -65,7 +65,7 @@ check "mise never installs on its own" test "$(mise settings get not_found_auto_
 check "EDITOR is zed" test "$(fish -l -c 'echo $EDITOR')" = "zed --wait"
 
 for f in .claude/settings.json .config/agterm/keymap.conf .config/zed/settings.json \
-    "Library/Application Support/Tuna/config.toml" Library/LaunchAgents/com.pavel-karpovich.colima.plist; do
+    "Library/Application Support/Tuna/config.toml"; do
     check "~/$f links into the source" linked_into_source "$HOME/$f"
 done
 check "~/.claude-work/settings.json links into the source" linked_into_source "$HOME/.claude-work/settings.json"
