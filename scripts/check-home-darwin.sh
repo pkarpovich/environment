@@ -64,7 +64,7 @@ check "rx is defined" fish -l -c 'functions -q rx'
 check "mise never installs on its own" test "$(mise settings get not_found_auto_install)" = false
 check "EDITOR is zed" test "$(fish -l -c 'echo $EDITOR')" = "zed --wait"
 
-for f in .claude/settings.json .zshrc .config/agterm/keymap.conf .config/zed/settings.json \
+for f in .claude/settings.json .config/agterm/keymap.conf .config/zed/settings.json \
     "Library/Application Support/Tuna/config.toml" Library/LaunchAgents/com.pavel-karpovich.colima.plist; do
     check "~/$f links into the source" linked_into_source "$HOME/$f"
 done

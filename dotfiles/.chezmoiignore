@@ -20,8 +20,6 @@ zellij
 .agents
 .claude
 .gitconfig.darwin
-.zprofile
-.zshrc
 Library
 .config/1Password
 .config/agterm
