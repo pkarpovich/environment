@@ -8,7 +8,7 @@ Status enum values are documented per type because they drive `.base` filters; u
 
 ### Journal
 - **Folder**: vault root (the empty `Journal/` directory is unused).
-- **Filename**: `YYYY-MM-DD - <Title>.md`. Multiple entries on the same day get `YYYY-MM-DD HHmm - <Title>.md`.
+- **Filename**: `YYYY-MM-DD <Title>.md` - no dash after the date (199 of 216 dated Journal notes, checked 2026-10-17). Multiple entries on the same day get `YYYY-MM-DD HHmm <Title>.md`.
 - **Frontmatter**:
   ```yaml
   categories:
