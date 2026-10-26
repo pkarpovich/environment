@@ -1,7 +1,6 @@
 # MacBook Pro only; loaded by darwin.rb
 
 cask("audacity")
-cask("bettermouse")
 cask("elgato-capture-device-utility")
 cask("elgato-control-center")
 cask("elgato-stream-deck")

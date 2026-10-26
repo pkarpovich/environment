@@ -13,7 +13,6 @@ azure-cli
 azure/kubelogin
 azure/kubelogin/kubelogin
 bat
-bettermouse
 broot
 bruno
 bruq
