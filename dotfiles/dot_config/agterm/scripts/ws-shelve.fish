@@ -9,6 +9,10 @@
 # rewrites its process title and drops the conversation id, so a snapshot built
 # from `foreground` alone would restore an empty session. Anything that is not a
 # Claude keeps its foreground argv, which is enough to re-run a server or a tail.
+# A session attached from another host (`zmx attach`) keeps only the host and the
+# remote session id: its local cwd is HOME and its argv is agterm's own ssh line.
+# The id comes from `zmx tree HOST`, matched by the daemon name in that argv, so
+# two remote sessions with the same name cannot be confused.
 set -l AGTERMCTL /opt/homebrew/bin/agtermctl
 set -l JQ /opt/homebrew/bin/jq
 set -l MAP ~/.local/state/agterm/cc-map
@@ -30,12 +34,22 @@ test -n "$ws"; or fail "this session belongs to no workspace"
 
 # one JSON per session: what the sidebar showed, where it sat, and how to bring
 # it back - a conversation id when cc-map knows one, the live argv otherwise
-set -l sessions (printf '%s' $tree | $JQ -c --arg ws $ws '.result.tree.workspaces[] | select(.id == $ws) | .sessions[] | {id, name, cwd, foreground}')
+set -l sessions (printf '%s' $tree | $JQ -c --arg ws $ws '.result.tree.workspaces[] | select(.id == $ws) | .sessions[] | {id, name, cwd, foreground, remoteHost}')
 test (count $sessions) -gt 0; or fail "workspace $ws_name has no sessions"
 
 set -l items
 for s in $sessions
     set -l id (printf '%s' $s | $JQ -r '.id')
+    set -l host (printf '%s' $s | $JQ -r '.remoteHost // empty')
+    if test -n "$host"
+        set -l daemon (printf '%s' $s | $JQ -r '.foreground | join(" ") | capture("(?<d>agterm-[0-9a-f]{32})") | .d')
+        set -l remote ($AGTERMCTL zmx tree $host --json | $JQ -r --arg d "$daemon" \
+            '.result.remote.sessions[] | select(.panes[].daemon == $d) | {id, cwd}' | string collect)
+        test -n "$remote"; or fail "$host no longer lists session "(printf '%s' $s | $JQ -r '.name')
+        set -a items (printf '%s' $s | $JQ -c --arg host $host --argjson remote "$remote" \
+            '{name, host: $host, remote_id: $remote.id, cwd: $remote.cwd}')
+        continue
+    end
     set -l entry $MAP/$id
     set -l conv ""
     set -l profile personal

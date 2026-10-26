@@ -3,7 +3,9 @@
 # @agt.desc pick a shelved project and rebuild its sessions
 # Bring back what ws-shelve wrote: recreate the workspace, its sessions and their
 # directories, then start each one again - a Claude by resuming its conversation,
-# anything else by re-running the argv the snapshot caught.
+# anything else by re-running the argv the snapshot caught. A session that was
+# attached from another host is attached again with `zmx attach`, which lands in
+# the window's current workspace, so the workspace is created and selected first.
 #
 # The shelf file stays after a restore. It is a record of a layout that worked,
 # and shelving again overwrites it; delete it by hand when the project is over
@@ -41,10 +43,26 @@ end
 set -l ws_name ($JQ -r '.workspace' $file)
 set -l n ($JQ -r '.sessions | length' $file)
 
-# --create-workspace on the first session makes the workspace; the rest join it
-# by name, so the order in the file becomes the order in the sidebar
+set -l win (test -n "$AGT_WINDOW_ID"; and echo $AGT_WINDOW_ID; or echo active)
+set -l ws ($AGTERMCTL tree --json --window $win | $JQ -r --arg name "$ws_name" '.result.tree.workspaces[] | select(.name == $name) | .id' | head -1)
+test -n "$ws"; or set ws ($AGTERMCTL workspace new $ws_name --window $win)
+test -n "$ws"; or fail "could not create workspace $ws_name"
+$AGTERMCTL workspace select --target $ws --window $win >/dev/null 2>&1
+
+# the order in the file becomes the order in the sidebar
 for i in (seq $n)
     set -l s ($JQ -c ".sessions[$(math $i - 1)]" $file)
+    set -l host (printf '%s' $s | $JQ -r '.host // empty')
+    if test -n "$host"
+        set -l remote_id (printf '%s' $s | $JQ -r '.remote_id')
+        set -l new ($AGTERMCTL zmx attach $host $remote_id --window $win 2>/dev/null)
+        if test -z "$new"
+            $AGTERMCTL notify (printf '%s' $s | $JQ -r '.name')" is gone on $host" --title Unshelve >/dev/null 2>&1
+            continue
+        end
+        $AGTERMCTL session move $ws --target $new --window $win >/dev/null 2>&1
+        continue
+    end
     set -l cwd (printf '%s' $s | $JQ -r '.cwd // empty')
     test -d "$cwd"; or set cwd $HOME
     set -l conv (printf '%s' $s | $JQ -r '.conv // empty')
@@ -55,7 +73,7 @@ for i in (seq $n)
         set -l saved (printf '%s' $s | $JQ -r '.name // empty')
         test -n "$saved"; and set name_args --name $saved
     end
-    set -l new ($AGTERMCTL session new --workspace-name $ws_name --create-workspace --cwd $cwd $name_args)
+    set -l new ($AGTERMCTL session new --workspace $ws --cwd $cwd $name_args --window $win)
     test -n "$new"; or continue
 
     set -l cmd ""
