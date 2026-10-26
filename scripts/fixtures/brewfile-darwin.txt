@@ -91,7 +91,6 @@ libpq
 little-snitch
 lnav
 mas
-melonamin/formulae/gt
 microsoft-teams
 mimi
 mise

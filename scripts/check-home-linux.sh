@@ -52,7 +52,7 @@ for f in .gitconfig .gitignore_global .Brewfile .config/starship.toml .config/fi
     .config/fish/conf.d/linux.fish .config/fish/functions/brewup.fish .config/bash/exec-fish.bash; do
     check "~/$f links into the source" linked_into_source ~/"$f"
 done
-for f in .gitconfig.darwin brewfiles .config/fish/conf.d/darwin.fish .config/fish/functions/wt.fish \
+for f in .gitconfig.darwin brewfiles .config/fish/conf.d/darwin.fish \
     .config/fish/functions/fish_greeting.fish .config/fish/functions/ccm.fish; do
     check "~/$f is not installed" absent ~/"$f"
 done
