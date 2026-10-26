@@ -342,7 +342,6 @@
     "code-simplifier@claude-plugins-official": true,
     "core-data-expert@core-data-agent-skill": true,
     "frontend-design@claude-plugins-official": true,
-    "mattpocock-skills@mattpocock": true,
     "planning@umputun-cc-thingz": true,
     "ralphex@ralphex": true,
     "release-tools@umputun-cc-thingz": true,
@@ -354,17 +353,9 @@
     "skill-creator@claude-plugins-official": true,
     "skill-eval@umputun-cc-thingz": true,
     "swift-lsp@claude-plugins-official": true,
-    "thinking-tools@umputun-cc-thingz": true,
-    "workflow@umputun-cc-thingz": true,
-    "xcode-build-skills@xcode-build-skills": true
+    "thinking-tools@umputun-cc-thingz": true
   },
   "extraKnownMarketplaces": {
-    "aiguide": {
-      "source": {
-        "source": "github",
-        "repo": "timescale/pg-aiguide"
-      }
-    },
     "axiom-marketplace": {
       "source": {
         "source": "github",
@@ -375,12 +366,6 @@
       "source": {
         "source": "github",
         "repo": "AvdLee/Core-Data-Agent-Skill"
-      }
-    },
-    "mattpocock": {
-      "source": {
-        "source": "github",
-        "repo": "mattpocock/skills"
       }
     },
     "ralphex": {
@@ -406,12 +391,6 @@
       "source": {
         "source": "github",
         "repo": "umputun/cc-thingz"
-      }
-    },
-    "xcode-build-skills": {
-      "source": {
-        "source": "github",
-        "repo": "AvdLee/Xcode-Build-Optimization-Agent-Skill"
       }
     }
   },
