@@ -337,7 +337,7 @@
     "command": "bash /Users/pavel.karpovich/.claude/statusline-script.sh"
   },
   "enabledPlugins": {
-    "axiom@axiom-marketplace": true,
+    "axiom@axiom-marketplace": false,
     "brainstorm@umputun-cc-thingz": true,
     "code-simplifier@claude-plugins-official": true,
     "core-data-expert@core-data-agent-skill": true,
