@@ -26,3 +26,5 @@ alias f 'open .'
 alias cb 'pbcopy'
 alias gg 'smerge .' # Git Gui
 alias e 'zed .'
+
+source ~/.orbstack/shell/init2.fish
