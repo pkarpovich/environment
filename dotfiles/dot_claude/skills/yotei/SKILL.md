@@ -12,12 +12,21 @@ MCP server `yotei` (`https://yotei.pkarpovich.space/mcp`), tools `mcp__yotei__*`
 The usual case: during a session Pavel spots something and says to add it to the backlog, so he doesn't switch context. Do it right away, without asking.
 
 1. `search_tasks` with a few key words first. Compare the problem each hit describes, not the file or repo it mentions: one file holds many unrelated problems. If an open task already covers it, say so; if the new finding sharpens it, edit that note (see below) instead of creating a second task.
-2. `add_tasks` with one item:
+2. A screenshot or other image Pavel sends with the request is evidence and goes into the body, not only into its description. Upload it to the bucket the `s3-images` Obsidian plugin uses, under the same `<YYYY-MM>/<sha256>.<ext>` key, and put `![](<url>)` in the body next to the text it supports:
+
+   ```sh
+   f="<image path>"; ext=png; type=image/png   # jpg -> image/jpeg
+   url="https://s3-hub.pkarpovich.space/obsidian/$(date -u +%Y-%m)/$(shasum -a 256 "$f" | cut -d' ' -f1).$ext"
+   curl -fsS -X PUT -H "Content-Type: $type" --data-binary @"$f" "$url"
+   ```
+
+   The bucket takes unsigned writes and is reachable only over the LAN or tailscale; a link works in Obsidian, for the tuclaw agent and in the yotei app alike. Never copy the image into the vault: Obsidian Sync drops files over its size limit, and the vault-root `Attachments/` is outside the tuclaw-vault repo the agent reads.
+3. `add_tasks` with one item:
    - `title`: names the problem, not the place - `reopen fallback ignores the last-frontmost window`, not `fix library.go`. Short, in English. It becomes the file name, so no `/` or `:`, and it must be unique.
    - `body`: see "Writing the body".
    - `project`: always set, as `[[Name]]` - the repo or product the task is about, e.g. `[[farside]]`, `[[turtle-hub]]`. Check `task_values` with `field: "project"` and reuse an existing name exactly when it is the same thing; otherwise a new name is fine. The link does not need an existing note.
    - Leave `status` (backlog), `scheduled`, `deadline` and `important` unset unless Pavel gave a day, a deadline or called it important.
-3. Reply with the title in one line. Don't go back to the task unless asked.
+4. Reply with the title in one line. Don't go back to the task unless asked.
 
 ## Writing the body
 

@@ -36,12 +36,14 @@ Capture from the ffmpeg output, for the nfo:
 
 ### 3. Copy to the NAS
 
-The cover image is usually already embedded in the vault by now: `Attachments/LEGO Cubes E0NN.jpg` (zero-padded there, unlike the NAS names). Obsidian sometimes leaves **two** files, `LEGO Cubes E0NN.jpg` and `LEGO Cubes E0NN 1.jpg`, with frontmatter `cover:` pointing at one and the `## Logo` embed at the other - `md5` them, and when they match (they always have) use either. Otherwise the source is `~/Downloads/Generated Image *.jpg` from Nano Banana Pro; if Pavel attached the image in chat, ask for the local path.
+The cover image is not a vault file: the episode note's frontmatter `cover:` holds its S3 URL (`https://s3-hub.pkarpovich.space/obsidian/<YYYY-MM>/<sha256>.jpg`), and the `## Logo` embed points at the same URL. Download it from there; the bucket is reachable over the LAN or tailscale. If `cover:` is still empty, the source is `~/Downloads/Generated Image *.jpg` from Nano Banana Pro; if Pavel attached the image in chat, ask for the local path.
 
 ```bash
-cp "<image-source>" "/System/Volumes/Data/mnt/nas/media/me/LEGO Cubes/LEGO Cubes E<N>.jpg"
-cp "<image-source>" "/System/Volumes/Data/mnt/nas/media/me/LEGO Cubes/LEGO Cubes E<N>-thumb.jpg"
+curl -fsS -o "/System/Volumes/Data/mnt/nas/media/me/LEGO Cubes/LEGO Cubes E<N>.jpg" "<cover url>"
+cp "/System/Volumes/Data/mnt/nas/media/me/LEGO Cubes/LEGO Cubes E<N>.jpg" "/System/Volumes/Data/mnt/nas/media/me/LEGO Cubes/LEGO Cubes E<N>-thumb.jpg"
 ```
+
+If the URL ends in `.png` (Pavel pasted a PNG), convert first with `sips -s format jpeg <file> --out <file>.jpg`: the NAS names are `.jpg`.
 
 Both .jpg names hold identical bytes; Plex and Kodi look for either, and every episode from E24 on has both.
 

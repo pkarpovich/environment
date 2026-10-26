@@ -70,4 +70,4 @@ For media references Pavel often wants the year and metadata pulled in:
 
 - **Use defuddle/WebFetch on IMDB, Goodreads, RAWG, Letterboxd** for movies/shows/games/books. The `defuddle` skill is the right first move when he gives a URL.
 - **Year is mandatory** in the filename for media - without it the `.base` views group wrong.
-- **Cover URL**: paste the source URL into `cover:` for media - it can be a `https://...` image or an `[[Attachment.png]]` wikilink to an already-stored image, both are seen in existing notes.
+- **Cover URL**: put an image URL into `cover:` for media, as a quoted string - the source's own `https://...` image, or the S3 URL of an image Pavel pasted. Images and PDFs never live in the vault: the `s3-images` plugin uploads pasted files to `https://s3-hub.pkarpovich.space/obsidian/` and links them, and there is no `Attachments/` folder any more.

@@ -123,7 +123,7 @@ Goal: a LEGO-diorama image prompt for Pavel to feed into Nano Banana Pro (Gemini
 5. Output the prompt as one fenced code block, followed by a 3-5 bullet `## Что в нём заложено` summary.
 6. On a change request, rewrite only the affected block - the style anchor and lighting boilerplate stay stable.
 
-The generated file lands in the vault as `Attachments/LEGO Cubes E0NN.jpg`; frontmatter `cover:` and the `## Logo` embed both point at it. Generation and embedding are Pavel's; Stage 7 picks the image back up for the NAS.
+Pavel pastes the generated image under `## Logo`; the `s3-images` Obsidian plugin uploads it to the S3 bucket and leaves `![](https://s3-hub.pkarpovich.space/obsidian/<YYYY-MM>/<sha256>.jpg)` there, so no file lands in the vault. Frontmatter `cover:` holds the same URL as a quoted string. Generation and pasting are Pavel's; Stage 7 downloads the image from that URL for the NAS.
 
 ### Stage 7 - Publish to NAS (post-recording)
 
