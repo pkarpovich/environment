@@ -12,6 +12,12 @@ searchPriorities = []
 sortOrders = []
 
     [[catalogs.globalScopes]]
+    catalogIdentifier = 'camera-preview.commands'
+
+        [catalogs.globalScopes.scope]
+        kind = 'none'
+
+    [[catalogs.globalScopes]]
     catalogIdentifier = 'obsidian.notes'
 
         [catalogs.globalScopes.scope]
