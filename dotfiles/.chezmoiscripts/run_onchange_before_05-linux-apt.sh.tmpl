@@ -1,0 +1,17 @@
+{{ if eq .chezmoi.os "linux" -}}
+{{ $wsl := contains "WSL" (dig "kernel" "osrelease" "" .chezmoi) -}}
+#!/bin/sh
+# packages {{ .packages.linux.apt | toJson }}{{ if $wsl }} {{ .packages.wsl.apt | toJson }}{{ end }}
+set -eu
+{{ if $wsl -}}
+if [ ! -f /etc/apt/sources.list.d/docker.sources ]; then
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+    printf 'Types: deb\nURIs: https://download.docker.com/linux/debian\nSuites: %s\nComponents: stable\nSigned-By: /etc/apt/keyrings/docker.asc\n' \
+        "$(. /etc/os-release && echo "$VERSION_CODENAME")" | sudo tee /etc/apt/sources.list.d/docker.sources >/dev/null
+fi
+{{ end -}}
+sudo apt-get update
+sudo apt-get install -y {{ range .packages.linux.apt }}{{ . }} {{ end }}{{ if $wsl }}{{ range .packages.wsl.apt }}{{ . }} {{ end }}{{ end }}
+{{ end -}}

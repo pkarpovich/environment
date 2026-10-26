@@ -1,11 +1,11 @@
 [tools]
 node = "22"
-pnpm = "9"
-go = "1.23"
+pnpm = { version = "9", os = ["macos"] }
+go = { version = "1.23", os = ["macos"] }
 python = "3.13"
-rust = "1.93"
-deno = "2.7"
-"npm:cf" = "0.15"
+rust = { version = "1.93", os = ["macos"] }
+deno = { version = "2.7", os = ["macos"] }
+"npm:cf" = { version = "0.15", os = ["macos"] }
 uv = "0.13"
 
 # macOS keeps dev debug info in per-CGU .o files ("unpacked") and cargo never

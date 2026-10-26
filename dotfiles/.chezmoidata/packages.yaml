@@ -1,0 +1,15 @@
+packages:
+  linux:
+    apt:
+      - build-essential
+      - curl
+      - file
+      - git
+      - procps
+  wsl:
+    apt:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin

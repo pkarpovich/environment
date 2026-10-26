@@ -23,13 +23,20 @@ Linux bootstrap below.
 Tools come from Homebrew on both OSes: [`dot_Brewfile`](dot_Brewfile)
 lists the shell and everything its aliases resolve to, and loads
 `brewfiles/darwin.rb` (the Mac's apps and CLI tools) or `brewfiles/linux.rb`
-by `uname`. `darwin.rb` in turn loads `<LocalHostName>.rb` for one Mac's extras.
+by `uname`. `darwin.rb` in turn loads `<LocalHostName>.rb` for one Mac's extras;
+`linux.rb` loads `linux-wsl.rb` when the kernel is Microsoft's WSL one. What
+Linux must take from apt (Homebrew's own prerequisites, the Docker engine on
+WSL) is listed in [`.chezmoidata/packages.yaml`](.chezmoidata/packages.yaml)
+and installed by a `run_onchange_` script, so editing the list re-runs it.
+mise is for runtimes only; the shared `.config/mise/config.toml` reaches the
+WSL box, with the Mac-only tools marked `os = ["macos"]`.
 
 ```sh
 mise run link_dotfiles     # from the repo root: chezmoi init --apply
 ```
 
-A new Linux box (needs `curl` and passwordless `sudo` for the Homebrew prefix):
+A new Linux box (needs `curl`; `sudo` is asked for apt and the Homebrew prefix,
+once per password prompt when it is not passwordless):
 
 ```sh
 sh -c "$(curl -fsLS get.chezmoi.io)" -- -b ~/.local/bin init --apply pkarpovich/environment
