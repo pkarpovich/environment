@@ -15,36 +15,36 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/cloudflare/skills.git",
       "skillPath": "skills/cloudflare/SKILL.md",
-      "skillFolderHash": "f9aa5dc020f8b8d5291611a22616efc8b1bcde77",
+      "skillFolderHash": "d964e627e14032b05351d06d7f06fed14362350e",
       "installedAt": "2026-08-02T23:09:50.397Z",
-      "updatedAt": "2026-10-02T13:48:41.219Z"
+      "updatedAt": "2026-10-19T08:41:39.896Z"
     },
     "cloudflare-email-service": {
       "source": "cloudflare/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/cloudflare/skills.git",
       "skillPath": "skills/cloudflare-email-service/SKILL.md",
-      "skillFolderHash": "8206f3fa7266dc1d9868680643da217705328ac0",
+      "skillFolderHash": "71a7107b1e2046e1d6a3c9998997bd51c93872bb",
       "installedAt": "2026-08-02T23:09:50.398Z",
-      "updatedAt": "2026-10-02T13:48:42.684Z"
+      "updatedAt": "2026-10-14T15:39:05.629Z"
     },
     "cloudflare-one": {
       "source": "cloudflare/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/cloudflare/skills.git",
       "skillPath": "skills/cloudflare-one/SKILL.md",
-      "skillFolderHash": "ef8688a923076a0dead74f056b975a3bbdf3cacb",
+      "skillFolderHash": "d74021a79642a4594ee116249cefd1a04b3ad5a1",
       "installedAt": "2026-08-02T23:09:50.398Z",
-      "updatedAt": "2026-10-02T13:48:44.114Z"
+      "updatedAt": "2026-10-19T08:41:40.994Z"
     },
     "cloudflare-one-migrations": {
       "source": "cloudflare/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/cloudflare/skills.git",
       "skillPath": "skills/cloudflare-one-migrations/SKILL.md",
-      "skillFolderHash": "46158eb5ae00b6d20f53abede28134a2530d4724",
+      "skillFolderHash": "631ae2d9945516f5ebe5cf6bd9a84b7e6c6bae2d",
       "installedAt": "2026-08-02T23:09:50.398Z",
-      "updatedAt": "2026-10-02T13:48:45.759Z"
+      "updatedAt": "2026-10-09T10:05:17.876Z"
     },
     "durable-objects": {
       "source": "cloudflare/skills",
@@ -69,9 +69,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/cloudflare/skills.git",
       "skillPath": "skills/turnstile-spin/SKILL.md",
-      "skillFolderHash": "a82846b57643fd8d92a40443d1dca3867a3a4932",
+      "skillFolderHash": "92bdf038738947cddf27e3edf14a81a09f3ba188",
       "installedAt": "2026-08-02T23:09:50.399Z",
-      "updatedAt": "2026-10-02T13:48:48.824Z"
+      "updatedAt": "2026-10-14T15:39:06.903Z"
     },
     "web-perf": {
       "source": "cloudflare/skills",
@@ -87,18 +87,18 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/cloudflare/skills.git",
       "skillPath": "skills/workers-best-practices/SKILL.md",
-      "skillFolderHash": "46b2eac6a1a81c6bfbc01164f93f0432ee3d9751",
+      "skillFolderHash": "60b76163741cb3464f710138ee2023e06403aaa5",
       "installedAt": "2026-08-02T23:09:50.400Z",
-      "updatedAt": "2026-10-02T13:48:50.348Z"
+      "updatedAt": "2026-10-14T15:39:08.200Z"
     },
     "wrangler": {
       "source": "cloudflare/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/cloudflare/skills.git",
       "skillPath": "skills/wrangler/SKILL.md",
-      "skillFolderHash": "2dab1373cf45bcde6db84354711b7406127a239a",
+      "skillFolderHash": "a6f70b001b36794b778ed888fc372df40d59e6ca",
       "installedAt": "2026-08-02T23:09:50.401Z",
-      "updatedAt": "2026-10-02T13:48:51.782Z"
+      "updatedAt": "2026-10-14T15:39:09.303Z"
     },
     "obsidian-bases": {
       "source": "kepano/obsidian-skills",
@@ -151,10 +151,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/AvdLee/SwiftUI-Agent-Skill.git",
       "skillPath": "skills/swiftui-expert-skill/SKILL.md",
-      "skillFolderHash": "b0b5debf5de45375209268a01528f0cf0c8ca359",
-      "pluginName": "swiftui-expert",
+      "skillFolderHash": "7f608997e3beb4aa0d926d21213873792a651e06",
       "installedAt": "2026-09-29T13:50:08.565Z",
-      "updatedAt": "2026-09-29T13:50:08.565Z"
+      "updatedAt": "2026-10-09T10:05:19.529Z"
     },
     "swift-concurrency": {
       "source": "AvdLee/Swift-Concurrency-Agent-Skill",
@@ -171,9 +170,18 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/umputun/agterm.git",
       "skillPath": "plugins/agterm/skills/agterm/SKILL.md",
-      "skillFolderHash": "b4117ccacfd7e43c2ca0c9db86978725061f3191",
+      "skillFolderHash": "ae1c9a528548dfdce82d6e3770649a48656cd650",
       "installedAt": "2026-09-29T13:56:34.644Z",
-      "updatedAt": "2026-10-02T13:48:55.775Z"
+      "updatedAt": "2026-10-24T23:43:47.655Z"
+    },
+    "langfuse": {
+      "source": "langfuse/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/langfuse/skills.git",
+      "skillPath": "skills/langfuse/SKILL.md",
+      "skillFolderHash": "e328647f773572c449699be03e719e95ab151a6f",
+      "installedAt": "2026-10-09T14:11:16.927Z",
+      "updatedAt": "2026-10-19T08:41:44.628Z"
     }
   },
   "dismissed": {}
