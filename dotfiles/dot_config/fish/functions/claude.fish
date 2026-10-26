@@ -17,6 +17,23 @@ function claude --description "agterm-aware Claude launcher: tags a fresh run wi
         return
     end
 
+    # agterm Live mode replays a forked pane's captured argv after a reboot, and
+    # `--resume <parent> --fork-session` then mints a new fork of the parent instead
+    # of the conversation this pane had: resume what cc-map recorded for the pane
+    if contains -- --fork-session $argv
+        set -l entry ~/.local/state/agterm/cc-map/$AGTERM_SESSION_ID
+        set -l conv (jq -r '.conv // empty' $entry 2>/dev/null)
+        set -l i (contains -i -- --resume $argv)
+        test -n "$i"; and set -l j (math $i + 1)
+        if test -n "$conv"; and test -n "$j"; and test "$conv" != "$argv[$j]"
+            and test (count ~/.claude/projects/*/$conv.jsonl ~/.claude-work/projects/*/$conv.jsonl) -gt 0
+            set -l rest (string match -v -- --fork-session $argv)
+            set rest[$j] $conv
+            command claude $rest
+            return
+        end
+    end
+
     for a in $argv
         switch $a
             case -r --resume --session-id '--resume=*' '--session-id=*' -c --continue -p --print -v --version -h --help
