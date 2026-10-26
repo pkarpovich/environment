@@ -1,5 +1,6 @@
 {
   "cli_default_open_behavior": "existing_window",
+  "window_title_format": "${remoteHost}${separator}${projectName}${separator}${fileName}",
   "outline_panel": {
     "dock": "left",
   },

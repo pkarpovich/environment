@@ -94,10 +94,8 @@ yashiki rule-add --close-button none ignore
 yashiki rule-add --app-id company.thebrowser.dia tags (tag 1)
 yashiki rule-add --app-id company.thebrowser.dia output "$LAPTOP"
 
-yashiki rule-add --app-id dev.zed.Zed tags (dltag 4)
+yashiki rule-add --app-id dev.zed.Zed tags (dltag 1)
 yashiki rule-add --app-id dev.zed.Zed output "$DELL_LANDSCAPE"
-yashiki rule-add --app-id dev.zed.Zed --title "*dealcloud*" tags (dltag 1)
-yashiki rule-add --app-id dev.zed.Zed --title "*dealcloud*" output "$DELL_LANDSCAPE"
 yashiki rule-add --app-id dev.zed.Zed --title "*environment*" tags (dltag 2)
 yashiki rule-add --app-id dev.zed.Zed --title "*environment*" output "$DELL_LANDSCAPE"
 yashiki rule-add --app-id dev.zed.Zed --title "*turtle-hub*" tags (dltag 3)
