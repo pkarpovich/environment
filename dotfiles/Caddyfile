@@ -94,3 +94,7 @@ private-equity-web-llm-proxy.localhost {
 heap.localhost {
     import site 50900
 }
+
+yotei.localhost {
+    import site 50910
+}
