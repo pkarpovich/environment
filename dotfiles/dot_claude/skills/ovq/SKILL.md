@@ -1,143 +1,49 @@
 ---
 name: ovq
-description: Query Obsidian vault files by frontmatter properties using Dataview-style syntax, AND discover what property names and values actually exist in the vault. Use when the user asks to find notes, search the vault, or filter notes by metadata (tags, status, dates, categories, projects). ALSO use proactively before writing or editing a vault note when the canonical schema is not 100% certain: run `ovq --values <field> --count` to discover real category and property values, and run a `categories contains` query plus read 1-2 sample files to confirm property names before assuming them. Triggers include "find notes where", "search vault for", "which notes have", "find meetings", "find projects with status", and any agent task that touches Obsidian frontmatter on a vault you do not own.
+description: Query the Obsidian vault by frontmatter with the ovq CLI (Dataview WHERE syntax), and list the property names and values the vault really uses. Use when asked to find or filter notes by metadata ("find notes where", "which notes have", "find meetings for project X"), and before writing or editing a note's frontmatter, to confirm the real category spelling and value set. Note creation itself is obsidian-vault.
 ---
 
-# ovq - Obsidian Vault Query
+# ovq
 
-Query markdown files by YAML frontmatter properties using Dataview-style syntax.
-
-## Quick Start
+The vault is `/Users/pavel.karpovich/Obsidian/PK Workspace`. Pass it as `--vault` or set `OVQ_VAULT`. Output is one vault-relative path per line.
 
 ```bash
-ovq --vault "/path/to/vault" 'status = "active"'
+ovq --vault "/Users/pavel.karpovich/Obsidian/PK Workspace" 'categories contains "Meetings" AND project = "Tuclaw"'
 ```
 
-Set `OVQ_VAULT` environment variable to skip `--vault` flag.
+## Discover before you write
 
-## Discovery: what actually exists in the vault
-
-Before writing queries (or new notes) on an unfamiliar vault, use the value-listing modes to learn the canonical property names and value enums. This is the single most useful agent move when you are about to touch frontmatter you did not write yourself.
+A note whose frontmatter does not match the vault's spelling drops out of every `.base` view. Before adding or editing frontmatter in a category you have not touched this session:
 
 ```bash
-ovq --values categories --count       # all categories with file counts
-ovq --values status --count           # all status values that actually appear
-ovq --values tags --count             # tag inventory
-ovq --values genre --count            # genre vocabulary used in media notes
+ovq --values categories --count     # real category names with counts, e.g. [[Movies]]: 83
+ovq --values status --count         # the value set a property really uses
+ovq 'categories contains "Movies"' | head -3   # then read two of these for the frontmatter shape
 ```
 
-Use this to:
+Categories are stored as wikilinks (`[[Movies]]`), the query matches them with or without brackets.
 
-- Find the **real spelling** of a category (`Project Notes` vs `Projects`, `TV Shows` vs `Shows`).
-- Discover the **value enum** for a property (what actually fills `status`? `watched`, `backlog`, `wishlist`, ...).
-- Spot **drift and typos** (one note with `status: watche` next to 50 notes with `watched`).
-- Decide whether a property is **load-bearing** at all (zero non-empty values = nobody uses it).
-
-After you know the universe, write the query.
-
-## Query Syntax
-
-### Comparison Operators
+## Query syntax
 
 ```bash
-ovq 'status = "active"'          # String equality
-ovq 'priority > 2'               # Numeric comparison
-ovq 'created >= 2024-01-01'      # Date comparison
-ovq 'done = true'                # Boolean
+ovq 'status = "active"'              # =, !=, >, <, >=, <=
+ovq 'created >= 2026-01-01'          # dates unquoted, YYYY-MM-DD
+ovq 'done = true'
+ovq 'tags contains "work"'           # array membership or substring
+ovq 'due'                            # property present and truthy
+ovq '!due'                           # missing or falsy
+ovq 'due != null'                    # present with any value
+ovq 'status = "active" AND (priority > 2 OR tags contains "urgent")'
 ```
 
-Operators: `=`, `!=`, `>`, `<`, `>=`, `<=`
+Field names and string values match case-insensitively.
 
-### Contains (Arrays and Substrings)
+## Output modes
 
 ```bash
-ovq 'tags contains "project"'        # Array membership
-ovq 'categories contains "Meetings"' # Check category
-ovq 'title contains "sync"'          # Substring match
+ovq --fields title,status,due 'status = "active"'   # path plus the fields as TSV, no file reads needed
+ovq --json 'categories contains "Movies"'            # [{"file": ..., "frontmatter": {...}}]
+ovq 'categories contains "Movies"' | ovq --stdin 'year > 2020'   # filter a piped path list
 ```
 
-### Existence Checks
-
-```bash
-ovq 'due'                # Property exists and is truthy
-ovq '!due'               # Property missing or falsy
-ovq 'due != null'        # Property exists (any value)
-ovq 'due = null'         # Property is missing
-```
-
-### Boolean Logic
-
-```bash
-ovq 'status = "active" AND priority > 2'
-ovq 'status = "done" OR status = "archived"'
-ovq '(type = "note" OR type = "doc") AND published = true'
-```
-
-### Value Types
-
-- Strings: `"quoted"`
-- Numbers: `42`, `3.14`
-- Booleans: `true`, `false`
-- Dates: `2024-01-15`
-- Null: `null`
-
-## Common Patterns
-
-### Find by Category
-
-```bash
-ovq 'categories contains "Meetings"'
-ovq 'categories contains "Projects"'
-ovq 'categories contains "Project Notes"'
-```
-
-### Find by Tag
-
-```bash
-ovq 'tags contains "work"'
-ovq 'tags contains "urgent" AND status != "done"'
-```
-
-### Find by Project
-
-```bash
-ovq 'project = "ProjectName"'
-ovq 'project contains "Graph"'
-```
-
-### Combined Queries
-
-```bash
-# Meetings for a specific project
-ovq 'categories contains "Meetings" AND project = "ProjectName"'
-
-# Active tasks with due dates
-ovq 'status = "active" AND due'
-
-# Recent notes
-ovq 'created >= 2024-01-01'
-
-# Notes missing a property
-ovq 'categories contains "Meetings" AND !date'
-```
-
-## Workflow
-
-When the property names and value enums are already known:
-
-1. Use ovq to find matching files
-2. Read relevant files to get content
-3. Process or summarize as needed
-
-When you do not know the schema yet (new vault, new property, drafting a note in a category you have not touched before):
-
-0. **Discover first.** `ovq --values <field> --count` to see what values exist. For a category-keyed property, also run `ovq 'categories contains "<Category>"'` and read 1-2 of the returned files to see the real frontmatter shape.
-1. Then proceed with steps 1-3 above.
-
-Skipping step 0 leads to inventing property names that no `.base` view actually filters on, which silently drops the note from the user's existing dashboards.
-
-## Matching Behavior
-
-- Field names: case-insensitive (`Status` matches `status`)
-- String values: case-insensitive
-- Obsidian links: `[[Link]]` normalized to `Link` for comparison
+Use `--fields` when the answer is a table, `--json` when a script consumes it, and Read only for the body of a note.
