@@ -1,10 +1,6 @@
 # Cover image prompt - Nano Banana Pro + LEGO aesthetic
 
-This reference is loaded only when assembling the Stage 5 cover prompt. It encodes both the LEGO Cubes visual style (which is fixed across episodes) and the Nano Banana Pro / Gemini 3 Pro Image prompting principles (which are model-specific). Both are deliberately separated from the workflow in SKILL.md so the workflow stays compact and the reference can be tuned independently as the model evolves.
-
-## What Pavel uses for image generation
-
-**Nano Banana Pro** is the community nickname for Google DeepMind's Gemini 3 Pro Image model (released November 2025). It is currently Pavel's tool of choice for Lego Cubes covers. The principles below are tuned to that model. If Pavel switches generators, this file is the right place to update.
+Loaded by Stage 6. The LEGO Cubes house style is fixed across episodes. The prompting notes are specific to Nano Banana Pro (Gemini 3 Pro Image) and change with the generator.
 
 ## Nano Banana Pro - core prompting principles
 
@@ -41,9 +37,9 @@ Acknowledge these limits in the prompt design - do not ask for things the model 
 
 ## The Lego Cubes house style
 
-Every Lego Cubes cover is a LEGO brick diorama. This is not negotiable - it is Pavel's brand. The variables are camera, subject, color palette, props, lighting, and Easter eggs. Everything else stays fixed.
+Every Lego Cubes cover is a LEGO brick diorama. The variables are camera, subject, color palette, props, lighting, and Easter eggs. Everything else stays fixed.
 
-### Style anchor (always include verbatim or close to it)
+### Style anchor (include verbatim or close to it)
 
 > A highly detailed LEGO brick diorama, [camera angle here], with tilt-shift miniature photography effect. [...] Style: official LEGO set photography with visible studs on every single surface. Glossy plastic material with realistic light reflections and subtle subsurface scattering. Dense with hundreds of small details - the scene feels like a premium LEGO Creator Expert set with 3000-5000+ pieces. 16:9 aspect ratio, 4K resolution.
 
@@ -155,4 +151,4 @@ If Pavel asks for a change:
 - **More/fewer Easter eggs** - just adjust the surrounding details paragraph
 - **Switch single-scene <-> multi-zone** - this is a bigger rewrite, treat it as a fresh prompt
 
-The style anchor (visible studs, tilt-shift, glossy plastic, Creator Expert feel, 16:9 4K) should never be cut.
+The style anchor (visible studs, tilt-shift, glossy plastic, Creator Expert feel, 16:9 4K) stays in every rewrite.

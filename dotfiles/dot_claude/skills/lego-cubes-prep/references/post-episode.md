@@ -70,7 +70,7 @@ The partial size has been an exact multiple of 1 MiB every time, so `bs=1m` with
 
 Plot field formatting (this is what makes the stage more than a copy-paste):
 
-- Sections labeled and separated by a blank line, in the order they appear in the vault note (`General:`, `Projects:`, `Content:` in 033; `General:`, `Content:`, `Projects:` in 028). Every bullet line gets a 2-space indent. Do not drop `General` when the note has one - Pavel flags this.
+- Sections labeled and separated by a blank line, in the order they appear in the vault note (`General:`, `Projects:`, `Content:` in 033; `General:`, `Content:`, `Projects:` in 028). Every bullet line gets a 2-space indent. Do not drop `General` when the note has one.
 - **Strip all `[[...]]` syntax.** `- <hook> - [[Title (Year)]]` becomes `- <hook> - Title (Year)`; `[[Tuclaw]]` becomes `Tuclaw`.
 - Sub-bullets keep their 4-space indentation under the parent, and the parent gets a trailing `:` for readability (`- Дилогия Devil Wears Prada перед выходом второго:`).
 - **Escape `&` as `&amp;`** - `The Ballad of Songbirds &amp; Snakes (2023)`. XML requires it.

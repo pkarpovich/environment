@@ -20,7 +20,7 @@ Read the five most recent episode filenames before brainstorming - they are the 
 
 - The `### General` and `### Projects` digest drives the central image more than Content does.
 - **Anchor on the top tier of the Stage 3 digest.** Bullets are one-line shorthand and give no sense of scale: "Реализовали с 0 процесс бекапов" was the month's biggest engineering effort (nothing had ever been backed up; a full 3-2-1 system with an offsite copy of the whole podcast archive), while "У Ralphex Farm теперь есть свои раннеры" was a minor increment. The weekly Highlights read in Stage 3 tell them apart. If a wikilinked project has its own note at the vault root (`Home Backups.md`, `nhop proxy router.md`), open it for imagery; a missing note is itself a signal the item is small.
-- Pavel pushes back hard when the title is built on a minor item ("ты выбираешь мелочь") or on something he already called small. In 033 he ruled out House of the Dragon, Terminator 2 and Star City as too minor to anchor a title.
+- A title built on a minor item, or on something the digest already ranked small, gets rejected.
 
 ## Brainstorm angles
 
@@ -28,7 +28,7 @@ Read the five most recent episode filenames before brainstorming - they are the 
 - One content reference as the secondary layer - prefer the **newest / headline** release over an older entry in the same marathon (with a Spider-Man marathon the anchor is `Brand New Day`, not `Homecoming`).
 - Hunt for double meanings: "артефакт" (tech bug + magic relic), "фантом" (Star Wars + glitched data), "сбой" (malfunction + disruption), "трещина" (crack in mask + crack in code), "бэкап" (the saved server + the joke on "blondes").
 - A well-known title or proverb bent to the month's events reads best: "Джентльмены предпочитают бэкапы" landed immediately.
-- Subtle and metaphorical over literal - Pavel dislikes in-your-face references.
+- Subtle and metaphorical over literal.
 - **Do not reuse a motif from the last 2-3 episodes.** After 030 "Автономная ферма выходит на форсаж", 031 "Сны молодого агента" and 033 "Джентльмены предпочитают бэкапы", the words "агент", "ферма", "сны", "бэкап" are burned.
 - The title must read as **one coherent phrase**. A liked opening plus a bolted-on technical tail ("Совершенно новый день на новой раскладке") reads as two halves glued together - keep rewriting until the whole line means one thing.
 
