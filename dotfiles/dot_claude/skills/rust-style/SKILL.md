@@ -152,8 +152,6 @@ let config_path = canonical_path.join("config.toml");
 - No TODO comments (use issue tracker)
 - No commented-out code (use version control)
 
-Exception: Doc comments (`///`) on public items are required. See the `rustdoc` skill.
-
 ```rust
 // DON'T
 // Check if user is valid
