@@ -1,6 +1,10 @@
 ---
 name: css-baseline
-description: Modern CSS (2026) style guide for plain CSS and CSS Modules. Apply automatically when writing, editing, or reviewing .css, .module.css, or .scss files. Targets Chrome (last 4) and Safari 26+. No fallbacks, no @supports hedges, no legacy support. Prescribes Grid/Flexbox over position:absolute for layout; intrinsic sizing (min-content, fit-content, clamp()) over fixed pixels; container queries for component-level responsive; CSS custom properties for every repeated value; OKLCH color space; light-dark() for theming; :has() and @scope over deep selector chains; @layer for cascade order over !important; native CSS Nesting; View Transitions API for navigation; scroll-driven animations via animation-timeline; anchor positioning for floating UI; text-wrap balance/pretty for typography; field-sizing for auto-resizing form controls; popover API for overlays. When editing existing CSS, apply these rules even if surrounding code is older - do not cargo-cult legacy patterns.
+description: Modern CSS style guide for plain CSS and CSS Modules, targeting current Chrome and Safari 26+ with no fallbacks. Grid and intrinsic sizing over absolute positioning and fixed pixels, container queries, custom properties, OKLCH and light-dark(), :has(), @scope, @layer, nesting, View Transitions, anchor positioning. Loads for .css, .module.css and .scss files.
+paths:
+  - "**/*.css"
+  - "**/*.scss"
+user-invocable: false
 ---
 
 # Modern CSS (2026)
@@ -9,9 +13,9 @@ Apply these rules when writing, editing, or reviewing any CSS or CSS Modules cod
 
 Target browsers: latest Chrome (last 4 versions) and Safari 26+ (iOS and macOS). Do not write `@supports` fallbacks, do not write vendor prefixes, do not pre-process with autoprefixer. Every feature listed here is supported in those targets.
 
-## Rule 0: Do not cargo-cult existing CSS
+## Rule 0: new lines follow this guide
 
-When editing an existing `.css` or `.module.css` file, the surrounding code is **not** authoritative. If the existing code uses `position: absolute` for layout, hardcoded `width: 350px`, hex colors, or Bootstrap-style breakpoints, apply the rules below regardless. Match patterns from this guide, not from adjacent legacy code.
+The rules apply to every line you write or change. Surrounding legacy CSS (`position: absolute` layout, `width: 350px`, hex colors, Bootstrap breakpoints) is not the pattern to copy, and it is not yours to rewrite either: leave untouched lines as they are.
 
 ## 1. Layout
 
@@ -267,6 +271,8 @@ See `references/selectors-and-cascade.md`.
 
 ## 7. Animations
 
+For View Transitions pseudo-elements and types, `@starting-style`, scroll-driven ranges, read `references/animations.md`.
+
 Use the View Transitions API for navigation animations. SPA: `document.startViewTransition()`. MPA: `@view-transition { navigation: auto; }`.
 
 ```css
@@ -310,6 +316,8 @@ See `references/animations.md`.
 
 ## 8. Typography
 
+For font scales and tokens, read `references/typography.md`.
+
 **Never** set a fixed pixel font-size on `html` or `body`. It overrides the user's browser default and breaks accessibility (low-vision users often raise the default above 16px). Body font-size stays plain `1rem`. Only headings and display copy use `clamp()` to scale fluidly. Always anchor the `clamp()` preferred value with a `rem` term (`+ 1rem`) so it respects user zoom at small viewports.
 
 ```css
@@ -345,6 +353,8 @@ WHY: unitless line-height inherits proportionally to font-size, fixed `px` line-
 See `references/typography.md`.
 
 ## 9. Forms & overlays
+
+For anchor positioning (`anchor()`, `anchor-size()`, `@position-try`) and the Popover API, read `references/forms-and-overlays.md`.
 
 Use `field-sizing: content` to make inputs and textareas size to their content:
 
@@ -414,16 +424,3 @@ WHY: modules remove the specificity-vs-naming tradeoff that BEM was invented to 
 See `references/css-modules.md`.
 
 ---
-
-## References index
-
-- `references/layout.md` - Grid, Flexbox, subgrid, intrinsic sizing, logical properties, viewport units.
-- `references/responsive.md` - clamp() patterns, fluid scales, page-level vs component-level responsive.
-- `references/container-queries.md` - `@container`, container types, units (cqi/cqw/cqb), style queries.
-- `references/colors.md` - OKLCH, color-mix, relative color syntax, light-dark, color-scheme.
-- `references/custom-properties.md` - var(), @property, theming, runtime updates.
-- `references/selectors-and-cascade.md` - `:has()`, `@scope`, `@layer`, native nesting.
-- `references/animations.md` - View Transitions (SPA + MPA), scroll-driven, interpolate-size, transition specifics.
-- `references/typography.md` - clamp font scales, balance/pretty, text-box, unit-less line-height.
-- `references/forms-and-overlays.md` - field-sizing, Popover API, anchor positioning patterns.
-- `references/css-modules.md` - scoping, composes, :global, design tokens.
