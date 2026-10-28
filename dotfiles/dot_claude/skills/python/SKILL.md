@@ -1,15 +1,21 @@
 ---
 name: python
-description: Modern Python 3.13+ development standards and best practices. Use when writing, reviewing, or refactoring Python code. Triggers on Python file creation/editing, code reviews, architecture decisions, async patterns, type hints, testing strategies, or when user asks about Python best practices.
+description: Python standards for this machine: uv, ruff, ty and pytest, strict typing, small typed signatures, private-by-default modules, async with anyio and httpx, function-based tests. Loads for .py files. Patterns and module layout are in references/architecture.md, the 3.14 and 3.15 features in references/python-3.14-3.15.md.
+paths:
+  - "**/*.py"
+  - "**/pyproject.toml"
+user-invocable: false
 ---
 
-# Modern Python 3.13+ Standards
+# Python standards
+
+Target the interpreter `requires-python` in `pyproject.toml` names. For anything newer than 3.13 (lazy imports, t-strings, frozendict, closed TypedDict, free threading) read `references/python-3.14-3.15.md`.
 
 ## Tooling
 
 - **Package management**: `uv` only, never `pip` directly
 - **Linting/formatting**: `ruff` (replaces black, isort, flake8)
-- **Type checking**: `ty` from Astral (fast, integrated with ruff/uv ecosystem)
+- **Type checking**: `ty` from Astral (`uvx ty check`)
 - **Testing**: `pytest` with function-based tests only
 
 ## Type System
@@ -21,23 +27,18 @@ def process(items: list[str], config: dict[str, int] | None = None) -> tuple[str
 # Union types
 def fetch(url: str) -> bytes | None: ...  # NOT Optional[bytes]
 
-# Generic typing
-from typing import TypeVar, Generic, Protocol, ParamSpec
+# Generics with PEP 695 syntax, no TypeVar declarations
+from typing import Protocol
+from collections.abc import Callable
 
-T = TypeVar("T")
-P = ParamSpec("P")
-
-class Repository(Protocol[T]):
+class Repository[T](Protocol):
     def get(self, id: str) -> T | None: ...
     def save(self, item: T) -> None: ...
 
-# Callable with ParamSpec for decorators
-from collections.abc import Callable
-
-def retry(fn: Callable[P, T]) -> Callable[P, T]: ...
+def retry[**P, T](fn: Callable[P, T]) -> Callable[P, T]: ...
 ```
 
-**Prohibited**: `Any` type, `Optional[T]`, `List`/`Dict`/`Tuple` from typing module
+No `Any`, no `Optional[T]`, no `List`/`Dict`/`Tuple` from `typing`, no `TypeVar()` where PEP 695 syntax works.
 
 ## Code Style
 
@@ -146,12 +147,6 @@ def get_user(db: Database, user_id: str) -> User:
     return db.query(User).get(user_id)
 ```
 
-**Why globals are harmful:**
-- Hidden dependencies make testing impossible without monkeypatching
-- Execution order matters (init must run first)
-- Concurrent code breaks with shared mutable state
-- Refactoring becomes dangerous
-
 **Acceptable module-level constants:**
 ```python
 DEFAULT_TIMEOUT = 30
@@ -161,7 +156,7 @@ API_VERSION = "v2"
 
 ## Hard rules
 
-Non-negotiable; the gate for marking any task complete. If a rule is violated the task is not done - refactor, re-test, then mark complete. This block is the source lifted into a plan's per-task Code-Quality gate.
+The gate before a task is marked complete. A violated rule means the task is not done.
 
 **Signatures:**
 - No function or method has 4+ parameters (`self`/`cls` do not count). Past the budget, pass a `@dataclass` or `TypedDict` of options.
@@ -180,52 +175,14 @@ Non-negotiable; the gate for marking any task complete. If a rule is violated th
 
 **Comments / docstrings (default: none):**
 - No comments or docstrings unless the WHY is non-obvious; clear names over comments.
-- Never restate WHAT self-evident code does.
+- Comments never restate what the code does.
 
 **Per-task gate (before marking a checkbox `[x]`):**
-1. `ruff format` clean, `ruff check` zero issues, type-check clean (`mypy`/`pyright`), `pytest` passes.
+1. `ruff format` clean, `ruff check` zero issues, `ty check` clean, `pytest` passes.
 2. Grep new code: `grep -nE 'def [^(]*\(([^)]*,){3,}'` for 4+ params (drop `self`/`cls`); for each new public (non-underscore) name confirm a cross-module caller or a deliberate `__all__` entry.
 3. Only after 1-2 pass: mark complete.
 
 ## Code Patterns
-
-### Early Return (flat code)
-
-```python
-def validate_user(user: User) -> ValidationResult:
-    if not user.email:
-        return ValidationResult(valid=False, error="missing email")
-    if not user.age or user.age < 18:
-        return ValidationResult(valid=False, error="invalid age")
-
-    return ValidationResult(valid=True)
-```
-
-### Pattern Matching (3.10+)
-
-```python
-def handle_event(event: Event) -> Response:
-    match event:
-        case ClickEvent(x=x, y=y):
-            return handle_click(x, y)
-        case KeyEvent(key=key) if key.isalpha():
-            return handle_alpha_key(key)
-        case KeyEvent(key="Enter"):
-            return handle_submit()
-        case _:
-            return Response(status="ignored")
-```
-
-### Walrus Operator
-
-```python
-# In comprehensions
-valid_users = [u for u in users if (email := u.get("email")) and "@" in email]
-
-# In conditionals
-if (match := pattern.search(text)) and match.group(1):
-    process(match.group(1))
-```
 
 ### Data Structures
 
@@ -299,7 +256,7 @@ async def read_config(path: Path) -> dict:
     return json.loads(content)
 ```
 
-**Prohibited**: Synchronous I/O (`open()`, `requests`, `time.sleep`) inside async functions
+No synchronous I/O (`open()`, `requests`, `time.sleep`) inside async functions.
 
 ## Performance
 
@@ -363,7 +320,7 @@ def test_uppercase(input: str, expected: str) -> None:
     assert input.upper() == expected
 ```
 
-**Prohibited**: Class-based tests, mocking internal services (use real objects/fixtures)
+Function-based tests only. Internal services are not mocked, use real objects and fixtures.
 
 ## Error Handling
 
@@ -382,7 +339,7 @@ def parse_config(data: dict) -> Config:
 ```
 
 **Rules**:
-- Catch specific exceptions, never bare `except:`
+- Catch specific exceptions, no bare `except:`
 - Chain exceptions with `from e`
 - No exception handling for impossible scenarios
 
@@ -399,35 +356,3 @@ For patterns (factory, protocol, dependency injection, layering), module layout 
 - **f-strings in logging** → Use structured logging: `logger.info("user created", extra={"user_id": user.id})`
 - **Blocking I/O in async** → Use anyio.Path, httpx AsyncClient
 - **Manual dependency management** → Use lock files (uv.lock)
-
-## Imports
-
-```python
-# Standard library
-import json
-from pathlib import Path
-from collections.abc import Callable, Iterator
-
-# Third-party
-import httpx
-from pydantic import BaseModel
-
-# Local
-from app.models import User
-from app.services import UserService
-```
-
-Always at file top, never inside functions. Ruff auto-sorts.
-
-## Modern Features Summary (3.13+)
-
-| Feature | Use |
-|---------|-----|
-| `list[T]`, `dict[K,V]` | Built-in generic syntax |
-| `X \| Y` | Union types |
-| `match/case` | Pattern matching |
-| `:=` | Walrus operator |
-| `@dataclass(slots=True)` | Memory-efficient dataclasses |
-| `typing.Self` | Return type for methods |
-| `type` statement | Type aliases (3.12+) |
-| `**kwargs: Unpack[TypedDict]` | Typed kwargs (3.12+) |
