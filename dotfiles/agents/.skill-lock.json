@@ -222,6 +222,15 @@
       "skillFolderHash": "6695a375b993430553b0738d7218cf8a31f16da1",
       "installedAt": "2026-10-26T22:57:55.526Z",
       "updatedAt": "2026-10-26T22:57:55.526Z"
+    },
+    "claude-md-improver": {
+      "source": "anthropics/claude-plugins-official",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/anthropics/claude-plugins-official.git",
+      "skillPath": "plugins/claude-md-management/skills/claude-md-improver/SKILL.md",
+      "skillFolderHash": "7188018e6710998fbc3227fdacd1b2b6e0508c38",
+      "installedAt": "2026-10-28T19:29:43.194Z",
+      "updatedAt": "2026-10-28T19:29:43.194Z"
     }
   },
   "dismissed": {}
