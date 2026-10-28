@@ -24,7 +24,6 @@ test -d "$cwd"; or set cwd $AGT_SESSION_PWD
 set -l new ($AGTERMCTL session new --cwd $cwd --after $AGT_SESSION_ID); or exit 1
 
 set -l resume "CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume $conv"
-test ($JQ -r '.profile // "personal"' $entry) = work; and set resume "CLAUDE_CONFIG_DIR=~/.claude-work $resume"
 
 # seed the new session's map entry and restore pin with the PARENT conversation:
 # the fork's own transcript exists only after its first message, so until the

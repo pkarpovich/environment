@@ -45,7 +45,7 @@ else reads it.
 
 | File | Role | Runs when |
 |---|---|---|
-| `scripts/cc-map-hook.fish` | records conv/profile/cwd/pid, pins the session's restore command | Claude Code SessionStart, UserPromptSubmit, Stop |
+| `scripts/cc-map-hook.fish` | records conv/cwd/pid, pins the session's restore command | Claude Code SessionStart, UserPromptSubmit, Stop |
 | `scripts/cc-map-unmap.fish` | forgets the entry + pin when you deliberately quit Claude | Claude Code SessionEnd (only `prompt_input_exit`/`logout`/`exit`) |
 | `scripts/cc-map-watch.fish` | deletes the entry when its agterm session is closed | launchd, subscribed to `agtermctl events --kind session.closed` |
 | `com.pavel-karpovich.cc-map-watch.plist` | keeps that watcher alive | login, `KeepAlive` |

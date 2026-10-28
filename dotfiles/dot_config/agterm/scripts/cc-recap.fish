@@ -6,7 +6,7 @@
 # and it spends half its length guessing which transcript belongs to the pane -
 # a status-line hook writing a pane map, plus a fallback that slugs the working
 # directory and takes the newest file. We already know the answer. cc-map holds
-# the conversation id and the profile for every agterm session, so the transcript
+# the conversation id for every agterm session, so the transcript
 # is one lookup, exact even for a session that moved into a worktree.
 #
 # Two entry points, one file: with no arguments it opens an overlay over the
@@ -40,9 +40,7 @@ set -l conv ($JQ -r '.conv // empty' $entry)
 set -l cwd ($JQ -r '.cwd // empty' $entry)
 test -n "$conv"; or fail "cc-map entry carries no conversation id"
 
-set -l base ~/.claude
-test ($JQ -r '.profile // "personal"' $entry) = work; and set base ~/.claude-work
-set -l transcript $base/projects/*/$conv.jsonl
+set -l transcript ~/.claude/projects/*/$conv.jsonl
 test (count $transcript) -gt 0; or fail "no transcript on disk for $conv"
 set transcript $transcript[1]
 

@@ -30,34 +30,4 @@ function skills-restore --description "reinstall every skill recorded in ~/.agen
         # Zed is not decoration - its skills dir IS ~/.agents/skills
         npx --yes skills@latest add $parts[1] -g -a claude-code -a zed -y $args
     end
-
-    # the CLI only knows about ~/.claude, so the work profile ends up without any of
-    # this. Mirror every skill that is a symlink in the personal profile - that is
-    # exactly the set nothing else manages: the vendored ones point into
-    # ~/.agents/skills, peon-ping's into its brew keg. Skills that chezmoi links from
-    # the repo are directories, not symlinks, and it already links them into both.
-    set -l work ~/.claude-work/skills
-    mkdir -p $work
-    set -l mirrored 0
-    for src in ~/.claude/skills/*
-        set -l name (basename $src)
-        test -e $work/$name; and continue
-        if test -L $src
-            # vendored: the whole skill directory is one link into ~/.agents/skills
-            ln -s (readlink $src) $work/$name
-        else if test -L $src/SKILL.md
-            # brew-installed (peon-ping): a real directory holding one linked SKILL.md.
-            # Repo skills look the same but chezmoi already put them in both profiles,
-            # so the `test -e` above has skipped them by now
-            mkdir -p $work/$name
-            ln -s (readlink $src/SKILL.md) $work/$name/SKILL.md
-        else
-            # real files that live only here on purpose - client-specific ones that must
-            # not leave this machine, so they are never in the repo and get no backup.
-            # The work profile links to them where they lie rather than taking a copy
-            ln -s $src $work/$name
-        end
-        set mirrored (math $mirrored + 1)
-    end
-    echo "-> mirrored $mirrored skill(s) into ~/.claude-work/skills"
 end

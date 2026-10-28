@@ -15,6 +15,5 @@ function ccl --description "resume the Claude conversation recorded for the curr
     end
 
     set -lx CLAUDE_CODE_NO_FLICKER 1
-    test (jq -r '.profile // "personal"' $entry) = work; and set -lx CLAUDE_CONFIG_DIR ~/.claude-work
     claude --enable-auto-mode --resume $conv
 end

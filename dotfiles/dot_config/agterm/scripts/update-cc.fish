@@ -7,7 +7,7 @@
 # mapped until it exits. `agtermctl session restart` (Live sessions mode) ends the main
 # pane's shell together with its Claude and starts a new shell running the given line,
 # in the same directory, so the new build takes over with no /exit typing and no
-# waiting for the old TUI to tear down. The conversation and profile come from cc-map,
+# waiting for the old TUI to tear down. The conversation comes from cc-map,
 # which the SessionStart hook keeps current.
 #
 # No argument: every session whose main pane runs an idle Claude, resumed. With a
@@ -60,11 +60,9 @@ for row in ($AGTERMCTL tree --json | $JQ -r '
         continue
     end
 
-    set -l profile personal
     set -l conv ""
     set -l entry $MAP/$id
     if test -f $entry
-        set profile ($JQ -r '.profile // "personal"' $entry)
         set conv ($JQ -r '.conv // empty' $entry)
     end
 
@@ -75,8 +73,6 @@ for row in ($AGTERMCTL tree --json | $JQ -r '
     end
 
     set -l cmd "CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume $conv"
-    test $profile = work; and set cmd "CLAUDE_CONFIG_DIR=\$HOME/.claude-work $cmd"
-
     if $AGTERMCTL session restart --pane left --target $id --command $cmd >/dev/null 2>&1
         set done (math $done + 1)
     else

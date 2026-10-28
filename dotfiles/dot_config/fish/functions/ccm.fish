@@ -123,9 +123,6 @@ function ccm --description "mirror agterm Claude sessions into tmux windows (sin
         test -d "$cwd"; or set cwd $HOME
 
         set -l cmd "CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume $conv"
-        if test (jq -r '.profile // "personal"' $f) = work
-            set cmd "CLAUDE_CONFIG_DIR=~/.claude-work $cmd"
-        end
 
         # a window this session already mirrors into is recycled, so re-picking a
         # session replaces its window instead of opening a second client on the

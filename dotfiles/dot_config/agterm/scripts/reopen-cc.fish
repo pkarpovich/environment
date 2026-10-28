@@ -48,7 +48,6 @@ for id in ($AGTERMCTL tree --json | $JQ -r '[.result.tree.workspaces[].sessions[
     # without parking that one first would put two clients on it
     test -n "$only"; and $PARK tmux $id >/dev/null 2>&1
     set -l cmd "CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume $conv"
-    test ($JQ -r '.profile // "personal"' $entry) = work; and set cmd "CLAUDE_CONFIG_DIR=~/.claude-work $cmd"
     printf '%s\n' $cmd | $AGTERMCTL session type --stdin --target $id
     # drop the parked marker cc-park left on the row: the agent-status hooks only
     # fire from the first prompt onward, so a resumed session would keep it until

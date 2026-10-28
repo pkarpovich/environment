@@ -42,7 +42,6 @@ Library
 .config/fish/conf.d/darwin.fish
 .config/fish/functions/apply-pr-diff.fish
 .config/fish/functions/br.fish
-.config/fish/functions/cc-vendor.fish
 .config/fish/functions/ccl.fish
 .config/fish/functions/ccm.fish
 .config/fish/functions/fish_greeting.fish

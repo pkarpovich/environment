@@ -62,9 +62,7 @@ set -l conv ($JQ -r '.conv // empty' $entry)
 test -n "$conv"; or fail "cc-map entry carries no conversation id" $dry
 set -l cwd ($JQ -r '.cwd // empty' $entry)
 
-set -l base ~/.claude
-test ($JQ -r '.profile // "personal"' $entry) = work; and set base ~/.claude-work
-set -l transcript $base/projects/*/$conv.jsonl
+set -l transcript ~/.claude/projects/*/$conv.jsonl
 test (count $transcript) -gt 0; or fail "no transcript on disk for $conv" $dry
 
 # no timestamps here, unlike the recap: a label needs the subject, not the when

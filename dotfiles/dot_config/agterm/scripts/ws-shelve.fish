@@ -52,13 +52,11 @@ for s in $sessions
     end
     set -l entry $MAP/$id
     set -l conv ""
-    set -l profile personal
     if test -f $entry
         set conv ($JQ -r '.conv // empty' $entry)
-        set profile ($JQ -r '.profile // "personal"' $entry)
     end
-    set -a items (printf '%s' $s | $JQ -c --arg conv "$conv" --arg profile "$profile" \
-        '{name, cwd, conv: (if $conv == "" then null else $conv end), profile: $profile,
+    set -a items (printf '%s' $s | $JQ -c --arg conv "$conv" \
+        '{name, cwd, conv: (if $conv == "" then null else $conv end),
           foreground: (if (.foreground // []) | length > 0 then (.foreground | join(" ")) else null end)}')
 end
 

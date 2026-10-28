@@ -38,37 +38,16 @@ function envup --description "refresh the full dev environment: brew, fisher, mi
         echo "==> claude update"
         claude update
         echo
-        # plugins live per config dir, so the work profile needs its own pass. Without
-        # it that side just falls behind silently - it sat on planning 3.4.0 while this
-        # one was on 3.8.5. The default profile must NOT get CLAUDE_CONFIG_DIR: with it
-        # set, claude looks for .claude.json inside the dir instead of ~/.claude.json,
-        # warns, and writes a stray empty one. Only the work profile needs the variable
-        for cfg in ~/.claude ~/.claude-work
-            test -d $cfg; or continue
-            set -l run env
-            test $cfg = ~/.claude; or set run env CLAUDE_CONFIG_DIR=$cfg
-            echo "==> claude plugins ("(basename $cfg)")"
-            $run claude plugin marketplace update
-            for plugin in ($run claude plugin list --json | jq -r '.[] | select(.scope == "user") | .id')
-                echo "    -> $plugin"
-                $run claude plugin update $plugin
-            end
-            echo
+        echo "==> claude plugins"
+        claude plugin marketplace update
+        for plugin in (claude plugin list --json | jq -r '.[] | select(.scope == "user") | .id')
+            echo "    -> $plugin"
+            claude plugin update $plugin
         end
-
-        # the work profile cannot install these plugins at all - org policy allows
-        # exactly one - so cc-vendor symlinks them in from the personal profile. Those
-        # links pin the version they were made against, and the update above deletes
-        # it: 10 of 22 were dangling before this ran here
-        if functions -q cc-vendor
-            echo "==> cc-vendor apply"
-            cc-vendor apply
-            echo
-        end
+        echo
     end
 
-    # third-party skills from the lock in ~/.agents; the work profile links into
-    # the same store, so one pass covers both
+    # third-party skills from the lock in ~/.agents
     if command -q npx; and test -f ~/.agents/.skill-lock.json
         echo "==> skills update"
         npx --yes skills@latest update -g -y

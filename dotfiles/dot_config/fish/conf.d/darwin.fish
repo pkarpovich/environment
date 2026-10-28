@@ -21,7 +21,6 @@ end
 alias pui 'pnpm update --interactive --latest -r --include-workspace-root'
 alias pu 'pnpm update -r --include-workspace-root'
 alias rx 'caffeinate -i ralphex --skip-finalize'
-alias rxw 'CLAUDE_CONFIG_DIR=~/.claude-work caffeinate -i ralphex --skip-finalize'
 alias f 'open .'
 alias cb 'pbcopy'
 alias gg 'smerge .' # Git Gui

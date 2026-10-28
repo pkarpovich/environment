@@ -79,7 +79,6 @@ for i in (seq $n)
     set -l cmd ""
     if test -n "$conv"
         set cmd "CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume $conv"
-        test (printf '%s' $s | $JQ -r '.profile // "personal"') = work; and set cmd "CLAUDE_CONFIG_DIR=~/.claude-work $cmd"
     else
         set cmd (printf '%s' $s | $JQ -r '.foreground // empty')
     end

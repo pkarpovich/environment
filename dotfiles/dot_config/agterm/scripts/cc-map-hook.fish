@@ -33,17 +33,12 @@ set -l conv (printf '%s' $input | $JQ -r '.session_id // empty')
 set -l cwd (printf '%s' $input | $JQ -r '.cwd // empty')
 test -n "$conv"; or exit 0
 
-set -l profile personal
-string match -q '*claude-work*' -- "$CLAUDE_CONFIG_DIR"; and set profile work
-
 # a brand-new conversation (fresh --session-id run, or a --fork-session child
 # before its first message) has no transcript on disk yet - mapping/pinning it
 # would point restore and ccl at an id --resume cannot find. Skip here; the
 # UserPromptSubmit/Stop registrations of this hook converge as soon as the
 # transcript exists.
-set -l base ~/.claude
-test $profile = work; and set base ~/.claude-work
-set -l transcript $base/projects/*/$conv.jsonl
+set -l transcript ~/.claude/projects/*/$conv.jsonl
 test (count $transcript) -gt 0; or exit 0
 
 mkdir -p $MAP
@@ -55,9 +50,9 @@ test -n "$cwd"; or set cwd ($JQ -r '.cwd // empty' $entry 2>/dev/null)
 set -l prev '{}'
 test -f $entry; and set prev (cat $entry | string collect)
 set -l tmp (mktemp $MAP/.tmp.XXXXXX)
-and printf '%s' $prev | $JQ --arg conv $conv --arg profile $profile --arg cwd "$cwd" --arg pid "$pid" \
+and printf '%s' $prev | $JQ --arg conv $conv --arg cwd "$cwd" --arg pid "$pid" \
     'if .conv == $conv then . else del(.tsession, .twindow) end
-     | . + {conv: $conv, profile: $profile, cwd: $cwd, ts: (now | floor),
+     | . + {conv: $conv, cwd: $cwd, ts: (now | floor),
             pid: (if $pid == "" then null else ($pid | tonumber) end)}' > $tmp
 and mv -f $tmp $entry
 
@@ -67,6 +62,5 @@ and mv -f $tmp $entry
 # --session-id flip) and re-runs --fork-session verbatim, minting a new
 # conversation on every launch
 set -l cmd "CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume $conv"
-test $profile = work; and set cmd "CLAUDE_CONFIG_DIR=~/.claude-work $cmd"
 /opt/homebrew/bin/agtermctl session restore "$cmd" --target $AGTERM_SESSION_ID >/dev/null 2>&1
 exit 0

@@ -16,9 +16,8 @@ carry no OS or `type -q` conditions. Its first block lists what here is not a
 script), `brewfiles/`, and a few configs nothing links anymore.
 
 What chezmoi does not do by itself is scripts in
-[`.chezmoiscripts/`](.chezmoiscripts/): `~/.claude-work` gets the same links as
-`~/.claude`, the Caddyfile link outside `$HOME`, the Karabiner rebuild, and the
-Linux bootstrap below.
+[`.chezmoiscripts/`](.chezmoiscripts/): the Caddyfile link outside `$HOME`, the
+Karabiner rebuild, and the Linux bootstrap below.
 
 Tools come from Homebrew on both OSes: [`dot_Brewfile`](dot_Brewfile)
 lists the shell and everything its aliases resolve to, and loads
@@ -72,7 +71,7 @@ last, so it wins; a missing file is fine).
   `ccm` mirrors agterm's Claude sessions into its windows. It replaced zellij
   because Moshi's chat integration is tmux-only.
 - **`dot_claude/`** - Claude Code settings, hooks, agents, and our own skills;
-  linked into `~/.claude`, and into `~/.claude-work` by a script.
+  linked into `~/.claude`.
 - **`agents/`** - linked whole as `~/.agents`: the store for skills written by
   *other people*, managed by [`npx skills`](https://skills.sh). Only
   `.skill-lock.json` is committed; `agents/skills/` is gitignored the way
@@ -82,8 +81,7 @@ last, so it wins; a missing file is fine).
   `~/.claude/skills`. Install with
   `npx skills add <source> -g -a claude-code -a zed` - naming a second agent is
   what makes it symlink rather than copy, and Zed reads `~/.agents/skills`
-  natively. Add `CLAUDE_CONFIG_DIR=~/.claude-work` in front for the work
-  profile. `npx skills update -g` refreshes everything; the `skillFolderHash`
+  natively. `npx skills update -g` refreshes everything; the `skillFolderHash`
   lines in the lock diff say which skills actually moved.
 - **`dot_config/zed/`**, **`Library/Application Support/Tuna/`**,
   **`dot_config/yashiki/`**, **`dot_config/revdiff/`** - editor, launcher,

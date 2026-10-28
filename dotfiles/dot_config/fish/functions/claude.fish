@@ -6,10 +6,9 @@ function claude --description "agterm-aware Claude launcher: tags a fresh run wi
 
     if test (count $argv) -ge 2; and test "$argv[1]" = --session-id
         set -l sid (string lower $argv[2])
-        set -l files ~/.claude/projects/*/$sid.jsonl ~/.claude-work/projects/*/$sid.jsonl
+        set -l files ~/.claude/projects/*/$sid.jsonl
         if test (count $files) -gt 0
             set -lx CLAUDE_CODE_NO_FLICKER 1
-            string match -q '*/.claude-work/*' $files[1]; and set -lx CLAUDE_CONFIG_DIR ~/.claude-work
             command claude --resume $sid $argv[3..]
             return
         end
@@ -26,7 +25,7 @@ function claude --description "agterm-aware Claude launcher: tags a fresh run wi
         set -l i (contains -i -- --resume $argv)
         test -n "$i"; and set -l j (math $i + 1)
         if test -n "$conv"; and test -n "$j"; and test "$conv" != "$argv[$j]"
-            and test (count ~/.claude/projects/*/$conv.jsonl ~/.claude-work/projects/*/$conv.jsonl) -gt 0
+            and test (count ~/.claude/projects/*/$conv.jsonl) -gt 0
             set -l rest (string match -v -- --fork-session $argv)
             set rest[$j] $conv
             command claude $rest

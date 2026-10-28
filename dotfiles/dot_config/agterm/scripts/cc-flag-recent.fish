@@ -5,7 +5,7 @@
 # The flagged view becomes "what moved recently" instead of a list that only
 # grows. agterm itself keeps no message times - statusChangedAt lives only while
 # a glyph is up - so the time comes from the transcript: the cc-map entry ccm
-# keeps per session names the conversation and profile, and the last record of
+# keeps per session names the conversation, and the last record of
 # type "assistant" in that .jsonl carries the timestamp. The file's mtime is not
 # that signal: Claude appends bookkeeping records with no dialogue behind them.
 #
@@ -38,10 +38,7 @@ for id in $ids
 
     set -l conv ($JQ -r '.conv // empty' $entry)
     test -n "$conv"; or continue
-    set -l root ~/.claude
-    test ($JQ -r '.profile // empty' $entry) = work; and set root ~/.claude-work
-
-    set -l transcript $root/projects/*/$conv.jsonl
+    set -l transcript ~/.claude/projects/*/$conv.jsonl
     test -f "$transcript[1]"; or continue
 
     # the last assistant record sits within the final few hundred KB even behind

@@ -30,8 +30,6 @@ alias lg 'lazygit'
 alias qq 'exit'
 alias cc 'CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode'
 alias ccr 'CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume'
-alias ccw 'CLAUDE_CONFIG_DIR=~/.claude-work CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode'
-alias ccwr 'CLAUDE_CONFIG_DIR=~/.claude-work CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume'
 
 bind \eOH beginning-of-line
 bind \eOF end-of-line
