@@ -15,8 +15,17 @@ TRIGGER_RE = re.compile(
     re.I,
 )
 
-DESC_MAX = 1024
+DESC_SPEC_MAX = 1024
+DESC_LISTING_MAX = 1536
 NAME_MAX = 64
+KNOWN_FIELDS = {
+    "name", "description", "when_to_use", "argument-hint", "arguments",
+    "disable-model-invocation", "user-invocable", "allowed-tools", "disallowed-tools",
+    "model", "effort", "context", "agent", "background", "hooks", "paths", "shell",
+    "metadata", "license", "compatibility",
+}
+EMPHASIS_RE = re.compile(r"\b(CRITICAL|IMPORTANT|MUST|ALWAYS|NEVER|MANDATORY|REQUIRED)\b")
+EMPHASIS_MAX = 2
 BODY_MAX_LINES = 500
 REF_TOC_THRESHOLD = 300
 
@@ -84,12 +93,19 @@ def audit_skill(skill_dir):
         if name != skill_dir.name:
             add("warn", "name-dir-mismatch", f"`name: {name}` differs from directory `{skill_dir.name}`")
 
+    unknown = sorted(k for k in fm if k not in KNOWN_FIELDS)
+    if unknown:
+        add("fail", "unknown-field", f"frontmatter field(s) Claude Code ignores silently: {', '.join(unknown)}")
+
     desc = fm.get("description")
     if not desc:
         add("fail", "description-required", "`description:` field missing")
     else:
-        if len(desc) > DESC_MAX:
-            add("fail", "description-length", f"description is {len(desc)} chars (limit {DESC_MAX}); excess: {len(desc) - DESC_MAX}")
+        listing = len(desc) + len(fm.get("when_to_use", ""))
+        if listing > DESC_LISTING_MAX:
+            add("fail", "description-length", f"description + when_to_use is {listing} chars; Claude Code cuts the listing at {DESC_LISTING_MAX}")
+        elif len(desc) > DESC_SPEC_MAX:
+            add("warn", "description-length", f"description is {len(desc)} chars; the Agent Skills spec caps it at {DESC_SPEC_MAX}, so it cannot be uploaded outside Claude Code")
         if CYRILLIC_RE.search(desc):
             add("warn", "description-cyrillic", "description contains Cyrillic; usually bilingual trigger padding. The model recognises intent across languages, drop the duplicates.")
         if not TRIGGER_RE.search(desc):
@@ -98,6 +114,10 @@ def audit_skill(skill_dir):
     body_lines = body.count("\n") + (1 if body and not body.endswith("\n") else 0)
     if body_lines > BODY_MAX_LINES:
         add("warn", "body-length", f"SKILL.md body is {body_lines} lines (suggested max {BODY_MAX_LINES}); split detail into references/")
+
+    emphasis = EMPHASIS_RE.findall(body)
+    if len(emphasis) > EMPHASIS_MAX:
+        add("warn", "emphatic-wording", f"{len(emphasis)} emphatic words ({', '.join(sorted(set(emphasis)))}); Claude 4.5+ overtriggers on them, write 'use when' instead")
 
     if EM_DASH in text or EN_DASH in text:
         em = text.count(EM_DASH)

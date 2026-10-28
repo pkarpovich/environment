@@ -386,6 +386,10 @@ def parse_config(data: dict) -> Config:
 - Chain exceptions with `from e`
 - No exception handling for impossible scenarios
 
+## Architecture
+
+For patterns (factory, protocol, dependency injection, layering), module layout and the decision guide, read `references/architecture.md`.
+
 ## Anti-Patterns to Avoid
 
 - **Inheritance for code reuse** → Use composition
