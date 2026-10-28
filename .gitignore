@@ -256,4 +256,4 @@ dotfiles/agents/skills/
 .revmux/
 
 # prompt eval corpus: sampled from private Claude Code transcripts, only the harness ships
-prompt-evals/*/cases.yaml
+prompt-evals/*/cases.yaml*

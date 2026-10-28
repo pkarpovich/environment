@@ -1,0 +1,54 @@
+# Synthetic hold-out cases for fix-ru prompt iterations. They cover the same error classes as the
+# real corpus (cases.yaml) with different words, so a prompt change that only memorizes the corpus
+# cases does not improve here. Never copy these messages into a prompt.
+#
+# must_fix starting with "nothing" also turns on a character-identity assert.
+
+- description: holdout - slang stays, no expansion to the full word
+  vars:
+    input: "щас гляну, чет не открывается"
+    must_fix: "nothing, the message is already correct. «щас» and «чет» are the author's words and stay as typed."
+- description: holdout - slang next to a real typo
+  vars:
+    input: "я седня не успею, мб завтро доделаю"
+    must_fix: "завтро -> завтра. «седня» and «мб» are the author's words and stay as typed."
+- description: holdout - colloquial noun stays
+  vars:
+    input: "плиз скинь доку, я ее не нашел"
+    must_fix: "nothing, the message is already correct. «плиз» and «доку» stay as typed."
+- description: holdout - subject and noun predicate joined by это
+  vars:
+    input: "реплика это копия базы на другом сервере"
+    must_fix: "a plain hyphen before «это»: «реплика - это копия базы на другом сервере»."
+- description: holdout - asyndetic clause after a verb of thinking
+  vars:
+    input: "я решил тесты подождут до понедельника"
+    must_fix: "a comma after «решил»: «я решил, тесты подождут до понедельника». A colon there is also acceptable."
+- description: holdout - что + если with то later, no comma between the conjunctions
+  vars:
+    input: "он сказал что если билд упадет, то откатим"
+    must_fix: "a comma before «что». There must be no comma between «что» and «если», because the clause continues with «то»."
+- description: holdout - и + если without то, comma between the conjunctions
+  vars:
+    input: "я напишу ему и если он ответит, начнем сегодня"
+    must_fix: "a comma before «и» (two clauses) and a comma after «и» before «если»: «я напишу ему, и, если он ответит, начнем сегодня»."
+- description: holdout - particle «как будто» takes no commas
+  vars:
+    input: "он как будто не понял задачу"
+    must_fix: "nothing, the message is already correct. «как будто» is a particle and takes no commas."
+- description: holdout - particle «якобы» takes no commas
+  vars:
+    input: "это якобы уже починили в прошлом релизе"
+    must_fix: "nothing, the message is already correct. «якобы» is a particle and takes no commas."
+- description: holdout - parenthetical «кажется» needs a comma
+  vars:
+    input: "кажется он уже ушел домой"
+    must_fix: "a comma after the parenthetical «кажется»: «кажется, он уже ушел домой»."
+- description: holdout - two predicates with one subject, no comma
+  vars:
+    input: "я открыл лог и нашел там ошибку"
+    must_fix: "nothing, the message is already correct. Two predicates share the subject «я», so no comma before «и»."
+- description: holdout - interjection and contrast
+  vars:
+    input: "ну да это баг но не критичный"
+    must_fix: "a comma after «ну да»; a comma before «но»: «ну да, это баг, но не критичный»."
