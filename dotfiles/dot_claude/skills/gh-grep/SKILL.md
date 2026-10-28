@@ -7,8 +7,6 @@ description: Search real-world code examples across millions of GitHub repositor
 
 Search for real-world code examples across over a million public GitHub repositories via grep.app.
 
-Base directory for this skill: `~/.claude/skills/gh-grep`
-
 ## When to Use
 
 - Finding implementation patterns for unfamiliar APIs or libraries
@@ -18,7 +16,7 @@ Base directory for this skill: `~/.claude/skills/gh-grep`
 
 ## Quick Start
 
-Run the Python script (stdlib only, no deps):
+Run the script. A 5xx from grep.app is retried twice inside it, so an error that reaches you is real.
 
 ```bash
 python3 ~/.claude/skills/gh-grep/scripts/grep.py --query "<code-pattern>" [options]
@@ -43,7 +41,7 @@ python3 ~/.claude/skills/gh-grep/scripts/grep.py --query "<code-pattern>" [optio
 
 ## Search Patterns
 
-**Important**: this tool searches for literal code patterns, not keywords.
+The query is a literal code pattern, not keywords. For an API name add `--match-case --match-whole-words`, otherwise `SHSession(` also matches `sendSession(`.
 
 Good searches:
 - `useState(` - Find React useState usage
@@ -84,13 +82,3 @@ python3 ~/.claude/skills/gh-grep/scripts/grep.py \
 python3 ~/.claude/skills/gh-grep/scripts/grep.py \
   --query "useState(" --language TypeScript -o json
 ```
-
-## Requirements
-
-- Python 3.8+ (stdlib only — no external packages)
-- Network access to `https://mcp.grep.app/`
-
-## Resources
-
-- `scripts/grep.py` - Python CLI calling grep.app's MCP server
-- `references/api_reference.md` - Detailed parameter documentation and regex patterns

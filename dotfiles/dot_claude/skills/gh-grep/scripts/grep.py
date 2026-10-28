@@ -4,6 +4,7 @@
 import argparse
 import json
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -26,8 +27,19 @@ def call_search(arguments: dict, timeout: int) -> dict:
         },
         method="POST",
     )
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        body = resp.read().decode("utf-8", errors="replace")
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                body = resp.read().decode("utf-8", errors="replace")
+            break
+        except urllib.error.HTTPError as e:
+            if e.code < 500 or attempt == 2:
+                raise
+            time.sleep(2 * (attempt + 1))
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == 2:
+                raise
+            time.sleep(2 * (attempt + 1))
 
     for line in body.splitlines():
         if line.startswith("data:"):
