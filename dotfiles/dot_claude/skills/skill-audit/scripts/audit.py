@@ -108,7 +108,7 @@ def audit_skill(skill_dir):
             add("warn", "description-length", f"description is {len(desc)} chars; the Agent Skills spec caps it at {DESC_SPEC_MAX}, so it cannot be uploaded outside Claude Code")
         if CYRILLIC_RE.search(desc):
             add("warn", "description-cyrillic", "description contains Cyrillic; usually bilingual trigger padding. The model recognises intent across languages, drop the duplicates.")
-        if not TRIGGER_RE.search(desc):
+        if not TRIGGER_RE.search(desc) and "paths" not in fm:
             add("warn", "description-no-trigger", "description has no `when`/`trigger`/`use this when` language. Either the trigger story is missing, or this content is really an always-on rule that belongs in CLAUDE.md rather than a skill.")
 
     body_lines = body.count("\n") + (1 if body and not body.endswith("\n") else 0)
