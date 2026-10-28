@@ -1,115 +1,87 @@
 ---
 name: skill-finder
-description: Find high-quality Claude Code skills for a topic by spawning parallel subagents that audit each candidate's AUTHOR (not the SKILL.md text, which is gameable in five minutes by a slop generator). Use whenever the user asks to find, search for, recommend, or pick a skill for a topic - phrases like "find me a skill for X", "find skill for X", "recommend a skill for X", "I need a skill that does X", "look for skills about X". Each candidate goes through prose-driven investigation across four signals (OSS contributions in the topic, repo context, external reputation, the care put into the author's own other repos), and you return the top 3 with categorical verdicts (real_expert / promising_unknown / skip), never numeric scores. Do NOT use for auditing the user's own existing skills (that's skill-audit) or creating a new skill from scratch (that's skill-creator).
+description: Find Claude Code skills for a topic by auditing each candidate's author in a parallel subagent, not the SKILL.md text, and return the top three with an install command. Use when asked to find, search for, recommend or pick a skill for a topic ("find me a skill for X", "is there a skill for X", "recommend a skill for X"). Not for auditing existing skills (skill-audit) or writing one (skill-creator).
 ---
 
 # skill-finder
 
-Help the user find quality Claude Code skills for a given topic. The signal-to-noise ratio on GitHub is bad: slop generators publish hundreds of ChatGPT-written SKILL.md files with polished frontmatter and zero substance. Filtering those out by reading the SKILL.md text does not work, because the text is exactly what the slop generator optimised. The only honest filter is investigating the AUTHOR - their other code, their history, their external footprint - and the signals there are too rich for a mechanical rubric. So this skill pushes the qualitative judgment into per-candidate subagents that go look and decide.
+Published SKILL.md text is the one thing a slop generator optimizes, so it does not separate good skills from bad. The author's record does. This skill gathers candidates, hands each author to a `skill-finder-investigator` subagent, and ranks the verdicts.
 
-## Workflow
+## 1. Narrow the topic
 
-### Step 1: Clarify intent (skip if topic is already specific)
+A topic that names a sub-domain and an angle ("FastAPI websocket testing", "WatchKit to SwiftUI migration") is ready. A one- or two-word topic ("Python", "Apple Watch", "Tailwind") spans many niches, and a candidate's relevance cannot be judged without knowing which.
 
-Before searching, decide whether the topic is precise enough. A topic is precise when it names a sub-domain plus an angle - e.g. "FastAPI websocket testing", "WatchKit to SwiftUI migration", "Postgres logical replication". Skip directly to Step 2.
+For a broad topic, ask one open question in plain text, for example "watchOS covers complications, Watch Connectivity, HealthKit workouts and SwiftUI layout. Which part, and are you building, migrating or reviewing?" No AskUserQuestion and no option list. Take the answer at face value, fold it into the topic string, and use that string in every later step.
 
-A topic is broad when it is a one-word or two-word platform/language/tool name - "Python", "Apple Watch", "debugging", "Tailwind". Broad topics fan out across many disjoint niches; without narrowing, you waste subagent budget on candidates that the user did not want and lose signal on `topic_relevance` (a skill about WatchKit complications is `high` if the user wants complications and `low` if they want HealthKit workouts - you cannot tell which until you ask).
+## 2. Gather candidates
 
-For broad topics, use `AskUserQuestion` to ask **one or two short questions max**:
+Run the three searches, in parallel, with the narrowed topic as `T`:
 
-1. **Sub-domain**, with 3-4 concrete options drawn from common niches inside the topic (for "watchOS": complications/Smart Stack, Watch Connectivity, SwiftUI for watchOS, HealthKit/workouts, code review). Multiple choice.
-2. **Use case**, only if it is not already implied by the sub-domain answer (building from scratch / migrating / reviewing existing code / learning). Multiple choice.
+- skills.sh registry, the source most installs come from:
 
-After the answers come back, refine the topic string. "watchOS" becomes "watchOS complications and Smart Stack widgets" or "WatchKit to SwiftUI migration on watchOS". Use this refined string everywhere downstream - both in the gather queries (Step 2) and in the subagent prompts (Step 4), so the subagent can judge `topic_relevance` against what the user actually wants.
+  ```bash
+  curl -fsS "https://skills.sh/api/search?q=<T>" | jq -r '.skills[] | "\(.source)\t\(.skillId)\t\(.installs)"'
+  ```
 
-Do not ask more than two questions. If the user answered with "Other" and gave free text, take that at face value and proceed.
+- GitHub code search for `SKILL.md` files mentioning `T`, through the `gh-grep` skill.
+- GitHub topic tags:
 
-### Step 2: Gather candidates
+  ```bash
+  for tag in claude-skill agent-skill claude-skills; do
+    gh api "/search/repositories?q=topic:$tag+<T>&per_page=30" --jq '.items[] | "\(.full_name)\t\(.owner.login)\t\(.description)"'
+  done
+  ```
 
-For the (now refined) topic T, run two parallel searches.
+Many authors tag nothing, so the three overlap only partly.
 
-**1a. Code search for SKILL.md files about T.** Use the `gh-grep` skill (it queries grep.app across GitHub). Search for files named `SKILL.md` that mention T.
+## 3. Dedupe and cap
 
-**1b. Repo search by topic tag.** Hit the GitHub API directly:
+One author is one candidate. When an author has several skills for the topic, keep the most direct one. Cap at 10 authors.
 
-```bash
-gh api '/search/repositories?q=topic:claude-skill+<T>&per_page=30' \
-  --jq '.items[] | {full_name, html_url, owner: .owner.login, description}'
-gh api '/search/repositories?q=topic:agent-skill+<T>&per_page=30' \
-  --jq '.items[] | {full_name, html_url, owner: .owner.login, description}'
-gh api '/search/repositories?q=topic:claude-skills+<T>&per_page=30' \
-  --jq '.items[] | {full_name, html_url, owner: .owner.login, description}'
-```
+Over 10, cut to 10 by a key that carries no quality signal, alphabetical by owner. Stars, descriptions, install counts and file sizes are the surface the slop generator controls, the audit decides quality.
 
-Many authors do not tag their repos at all, which is why content search (1a) and topic search (1b) complement each other.
+Zero candidates: say "Found nothing for `<T>`, try broader keywords" and stop.
 
-### Step 3: Dedupe and cap
+## 4. Audit in parallel
 
-Merge the two result sets. **One author = one candidate** - if an author has several SKILL.md files for the topic, pick the most directly relevant. After dedup, cap at 10 distinct authors.
-
-If you have more than 10 after dedup, sample down to 10 - but do not try to "pick the best 10 by eyeballing description and stars". That is exactly the surface the slop generator optimised. Take the first 10 after sorting by some stable, non-quality key (alphabetical by owner name is fine). The deep audit decides quality, not you.
-
-If you have 0 candidates after the two searches, stop and tell the user: "Found nothing for `<T>`. Try broader keywords." Do not fake results.
-
-### Step 4: Fan out to the investigator subagent
-
-For each of the (up to) 10 candidates, spawn one `skill-finder-investigator` subagent. **Send all Agent tool calls in a single message** so they run in parallel.
-
-The subagent already knows what to do - its system prompt teaches it where to look, what counts as substance vs slop, and how to calibrate. You only need to tell it about THIS candidate. Pass exactly this as the `prompt` for each invocation, using the refined topic from Step 1:
+Spawn one `skill-finder-investigator` subagent per candidate, all in one message. The agent knows where to look and how to calibrate. The prompt is three lines:
 
 ```
-Topic: <refined T>
-Candidate: <candidate_url>
-Author: <github_username>
+Topic: <T>
+Candidate: <url>
+Author: <github login>
 ```
 
-The refined topic carries the user's actual intent (e.g. "watchOS complications and Smart Stack widgets"), so the subagent can mark `topic_relevance: low` for any candidate that addresses a different niche of the broader area.
-
-Each subagent returns a JSON verdict:
+Each returns:
 
 ```json
 {
   "candidate_url": "https://github.com/...",
-  "author": "username",
+  "author": "login",
   "topic_relevance": "high" | "medium" | "low",
   "author_quality": "real_expert" | "promising_unknown" | "skip",
-  "rationale": "2-3 sentences explaining the call",
-  "key_signals": ["short evidence point 1", "..."],
-  "red_flags": ["any concerns, or empty array"]
+  "rationale": "2-3 sentences",
+  "key_signals": ["..."],
+  "red_flags": ["..."]
 }
 ```
 
-### Step 5: Aggregate and print the top 3
+Verdicts are categorical. A numeric score from independent subagents has no shared scale.
 
-Drop everything with `author_quality = skip` or `topic_relevance = low`. Sort the remainder by **relevance first, then quality**: `high` relevance before `medium` (regardless of quality), and within each relevance tier, `real_expert` before `promising_unknown`.
+## 5. Rank and report
 
-Relevance is the outer key because the user asked for a skill ABOUT a topic. A `real_expert` skill that only tangentially touches the topic is less useful than a `promising_unknown` skill that addresses it directly. The expert's general-purpose material is usually already in official docs; the focused skill is the value-add. Quality still matters - it tiebreaks within each relevance bucket and filters out `skip` outright - but it does not override relevance.
+Drop `author_quality: skip` and `topic_relevance: low`. Sort by relevance first (`high` before `medium`), then by quality (`real_expert` before `promising_unknown`). The user asked for a skill about the topic, so a focused skill by an unknown outranks a tangential one by an expert. `promising_unknown` is a real tier: six maintained repos and no blog is often exactly what is wanted.
 
-Print the top 3:
+Print the top three, nothing else:
 
 ```
-1. <author>/<repo> - real_expert, high relevance
-   <rationale prose from the subagent>
-   Signals: <one-line summary of key_signals>
+1. <owner>/<repo> <skill-name> - real_expert, high relevance
+   <rationale>
+   Signals: <key_signals in one line>
    <url>
-
-2. ...
+   npx skills add <owner>/<repo> -g -a claude-code -a zed -y -s <skill-name>
 ```
 
-If after filtering you have 0 candidates left, say it honestly: "Checked N candidates, none passed the quality bar. Try different keywords or a broader topic."
+The install line follows the skills lock convention in `~/.agents` (two agents, so the CLI symlinks instead of copying). Print it, do not run it. No cloning, no watchlist file.
 
-Print only. Do not clone, do not write a watchlist file, do not offer to install. The user decides what to do next.
-
-## Why this skill is shaped the way it is
-
-These decisions look weird at a glance, so the reasoning lives here so a future reader does not "fix" them by mistake.
-
-**No numeric scores.** A 1-10 score forces calibration across independent subagents that have no shared anchors. score=7 from one subagent does not mean the same thing as score=7 from another. Categorical verdicts (`real_expert` / `promising_unknown` / `skip`) carry honest signal without false precision.
-
-**No mechanical prefilter at Step 2.** Every shallow signal (repo name, description, star count, file size, file line count) is text or vanity metric the slop generator controls. Filtering on those at the gathering step actively hurts: it favours polished marketing over substance. The only legitimate cut at this stage is dedup-by-author plus a cap to bound cost.
-
-**Two-axis verdict, not one.** A famous Python expert's general "modern Python" skill is not the right answer for a "FastAPI websocket testing" query, even if the author is a real_expert. Separating `topic_relevance` from `author_quality` lets you reject "great author, wrong topic" and "right topic, weak author" with the same mechanism.
-
-**`promising_unknown` is a first-class category.** Noname engineers with no blog and 12 followers but 6 well-maintained personal repos are exactly what the user often wants. They will never look like a `real_expert` by external signals. The category exists so the subagent does not have to choose between dishonestly labelling them as expert or dishonestly skipping them.
-
-**The investigator subagent is a separate file.** The audit logic - where to look on GitHub, what counts as substance vs slop, calibration rules for noname-with-substance - lives in the `skill-finder-investigator` agent definition (under `.claude/agents/`), not in this SKILL.md. That keeps the main-agent context lean: this file is just orchestration, and the substance-vs-slop knowledge only loads inside the subagent that actually needs it.
+Zero left after filtering: "Checked N candidates, none passed the quality bar. Try different keywords or a broader topic."
