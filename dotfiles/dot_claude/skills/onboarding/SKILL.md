@@ -1,108 +1,55 @@
 ---
 name: onboarding
-description: >
-  Deep codebase exploration to fully understand the current project before starting work.
-  Use this skill whenever the user says "onboarding", "onboard", "get familiar",
-  "learn the codebase", "understand this repo", "context load", or at the start of
-  a session when the user wants Claude to be fully prepared to work on the project.
-  Also use when switching to an unfamiliar part of the codebase.
-allowed-tools: Read Glob Grep Bash(git *) Bash(find *) Bash(ls *) Agent
+description: Load the current project into context before work starts: checkout freshness, manifests, docs, structure, entry points, conventions and recent activity. Use when the user says "onboarding", "onboard", "get familiar", "learn the codebase", "understand this repo", or asks to study a service, a folder, another repo or the current PR before discussing it. The result is the agent's own understanding, not a document.
+argument-hint: "[path | @subfolder | PR] [focus]"
+allowed-tools: Read Glob Grep Bash(git *) Bash(gh pr *) Bash(find *) Bash(ls *) Agent
 ---
 
-# Project Onboarding
+# Onboarding
 
-Deeply explore the current project so you are fully in context and ready to work.
-This is not about generating a report — it is about you genuinely understanding
-the codebase so that your subsequent answers and edits are accurate and informed.
+Explore the project so later answers and edits rest on the current code. The output is a short confirmation. The understanding stays in context.
 
-## Phase 0: Checkout Freshness
+## Arguments
 
-Before exploring anything, make sure you are about to study CURRENT code, not a
-stale checkout — onboarding onto last week's code poisons every conclusion after it.
+- A path or `@subfolder` limits every phase to that tree. An absolute path outside the working directory means onboard that repo instead.
+- "PR", "the current PR" or a PR number means the scope is `gh pr diff` plus the files it touches.
+- Free text after the scope is a focus ("how sessions and blob containers work", "the Obsidian services"). Answer it explicitly in the summary, and give it its own Explore agent when agents run.
+- No argument: the whole repository.
 
-1. Run `git fetch --quiet` (skip silently if not a git repo or offline).
-2. Check how far behind the checkout is:
-   - current branch vs its upstream: `git status -sb` (look for "behind N")
-   - local default branch vs origin: `git rev-list --count main..origin/main`
-     (or `master..origin/master`, whichever exists)
-3. If the working tree is clean and the current branch is simply behind its
-   upstream (fast-forward), pull right away: `git pull --ff-only`, then say what
-   was pulled ("pulled 7 commits on main").
-4. If there are local changes, diverged history, or you are on a feature branch
-   whose base (main) is stale — do NOT pull anything; state the staleness
-   prominently ("main is 12 commits behind origin/main") and ask before proceeding.
-5. Up to date — say nothing and move on.
+## Phase 0: checkout freshness
 
-Never start Phase 1/2 exploration on a checkout you know is stale without
-flagging it first.
+1. `git fetch --quiet`. Skip when not a git repo or offline.
+2. `git status -sb` for "behind N" on the current branch, and `git rev-list --count main..origin/main` (or `master`) for the default branch.
+3. Clean tree and simply behind upstream: `git pull --ff-only`, then say what was pulled.
+4. Local changes, diverged history, or a feature branch whose base is stale: pull nothing, state the staleness in the summary, and ask before going on.
+5. Up to date: say nothing.
 
-## Phase 1: Project Identity
+## Phase 1: identity
 
-Run these in parallel to establish what the project is:
+In one batch:
 
-1. **File tree snapshot** — run `git ls-files | head -200` to see the full shape of the repo.
-   If not a git repo, use `find . -not -path '*/.*' -type f | head -200`.
+1. Shape: `git ls-files <scope> | head -200`, or `find` outside git.
+2. Manifests that exist: `package.json`, `pnpm-workspace.yaml`, `turbo.json`, `pyproject.toml`, `requirements.txt`, `go.mod`, `Cargo.toml`, `Makefile`, `Justfile`, `Taskfile.yml`, `docker-compose.yml`, `Dockerfile`, `.env.example`.
+3. Docs: `README.md`, `CLAUDE.md`, `ARCHITECTURE.md`, the `docs/` index.
+4. Claude config: `.claude/settings.json`, `.claude/skills/`, `.claude/rules/`, `.claude/commands/`.
+5. Recent activity: `git log --oneline -20`, `git log --oneline --since="1 week ago"`, `git branch -a`.
 
-2. **Read project manifests** — look for and read whichever exist:
-   - `package.json`, `pnpm-workspace.yaml`, `turbo.json` (JS/TS)
-   - `pyproject.toml`, `setup.py`, `requirements.txt` (Python)
-   - `go.mod`, `go.sum` (Go)
-   - `Cargo.toml` (Rust)
-   - `Makefile`, `Justfile`, `Taskfile.yml`
-   - `docker-compose.yml`, `Dockerfile`
-   - `.env.example`
+## Phase 2: architecture
 
-3. **Read documentation** — `README.md`, `CLAUDE.md`, `ARCHITECTURE.md`, `docs/` index,
-   or any top-level markdown that describes the project.
+For a scope under about 300 files, read it directly: entry points, core flow, data layer and external clients, config loading, test layout, build and lint commands.
 
-4. **Check Claude config** — read `.claude/CLAUDE.md`, `.claude/settings.json`,
-   scan `.claude/commands/`, `.claude/skills/`, `.claude/rules/` if they exist.
+For a larger scope, launch Explore agents (`subagent_type: "Explore"`, thoroughness "very thorough") in one message, one per dimension, plus one per major service in a monorepo with more than three:
 
-## Phase 2: Architecture Deep Dive
+1. Entry points and core flow: where the app starts, what it does, the core business modules.
+2. Data layer and external dependencies: schemas, migrations, models, API clients, MCP servers, configuration and environment variables.
+3. Patterns and conventions: directory layout, error handling, test layout, naming, build, lint and test commands.
+4. The focus from the arguments, when there is one.
 
-Launch parallel Explore agents (subagent_type: "Explore", thoroughness: "very thorough")
-to investigate these dimensions simultaneously:
+The agents report back into this conversation. Wait for every report before writing the summary. A turn that ends on "agents are running" is not finished.
 
-### Agent 1: Entry Points and Core Flow
-- Find main entry points (main.go, main.py, index.ts, cmd/*/main.go, src/app, etc.)
-- Trace the primary execution flow — how does the app start, what does it do
-- Identify the core business logic modules
+## Summary
 
-### Agent 2: Data Layer and External Dependencies
-- Database schemas, migrations, ORM models
-- External API clients, MCP servers, third-party integrations
-- Configuration loading, environment variables
-
-### Agent 3: Project Patterns and Conventions
-- Directory structure patterns (flat, layered, domain-driven)
-- Error handling approach
-- Testing patterns (unit, integration, e2e), test locations
-- Naming conventions observed in the code
-- Build, lint, and test commands
-
-### Agent 4: Recent Activity
-- Run `git log --oneline -20` to see recent commits
-- Run `git log --oneline --since="1 week ago"` for this week's focus
-- Check `git branch -a` for active branches
-- Identify what areas of the codebase are actively being worked on
-- Note any in-progress features or recent refactors
-
-For monorepos: add an agent per major service/package if there are more than 3.
-
-## Phase 3: Synthesize
-
-After all agents complete, mentally organize what you learned:
-
-- What this project does and why it exists
-- Tech stack and key dependencies
-- How the code is organized
-- Main entry points and data flow
-- Testing and build approach
-- Any non-obvious conventions or gotchas
-
-## Output
-
-Keep it brief. Confirm you are ready with a short summary (5-10 lines max):
+Under 10 lines, then stop:
 
 ```
 Project: {name}
@@ -110,8 +57,8 @@ Purpose: {one sentence}
 Stack: {languages, frameworks, key deps}
 Structure: {how code is organized}
 Entry: {main entry points}
+Focus: {answer to the focus, when given}
 Ready to work.
 ```
 
-Do not generate lengthy reports, architecture docs, or onboarding guides.
-The goal is YOUR understanding, not documentation for the user.
+No architecture doc, no onboarding guide, no file-by-file listing.
