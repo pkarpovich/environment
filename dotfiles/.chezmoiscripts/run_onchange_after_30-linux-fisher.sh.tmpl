@@ -2,5 +2,8 @@
 #!/bin/sh
 # fish_plugins {{ include "dot_config/fish/fish_plugins" | sha256sum }}
 set -eu
-exec /home/linuxbrew/.linuxbrew/bin/fish -c 'fisher update'
+# fisher reads the plugin list from stdin when stdin is not a terminal, and
+# chezmoi hands scripts its own stdin: closed here so an ssh-driven apply does
+# not wait forever
+exec /home/linuxbrew/.linuxbrew/bin/fish -c 'fisher update' </dev/null
 {{ end -}}
