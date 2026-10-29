@@ -4,6 +4,7 @@
 # Debian-under-Windows box needs beyond the shell every machine gets.
 
 tap("umputun/apps", trusted: true)
+tap("pkarpovich/apps", trusted: true)
 tap("Azure/kubelogin", trusted: true)
 
 ### shell, prompt, and what loads on every command
@@ -19,6 +20,7 @@ brew("sk")
 
 brew("umputun/apps/revdiff", trusted: true)
 brew("umputun/apps/ralphex", trusted: true)
+brew("pkarpovich/apps/foster", trusted: true)
 
 ### network, and the tools for when it misbehaves
 
