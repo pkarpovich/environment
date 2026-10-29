@@ -11,6 +11,8 @@ MCP server `yotei` (`https://yotei.pkarpovich.space/mcp`), tools `mcp__yotei__*`
 
 The usual case: during a session Pavel spots something and says to add it to the backlog, so he doesn't switch context. Do it right away, without asking.
 
+One request is one task, however many problems it names: "a ticket for X and Y" is one note with both in the body. Several tasks only when Pavel asks for several.
+
 1. `search_tasks` with a few key words first. Compare the problem each hit describes, not the file or repo it mentions: one file holds many unrelated problems. If an open task already covers it, say so; if the new finding sharpens it, edit that note (see below) instead of creating a second task.
 2. A screenshot or other image Pavel sends with the request is evidence and goes into the body, not only into its description. Upload it to the bucket the `s3-images` Obsidian plugin uses, under the same `<YYYY-MM>/<sha256>.<ext>` key, and put `![](<url>)` in the body next to the text it supports:
 
@@ -24,7 +26,7 @@ The usual case: during a session Pavel spots something and says to add it to the
 3. `add_tasks` with one item:
    - `title`: names the problem, not the place - `reopen fallback ignores the last-frontmost window`, not `fix library.go`. Short, in English. It becomes the file name, so no `/` or `:`, and it must be unique.
    - `body`: see "Writing the body".
-   - `project`: always set, as `[[Name]]` - the repo or product the task is about, e.g. `[[farside]]`, `[[turtle-hub]]`. Check `task_values` with `field: "project"` and reuse an existing name exactly when it is the same thing; otherwise a new name is fine. The link does not need an existing note.
+   - `project`: always set, as `[[Name]]` - the repo or product the task is about, e.g. `[[farside]]`, `[[tuclaw]]`. It must exist in yotei: `list_projects` first, reuse the name exactly, and only for something really new `add_projects` (a `parent` makes it a sub-project). `add_tasks` rejects an unknown project.
    - Leave `status` (backlog), `scheduled`, `deadline` and `important` unset unless Pavel gave a day, a deadline or called it important.
 4. Reply with the title in one line. Don't go back to the task unless asked.
 
