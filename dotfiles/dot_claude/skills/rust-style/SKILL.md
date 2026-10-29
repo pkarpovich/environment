@@ -9,7 +9,7 @@ user-invocable: false
 
 # Rust style
 
-Edition 2024 on a current stable toolchain. The control-flow rules come from David Barsky's gist, the error and lint rules from Apollo's Rust handbook and the Google Rust style guide.
+Edition 2024 on a current stable toolchain. The control-flow rules come from David Barsky's gist, the error and lint rules from Apollo's Rust handbook and the Google Rust style guide. For what stable gained since 1.85 (async closures, let chains, `extract_if`, file locks, `fmt::from_fn`) read `references/rust-1.85-1.99.md`.
 
 ## Control flow: `for` loops, not iterator chains
 
@@ -358,4 +358,5 @@ Facts worth remembering because they changed:
 - `if let` scrutinee temporaries drop before the else branch.
 - `unsafe extern` blocks, and `unsafe` on `#[no_mangle]` and `#[export_name]`.
 - `gen` is reserved. `expr` fragments in `macro_rules!` match `const {}` and `_`.
-- Let chains (1.88) and `if let` guards in match arms (1.95), see the pattern matching rule above. `LazyLock` and `LazyCell` replace `once_cell` and `lazy_static`. `#[expect]` (1.81) replaces `#[allow]`.
+
+Newer stable features (let chains, `if let` guards, the standard library additions) are in `references/rust-1.85-1.99.md`.
