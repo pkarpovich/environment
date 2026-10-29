@@ -43,7 +43,7 @@ The body is read cold, days later, by Pavel or by an agent that has none of this
 ## Changing a task
 
 - Status, dates, important and tags live in yotei: change them with `update_tasks`.
-- The body is just the note: edit `~/Obsidian/PK Workspace/Tuclaw/Tasks/<title>.md` directly, like any file - rewrite, fix, restructure. Leave the frontmatter (`task_id`, `project`) as it is. Obsidian git syncs the file, and yotei picks it up on its next pull.
+- The body is just the note: edit `~/Obsidian/PK Workspace/Tuclaw/Tasks/<title>.md` directly, like any file - rewrite, fix, restructure. Leave the frontmatter (`task_id`, `number`, `project`) as it is. Obsidian git syncs the file, and yotei picks it up on its next pull.
 - `append_to_task` is for a quick addition when you have no access to the file.
 - Never close a task to recreate it with a cleaner text: edit the note instead.
 - When a session does the work a task describes, set it to `done` in the same session, right after the work lands. A task not worth doing goes to `dropped`.
@@ -54,6 +54,7 @@ The body is read cold, days later, by Pavel or by an agent that has none of this
 - To list: `query_tasks`, one line per task - title, project, status, date if set.
 - When Pavel picks a task or asks what to take, brief it before anything else, one line each: summary in your own words (not the title restated); effort - what the fix touches and whether it is mechanical or still a design decision; blast radius - what else the change can reach; materiality - who is affected today and how badly, or plainly that nothing is visible yet.
 - `query_tasks` takes a Dataview-like `where`: `!closed AND scheduled <= today`, `project = "farside"`, `tags contains "x"`, `important`, `today±N` for relative days. Unset fields are `null`.
+- Projects form a tree (`list_projects` shows each parent). `project = "turtle-hub"` matches only that project; `project_path contains "turtle-hub"` matches it and every project below it.
 - `get_tasks` returns the note body.
 - Statuses: `list_statuses` (backlog, todo, in-progress, done, dropped). A task leaves lists through a closed status; there is no delete.
 - Batch several tasks into one `add_tasks` / `update_tasks` call; each call is one git commit.
