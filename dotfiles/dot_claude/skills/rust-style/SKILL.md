@@ -1,13 +1,17 @@
 ---
 name: rust-style
-description: Rust coding style guide. Apply automatically when writing or modifying Rust code. Enforces for-loops over iterators, let-else for early returns, variable shadowing, newtypes, explicit matching, and minimal comments.
+description: Rust style for this machine, edition 2024: for loops over iterator chains, let-else and let chains over nested if let, shadowing over renaming, newtypes and two-variant enums over strings and bools, exhaustive matches, no narrating comments, thiserror in libraries and anyhow in binaries, clippy clean with no silenced lints. Loads for .rs files and Cargo.toml.
+paths:
+  - "**/*.rs"
+  - "**/Cargo.toml"
+user-invocable: false
 ---
 
-# Rust Coding Style
+# Rust style
 
-Apply these rules when writing or modifying any Rust code.
+Edition 2024 on a current stable toolchain. The control-flow rules come from David Barsky's gist, the error and lint rules from Apollo's Rust handbook and the Google Rust style guide.
 
-## Control Flow: Use `for` Loops, Not Iterator Chains
+## Control flow: `for` loops, not iterator chains
 
 Write `for` loops with mutable accumulators instead of iterator combinators.
 
@@ -53,7 +57,7 @@ for item in items {
 let found = items.iter().find(|item| item.matches(query));
 ```
 
-## Early Returns: Use `let ... else`
+## Early returns: `let ... else`
 
 Use `let ... else` to extract values and exit early on failure. This keeps the happy path unindented.
 
@@ -92,9 +96,9 @@ if let Some(value) = maybe_value {
 }
 ```
 
-## Pattern Matching: Minimize `if let`
+## Pattern matching: `if let` only for a short branch
 
-Use `if let` only when the `Some`/`Ok` branch is short and there's no else branch.
+`if let` is for a short `Some`/`Ok` branch with no else. A value needed afterwards is a `let ... else`. Several conditions on one value are one let chain (`if let ... && ...`), stable since 1.88 in edition 2024, never nested `if let`. A match arm that needs a binding plus a condition uses an `if let` guard (1.95).
 
 ```rust
 // ACCEPTABLE: short action, no else
@@ -113,9 +117,23 @@ match result {
     Err(Error::NotFound) => use_default(),
     Err(e) => return Err(e),
 }
+
+// DO: one let chain instead of nested if let
+if let Some(user) = session.user() && user.is_admin() && let Ok(token) = user.token() {
+    grant(token);
+}
+
+// DON'T
+if let Some(user) = session.user() {
+    if user.is_admin() {
+        if let Ok(token) = user.token() {
+            grant(token);
+        }
+    }
+}
 ```
 
-## Variable Naming: Shadow, Don't Rename
+## Variable naming: shadow, don't rename
 
 Shadow variables through transformations. Avoid prefixes like `raw_`, `parsed_`, `trimmed_`.
 
@@ -145,12 +163,9 @@ let canonical_path = input_path.canonicalize()?;
 let config_path = canonical_path.join("config.toml");
 ```
 
-## Comments: Don't Write Them
+## Comments
 
-- No inline comments explaining what code does
-- No section headers or dividers (`// --- Section ---`)
-- No TODO comments (use issue tracker)
-- No commented-out code (use version control)
+The global comments rule applies: no narration, no section dividers, no TODO comments, no commented-out code. An `unsafe` block carries a `// SAFETY:` line, that is the one comment Rust asks for.
 
 ```rust
 // DON'T
@@ -176,7 +191,7 @@ if user.is_valid() {
 fn helper() { }
 ```
 
-## Type Safety: Prefer Newtypes Over Strings
+## Type safety: newtypes over strings
 
 Wrap strings in newtypes to add semantic meaning and prevent mixing different string types.
 
@@ -191,7 +206,7 @@ fn send_email(to: Email, from: UserId) { }
 fn send_email(to: String, from: String) { }
 ```
 
-## Type Safety: Prefer Strongly-Typed Enums Over Bools
+## Type safety: two-variant enums over bools
 
 Use enums with meaningful variant names instead of `bool` parameters.
 
@@ -221,7 +236,7 @@ fn traverse(dir: Direction) { }
 fn traverse(forward: bool) { }
 ```
 
-## Pattern Matching: Never Use Wildcard Matches
+## Pattern matching: no wildcard arms
 
 Always match all variants explicitly to get compiler errors when variants are added.
 
@@ -240,9 +255,9 @@ match status {
 }
 ```
 
-If a wildcard seems necessary, **ask the user before using it**.
+A foreign `#[non_exhaustive]` enum is the exception: list every known variant and fold the rest into the wildcard. Anywhere else a wildcard seems needed, ask first.
 
-## Pattern Matching: Avoid `matches!` Macro
+## Pattern matching: no `matches!`
 
 Use full `match` expressions instead of `matches!`. Full matches provide better compiler diagnostics when the matched type changes.
 
@@ -258,7 +273,7 @@ let is_ready = match state {
 let is_ready = matches!(state, State::Ready);
 ```
 
-## Destructuring: Always Use Explicit Destructuring
+## Destructuring: explicit, every field
 
 Destructure structs and tuples explicitly to get compiler errors when fields change.
 
@@ -283,12 +298,64 @@ for entry in entries {
 }
 ```
 
-## Code Navigation: Always Use rust-analyzer LSP
+## Code navigation: rust-analyzer through the LSP tool
 
-When searching or navigating Rust code, always use the LSP tool with rust-analyzer operations:
+Navigate Rust through the LSP tool, not grep:
 
 - `goToDefinition` - Find where a symbol is defined
 - `findReferences` - Find all references to a symbol
 - `hover` - Get type info and documentation
 - `documentSymbol` - Get all symbols in a file
 - `goToImplementation` - Find trait implementations
+
+## Errors
+
+- A fallible function returns `Result`. `panic!`, `unreachable!` and `assert!` are for bugs and broken invariants, with a message that names the invariant.
+- `unwrap()` only in tests. In code, `expect("invariant that holds here")` when failure is a bug, `let ... else`, `?`, `unwrap_or_else` or `ok_or` otherwise.
+- A library crate defines its error enum with `thiserror`, one variant per cause, `#[from]` for wrapped errors, `#[error(transparent)]` for pass-through. A binary uses `anyhow` with `.context("what was being done")` on every `?` that crosses a boundary.
+- `?` bubbles. `map_err` and `or_else` recover, `inspect_err` logs. A test asserts the error with a match on the variant, or on `to_string()` when the type has no `PartialEq`.
+
+```rust
+#[derive(Debug, thiserror::Error)]
+pub enum StoreError {
+    #[error("record {0} not found")]
+    NotFound(RecordId),
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
+}
+
+fn main() -> anyhow::Result<()> {
+    let config = std::fs::read_to_string(path).context("reading the config")?;
+    Ok(())
+}
+```
+
+## Lints
+
+The gate is `cargo clippy --all-targets --all-features --locked -- -D warnings`, plus `cargo fmt --check`. A new crate gets this block in `Cargo.toml` (`[workspace.lints.*]` in a workspace, with `lints.workspace = true` in the members):
+
+```toml
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = { level = "deny", priority = 10 }
+pedantic = { level = "warn", priority = 3 }
+unwrap_used = "deny"
+wildcard_imports = "deny"
+needless_for_each = "deny"
+undocumented_unsafe_blocks = "deny"
+```
+
+A finding is fixed in code. When one genuinely cannot be, the suppression is `#[expect(clippy::lint, reason = "...")]` on the smallest item, after asking, never `#[allow]` and never a crate-wide override. `#[expect]` fails the build once the lint stops firing, so a stale exception cannot linger.
+
+## Edition 2024
+
+Facts worth remembering because they changed:
+
+- `impl Trait` in return position captures every in-scope lifetime. `use<'a, T>` narrows the capture when a caller needs the value to outlive an argument.
+- A temporary in a tail expression drops before the locals of the block, so `lock().value.clone()` at the end of a function no longer holds the guard past the locals.
+- `if let` scrutinee temporaries drop before the else branch.
+- `unsafe extern` blocks, and `unsafe` on `#[no_mangle]` and `#[export_name]`.
+- `gen` is reserved. `expr` fragments in `macro_rules!` match `const {}` and `_`.
+- Let chains (1.88) and `if let` guards in match arms (1.95), see the pattern matching rule above. `LazyLock` and `LazyCell` replace `once_cell` and `lazy_static`. `#[expect]` (1.81) replaces `#[allow]`.

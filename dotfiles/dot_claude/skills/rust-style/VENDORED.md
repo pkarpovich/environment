@@ -9,14 +9,4 @@ This skill is a snapshot of `SKILL-2.md` from David Barsky's public gist of Rust
 
 ## Drift policy
 
-This is a manual snapshot. Upstream changes do NOT auto-flow here. To re-pull all three sibling skills:
-
-```bash
-GID=8fae6dc45c294297db582378284bd1f2
-declare -A MAP=([SKILL-1.md]=rustdoc [SKILL-2.md]=rust-style [SKILL-3.md]=rust-analyzer-ssr)
-for src in SKILL-1.md SKILL-2.md SKILL-3.md; do
-  dst=~/Projects/environment/dotfiles/dot_claude/skills/${MAP[$src]}/SKILL.md
-  gh api "gists/$GID" --jq ".files[\"$src\"].content" > "$dst"
-done
-# update the SHA / date lines in each sibling VENDORED.md
-```
+The control-flow, naming, type-safety and matching sections are Barsky's, with the headings reworded. The frontmatter (`paths`), the let chains paragraph, and the Errors, Lints and Edition 2024 sections are local additions, drawn from Apollo's rust-best-practices handbook and the Google Rust style guide skill by 0xMassi. Re-pulling the gist replaces the shared sections only, the local ones stay.
