@@ -13,7 +13,7 @@ brew("mise")
 ### the coreutils the shell actually reaches for
 
 brew("jq")
-brew("skim")
+brew("sk")
 
 ### git, review, and the coding agents
 
