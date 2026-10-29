@@ -1,0 +1,12 @@
+{{ if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+# exec-fish {{ include "dot_config/bash/exec-fish.bash" | sha256sum }}
+set -eu
+line='[ -f ~/.config/bash/exec-fish.bash ] && . ~/.config/bash/exec-fish.bash'
+touch ~/.bashrc
+if [ "$(head -n 1 ~/.bashrc)" != "$line" ]; then
+    grep -vxF "$line" ~/.bashrc > ~/.bashrc.tmp || true
+    { printf '%s\n' "$line"; cat ~/.bashrc.tmp; } > ~/.bashrc
+    rm ~/.bashrc.tmp
+fi
+{{ end -}}
