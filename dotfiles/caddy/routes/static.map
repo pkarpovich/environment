@@ -7,7 +7,6 @@ continuum-api.localhost                50003
 dc-query-api.localhost                 50100
 ask-agent-api.localhost                50101
 retribution.localhost                  50200
-content-oracle.localhost               50201
 nikki.localhost                        50300
 sahara.localhost                       50310
 sahara-api.localhost                   50311
