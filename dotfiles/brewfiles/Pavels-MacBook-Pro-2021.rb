@@ -18,6 +18,10 @@ brew("qemu")
 # file share for the VM: the macOS SMB server breaks on large directory listings
 brew("samba")
 
+# software KVM over a Pi Zero and the Elgato capture card above; the cask also
+# links the `kvmzero` CLI
+cask("pkarpovich/apps/kvmzero", trusted: true)
+
 # tuclaw-client carries a .swiftlint.yml
 brew("swiftlint")
 
