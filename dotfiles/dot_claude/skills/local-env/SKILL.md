@@ -12,7 +12,8 @@ A mise task holds the script that starts a service, a Zed task calls that mise t
 - A service starts only from a Zed task. If the project has no task for it, add one first: the script goes into a mise task (`mise.toml`, `[tasks.dev]` with a `description`), and the Zed task in `.zed/tasks.json` runs `mise run <task>`. Then start it with `foster task <slug>`. `foster task --json` lists the tasks.
 - A long-running process goes through foster, never `&`, `nohup` or `run_in_background`. The `foster` skill has the commands. Load it before you start, read or stop anything.
 - Is X running: `foster ls --json` for processes, `lsof -nP -iTCP:<port> -sTCP:LISTEN` for whatever holds a port. A running foster process or a busy port is usually Pavel's. Report it, never stop it.
-- A server an agent starts for itself, to check its own change, runs under `foster run` on an explicit port outside 50000-50999 and outside every port in the Caddyfile, with `--strictPort` or its equivalent. Vite silently moves to the next port when one is busy, so without it the agent's server lands on Pavel's port plus one and the two cannot be told apart. Stop it with `foster rm` when done.
+- foster gives every process a free port from 51000-51999 as `PORT` and a domain as `FOSTER_DOMAIN`. The service listens on `$PORT` with `--strictPort` or its equivalent, never on a port of its own: Vite silently moves to the next port when one is busy, and a port set by hand leaves the domain pointing at nothing. `foster ls` shows each process's domain and port.
+- A server an agent starts for itself, to check its own change, runs under `foster run <repo>:<name>` the same way, and gets `<name>.localhost`. Stop it with `foster rm` when done.
 - Pavel starts tasks with `ft` and attaches with `fa` (fish functions over sk). They are interactive: suggest them, never run them.
 
 A service in this shape, from a static site:
@@ -59,8 +60,12 @@ run = "pnpm exec astro dev"
 
 ## Local domains
 
-- Caddy runs as a Homebrew service. Its config `/opt/homebrew/etc/Caddyfile` is a symlink to `dotfiles/Caddyfile` in `~/Projects/environment`. Each site there is `<name>.localhost { import site <port> }`, a reverse proxy to `localhost:<port>` over https with Caddy's local CA. http redirects to https.
-- The Caddyfile is the source of truth for the port a service uses. Read it instead of guessing. The service's own config must listen on that port.
-- Most ports sit in 50000-50999, grouped by project. A new service takes the next free port in its project's group. Check that no site in the Caddyfile and no listener already has it.
-- To add a domain, add the site to `dotfiles/Caddyfile`, run `caddy reload --config /opt/homebrew/etc/Caddyfile`, then check it with `curl -sI https://<name>.localhost`.
-- On the MacBook Air a site whose port does not listen there is proxied to the MacBook Pro. The `X-Served-By` response header names the machine that answered.
+- Caddy runs as a Homebrew service. Its config `/opt/homebrew/etc/Caddyfile` is a symlink to `dotfiles/Caddyfile` in `~/Projects/environment`. It holds one site for every `*.localhost` and `*.*.localhost` name, over https with Caddy's local CA, and http redirects to https.
+- The port behind a name comes from two tables of `<domain> <port>` lines:
+  - `dotfiles/caddy/routes/static.map`, written by hand, for services not started by foster yet;
+  - `~/.local/state/foster/routes/foster.map`, written by the foster hook `~/.config/foster/hook` from the running sessions on every start, exit and `rm`.
+- A service started by foster needs no Caddy edit: its domain is the slug of its Zed task plus `.localhost`, or `FOSTER_DOMAIN` from the task's `env`. In a linked worktree the worktree's folder goes in front: `feat-x.yotei.localhost`.
+- A domain in both tables breaks every route: Caddy refuses the reload. The hook leaves such a domain out of its table and reports it. When a service moves to foster, delete its line from `static.map` in the same change.
+- A name in neither table answers 404 `no route for <name>`. To check a name: `foster ls`, `cat` of both tables, `curl -sI https://<name>.localhost`.
+- A neighbour's address goes into the service's own `.env` as its domain, not as `localhost:<port>`.
+- On the MacBook Air a name that no table knows, or whose port does not listen there, goes to the MacBook Pro. The `X-Served-By` response header names the machine that answered.

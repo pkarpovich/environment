@@ -1,8 +1,6 @@
-# every site is a local port. flush_interval -1 streams SSE and long polls as they
-# are written; X-Served-By names the machine that answered
-(site) {
-    reverse_proxy localhost:{args[0]} {
-        flush_interval -1
-        header_down X-Served-By {system.hostname}
-    }
+(unknown) {
+    respond "no route for {host}" 404
+}
+
+(errors) {
 }

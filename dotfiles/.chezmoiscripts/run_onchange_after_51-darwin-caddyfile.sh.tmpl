@@ -2,7 +2,8 @@
 #!/bin/sh
 # caddy reads its config from the Homebrew prefix, outside the home directory
 # chezmoi manages. The Caddyfile imports caddy-site.caddy from there: this host's
-# snippet when caddy/ has one, the default otherwise
+# snippet when caddy/ has one, the default otherwise. It also imports the route
+# tables: caddy/routes from the repo and the one foster's hook writes
 set -eu
 etc=/opt/homebrew/etc
 caddy_src={{ joinPath .chezmoi.sourceDir "caddy" | quote }}
@@ -10,6 +11,9 @@ site="$caddy_src/$(scutil --get LocalHostName).caddy"
 [ -f "$site" ] || site="$caddy_src/default.caddy"
 ln -sfn {{ joinPath .chezmoi.sourceDir "Caddyfile" | quote }} "$etc/Caddyfile"
 ln -sfn "$site" "$etc/caddy-site.caddy"
+ln -sfn "$caddy_src/routes" "$etc/caddy-routes"
+mkdir -p "$HOME/.local/state/foster/routes"
+ln -sfn "$HOME/.local/state/foster/routes" "$etc/foster-routes"
 # the running caddy keeps the config it started with until told otherwise
 if pgrep -qx caddy; then
     caddy reload --config "$etc/Caddyfile"

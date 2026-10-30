@@ -1,0 +1,39 @@
+#!/bin/sh
+# foster runs this on start, exit and rm. It rebuilds the whole table from the
+# running sessions instead of editing one line, so a missed event heals on the next
+# one. Caddy refuses a domain listed twice and then loads no new route at all, so a
+# domain still in a hand-written table is left out and reported
+set -eu
+
+etc=/opt/homebrew/etc
+[ -f "$etc/Caddyfile" ] && command -v caddy >/dev/null || exit 0
+
+dir="$HOME/.local/state/foster/routes"
+mkdir -p "$dir"
+staged="$dir/.foster.map.$$"
+running="$dir/.running.$$"
+trap 'rm -f "$staged" "$running"' EXIT
+
+static=$(cat "$etc"/caddy-routes/*.map 2>/dev/null | awk '{ print $1 }')
+foster ls --json |
+    jq -r '.[] | select(.status == "running" and .domain != null and .port != null) | "\(.domain) \(.port)"' >"$running"
+
+conflicts=""
+: >"$staged"
+while read -r domain port; do
+    if printf '%s\n' "$static" | grep -qxF "$domain"; then
+        conflicts="$conflicts $domain"
+    else
+        echo "$domain $port" >>"$staged"
+    fi
+done <"$running"
+mv "$staged" "$dir/foster.map"
+
+if ! errors=$(caddy reload --config "$etc/Caddyfile" 2>&1 >/dev/null); then
+    echo "$errors" >&2
+    exit 1
+fi
+if [ -n "$conflicts" ]; then
+    echo "also in $etc/caddy-routes, remove them there so foster serves them:$conflicts" >&2
+    exit 1
+fi

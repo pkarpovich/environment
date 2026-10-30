@@ -1,12 +1,13 @@
-# the Air serves a site itself when its port is up here, and hands it to the MBP's
-# caddy otherwise: a refused local dial is a 502 error, which handle_errors catches.
-# The MBP answers to the same *.localhost name, so a frontend and its API keep
-# talking to each other on whichever machine runs them
-(site) {
-    reverse_proxy localhost:{args[0]} {
-        flush_interval -1
-        header_down X-Served-By {system.hostname}
-    }
+# the Air serves a name itself when a table knows it and its port is up here, and
+# hands it to the MBP's caddy otherwise: an unknown name goes there at once, and a
+# refused local dial is a 502 error, which handle_errors catches. The MBP answers
+# to the same *.localhost names, so a frontend and its API keep talking to each
+# other on whichever machine runs them
+(unknown) {
+    import mbp
+}
+
+(errors) {
     handle_errors 502 {
         import mbp
     }

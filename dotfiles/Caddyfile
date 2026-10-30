@@ -1,100 +1,37 @@
-# the site snippet differs per machine: caddy/<LocalHostName>.caddy when it exists,
-# caddy/default.caddy otherwise. run_onchange_after_51 links the right one next to
-# this file, since import paths resolve from /opt/homebrew/etc, not from the repo
+# every *.localhost name is one site. Its port comes from two tables of
+# "<domain> <port>" lines: caddy/routes/*.map in the repo, written by hand, and the
+# table foster's hook writes from the running sessions. run_onchange_after_51 links
+# both next to this file, since import paths resolve from /opt/homebrew/etc, not
+# from the repo. The per-machine snippet caddy-site.caddy decides what happens to
+# a name no table knows
 import caddy-site.caddy
 
-dorag-mcp.localhost {
-    import site 8001
+(proxy) {
+    map {host} {upstream_port} {
+        import caddy-routes/*.map
+        import foster-routes/*.map
+        default ""
+    }
+    @known expression `{upstream_port} != ""`
+    handle @known {
+        # flush_interval -1 streams SSE and long polls as they are written;
+        # X-Served-By names the machine that answered
+        reverse_proxy localhost:{upstream_port} {
+            flush_interval -1
+            header_down X-Served-By {system.hostname}
+        }
+    }
+    handle {
+        import unknown
+    }
+    import errors
 }
 
-spider-web.localhost {
-    import site 50700
-}
-
-ask-agent.localhost {
-    import site 5173
-}
-
-th-telegram-mcp.localhost {
-    import site 50001
-}
-
-continuum.localhost {
-    import site 50002
-}
-
-continuum-api.localhost {
-    import site 50003
-}
-
-dc-query-api.localhost {
-    import site 50100
-}
-
-ask-agent-api.localhost {
-    import site 50101
-}
-
-retribution.localhost {
-    import site 50200
-}
-
-content-oracle.localhost {
-    import site 50201
-}
-
-nikki.localhost {
-    import site 50300
-}
-
-sahara.localhost {
-    import site 50310
-}
-
-sahara-api.localhost {
-    import site 50311
-}
-
-sahara-llm-proxy.localhost {
-    import site 50312
-}
-
-agent-sdk-runtime.localhost {
-    import site 50320
-}
-
-agent-sdk-runtime-llm-proxy.localhost {
-    import site 50321
-}
-
-pkarpovich-dev.localhost {
-    import site 50400
-}
-
-corne.localhost {
-    import site 50500
-}
-
-ralphex-farm.localhost {
-    import site 50600
-}
-
-corne-keytap.localhost {
-    import site 50501
-}
-
-private-equity-web.localhost {
-    import site 50800
-}
-
-private-equity-web-llm-proxy.localhost {
-    import site 50801
-}
-
-heap.localhost {
-    import site 50900
-}
-
-yotei.localhost {
-    import site 50910
+# a browser rejects a certificate for *.*.localhost, so every name gets its own
+# from the local CA on its first request
+*.localhost, *.*.localhost {
+    tls internal {
+        on_demand
+    }
+    import proxy
 }
