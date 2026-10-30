@@ -178,15 +178,6 @@
       "installedAt": "2026-10-26T21:35:50.066Z",
       "updatedAt": "2026-10-26T21:35:50.066Z"
     },
-    "new": {
-      "source": "umputun/cc-thingz",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
-      "skillPath": "plugins/release-tools/skills/new/SKILL.md",
-      "skillFolderHash": "1d05ef9bacfd63f6e06cfd20e5d2c908ff08fde4",
-      "installedAt": "2026-10-26T22:47:41.386Z",
-      "updatedAt": "2026-10-26T22:47:41.386Z"
-    },
     "writing-style": {
       "source": "umputun/cc-thingz",
       "sourceType": "github",

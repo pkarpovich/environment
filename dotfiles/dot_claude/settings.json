@@ -335,7 +335,8 @@
     "skill-eval@umputun-cc-thingz": true,
     "swift-lsp@claude-plugins-official": true,
     "thinking-tools@umputun-cc-thingz": true,
-    "brainstorm@umputun-cc-thingz": true
+    "brainstorm@umputun-cc-thingz": true,
+    "release-tools@umputun-cc-thingz": true
   },
   "extraKnownMarketplaces": {
     "axiom-marketplace": {
