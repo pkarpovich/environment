@@ -178,15 +178,6 @@
       "installedAt": "2026-10-26T21:35:50.066Z",
       "updatedAt": "2026-10-26T21:35:50.066Z"
     },
-    "brainstorm": {
-      "source": "umputun/cc-thingz",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
-      "skillPath": "plugins/brainstorm/skills/brainstorm/SKILL.md",
-      "skillFolderHash": "5c604e0ae6b4f84aa43cdfd3c8ddc84212ebf54b",
-      "installedAt": "2026-10-26T22:31:31.267Z",
-      "updatedAt": "2026-10-26T22:31:31.267Z"
-    },
     "new": {
       "source": "umputun/cc-thingz",
       "sourceType": "github",
