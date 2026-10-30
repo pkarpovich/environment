@@ -213,6 +213,15 @@
       "skillFolderHash": "7188018e6710998fbc3227fdacd1b2b6e0508c38",
       "installedAt": "2026-10-28T19:29:43.194Z",
       "updatedAt": "2026-10-28T19:29:43.194Z"
+    },
+    "tuna": {
+      "source": "mikker/dotfiles",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/mikker/dotfiles.git",
+      "skillPath": "agents.symlink/skills/tuna/SKILL.md",
+      "skillFolderHash": "32516fdca693c3f2dcfbe29738072060b34b3ad9",
+      "installedAt": "2026-10-30T12:32:25.994Z",
+      "updatedAt": "2026-10-30T12:32:25.994Z"
     }
   },
   "dismissed": {}
