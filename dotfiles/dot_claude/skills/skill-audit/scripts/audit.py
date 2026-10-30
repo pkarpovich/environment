@@ -11,7 +11,7 @@ EN_DASH = "–"
 CYRILLIC_RE = re.compile(r"[Ѐ-ӿ]")
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n?(.*)$", re.S)
 TRIGGER_RE = re.compile(
-    r"\b(when|whenever|trigger|triggers|invoke|invoked|activate|activates|use this|use when|use it when|loads for|fires?|on request|user asks|user says)\b",
+    r"\b(when|whenever|trigger|triggers|invoke|invoked|activate|activates|use this|use when|use for|use it when|loads for|fires?|on request|user asks|user says)\b",
     re.I,
 )
 
