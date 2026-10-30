@@ -115,6 +115,9 @@ def audit_skill(skill_dir):
     if body_lines > BODY_MAX_LINES:
         add("warn", "body-length", f"SKILL.md body is {body_lines} lines (suggested max {BODY_MAX_LINES}); split detail into references/")
 
+    if "CLAUDE_PLUGIN_ROOT" in body or "CLAUDE_PLUGIN_DATA" in body:
+        add("warn", "plugin-only-variables", "body uses CLAUDE_PLUGIN_ROOT or CLAUDE_PLUGIN_DATA, which exist only for a plugin install; as a personal or npx skill its scripts and rules will not resolve")
+
     emphasis = EMPHASIS_RE.findall(body)
     if len(emphasis) > EMPHASIS_MAX:
         add("warn", "emphatic-wording", f"{len(emphasis)} emphatic words ({', '.join(sorted(set(emphasis)))}); Claude 4.5+ overtriggers on them, write 'use when' instead")

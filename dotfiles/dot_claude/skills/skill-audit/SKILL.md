@@ -40,3 +40,4 @@ python3 ~/.claude/skills/skill-audit/scripts/audit.py <path>
 - **No dates.** No "before X use the old API". A current method and an old-patterns section instead.
 - **Consistent terms.** One word for one thing throughout.
 - **Sibling overlap.** When two skills could take the same request, the more specific one names the general one and says who defers.
+- **Plugin-only variables.** A skill that references `CLAUDE_PLUGIN_ROOT` or `CLAUDE_PLUGIN_DATA` works only as a plugin: those are unset for a personal or npx-installed skill, so its scripts and user rules silently vanish. `CLAUDE_SKILL_DIR` is fine anywhere. The script flags the plugin-only names.
