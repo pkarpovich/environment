@@ -1,24 +1,22 @@
 ---
 name: go
-description: Go 1.25+ development standards and coding conventions. Use when writing, reviewing, or refactoring Go code. Triggers on Go file creation/editing, code reviews, architecture decisions, testing strategies, error handling patterns, concurrency, or when user asks about Go best practices.
+description: Go conventions for this machine: early returns, wrapped errors, small typed signatures with config structs, consumer-side interfaces, capability and decorator patterns, a composition root in main, errgroup and sequence numbers for async work, table-driven tests with testify and moq. Loads for .go files and go.mod. Go 1.27 changes are in references/go-1.27.md.
+paths:
+  - "**/*.go"
+  - "**/go.mod"
+user-invocable: false
 ---
 
 # Go
 
-## Before Writing Code
-
-- Read `go.mod` to check Go version and installed dependencies
-- Use existing libraries from `go.mod` instead of reimplementing
-- Never add new dependencies unless directly needed for the task
-- `go.mod` at `go 1.27`, or bumping to it: read `references/go-1.27.md` (generic methods, embedded-field literals, `httptest.NewTestServer` in synctest, stdlib `uuid`, bump checklist)
+`go.mod` at `go 1.27`, or a bump to it: read `references/go-1.27.md` (generic methods, embedded-field literals, `httptest.NewTestServer` in synctest, stdlib `uuid`, bump checklist).
 
 ## Code Style
 
 ### Naming
 
 - All comments lowercase except godoc on exported symbols
-- Clear names over comments — code should be self-documenting
-- No comments or docstrings unless absolutely necessary for non-obvious logic
+- Clear names over comments. A comment only for logic the name cannot carry
 
 ### Structure
 
@@ -27,14 +25,14 @@ description: Go 1.25+ development standards and coding conventions. Use when wri
 - Private struct fields; add accessor methods only when needed outside package
 - Compile regex once at package level: `var reToken = regexp.MustCompile(...)`
 - Deferred cleanup: `defer f.Close()` immediately after acquiring resource
-- Big structs: group fields into named sub-structs by concern (`m.cfg`, `m.layout`, `m.modes`) to make ownership explicit; keep methods on the parent type — don't fragment into mini-types
+- Big structs: group fields into named sub-structs by concern (`m.cfg`, `m.layout`, `m.modes`) to make ownership explicit; keep methods on the parent type - don't fragment into mini-types
 - Split a large file by concern across multiple files in the same package, not by type or by alphabetical order; keep each file focused enough that a reader can hold it in their head
 
 ```go
 type Model struct {
     cfg    modelConfigState  // immutable session config
     layout layoutState       // viewport, focus, geometry
-    file   loadedFileState   // current file's parallel arrays grouped — sync invariant explicit
+    file   loadedFileState   // current file's parallel arrays grouped - sync invariant explicit
     modes  modeState         // user-togglable view modes
     nav    navigationState   // cursor position
 }
@@ -43,13 +41,12 @@ type Model struct {
 ### Error Handling
 
 - Wrap errors with context: `fmt.Errorf("load config: %w", err)`
-- Return errors, don't panic — panic only for programmer bugs (impossible states)
-- Check errors immediately, never ignore with `_`
-- Add linter exclusions to `.golangci.yml` instead of `_, _ =` prefixes
+- Return errors. `panic` only for programmer bugs (impossible states)
+- Check every error where it occurs. An error that genuinely does not matter (a `Close` on a read-only file in a deferred cleanup) is handled in code, not hidden behind `_` or a `.golangci.yml` exclusion
 
 ## Hard rules
 
-Non-negotiable; the gate for marking any task complete. If a rule is violated the task is not done - refactor, re-test, then mark complete. This block is the source lifted into a plan's per-task Code-Quality gate.
+The gate before a task is marked complete. A violated rule means the task is not done.
 
 **Signatures:**
 - No function or method has 4+ parameters; `ctx context.Context` does not count. Past the budget, use an options struct (`type fooOpts struct { ... }`).
@@ -57,19 +54,19 @@ Non-negotiable; the gate for marking any task complete. If a rule is violated th
 - Adjacent same-type parameters (`oldLine, newLine int`) are a swap hazard - put them on a struct.
 
 **Methods vs standalone helpers:**
-- If a function is called only from methods of a single struct, it MUST be a method on that struct. Calling pattern decides, not field access.
+- A function called only from methods of a single struct is a method on that struct. The calling pattern decides, not field access.
 - Standalone helpers are only for: constructors/entry points (`New...`, `Parse...`, `Decorate...`), utilities shared by multiple unrelated types, and tiny cross-cutting helpers.
 - Before adding a standalone helper, walk its callers; if every caller is a method of one type, make it a method.
 
 **Visibility (private by default):**
 - Lowercase identifiers by default; export only when an out-of-package caller exists.
-- Exception (per CLAUDE.md): a method called by other structs in the same package may be exported for inter-component API clarity - methods only, not types, functions, constants, or variables.
+- Exception: a method called by other structs in the same package may be exported for inter-component API clarity. Methods only, not types, functions, constants or variables.
 - Before exporting a new identifier, grep for cross-package callers; if none, lowercase it.
 
 **Comments (default: none):**
 - Default to no comments; add one only when the WHY is non-obvious (a hidden invariant, a workaround, surprising behavior).
-- Being exported is NOT a reason to comment. The visibility rule above exports methods for inter-component clarity, so "godoc on everything exported" turns every export into a comment and fills a package with restated field lists. A godoc comment is for an identifier with a caller in another package AND something to say that the name does not; it starts with the name.
-- Never describe WHAT self-evident code does; no multi-paragraph comments on routine helpers.
+- Being exported is not a reason to comment. The visibility rule above exports methods for inter-component clarity, so "godoc on everything exported" turns every export into a comment and fills a package with restated field lists. A godoc comment is for an identifier with a caller in another package AND something to say that the name does not; it starts with the name.
+- A comment never describes what self-evident code does, and a routine helper gets no paragraph.
 
 **Per-task gate (before marking a checkbox `[x]`):**
 1. `gofmt -s`/`goimports` clean, `golangci-lint run` zero issues, `go test ./... -race` passes.
@@ -80,7 +77,7 @@ Non-negotiable; the gate for marking any task complete. If a rule is violated th
 
 - **≤3 positional args**: fine as-is
 - **4+ args, or 2+ adjacent same-typed args**: use a config struct
-- `context.Context` stays as first positional param — never in config struct
+- `context.Context` stays the first positional parameter, not a config field
 - Required args without sensible defaults may stay positional alongside the config struct
 - Name config structs `ThingConfig` (e.g., `ManagerConfig`, `UploaderConfig`); if package has one main type, just `Config`
 - Use config structs for internal code; functional options (`...Option`) only for public library APIs where backward compat matters
@@ -106,7 +103,7 @@ func NewManager(cfg ManagerConfig) *Manager {
 ## Interfaces
 
 - Define interfaces at consumer side, not provider side
-- Keep interfaces small — one or two methods is ideal
+- Keep interfaces small, one or two methods
 - Accept interfaces, return concrete types:
 
 ```go
@@ -129,7 +126,7 @@ type Renderer interface {
     Files() []string
 }
 
-// optional capability — only some renderers implement it
+// optional capability - only some renderers implement it
 type CommitLogger interface {
     CommitLog(ref string) ([]CommitInfo, error)
 }
@@ -146,7 +143,7 @@ func showCommits(r Renderer, ref string) {
 
 ### Decorator pattern
 
-Cross-cutting concerns (filtering, fallback, retry) compose by wrapping the same interface — not via flags or branches inside the concrete type.
+Cross-cutting concerns (filtering, fallback, retry) compose by wrapping the same interface, not through flags or branches inside the concrete type.
 
 ```go
 type ExcludeFilter struct {
@@ -188,14 +185,14 @@ func (o *Overlay) HandleKey(k string) Outcome { /* ... */ }
 
 ## Composition Root
 
-- `package main` is the only place that knows concrete types — it constructs everything and injects through interfaces into core types via a `Config` struct
+- `package main` is the only place that knows concrete types. It constructs everything and injects through interfaces into core types via a `Config` struct
 - Split `main` package by concern across files (`config.go`, `setup.go`, `wiring.go`), not by alphabetical order
 - Application packages depend only on consumer-side interfaces, never on each other's concrete types
-- When two packages need to interoperate but neither owns the bridging concept, build the adapter at the composition root — not inside either package
+- When two packages need to interoperate but neither owns the bridging concept, the adapter lives at the composition root, not inside either package
 - Use factory closures (`func(...) Component`) when a constructor needs runtime parameters that the consuming type shouldn't know about
 
 ```go
-// app/main.go — composition root
+// app/main.go - composition root
 func run(cfg options) error {
     storage := newStorage(cfg.DBPath)
     logger  := slog.New(...)
@@ -214,8 +211,8 @@ func run(cfg options) error {
 - Use `errgroup` for parallel work with error propagation
 - Protect shared state with `sync.Mutex`; prefer `atomic` for simple counters
 - Channel direction in signatures: `func process(in <-chan Item, out chan<- Result)`
-- Never start goroutines without a way to stop them (context, done channel, or WaitGroup)
-- Async work that can be superseded (re-loads, search, debounced inputs) must carry a sequence number — increment on dispatch, drop responses where `msg.seq != current` so a stale completion can't overwrite newer state
+- Every goroutine has a way to stop (context, done channel or WaitGroup)
+- Async work that can be superseded (re-loads, search, debounced inputs) carries a sequence number: increment on dispatch, drop responses where `msg.seq != current`, so a stale completion cannot overwrite newer state
 
 ```go
 m.loadSeq++
@@ -235,9 +232,9 @@ if msg.seq != m.loadSeq {
 
 - Table-driven tests with `testify/assert` and `testify/require`
 - One `_test.go` per source file, same package
-- Never `foo_something_test.go` — just `foo_test.go`
+- `foo_test.go`, not `foo_something_test.go`
 - Use `t.TempDir()` for all file operations in tests
-- Tests must NEVER touch real user config directories
+- Tests never touch real user config directories
 - Mocks: generate with `moq`, store in `mocks/` subdirectory
 - Target 80%+ coverage
 
@@ -275,11 +272,11 @@ func TestParseConfig(t *testing.T) {
 ## Project Layout
 
 ```
-cmd/{name}/main.go      — entry points
-internal/{pkg}/          — private packages
-{pkg}/                   — public packages (only if intentional)
+cmd/{name}/main.go      - entry points
+internal/{pkg}/          - private packages
+{pkg}/                   - public packages (only if intentional)
 ```
 
-- Flat package structure preferred — avoid deep nesting
+- Flat package structure preferred - avoid deep nesting
 - One package per concern, not per type
 - Enforce import boundaries with `depguard` in `.golangci.yml` when consumer-side interfaces alone aren't enough (e.g. UI package must not import a theme/storage package directly)
