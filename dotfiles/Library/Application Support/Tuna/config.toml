@@ -640,14 +640,99 @@ key = 'k'
 label = 'kvmzero'
 
     [comboMode.bindings.destination]
-    type = 'command'
+    type = 'group'
 
-        [comboMode.bindings.destination.command]
-        actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
-        behavior = 'run'
-        presentation = 'automatic'
-        subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "KVMZero" "open -b dev.pkarpovich.kvmzero" && curl -s --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:7480/on' ]
-        type = 'savedCommand'
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = '/Applications/KVMZero.app'
+        key = 'k'
+        label = 'capture'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [
+                    'text:yashiki exec-or-focus --app-name "KVMZero" "open -b dev.pkarpovich.kvmzero" && curl -s --retry 10 --retry-connrefused --retry-delay 1 http://127.0.0.1:7480/on'
+                ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'laptopcomputer'
+        key = 'r'
+        label = 'release'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:curl -s http://127.0.0.1:7480/off' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'key'
+        key = 'p'
+        label = 'windows password'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:"$HOME/.local/bin/kvmzero" password && curl -s http://127.0.0.1:7480/on' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'circle.lefthalf.filled'
+        key = 'a'
+        label = 'awake auto'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:curl -s http://127.0.0.1:7480/awake/auto && curl -s http://127.0.0.1:7480/on' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'sun.max'
+        key = 'o'
+        label = 'awake on'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:curl -s http://127.0.0.1:7480/awake/on && curl -s http://127.0.0.1:7480/on' ]
+                type = 'savedCommand'
+
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'moon'
+        key = 'f'
+        label = 'awake off'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run-text-as-shell-command'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'text:curl -s http://127.0.0.1:7480/awake/off && curl -s http://127.0.0.1:7480/on' ]
+                type = 'savedCommand'
 
 [[comboMode.bindings]]
 iconPath = 'macwindow'
