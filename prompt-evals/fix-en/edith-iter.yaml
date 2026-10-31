@@ -1,0 +1,75 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: fix-en prompt versions on sonnet 5.5 medium
+
+prompts:
+  - id: file://render.js:v0
+    label: v0
+  - id: file://render.js:v1
+    label: v1
+  - id: file://render.js:v2
+    label: v2
+
+providers:
+  - id: anthropic:messages:claude-sonnet-5-5
+    label: sonnet-5-5-medium
+    transform: "(typeof output === 'string' ? JSON.parse(output) : output).text"
+    config:
+      max_tokens: 16000
+      effort: medium
+      showThinking: false
+      output_format:
+        type: json_schema
+        schema:
+          type: object
+          properties:
+            text:
+              type: string
+          required: [text]
+          additionalProperties: false
+
+defaultTest:
+  options:
+    provider: anthropic:messages:claude-opus-5-5
+  assert:
+    - type: javascript
+      value: file://asserts.js:plainHyphen
+    - type: javascript
+      value: file://asserts.js:straightQuotes
+    - type: javascript
+      value: file://asserts.js:noTrailingPeriod
+    - type: javascript
+      value: file://asserts.js:firstCharCase
+    - type: javascript
+      value: file://asserts.js:textOnly
+    - type: javascript
+      value: file://asserts.js:unchangedWhenValid
+    - type: llm-rubric
+      value: |
+        An English chat message by a fluent non-native speaker (Russian is their first language) was
+        handed to an editor whose job is to make it read like a native speaker wrote it, in the
+        author's own voice. Judge the output against the original.
+
+        Original message:
+        {{input}}
+
+        Reference notes for this message (required fixes and acceptable alternatives):
+        {{must_fix}}
+
+        The author's conventions, which are correct by definition here: a plain hyphen instead of
+        em/en dashes; straight quotes; no period ending the message; the first letter keeps the
+        author's case.
+
+        Grade PASS only when all three hold:
+
+        1. Every required fix in the notes is made (an alternative the notes call acceptable counts).
+        2. The output has no remaining error a native speaker would notice: spelling, grammar,
+           articles, prepositions, tense, word order, or unnatural word choice and phrasing.
+        3. Nothing else moved: the meaning, what the author asks or promises, the casual tone, chat
+           abbreviations, technical terms, names and code are as in the original. A fragment that
+           continues an earlier message stays a fragment. Adding information, a greeting, a
+           sign-off, commentary, or making the message formal is a FAIL.
+
+        When the notes say "nothing, the message is already correct", PASS requires the output to
+        be character-identical to the original.
+
+tests: file://cases.yaml

@@ -67,6 +67,20 @@ starting with "nothing" also turns on a character-identity assert. Writing those
 work: they turn "the output looks fine" into a criterion the grader can fail. One case is a real
 before/after pair recovered from the clipboard and asserts an exact expected output.
 
+## fix-en
+
+Edith's English prompt, `~/.config/edith/fix-en.txt`. The author writes English as a second language, so this prompt also rewrites unnatural structure and word choice, while meaning, casual tone, chat abbreviations, technical terms and fragments that continue an earlier message stay as typed.
+
+```fish
+cd prompt-evals/fix-en
+mise exec -- pnpm exec promptfoo eval -c edith.yaml       # the live prompt
+mise exec -- pnpm exec promptfoo eval -c edith-iter.yaml  # versions/edith-v*.md side by side
+```
+
+`render.js` sends the same request Edith sends: the template before `{{selection}}` in a `cache_control` block, structured output with a `{"text": string}` schema, effort `medium`. `asserts.js` reuses the language-neutral checks from fix-ru and adds straight quotes. The rubric grades against what a native speaker would write.
+
+`cases.yaml` holds real English messages from Edith's run history (`~/Library/Application Support/space.pkarpovich.edith/history.store`) and stays out of git. The first five came through the fix-ru hotkey. New ones come from runs with `promptName = fix-en`.
+
 ## The loop
 
 1. Run the eval, read the failures rather than the total.
