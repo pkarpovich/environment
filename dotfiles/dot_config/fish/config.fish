@@ -7,6 +7,7 @@ test -n "$LANG"; or set -gx LANG en_US.UTF-8
 # `skills` reports every add/update to add-skill.vercel.sh; DO_NOT_TRACK is the
 # convention it and a good number of other CLIs honour
 set -gx DO_NOT_TRACK 1
+set -gx BUN_OPTIONS "--preload=$HOME/.local/share/no-agent-summary.js"
 
 fish_add_path ~/.local/bin
 
