@@ -1,0 +1,5 @@
+# fish is the login shell; zsh only runs under tools (`zsh -lc`, Claude Code).
+# /etc/zprofile's path_helper would move /usr/local/bin and /usr/bin ahead of
+# the PATH the caller passed in, so skip the global rc files and keep it.
+unsetopt GLOBAL_RCS
+[[ :$PATH: == *:/opt/homebrew/bin:* ]] || eval "$(/opt/homebrew/bin/brew shellenv zsh)"
