@@ -495,7 +495,7 @@ label = 'Apps'
                 type = 'savedCommand'
 
 [[comboMode.bindings]]
-iconPath = '/Applications/Dia.app'
+iconPath = '/Applications/Ardia.app'
 key = 'b'
 
     [comboMode.bindings.destination]
@@ -505,7 +505,7 @@ key = 'b'
         actionIdentifier = 'tuna.common-actions/open'
         behavior = 'run'
         presentation = 'automatic'
-        subjectIdentifiers = [ 'path:/Applications/Dia.app' ]
+        subjectIdentifiers = [ 'path:/Applications/Ardia.app' ]
         type = 'savedCommand'
 
 [[comboMode.bindings]]

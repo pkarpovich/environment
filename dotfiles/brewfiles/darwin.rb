@@ -205,6 +205,7 @@ cask("zed")
 
 cask("google-chrome")
 cask("thebrowsercompany-dia")
+cask("mantrakp04/tap/ardia", trusted: true)
 cask("slack")
 cask("discord")
 cask("telegram")

@@ -6,6 +6,7 @@ agent-browser
 agterm
 appcleaner
 Apple Configurator
+ardia
 atuin
 audacity
 Audiobook Builder

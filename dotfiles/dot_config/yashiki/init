@@ -91,8 +91,8 @@ yashiki bind alt-m layout-cmd zoom   # promote focused window to master slot
 yashiki rule-add --subrole AXUnknown ignore
 yashiki rule-add --close-button none ignore
 
-yashiki rule-add --app-id company.thebrowser.dia tags (tag 1)
-yashiki rule-add --app-id company.thebrowser.dia output "$LAPTOP"
+yashiki rule-add --app-id com.ardia.browser tags (tag 1)
+yashiki rule-add --app-id com.ardia.browser output "$LAPTOP"
 
 yashiki rule-add --app-id dev.zed.Zed tags (dltag 1)
 yashiki rule-add --app-id dev.zed.Zed output "$DELL_LANDSCAPE"
