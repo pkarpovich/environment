@@ -1,0 +1,6 @@
+claude_sideload:
+  repo: umputun/cc-thingz
+  sha: f84b93ca0f04a1406bdbb834d8f1ed1946996d1e
+  plugins:
+    - planning
+    - brainstorm

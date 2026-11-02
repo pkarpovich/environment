@@ -29,7 +29,6 @@ zellij
 {{ end }}
 
 {{ if $wsl }}
-.claude/plugins
 .claude/hooks/notify
 .claude/hooks/wezterm-status
 .claude/agents/skill-finder-investigator.md
@@ -41,6 +40,11 @@ zellij
 .claude/skills/ralphex-farm
 .claude/skills/skill-finder
 .claude/skills/yotei
+{{ end }}
+
+{{ if eq .chezmoi.os "darwin" }}
+.claude/plugins/data/brainstorm-inline
+.claude/plugins/data/planning-inline
 {{ end }}
 
 {{ if ne .chezmoi.os "darwin" }}

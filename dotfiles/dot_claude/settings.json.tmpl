@@ -1,7 +1,8 @@
 {{- $darwin := eq .chezmoi.os "darwin" -}}
 {
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "opus"
+    "CLAUDE_CODE_SUBAGENT_MODEL": "opus"{{ if not $darwin }},
+    "CLAUDE_CODE_PLUGIN_DIRS": "{{ range $i, $p := .claude_sideload.plugins }}{{ if $i }}:{{ end }}{{ $.chezmoi.homeDir }}/.claude/sideload/{{ $p }}{{ end }}"{{ end }}
   },
   "permissions": {
     "allow": [

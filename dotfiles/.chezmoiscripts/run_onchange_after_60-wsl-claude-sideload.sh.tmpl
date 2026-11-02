@@ -1,0 +1,19 @@
+{{ if contains "WSL" (dig "kernel" "osrelease" "" .chezmoi) -}}
+#!/bin/sh
+# The org policy on this box allows no plugin marketplace, so the two cc-thingz plugins
+# that are not plain skills load from a folder (CLAUDE_CODE_PLUGIN_DIRS in settings) at a
+# pinned commit. Bump the sha in .chezmoidata/claude-sideload.yaml after reading the diff.
+# {{ .claude_sideload.sha }} {{ .claude_sideload.plugins | join " " }}
+set -eu
+dst="$HOME/.claude/sideload"
+tmp="$(mktemp -d)"
+git -C "$tmp" init -q
+git -C "$tmp" fetch -q --depth 1 "https://github.com/{{ .claude_sideload.repo }}.git" "{{ .claude_sideload.sha }}"
+git -C "$tmp" checkout -q FETCH_HEAD
+mkdir -p "$dst"
+{{ range .claude_sideload.plugins -}}
+rm -rf "$dst/{{ . }}"
+cp -R "$tmp/plugins/{{ . }}" "$dst/{{ . }}"
+{{ end -}}
+rm -rf "$tmp"
+{{ end -}}
