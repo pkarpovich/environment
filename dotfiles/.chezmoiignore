@@ -23,7 +23,9 @@ zellij
 {{ end }}
 
 {{ if and (ne .chezmoi.os "darwin") (not $wsl) }}
+.agents
 .claude
+.config/fish/functions/skills-restore.fish
 {{ end }}
 
 {{ if $wsl }}
@@ -42,7 +44,6 @@ zellij
 {{ end }}
 
 {{ if ne .chezmoi.os "darwin" }}
-.agents
 .gitconfig.darwin
 Obsidian
 .zshenv
@@ -68,7 +69,6 @@ Library
 .config/fish/functions/gm.fish
 .config/fish/functions/gmi.fish
 .config/fish/functions/proxy.fish
-.config/fish/functions/skills-restore.fish
 .config/fish/functions/stable-to-master.fish
 .config/fish/functions/sync-to-gitea.fish
 .config/fish/functions/wins.fish
