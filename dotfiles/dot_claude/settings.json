@@ -380,5 +380,6 @@
   "terminalProgressBarEnabled": false,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "awaySummaryEnabled": false
 }
