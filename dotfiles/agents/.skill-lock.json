@@ -6,27 +6,27 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/cloudflare/skills.git",
       "skillPath": "skills/cloudflare/SKILL.md",
-      "skillFolderHash": "d964e627e14032b05351d06d7f06fed14362350e",
+      "skillFolderHash": "3eb560a41f50d50415cac69334742f70384246cd",
       "installedAt": "2026-08-02T23:09:50.397Z",
-      "updatedAt": "2026-10-19T08:41:39.896Z"
+      "updatedAt": "2026-11-02T12:12:39.224Z"
     },
     "wrangler": {
       "source": "cloudflare/skills",
       "sourceType": "github",
       "sourceUrl": "https://github.com/cloudflare/skills.git",
       "skillPath": "skills/wrangler/SKILL.md",
-      "skillFolderHash": "a6f70b001b36794b778ed888fc372df40d59e6ca",
+      "skillFolderHash": "a008bb54eab6653272b18ee0f74ba656bb19ac8d",
       "installedAt": "2026-08-02T23:09:50.401Z",
-      "updatedAt": "2026-10-14T15:39:09.303Z"
+      "updatedAt": "2026-11-02T12:12:40.321Z"
     },
     "agent-browser": {
       "source": "vercel-labs/agent-browser",
       "sourceType": "github",
       "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
       "skillPath": "skills/agent-browser/SKILL.md",
-      "skillFolderHash": "82def67855a0d2aad7794207951820fa5422fdb0",
+      "skillFolderHash": "aee3afd3dd9c879a14816dd6dca77c938f8c9c10",
       "installedAt": "2026-09-05T21:01:47.163Z",
-      "updatedAt": "2026-09-05T21:01:48.022Z"
+      "updatedAt": "2026-11-02T12:12:40.961Z"
     },
     "swift-testing-expert": {
       "source": "AvdLee/Swift-Testing-Agent-Skill",
@@ -62,9 +62,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/umputun/agterm.git",
       "skillPath": "plugins/agterm/skills/agterm/SKILL.md",
-      "skillFolderHash": "ae1c9a528548dfdce82d6e3770649a48656cd650",
+      "skillFolderHash": "77c7ac3efbe742ba82d0380ef8e8de8c4a3893e2",
       "installedAt": "2026-09-29T13:56:34.644Z",
-      "updatedAt": "2026-10-24T23:43:47.655Z"
+      "updatedAt": "2026-11-02T12:12:43.861Z"
     },
     "langfuse": {
       "source": "langfuse/skills",
@@ -89,9 +89,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/pkarpovich/foster.git",
       "skillPath": "plugins/foster/skills/foster/SKILL.md",
-      "skillFolderHash": "84573f2180d85ac02b7fae92bb4b116237c31aab",
+      "skillFolderHash": "273e1e92c9160eaa9665a2810276695cc88d3f40",
       "installedAt": "2026-10-26T15:16:07.858Z",
-      "updatedAt": "2026-10-31T20:27:47.313Z"
+      "updatedAt": "2026-11-02T12:12:44.989Z"
     },
     "postgres": {
       "source": "timescale/pg-aiguide",
@@ -174,9 +174,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/umputun/revdiff.git",
       "skillPath": ".claude-plugin/skills/revdiff/SKILL.md",
-      "skillFolderHash": "6695a375b993430553b0738d7218cf8a31f16da1",
+      "skillFolderHash": "899985967294e681b855b8e96a42f7a9147e6e10",
       "installedAt": "2026-10-26T22:57:55.526Z",
-      "updatedAt": "2026-10-26T22:57:55.526Z"
+      "updatedAt": "2026-11-02T12:12:47.275Z"
     },
     "claude-md-improver": {
       "source": "anthropics/claude-plugins-official",
