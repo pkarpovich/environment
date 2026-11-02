@@ -1,6 +1,6 @@
 ---
 name: go
-description: Go conventions for this machine: early returns, wrapped errors, small typed signatures with config structs, consumer-side interfaces, capability and decorator patterns, a composition root in main, errgroup and sequence numbers for async work, table-driven tests with testify and moq. Loads for .go files and go.mod. Go 1.27 changes are in references/go-1.27.md.
+description: "Go conventions for this machine: early returns, wrapped errors, small typed signatures with config structs, consumer-side interfaces, capability and decorator patterns, a composition root in main, errgroup and sequence numbers for async work, table-driven tests with testify and moq. Loads for .go files and go.mod. Go 1.27 changes are in references/go-1.27.md."
 paths:
   - "**/*.go"
   - "**/go.mod"

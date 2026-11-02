@@ -1,6 +1,6 @@
 ---
 name: python
-description: Python standards for this machine: uv, ruff, ty and pytest, strict typing, small typed signatures, private-by-default modules, async with anyio and httpx, function-based tests. Loads for .py files. Patterns and module layout are in references/architecture.md, the 3.14 and 3.15 features in references/python-3.14-3.15.md.
+description: "Python standards for this machine: uv, ruff, ty and pytest, strict typing, small typed signatures, private-by-default modules, async with anyio and httpx, function-based tests. Loads for .py files. Patterns and module layout are in references/architecture.md, the 3.14 and 3.15 features in references/python-3.14-3.15.md."
 paths:
   - "**/*.py"
   - "**/pyproject.toml"

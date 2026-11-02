@@ -1,6 +1,6 @@
 ---
 name: rust-style
-description: Rust style for this machine, edition 2024: for loops over iterator chains, let-else and let chains over nested if let, shadowing over renaming, newtypes and two-variant enums over strings and bools, exhaustive matches, no narrating comments, thiserror in libraries and anyhow in binaries, clippy clean with no silenced lints. Loads for .rs files and Cargo.toml.
+description: "Rust style for this machine, edition 2024: for loops over iterator chains, let-else and let chains over nested if let, shadowing over renaming, newtypes and two-variant enums over strings and bools, exhaustive matches, no narrating comments, thiserror in libraries and anyhow in binaries, clippy clean with no silenced lints. Loads for .rs files and Cargo.toml."
 paths:
   - "**/*.rs"
   - "**/Cargo.toml"

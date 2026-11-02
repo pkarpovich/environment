@@ -1,6 +1,6 @@
 ---
 name: defuddle
-description: Turn a web article, blog post, documentation page or release notes into clean markdown with a YAML header (title, author, published date, source, word count) through the public defuddle.md API, one curl. Use instead of WebFetch whenever a URL to readable prose comes up, said or not: "open <url>", "what does this article say", a bare link in chat, "what does <author> say about X". The text comes back verbatim, so quotes and dates survive. Not for .md or .txt URLs, PDFs and other binaries, JS-rendered apps, pages behind a login or Cloudflare, localhost, or GitHub blob pages (gh api).
+description: "Turn a web article, blog post, documentation page or release notes into clean markdown with a YAML header (title, author, published date, source, word count) through the public defuddle.md API, one curl. Use instead of WebFetch whenever a URL to readable prose comes up, said or not: \"open <url>\", \"what does this article say\", a bare link in chat, \"what does <author> say about X\". The text comes back verbatim, so quotes and dates survive. Not for .md or .txt URLs, PDFs and other binaries, JS-rendered apps, pages behind a login or Cloudflare, localhost, or GitHub blob pages (gh api)."
 allowed-tools: Bash(curl:*)
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: onboarding
-description: Load the current project into context before work starts: checkout freshness, manifests, docs, structure, entry points, conventions and recent activity. Use when the user says "onboarding", "onboard", "get familiar", "learn the codebase", "understand this repo", or asks to study a service, a folder, another repo or the current PR before discussing it. The result is the agent's own understanding, not a document.
+description: "Load the current project into context before work starts: checkout freshness, manifests, docs, structure, entry points, conventions and recent activity. Use when the user says \"onboarding\", \"onboard\", \"get familiar\", \"learn the codebase\", \"understand this repo\", or asks to study a service, a folder, another repo or the current PR before discussing it. The result is the agent's own understanding, not a document."
 argument-hint: "[path | @subfolder | PR] [focus]"
 allowed-tools: Read Glob Grep Bash(git *) Bash(gh pr *) Bash(find *) Bash(ls *) Agent
 ---

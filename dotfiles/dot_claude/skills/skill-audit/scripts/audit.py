@@ -50,11 +50,15 @@ def parse_frontmatter(text):
             current_chunks.append(line)
     if current_key is not None:
         fields[current_key] = "\n".join(current_chunks).strip()
+    raw = dict(fields)
     for k, v in list(fields.items()):
         if v.startswith((">", "|")):
             v = v[1:].lstrip("\n")
         v = re.sub(r"\s+", " ", v).strip()
+        if len(v) >= 2 and v[0] == v[-1] and v[0] in "\"'":
+            v = v[1:-1].replace('\\"', '"')
         fields[k] = v
+    fields["_raw"] = raw
     return fields, body
 
 
@@ -93,11 +97,14 @@ def audit_skill(skill_dir):
         if name != skill_dir.name:
             add("warn", "name-dir-mismatch", f"`name: {name}` differs from directory `{skill_dir.name}`")
 
-    unknown = sorted(k for k in fm if k not in KNOWN_FIELDS)
+    unknown = sorted(k for k in fm if k not in KNOWN_FIELDS and not k.startswith("_"))
     if unknown:
         add("fail", "unknown-field", f"frontmatter field(s) Claude Code ignores silently: {', '.join(unknown)}")
 
     desc = fm.get("description")
+    raw_desc = fm.get("_raw", {}).get("description", "")
+    if raw_desc and not raw_desc.startswith(("\"", "'", ">", "|")) and re.search(r": |:$| #", raw_desc.splitlines()[0]):
+        add("fail", "description-unquoted", "description is a plain YAML scalar with `: ` or ` #` in it; Claude Code reads it, strict parsers (the skills CLI, skill tooling) reject it. Quote the value.")
     if not desc:
         add("fail", "description-required", "`description:` field missing")
     else:

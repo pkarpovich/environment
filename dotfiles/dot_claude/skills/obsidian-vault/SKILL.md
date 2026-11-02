@@ -1,6 +1,6 @@
 ---
 name: obsidian-vault
-description: Create or extend notes in Pavel's Obsidian vault, PK Workspace, in its own grammar: plural wikilinked categories, YYYY-MM-DD dates, eager wikilinks, root for personal notes and References for the outside world, a 1-10 rating. Use whenever something should land in the vault, said or not: "save a note", "log this", "I watched", "I read", "I finished", "I bought", "I met", "new idea", "meeting note", "weekly note", or a bare movie, book, game, person or product to catalogue. The 19 note types and their frontmatter are in references/types.md. Lego Cubes episodes go to lego-cubes-prep. Notes with an existing structure are edited directly.
+description: "Create or extend notes in Pavel's Obsidian vault, PK Workspace, in its own grammar: plural wikilinked categories, YYYY-MM-DD dates, eager wikilinks, root for personal notes and References for the outside world, a 1-10 rating. Use whenever something should land in the vault, said or not: \"save a note\", \"log this\", \"I watched\", \"I read\", \"I finished\", \"I bought\", \"I met\", \"new idea\", \"meeting note\", \"weekly note\", or a bare movie, book, game, person or product to catalogue. The 19 note types and their frontmatter are in references/types.md. Lego Cubes episodes go to lego-cubes-prep. Notes with an existing structure are edited directly."
 ---
 
 # obsidian-vault
