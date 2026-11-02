@@ -22,9 +22,25 @@ zellij
 .config/fish/functions/rvb.fish
 {{ end }}
 
+{{ if and (ne .chezmoi.os "darwin") (not $wsl) }}
+.claude
+{{ end }}
+
+{{ if $wsl }}
+.claude/plugins
+.claude/agents/skill-finder-investigator.md
+.claude/skills/homelab-backups
+.claude/skills/lego-cubes-prep
+.claude/skills/local-env
+.claude/skills/obsidian-vault
+.claude/skills/ovq
+.claude/skills/ralphex-farm
+.claude/skills/skill-finder
+.claude/skills/yotei
+{{ end }}
+
 {{ if ne .chezmoi.os "darwin" }}
 .agents
-.claude
 .gitconfig.darwin
 Obsidian
 .zshenv
