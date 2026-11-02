@@ -28,6 +28,8 @@ zellij
 
 {{ if $wsl }}
 .claude/plugins
+.claude/hooks/notify
+.claude/hooks/wezterm-status
 .claude/agents/skill-finder-investigator.md
 .claude/skills/homelab-backups
 .claude/skills/lego-cubes-prep
