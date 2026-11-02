@@ -1,3 +1,4 @@
+{{- $darwin := eq .chezmoi.os "darwin" -}}
 {
   "env": {
     "CLAUDE_CODE_SUBAGENT_MODEL": "opus"
@@ -34,13 +35,14 @@
     "defaultMode": "auto"
   },
   "hooks": {
+{{- if $darwin }}
     "Notification": [
       {
         "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/notify/notify.sh"
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/notify/notify.sh"
           }
         ]
       },
@@ -49,7 +51,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10
           }
         ]
@@ -59,7 +61,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh notify",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/wezterm-status/mark.sh notify",
             "timeout": 5
           }
         ]
@@ -69,7 +71,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-claude-status.sh' blocked"
+            "command": "'{{ .chezmoi.homeDir }}/.config/agterm/agent-status/agterm-claude-status.sh' blocked"
           }
         ]
       }
@@ -80,7 +82,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10
           }
         ]
@@ -100,7 +102,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-claude-status.sh' active --blink"
+            "command": "'{{ .chezmoi.homeDir }}/.config/agterm/agent-status/agterm-claude-status.sh' active --blink"
           }
         ]
       },
@@ -131,7 +133,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh thinking",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/wezterm-status/mark.sh thinking",
             "timeout": 5
           }
         ]
@@ -163,7 +165,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/clear.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/wezterm-status/clear.sh",
             "timeout": 5
           }
         ]
@@ -202,7 +204,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10
           }
         ]
@@ -241,7 +243,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10
           }
         ]
@@ -251,7 +253,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh stop",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/wezterm-status/mark.sh stop",
             "timeout": 5
           }
         ]
@@ -260,7 +262,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-claude-status.sh' completed --auto-reset"
+            "command": "'{{ .chezmoi.homeDir }}/.config/agterm/agent-status/agterm-claude-status.sh' completed --auto-reset"
           }
         ]
       },
@@ -289,7 +291,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/peon-ping/peon.sh",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10
           }
         ]
@@ -299,7 +301,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/Users/pavel.karpovich/.claude/hooks/wezterm-status/mark.sh thinking",
+            "command": "{{ .chezmoi.homeDir }}/.claude/hooks/wezterm-status/mark.sh thinking",
             "timeout": 5
           }
         ]
@@ -308,7 +310,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "'/Users/pavel.karpovich/.config/agterm/agent-status/agterm-claude-status.sh' active --blink"
+            "command": "'{{ .chezmoi.homeDir }}/.config/agterm/agent-status/agterm-claude-status.sh' active --blink"
           }
         ]
       },
@@ -322,11 +324,76 @@
         ]
       }
     ]
+{{- else }}
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "agtermctl session status blocked"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "agtermctl session status active --blink"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "agtermctl session status idle"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/temporal-context.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "agtermctl session status completed"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "agtermctl session status active --blink"
+          }
+        ]
+      }
+    ]
+{{- end }}
   },
   "statusLine": {
     "type": "command",
-    "command": "bash /Users/pavel.karpovich/.claude/statusline-script.sh"
+    "command": "bash {{ .chezmoi.homeDir }}/.claude/statusline-script.sh"
   },
+{{- if $darwin }}
   "enabledPlugins": {
     "axiom@axiom-marketplace": false,
     "planning@umputun-cc-thingz": true,
@@ -358,6 +425,7 @@
       }
     }
   },
+{{- end }}
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "modelSettings": {
@@ -380,6 +448,5 @@
   "terminalProgressBarEnabled": false,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true,
   "awaySummaryEnabled": false
 }
