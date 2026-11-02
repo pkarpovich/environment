@@ -1,0 +1,10 @@
+{
+  "cssTheme": "Minimal",
+  "enabledCssSnippets": [],
+  "theme": "system",
+  "accentColor": "#842424",
+  "showRibbon": false,
+  "textFontFamily": "Iosevka Nerd Font",
+  "interfaceFontFamily": "Iosevka Nerd Font",
+  "monospaceFontFamily": "Iosevka Nerd Font Mono"
+}

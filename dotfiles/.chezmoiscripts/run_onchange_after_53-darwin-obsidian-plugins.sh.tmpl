@@ -1,0 +1,46 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/sh
+# The repo keeps the vault's settings but no plugin or theme code. Obsidian does
+# not fetch a listed plugin that is missing on disk, so install those through
+# its CLI, which only answers while the app runs with Settings > General >
+# Advanced > Command line interface on. Plugins outside the community list come
+# from pkarpovich/obsidian-plugins.
+# {{ $obs := "Obsidian/private_PK Workspace/private_dot_obsidian" }}{{ include (joinPath $obs "community-plugins.json") | sha256sum | trunc 12 }} {{ include (joinPath $obs "appearance.json") | sha256sum | trunc 12 }}
+set -eu
+vault="PK Workspace"
+conf="$HOME/Obsidian/$vault/.obsidian"
+
+missing=""
+for id in $(jq -r '.[]' "$conf/community-plugins.json"); do
+    [ -f "$conf/plugins/$id/manifest.json" ] || missing="$missing $id"
+done
+theme=$(jq -r '.cssTheme // empty' "$conf/appearance.json")
+[ -z "$theme" ] || [ -f "$conf/themes/$theme/theme.css" ] || missing_theme="$theme"
+[ -n "$missing" ] || [ -n "${missing_theme:-}" ] || exit 0
+
+# the CLI prints its errors and still exits 0, so read what it says
+cli() { obsidian vault="$vault" "$@" 2>&1; }
+ready() { cli plugins:restrict | grep -qx -e on -e off; }
+if ! ready; then
+    open -g "obsidian://open?vault=$(printf %s "$vault" | sed 's/ /%20/g')"
+    for _ in 1 2 3 4 5 6; do sleep 5; ready && break; done
+fi
+ready || { echo "obsidian: CLI does not answer, turn it on in Obsidian and run chezmoi apply again" >&2; exit 1; }
+
+# restricted mode keeps every community plugin off
+[ "$(cli plugins:restrict)" = off ] || cli plugins:restrict off
+for id in $missing; do
+    out=$(cli plugin:install id="$id" enable)
+    echo "obsidian: $out"
+    case "$out" in
+        Installed*) ;;
+        *"not found in community plugins"*)
+            echo "obsidian: $id is built from pkarpovich/obsidian-plugins, run pnpm vault there" ;;
+        *) exit 1 ;;
+    esac
+done
+if [ -n "${missing_theme:-}" ]; then
+    out=$(cli theme:install name="$missing_theme")
+    echo "obsidian: $out"
+fi
+{{ end -}}
