@@ -1,5 +1,124 @@
 {
   "version": 3,
-  "skills": {},
+  "skills": {
+    "git-review": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/review/skills/git-review/SKILL.md",
+      "skillFolderHash": "2229f0d19d92eadc5ca1de470808344119b1cbd9",
+      "installedAt": "2026-11-02T16:21:29.002Z",
+      "updatedAt": "2026-11-02T16:21:29.002Z"
+    },
+    "pr": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/review/skills/pr/SKILL.md",
+      "skillFolderHash": "3dc3b126c5ef69f987504339bab787eed465b52a",
+      "installedAt": "2026-11-02T16:21:29.004Z",
+      "updatedAt": "2026-11-02T16:21:29.004Z"
+    },
+    "writing-style": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/review/skills/writing-style/SKILL.md",
+      "skillFolderHash": "b72b2a72f03a34ec1f58b26fdae73524995ac73b",
+      "installedAt": "2026-11-02T16:21:29.005Z",
+      "updatedAt": "2026-11-02T16:21:29.005Z"
+    },
+    "dialectic": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/thinking-tools/skills/dialectic/SKILL.md",
+      "skillFolderHash": "440ae3366ffc22a4e13af100963e05f451f4d995",
+      "installedAt": "2026-11-02T16:21:29.005Z",
+      "updatedAt": "2026-11-02T16:21:29.005Z"
+    },
+    "root-cause-investigator": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/thinking-tools/skills/root-cause-investigator/SKILL.md",
+      "skillFolderHash": "615afcb9ae31ba2fc5a80a08c5f7d738bb3877b0",
+      "installedAt": "2026-11-02T16:21:29.006Z",
+      "updatedAt": "2026-11-02T16:21:29.006Z"
+    },
+    "backlog": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/workflow/skills/backlog/SKILL.md",
+      "skillFolderHash": "5c3d3d8552b9fd6cc271083ca1e56f396f866b1b",
+      "installedAt": "2026-11-02T16:21:29.006Z",
+      "updatedAt": "2026-11-02T16:21:29.006Z"
+    },
+    "clarify": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/workflow/skills/clarify/SKILL.md",
+      "skillFolderHash": "162971c831706de64f6eb8fe8745bd90a396dbbd",
+      "installedAt": "2026-11-02T16:21:29.007Z",
+      "updatedAt": "2026-11-02T16:21:29.007Z"
+    },
+    "learn": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/workflow/skills/learn/SKILL.md",
+      "skillFolderHash": "0238c4e7049716b7e4f7aa60bf5eb450598a6b75",
+      "installedAt": "2026-11-02T16:21:29.008Z",
+      "updatedAt": "2026-11-02T16:21:29.008Z"
+    },
+    "wrong": {
+      "source": "umputun/cc-thingz",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/cc-thingz.git",
+      "skillPath": "plugins/workflow/skills/wrong/SKILL.md",
+      "skillFolderHash": "469cdb666bdf166010bccd7b5ec4757d178b8fa8",
+      "installedAt": "2026-11-02T16:21:29.008Z",
+      "updatedAt": "2026-11-02T16:21:29.008Z"
+    },
+    "revdiff": {
+      "source": "umputun/revdiff",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/umputun/revdiff.git",
+      "skillPath": ".claude-plugin/skills/revdiff/SKILL.md",
+      "skillFolderHash": "899985967294e681b855b8e96a42f7a9147e6e10",
+      "installedAt": "2026-11-02T16:22:09.328Z",
+      "updatedAt": "2026-11-02T16:22:09.328Z"
+    },
+    "foster": {
+      "source": "pkarpovich/foster",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/pkarpovich/foster.git",
+      "skillPath": "plugins/foster/skills/foster/SKILL.md",
+      "skillFolderHash": "273e1e92c9160eaa9665a2810276695cc88d3f40",
+      "installedAt": "2026-11-02T16:22:31.184Z",
+      "updatedAt": "2026-11-02T16:22:31.184Z"
+    },
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "skillFolderHash": "aee3afd3dd9c879a14816dd6dca77c938f8c9c10",
+      "pluginName": "agent-browser",
+      "installedAt": "2026-11-02T16:22:52.682Z",
+      "updatedAt": "2026-11-02T16:22:52.682Z"
+    },
+    "langfuse": {
+      "source": "langfuse/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/langfuse/skills.git",
+      "skillPath": "skills/langfuse/SKILL.md",
+      "skillFolderHash": "e328647f773572c449699be03e719e95ab151a6f",
+      "installedAt": "2026-11-02T16:23:14.500Z",
+      "updatedAt": "2026-11-02T16:23:14.500Z"
+    }
+  },
   "dismissed": {}
 }
