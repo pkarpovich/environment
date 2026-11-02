@@ -7,7 +7,7 @@
 TRAINING_CUTOFF="2026-05"
 CURRENT_YEAR_MONTH=$(date +%Y-%m)
 
-cutoff_months=$(( ($(date -j -f "%Y-%m" "$CURRENT_YEAR_MONTH" "+%s") - $(date -j -f "%Y-%m" "$TRAINING_CUTOFF" "+%s")) / 2592000 ))
+cutoff_months=$(( (10#${CURRENT_YEAR_MONTH%-*} - 10#${TRAINING_CUTOFF%-*}) * 12 + (10#${CURRENT_YEAR_MONTH#*-} - 10#${TRAINING_CUTOFF#*-}) ))
 
 # Drawn from the repositories actually being worked on, not from a generic list. Two tests to
 # earn a place here: the thing moves fast enough that six months makes advice wrong, and it is
@@ -25,7 +25,7 @@ never seen.
 Search before advising on a version, an API surface or the current state of anything - and always for
 these, where the churn is fastest: ${HIGH_RISK_LIBS}.
 
-CLAUDE.md's Epistemic section carries the rest: the source hierarchy, what not to do when a version is
+CLAUDE.md's Facts and versions section carries the rest: the source hierarchy, what not to do when a version is
 unknown, and permission to say you do not know. This block only tells you how stale you are.
 
       IMPORTANT: this context may or may not be relevant to your tasks. You should not respond to this context unless it is highly relevant to your task.
