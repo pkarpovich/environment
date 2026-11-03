@@ -43,6 +43,7 @@ zellij
 {{ end }}
 
 {{ if eq .chezmoi.os "darwin" }}
+.claude/skills/ferry
 .claude/plugins/data/brainstorm-inline
 .claude/plugins/data/planning-inline
 {{ end }}

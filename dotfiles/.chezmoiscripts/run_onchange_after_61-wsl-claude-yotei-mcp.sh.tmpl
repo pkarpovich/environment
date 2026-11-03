@@ -1,0 +1,13 @@
+{{ if contains "WSL" (dig "kernel" "osrelease" "" .chezmoi) -}}
+#!/bin/sh
+# yotei's MCP endpoint on this box is a ferry listen port that forwards to the Mac. MCP
+# servers live in ~/.claude.json, which chezmoi does not manage, so the entry is set
+# through the claude CLI and refreshed whenever the URL here changes.
+set -eu
+url="http://127.0.0.1:7811/mcp"
+if claude mcp get yotei >/dev/null 2>&1; then
+    claude mcp get yotei | grep -q -F "$url" && exit 0
+    claude mcp remove yotei -s user
+fi
+claude mcp add --transport http --scope user yotei "$url"
+{{ end -}}
