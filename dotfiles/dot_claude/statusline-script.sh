@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# The session that runs this keeps the PATH of the shell it was launched from, which can
+# predate the shell config: jq then goes missing and the line comes out empty.
+PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:$HOME/.local/bin:$PATH"
+
 # Read JSON input from stdin
 input=$(cat)
 
