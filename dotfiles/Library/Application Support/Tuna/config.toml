@@ -334,6 +334,21 @@ label = 'Messaging'
                 subjectIdentifiers = [ 'text:yashiki exec-or-focus --app-name "Calendar" "open -b com.apple.iCal"' ]
                 type = 'savedCommand'
 
+        [[comboMode.bindings.destination.bindings]]
+        iconPath = 'video.fill'
+        key = 'j'
+        label = 'join meeting'
+
+            [comboMode.bindings.destination.bindings.destination]
+            type = 'command'
+
+                [comboMode.bindings.destination.bindings.destination.command]
+                actionIdentifier = 'tuna.common-actions/run'
+                behavior = 'run'
+                presentation = 'automatic'
+                subjectIdentifiers = [ 'tuna.scripts//Users/pavel.karpovich/Projects/environment/dotfiles/tuna-scripts/join-next-meeting.sh' ]
+                type = 'savedCommand'
+
 [[comboMode.bindings]]
 iconPath = 'square.grid.2x2'
 key = 'o'
@@ -1429,7 +1444,7 @@ key = 'p'
         actionIdentifier = 'tuna.common-actions/run'
         behavior = 'run'
         presentation = 'automatic'
-        subjectIdentifiers = [ 'tuna.scripts/1Password Quick Access' ]
+        subjectIdentifiers = [ 'tuna.scripts//Users/pavel.karpovich/Projects/environment/dotfiles/tuna-scripts/op-qa.sh' ]
         type = 'savedCommand'
 
 [hotkeys]
