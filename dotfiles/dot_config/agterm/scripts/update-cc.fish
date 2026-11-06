@@ -10,9 +10,12 @@
 # waiting for the old TUI to tear down. The conversation comes from cc-map,
 # which the SessionStart hook keeps current.
 #
-# No argument: every session whose main pane runs an idle Claude, resumed. With a
-# session (id or prefix): only that one, whatever its status, and a pane sitting at a
-# shell prompt is started too.
+# No argument: every session whose main pane runs an idle Claude older than the
+# installed build, resumed. Claude also updates itself in the background, so
+# `claude update` saying "up to date" does not mean the running processes are; the
+# build a process runs is the versions/ directory its executable was mapped from.
+# With a session (id or prefix): only that one, whatever its status or build, and a
+# pane sitting at a shell prompt is started too.
 set -l AGTERMCTL /opt/homebrew/bin/agtermctl
 set -l JQ /opt/homebrew/bin/jq
 set -l MAP ~/.local/state/agterm/cc-map
@@ -21,18 +24,15 @@ set -l only $argv[1]
 
 # the native install downloads new builds in the background, but only a restart
 # runs one; `claude update` makes sure the build is there before any pane goes
-set -l update (claude update 2>&1 | string collect)
-if test $status -ne 0
+if not claude update >/dev/null 2>&1
     $AGTERMCTL notify "update-cc: claude update failed" --title update-cc
     exit 1
 end
-if string match -q '*is up to date*' -- $update; and test -z "$only"
-    $AGTERMCTL notify "update-cc: Claude is up to date, nothing restarted" --title update-cc
-    exit 0
-end
+set -l current (path basename (readlink ~/.local/bin/claude))
 
 set -l done 0
 set -l skipped 0
+set -l uptodate 0
 
 for row in ($AGTERMCTL tree --json | $JQ -r '
     [.result.tree.workspaces[].sessions[]] | .[]
@@ -72,6 +72,21 @@ for row in ($AGTERMCTL tree --json | $JQ -r '
         continue
     end
 
+    if test -z "$only"
+        set -l pid ($JQ -r '.pid // empty' $entry)
+        set -l running ""
+        test -n "$pid"; and set running (lsof -a -p $pid -d txt -Fn 2>/dev/null | string match -r -g '/claude/versions/([^/]+)$')[1]
+        if test "$running" = "$current"
+            set uptodate (math $uptodate + 1)
+            continue
+        end
+        if test -z "$running"
+            $AGTERMCTL notify "update-cc: cannot tell which build $id runs, skipped" --title update-cc
+            set skipped (math $skipped + 1)
+            continue
+        end
+    end
+
     set -l cmd "CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume $conv"
     if $AGTERMCTL session restart --pane left --target $id --command $cmd >/dev/null 2>&1
         set done (math $done + 1)
@@ -82,5 +97,5 @@ for row in ($AGTERMCTL tree --json | $JQ -r '
 end
 
 if test -z "$only"
-    $AGTERMCTL notify "update-cc: $done restarted, $skipped skipped" --title update-cc
+    $AGTERMCTL notify "update-cc: $done restarted on $current, $uptodate already on it, $skipped skipped" --title update-cc
 end
