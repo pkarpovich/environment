@@ -137,6 +137,69 @@ if [ -n "$weekly_pct" ] && [ -n "$weekly_reset" ]; then
     sep=" ${WHITE}|${RESET} "
 fi
 
+# Monthly usage credits, for an account without plan windows (no rate_limits in the
+# payload): the same source /usage reads, cached and refreshed in the background so
+# the line never waits for the network. The pace counts working days, Mon-Fri.
+CREDITS_CACHE="${XDG_STATE_HOME:-$HOME/.local/state}/claude/usage-credits.json"
+CREDITS_TTL=300
+has_rate_limits=$(echo "$input" | jq -r '.rate_limits != null')
+cc_version=$(echo "$input" | jq -r '.version // empty')
+
+refresh_credits() {
+    local token
+    if [ -r "$HOME/.claude/.credentials.json" ]; then
+        token=$(jq -r '.claudeAiOauth.accessToken // empty' "$HOME/.claude/.credentials.json")
+    else
+        token=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null | jq -r '.claudeAiOauth.accessToken // empty')
+    fi
+    [ -n "$token" ] || return
+    mkdir -p "$(dirname "$CREDITS_CACHE")"
+    touch "$CREDITS_CACHE"
+    printf 'Authorization: Bearer %s\n' "$token" \
+        | curl -sf --max-time 5 -H @- \
+            -H "anthropic-beta: oauth-2025-04-20" \
+            -H "User-Agent: claude-code/$cc_version" \
+            https://api.anthropic.com/api/oauth/usage \
+        | jq -ce '.extra_usage | select(.is_enabled == true) | {used: .used_credits, limit: .monthly_limit}' \
+        > "$CREDITS_CACHE.$$" 2>/dev/null && mv -f "$CREDITS_CACHE.$$" "$CREDITS_CACHE"
+    rm -f "$CREDITS_CACHE.$$"
+}
+
+if [ "$has_rate_limits" = "false" ] && [ -n "$cc_version" ]; then
+    cache_age=$(( $(date +%s) - $(stat -c %Y "$CREDITS_CACHE" 2>/dev/null || stat -f %m "$CREDITS_CACHE" 2>/dev/null || echo 0) ))
+    [ "$cache_age" -ge "$CREDITS_TTL" ] && refresh_credits >/dev/null 2>&1 &
+    if [ -s "$CREDITS_CACHE" ]; then
+        read -r used_c limit_c <<< "$(jq -r '"\(.used) \(.limit)"' "$CREDITS_CACHE" 2>/dev/null)"
+    fi
+    if [ -n "${limit_c:-}" ] && [ "$limit_c" != "null" ] && [ "${limit_c%.*}" -gt 0 ]; then
+        used_pct=$(( ${used_c%.*} * 100 / ${limit_c%.*} ))
+        read -r wd_done wd_total <<< "$(jq -nr '
+            (now | gmtime) as $t | $t[0] as $y | $t[1] as $m | $t[2] as $d
+            | ([ $y, $m + 1, 1, 0, 0, 0, 0, 0 ] | mktime) - 86400 | gmtime[2] as $dim
+            | [range(1; $dim + 1) | select(([ $y, $m, ., 0, 0, 0, 0, 0 ] | mktime | strftime("%u") | tonumber) <= 5)]
+            | "\([.[] | select(. <= $d)] | length) \(length)"')"
+        wd_left=$(( wd_total - wd_done ))
+        ideal_pct=$(( wd_done * 100 / wd_total ))
+
+        if [ "$used_pct" -gt 80 ]; then
+            MO_COLOR="$FX_RED"
+        elif [ "$used_pct" -gt 60 ]; then
+            MO_COLOR="$FX_ORANGE"
+        elif [ "$used_pct" -gt 40 ]; then
+            MO_COLOR="$FX_YELLOW"
+        elif [ "$used_pct" -gt 20 ]; then
+            MO_COLOR="$FX_CYAN"
+        else
+            MO_COLOR="$FX_GREEN"
+        fi
+
+        printf "${sep}${GRAY}mo${RESET} ${MO_COLOR}\$%d${RESET}${GRAY}/\$%d${RESET} ${GRAY}·${RESET} ${MO_COLOR}%d%%${RESET} ${GRAY}·${RESET} ${FX_BLUE}%dwd${RESET}" \
+            "$(( ${used_c%.*} / 100 ))" "$(( ${limit_c%.*} / 100 ))" "$used_pct" "$wd_left"
+        pace_badge $(( used_pct - ideal_pct ))
+        sep=" ${WHITE}|${RESET} "
+    fi
+fi
+
 if [ -n "$fivehour_pct" ] && [ -n "$fivehour_reset" ]; then
     fivehour_pct_int=$(printf "%.0f" "$fivehour_pct" 2>/dev/null || echo "$fivehour_pct")
     if [ "$fivehour_pct_int" -ge 80 ]; then
