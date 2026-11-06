@@ -10,7 +10,7 @@
 # @agt.desc is optional and belongs to the @agt.name line above it; the picker
 # shows it as the row's subtitle. Everything after " -- " is passed as arguments
 # and expanded at run time, which is how one script contributes several rows
-# (cc-name has one to name and one to restore). The hooks and the watcher carry no marker: running
+# (update-cc has one for every session and one for this). The hooks and the watcher carry no marker: running
 # them by hand would corrupt the map rather than do anything useful.
 #
 # Runs as a keymap custom command, so the runner exports AGT_* and sends stdout

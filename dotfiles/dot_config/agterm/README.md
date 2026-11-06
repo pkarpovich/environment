@@ -30,12 +30,9 @@ else reads it.
 | `scripts/cc-map-unmap.fish` | forgets the entry + pin when you deliberately quit Claude | Claude Code SessionEnd (only `prompt_input_exit`/`logout`/`exit`) |
 | `scripts/cc-map-watch.fish` | deletes the entry when its agterm session is closed | launchd, subscribed to `agtermctl events --kind session.closed` |
 | `com.pavel-karpovich.cc-map-watch.plist` | keeps that watcher alive | login, `KeepAlive` |
-| `scripts/cc-recap.fish` | what the agent has been working on, from its transcript | palette "Claude Recap" |
-| `scripts/cc-name.fish` | names the session from its transcript | script palette |
 | `scripts/fork-cc.fish` | forks this session's conversation into a new session below it | palette "Fork Claude session" |
 | `scripts/update-cc.fish` | restarts Claude on its own conversation after an update | script palette |
 | `scripts/ws-shelve.fish`, `ws-unshelve.fish` | put a workspace away and bring it back | script palette |
-| `scripts/go-session.fish` | jump to the Nth sidebar row | `Cmd+Shift+1..9` |
 | `../fish/functions/ccl.fish` | resume this session's recorded conversation | by hand |
 | `../fish/functions/claude.fish` | tags a fresh run with an explicit session id | every `claude` invocation |
 | `../claude/settings.json` | registers the four hooks above | - |

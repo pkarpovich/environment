@@ -1,7 +1,7 @@
 #!/opt/homebrew/bin/fish
 # Claude Code SessionStart hook: record which conversation lives in which agterm
 # session. One file per agterm session (atomic mv - no races), read by ccl,
-# cc-recap, cc-name, fork-cc, update-cc and ws-shelve.
+# fork-cc, update-cc and ws-shelve.
 set -l JQ /opt/homebrew/bin/jq
 set -l MAP ~/.local/state/agterm/cc-map
 
