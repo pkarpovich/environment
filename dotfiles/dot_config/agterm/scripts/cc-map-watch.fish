@@ -1,7 +1,7 @@
 #!/opt/homebrew/bin/fish
 # agterm events watcher (launchd: com.pavel-karpovich.cc-map-watch): drop a
 # session's cc-map entry the moment the session is closed (sidebar close,
-# workspace or window delete), so ccl/ccm/reopen-cc never see orphans. App
+# workspace or window delete), so ccl and the scripts never see orphans. App
 # quit does not emit session.closed - the map survives restarts. agtermctl
 # exits when agterm quits; launchd KeepAlive restarts the watcher (30s
 # throttle) and `events` resubscribes from the current tail.

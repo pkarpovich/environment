@@ -1,9 +1,9 @@
 #!/opt/homebrew/bin/fish
 # @agt.name Shelve this workspace
-# @agt.desc write it to disk, park its Claudes and close it
+# @agt.desc write it to disk and close it
 # Put a finished project away: serialise the workspace this session belongs to
-# (its sessions, their directories and what each one is running), park the Claude
-# clients in it, and delete the workspace. ws-unshelve brings it back.
+# (its sessions, their directories and what each one is running) and delete the
+# workspace, which hangs up every program in it. ws-unshelve brings it back.
 #
 # Conversations come from cc-map, not from the running argv: a resumed Claude
 # rewrites its process title and drops the conversation id, so a snapshot built
@@ -17,7 +17,6 @@ set -l AGTERMCTL /opt/homebrew/bin/agtermctl
 set -l JQ /opt/homebrew/bin/jq
 set -l MAP ~/.local/state/agterm/cc-map
 set -l SHELF ~/.local/state/agterm/shelved
-set -l PARK ~/.config/agterm/scripts/cc-park.fish
 
 function fail --argument-names msg
     /opt/homebrew/bin/agtermctl notify $msg --title Shelve >/dev/null 2>&1
@@ -65,14 +64,6 @@ set -l slug (string replace -ra '[^a-z0-9_.-]' '-' (string lower $ws_name))
 set -l file $SHELF/$slug.json
 printf '%s\n' $items | $JQ -s --arg name "$ws_name" --arg ts (date +%s) \
     '{workspace: $name, shelved_at: ($ts | tonumber), sessions: .}' > $file
-
-# park each Claude first so it exits on its own terms rather than being torn
-# down with the pane; this also clears the restore pins of sessions that are
-# about to stop existing
-for s in $sessions
-    set -l id (printf '%s' $s | $JQ -r '.id')
-    test -f $MAP/$id; and $PARK agterm $id >/dev/null 2>&1
-end
 
 $AGTERMCTL workspace delete --target $ws >/dev/null 2>&1
 $AGTERMCTL notify "$ws_name shelved ("(count $items)" sessions)" --title Shelve >/dev/null 2>&1

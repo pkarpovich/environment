@@ -1,7 +1,7 @@
 #!/opt/homebrew/bin/fish
 # Claude Code SessionStart hook: record which conversation lives in which agterm
-# session. One file per agterm session (atomic mv - no races), consumed by
-# ccm (tmux windows on the second Mac) and reopen-cc.
+# session. One file per agterm session (atomic mv - no races), read by ccl,
+# cc-recap, cc-name, fork-cc, update-cc and ws-shelve.
 set -l JQ /opt/homebrew/bin/jq
 set -l MAP ~/.local/state/agterm/cc-map
 
@@ -45,15 +45,10 @@ mkdir -p $MAP
 set -l entry $MAP/$AGTERM_SESSION_ID
 test -n "$cwd"; or set cwd ($JQ -r '.cwd // empty' $entry 2>/dev/null)
 
-# merged, not rebuilt: ccm records which tmux window mirrors this session
-# (tsession/twindow) and must survive a hook fire; a changed conversation drops it
-set -l prev '{}'
-test -f $entry; and set prev (cat $entry | string collect)
 set -l tmp (mktemp $MAP/.tmp.XXXXXX)
-and printf '%s' $prev | $JQ --arg conv $conv --arg cwd "$cwd" --arg pid "$pid" \
-    'if .conv == $conv then . else del(.tsession, .twindow) end
-     | . + {conv: $conv, cwd: $cwd, ts: (now | floor),
-            pid: (if $pid == "" then null else ($pid | tonumber) end)}' > $tmp
+and $JQ -n --arg conv $conv --arg cwd "$cwd" --arg pid "$pid" \
+    '{conv: $conv, cwd: $cwd, ts: (now | floor),
+      pid: (if $pid == "" then null else ($pid | tonumber) end)}' > $tmp
 and mv -f $tmp $entry
 
 # pin the pane's restore command to the live conversation (agterm >= 0.16.0):

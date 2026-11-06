@@ -56,8 +56,8 @@ last, so it wins; a missing file is fine).
 
 - **`dot_config/agterm/`** - keymap and ghostty overrides for the
   [agterm](https://github.com/umputun/agterm) terminal, plus control scripts:
-  numbered session jumps, the Claude-conversation map hook, side parking and
-  reopen for the two-Mac flow. **Start with
+  numbered session jumps, the Claude-conversation map and the scripts built on
+  it. **Start with
   [`dot_config/agterm/README.md`](dot_config/agterm/README.md)** - it documents the whole
   Claude-session system, whose parts are spread across
   `dot_config/agterm/`, `dot_config/fish/`, `dot_claude/` and
@@ -65,11 +65,10 @@ last, so it wins; a missing file is fine).
 - **`dot_config/fish/`** - `config.fish` is shared; what one OS needs goes
   to `conf.d/darwin.fish` or `conf.d/linux.fish`, which fish sources before
   `config.fish`. One autoloaded function per file in `functions/` (`wt`, `ccl`,
-  `ccm`, the `claude` wrapper, `zw`, `gcrb`, ...); the Mac-only ones are listed
+  the `claude` wrapper, `zw`, `gcrb`, ...); the Mac-only ones are listed
   in `.chezmoiignore`.
-- **`dot_config/tmux/`** - the SSH/mosh attach point for the second Mac and the phone;
-  `ccm` mirrors agterm's Claude sessions into its windows. It replaced zellij
-  because Moshi's chat integration is tmux-only.
+- **`dot_config/tmux/`** - the SSH/mosh attach point for the phone. It replaced
+  zellij because Moshi's chat integration is tmux-only.
 - **`dot_claude/`** - Claude Code settings, hooks, agents, and our own skills;
   linked into `~/.claude`.
 - **`agents/`** - linked whole as `~/.agents`: the store for skills written by
