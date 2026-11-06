@@ -24,9 +24,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
       "skillPath": "skills/agent-browser/SKILL.md",
-      "skillFolderHash": "aee3afd3dd9c879a14816dd6dca77c938f8c9c10",
+      "skillFolderHash": "29ba9c12789b1c54ab76ad40e2472e646d141b85",
       "installedAt": "2026-09-05T21:01:47.163Z",
-      "updatedAt": "2026-11-02T12:12:40.961Z"
+      "updatedAt": "2026-11-06T12:10:18.999Z"
     },
     "swift-testing-expert": {
       "source": "AvdLee/Swift-Testing-Agent-Skill",
@@ -43,28 +43,28 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/AvdLee/SwiftUI-Agent-Skill.git",
       "skillPath": "skills/swiftui-expert-skill/SKILL.md",
-      "skillFolderHash": "7f608997e3beb4aa0d926d21213873792a651e06",
+      "skillFolderHash": "0c8daa1643f919dd603e577b773564b1be5dfe7d",
       "installedAt": "2026-09-29T13:50:08.565Z",
-      "updatedAt": "2026-10-09T10:05:19.529Z"
+      "updatedAt": "2026-11-06T12:10:19.325Z"
     },
     "swift-concurrency": {
       "source": "AvdLee/Swift-Concurrency-Agent-Skill",
       "sourceType": "github",
       "sourceUrl": "https://github.com/AvdLee/Swift-Concurrency-Agent-Skill.git",
       "skillPath": "skills/swift-concurrency/SKILL.md",
-      "skillFolderHash": "39fa694c2fad228a64d0ffb9b395fac6b856b1ad",
+      "skillFolderHash": "a2d58fe06bce48e0de55acb7a9ae71f17e6827df",
       "pluginName": "swift-concurrency",
       "installedAt": "2026-09-29T13:50:11.135Z",
-      "updatedAt": "2026-09-29T13:50:11.135Z"
+      "updatedAt": "2026-11-06T12:10:19.465Z"
     },
     "agterm": {
       "source": "umputun/agterm",
       "sourceType": "github",
       "sourceUrl": "https://github.com/umputun/agterm.git",
       "skillPath": "plugins/agterm/skills/agterm/SKILL.md",
-      "skillFolderHash": "77c7ac3efbe742ba82d0380ef8e8de8c4a3893e2",
+      "skillFolderHash": "af01ac09653d073ab76959ea14302f0f84d6016f",
       "installedAt": "2026-09-29T13:56:34.644Z",
-      "updatedAt": "2026-11-02T12:12:43.861Z"
+      "updatedAt": "2026-11-06T12:10:19.607Z"
     },
     "langfuse": {
       "source": "langfuse/skills",
@@ -174,9 +174,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/umputun/revdiff.git",
       "skillPath": ".claude-plugin/skills/revdiff/SKILL.md",
-      "skillFolderHash": "899985967294e681b855b8e96a42f7a9147e6e10",
+      "skillFolderHash": "72f73a3a3c29d1252afb566b7ed73537ada8f004",
       "installedAt": "2026-10-26T22:57:55.526Z",
-      "updatedAt": "2026-11-02T12:12:47.275Z"
+      "updatedAt": "2026-11-06T12:10:19.764Z"
     },
     "claude-md-improver": {
       "source": "anthropics/claude-plugins-official",
