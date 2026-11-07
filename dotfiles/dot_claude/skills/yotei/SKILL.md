@@ -19,10 +19,12 @@ One request is one task, however many problems it names: "a ticket for X and Y" 
    ```sh
    f="<image path>"; ext=png; type=image/png   # jpg -> image/jpeg
    url="https://s3-hub.pkarpovich.space/obsidian/$(date -u +%Y-%m)/$(shasum -a 256 "$f" | cut -d' ' -f1).$ext"
-   curl -fsS -X PUT -H "Content-Type: $type" --data-binary @"$f" "$url"
+   key=$(security find-generic-password -s obsidian-s3-sessions | sed -n 's/.*"acct"<blob>="\(.*\)"/\1/p')
+   printf 'user = "%s:%s"\n' "$key" "$(security find-generic-password -s obsidian-s3-sessions -w)" |
+     command curl -fsS -K - --aws-sigv4 "aws:amz:us-east-1:s3" -X PUT -H "Content-Type: $type" --data-binary @"$f" "$url"
    ```
 
-   The bucket takes unsigned writes and is reachable only over the LAN or tailscale; a link works in Obsidian, for the tuclaw agent and in the yotei app alike. Never copy the image into the vault: Obsidian Sync drops files over its size limit, and the vault-root `Attachments/` is outside the tuclaw-vault repo the agent reads.
+   Writes need a signature: the key is the Keychain item `obsidian-s3-sessions` (account = access key ID, password = secret), allowed only `PutObject` on `obsidian/`. It goes to curl through stdin, so it never shows in a command line or the output. If the item is missing or the PUT fails, create the task without the image and tell Pavel the image was not uploaded. Reads stay anonymous. The bucket is reachable only over the LAN or tailscale; a link works in Obsidian, for the tuclaw agent and in the yotei app alike. Never copy the image into the vault: Obsidian Sync drops files over its size limit, and the vault-root `Attachments/` is outside the tuclaw-vault repo the agent reads.
 3. `add_tasks` with one item:
    - `title`: names the problem, not the place - `reopen fallback ignores the last-frontmost window`, not `fix library.go`. Short, in English. It becomes the file name, so no `/` or `:`, and it must be unique.
    - `body`: see "Writing the body".

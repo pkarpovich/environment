@@ -1,3 +1,5 @@
 {
-  "bucketUrl": "https://s3-hub.pkarpovich.space/obsidian"
+  "bucketUrl": "https://s3-hub.pkarpovich.space/obsidian",
+  "accessKeySecret": "obsidian-s3-access-key",
+  "secretKeySecret": "obsidian-s3-secret-key"
 }
