@@ -6,7 +6,6 @@
 set -euo pipefail
 
 JQ=/opt/homebrew/bin/jq
-BROWSER_ID="company.thebrowser.dia"
 OBSIDIAN_CONFIG="$HOME/Library/Application Support/obsidian/obsidian.json"
 
 DEFAULT_URLS="https://app.trakt.tv/users/taller_stk/mir/$(date -v1d -v-1m '+%Y/%-m')
@@ -34,7 +33,7 @@ esac
 
 URLS=$(awk '/^## /{inside = ($0 == "## Links"); next} inside && /^- https?:\/\//{print $2}' "$VAULT/$NOTE")
 
-printf '%s\n%s\n' "$DEFAULT_URLS" "$URLS" | xargs open -b "$BROWSER_ID"
+printf '%s\n%s\n' "$DEFAULT_URLS" "$URLS" | xargs open
 
 DEFAULT_COUNT=$(printf '%s\n' "$DEFAULT_URLS" | wc -l | tr -d ' ')
 if [ -z "$URLS" ]; then
