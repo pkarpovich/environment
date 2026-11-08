@@ -51,14 +51,14 @@ Bad:
 
 ```
 title: proper mobile layout
-Наблюдение от 08.11.2026. Сейчас yotei на телефоне только растягивается под ширину экрана, отдельного мобильного дизайна нет. Главная проблема: стоит начать скроллить, боковое меню вызвать уже невозможно. Нужна нормальная мобильная навигация.
+Pavel 08.11.2026: on the phone yotei just stretches to the screen width, there is no separate mobile design. Main problem: once you start scrolling, the sidebar cannot be opened any more. Needs proper mobile navigation. Details later.
 ```
 
 Good:
 
 ```
 title: sidebar cannot be opened after scrolling on the phone
-В yotei-app на телефоне боковое меню нельзя открыть, как только начинаешь прокручивать список. Мобильной раскладки нет: десктопная сжата по ширине экрана.
+In yotei-app on the phone the sidebar cannot be opened once the list scrolls. There is no mobile layout: the desktop one is squeezed to the screen width.
 ```
 
 ## Changing a task
