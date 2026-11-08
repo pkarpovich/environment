@@ -26,21 +26,40 @@ One request is one task, however many problems it names: "a ticket for X and Y" 
 
    Writes need a signature: the key is the Keychain item `obsidian-s3-sessions` (account = access key ID, password = secret), allowed only `PutObject` on `obsidian/`. It goes to curl through stdin, so it never shows in a command line or the output. If the item is missing or the PUT fails, create the task without the image and tell Pavel the image was not uploaded. Reads stay anonymous. The bucket is reachable only over the LAN or tailscale; a link works in Obsidian, for the tuclaw agent and in the yotei app alike. Never copy the image into the vault: Obsidian Sync drops files over its size limit, and the vault-root `Attachments/` is outside the tuclaw-vault repo the agent reads.
 3. `add_tasks` with one item:
-   - `title`: names the problem, not the place - `reopen fallback ignores the last-frontmost window`, not `fix library.go`. Short, in English. It becomes the file name, so no `/` or `:`, and it must be unique.
+   - `title`: names the problem, not the place and not the fix - `reopen fallback ignores the last-frontmost window`, not `fix library.go`; `sidebar cannot be opened after scrolling on the phone`, not `proper mobile layout`. A feature names what Pavel wants to be able to do, not the shape of the solution. Short, in English, starts with a lowercase letter like the existing titles (product names inside keep their case). It becomes the file name, so no `/` or `:`, and it must be unique.
    - `body`: see "Writing the body".
    - `project`: always set, as `[[Name]]` - the repo or product the task is about, e.g. `[[farside]]`, `[[tuclaw]]`. It must exist in yotei: `list_projects` first, reuse the name exactly, and only for something really new `add_projects` (a `parent` makes it a sub-project). `add_tasks` rejects an unknown project.
-   - Leave `status` (backlog), `scheduled`, `deadline` and `important` unset unless Pavel gave a day, a deadline or called it important.
+   - Leave `status` (backlog), `scheduled`, `deadline`, `important` and `tags` unset unless Pavel gave a day, a deadline, called it important or named a tag. Never invent tags like `feature`, `bug` or `migration`.
 4. Reply with the title in one line. Don't go back to the task unless asked.
 
 ## Writing the body
 
-The body is read cold, days later, by Pavel or by an agent that has none of this session's context. Markdown, in the language Pavel used.
+The body is read cold, days later, by Pavel or by an agent that has none of this session's context. Markdown, in the language of Pavel's request; only the title is English. Do not mix languages inside the body.
 
-- Say what is wrong or missing, why it matters, and how it shows today: the concrete command, output, repo, `path:line`, PR or commit. Add the idea for the fix if there is one.
+- Say what is wrong or missing, why it matters, and how it shows today: the concrete command, output, repo, `path:line`, PR, commit, date. The idea for the fix is one sentence, and only when Pavel gave it or the evidence points to it.
 - No required sections. Two lines when two lines carry it; a page only for a problem that needs a page.
 - No implementation plan: no step lists, tests, docs or file-by-file changes. Whoever takes the task decides how.
 - Write about 80% of the way to ASD-STE100 (Simplified Technical English), also in Russian: short sentences, about 20 words at most; one idea per sentence; active voice; concrete words - the command, the file, the date - not general ones; one word for one thing, no synonyms for variety; no hedges or filler ("apparently", "in general", "it is worth noting").
 - A mermaid diagram only when the point is a structure that text describes badly: a flow between several components, or state transitions. Keep it small, and never instead of the text. Obsidian renders it; the yotei app shows it as a code block.
+
+Never put into a body:
+- a date or author prefix (`Pavel 08.11.2026:`): yotei records `created_at`, and every task is Pavel's.
+- a list of guesses (`likely suspects`, `options to check`) or a designed API (field lists, parameter names, a wait mode).
+- a promise instead of content (`details later`, `Pavel will explain`). If the request lacks what a cold reader needs, ask one question before creating the task, or write down exactly what is known.
+
+Bad:
+
+```
+title: proper mobile layout
+Наблюдение от 08.11.2026. Сейчас yotei на телефоне только растягивается под ширину экрана, отдельного мобильного дизайна нет. Главная проблема: стоит начать скроллить, боковое меню вызвать уже невозможно. Нужна нормальная мобильная навигация.
+```
+
+Good:
+
+```
+title: sidebar cannot be opened after scrolling on the phone
+В yotei-app на телефоне боковое меню нельзя открыть, как только начинаешь прокручивать список. Мобильной раскладки нет: десктопная сжата по ширине экрана.
+```
 
 ## Changing a task
 
