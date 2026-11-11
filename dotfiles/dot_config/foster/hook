@@ -2,7 +2,10 @@
 # foster runs this on start, exit and rm. It rebuilds the whole table from the
 # running sessions instead of editing one line, so a missed event heals on the next
 # one. Caddy refuses a domain listed twice and then loads no new route at all, so a
-# domain still in a hand-written table is left out and reported
+# domain still in a hand-written table is left out and reported. A session with path
+# prefixes goes to foster.paths as one anchored regex line instead, matched on host
+# plus path before the host table. It stays there after its process exits, until
+# foster rm, so a dead API answers 502 rather than falling through to the app
 set -eu
 
 etc=/opt/homebrew/etc
@@ -11,12 +14,18 @@ etc=/opt/homebrew/etc
 dir="$HOME/.local/state/foster/routes"
 mkdir -p "$dir"
 staged="$dir/.foster.map.$$"
+staged_paths="$dir/.foster.paths.$$"
 running="$dir/.running.$$"
-trap 'rm -f "$staged" "$running"' EXIT
+trap 'rm -f "$staged" "$staged_paths" "$running"' EXIT
 
 static=$(cat "$etc"/caddy-routes/*.map 2>/dev/null | awk '{ print $1 }')
-foster ls --json |
-    jq -r '.[] | select(.status == "running" and .domain != null and .port != null) | "\(.domain) \(.port)"' >"$running"
+sessions=$(foster ls --json)
+printf '%s' "$sessions" |
+    jq -r '.[] | select(.status == "running" and .domain != null and .port != null and ((.paths // []) | length) == 0) | "\(.domain) \(.port)"' >"$running"
+printf '%s' "$sessions" |
+    jq -r 'def quote: gsub("(?<c>[.+*?()|\\[\\]{}^$\\\\])"; "\\\(.c)");
+        .[] | select(.domain != null and .port != null and ((.paths // []) | length) > 0)
+        | "~^\(.domain | quote)(\([.paths[] | quote] | join("|")))(/.*)?$ \(.port)"' >"$staged_paths"
 
 conflicts=""
 : >"$staged"
@@ -28,6 +37,7 @@ while read -r domain port; do
     fi
 done <"$running"
 mv "$staged" "$dir/foster.map"
+mv "$staged_paths" "$dir/foster.paths"
 
 if ! errors=$(caddy reload --config "$etc/Caddyfile" 2>&1 >/dev/null); then
     echo "$errors" >&2

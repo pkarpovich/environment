@@ -6,20 +6,35 @@
 # a name no table knows
 import caddy-site.caddy
 
+# flush_interval -1 streams SSE and long polls as they are written; X-Served-By
+# names the machine that answered
+(upstream) {
+    reverse_proxy localhost:{args[0]} {
+        flush_interval -1
+        header_down X-Served-By {system.hostname}
+    }
+}
+
+# a name with path prefixes splits one origin between processes the way a
+# production edge proxy does: foster's hook writes "~^<host>(<prefix>|...)(/.*)?$ <port>"
+# lines into foster-routes/*.paths, and a path match wins over the host's own port
 (proxy) {
+    map {host}{path} {path_port} {
+        import foster-routes/*.paths
+        default ""
+    }
     map {host} {upstream_port} {
         import caddy-routes/*.map
         import foster-routes/*.map
         default ""
     }
+    @path expression `{path_port} != ""`
+    handle @path {
+        import upstream {path_port}
+    }
     @known expression `{upstream_port} != ""`
     handle @known {
-        # flush_interval -1 streams SSE and long polls as they are written;
-        # X-Served-By names the machine that answered
-        reverse_proxy localhost:{upstream_port} {
-            flush_interval -1
-            header_down X-Served-By {system.hostname}
-        }
+        import upstream {upstream_port}
     }
     handle {
         import unknown

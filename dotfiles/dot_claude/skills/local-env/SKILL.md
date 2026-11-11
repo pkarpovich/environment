@@ -65,6 +65,7 @@ run = "pnpm exec astro dev"
   - `dotfiles/caddy/routes/static.map`, written by hand, for services not started by foster yet;
   - `~/.local/state/foster/routes/foster.map`, written by the foster hook `~/.config/foster/hook` from the running sessions on every start, exit and `rm`.
 - A service started by foster needs no Caddy edit: its domain is the slug of its Zed task plus `.localhost`, or `FOSTER_DOMAIN` from the task's `env`. In a linked worktree the worktree's folder goes in front: `feat-x.yotei.localhost`.
+- Two tasks share one domain by path, as a production edge proxy splits a host: both set the same `FOSTER_DOMAIN`, and the one serving `/api` adds `"FOSTER_PATHS": "/api /mcp"`. The hook writes such a session into `~/.local/state/foster/routes/foster.paths`, matched on host plus path before the host tables. The route stays until `foster rm`, so a dead API answers 502 instead of the app's HTML. Never send `/api` through the frontend dev server's proxy.
 - A domain in both tables breaks every route: Caddy refuses the reload. The hook leaves such a domain out of its table and reports it. When a service moves to foster, delete its line from `static.map` in the same change.
 - A name in neither table answers 404 `no route for <name>`. To check a name: `foster ls`, `cat` of both tables, `curl -sI https://<name>.localhost`.
 - A neighbour's address goes into the service's own `.env` as its domain, not as `localhost:<port>`.
