@@ -1,6 +1,6 @@
 ---
 name: local-env
-description: Pavel's local dev environment on the Mac - which *.localhost domain and port a service uses behind the local Caddy, how to start, check or stop a dev server (foster, the project's Zed tasks, mise tasks, ft/fa), where worktrees live, how a project pins its languages and tools in mise, and how to add a local domain or a Zed task. Use for "start the dev server", "run the app locally", "which port does X use", "is X running", "open X locally", "add a local domain", "add a Zed task", "create a worktree", "install node/go/python for this project", "which version of X", and before editing .zed/tasks.json, mise.toml or the Caddyfile.
+description: Pavel's local dev environment on the Mac - which *.localhost domain and port a service uses behind the local Caddy, how to start, check or stop a dev server (foster, the project's Zed tasks, mise tasks, ft/fa), where worktrees live, how a project pins its languages and tools in mise, how a local service signs users in and gets tokens from the local authorization server, and how to add a local domain or a Zed task. Use for "start the dev server", "run the app locally", "which port does X use", "is X running", "open X locally", "add a local domain", "add a Zed task", "create a worktree", "install node/go/python for this project", "which version of X", "sign in locally", "a token for a local service", and before editing .zed/tasks.json, mise.toml or the Caddyfile.
 ---
 
 # Local dev environment
@@ -70,3 +70,8 @@ run = "pnpm exec astro dev"
 - A name in neither table answers 404 `no route for <name>`. To check a name: `foster ls`, `cat` of both tables, `curl -sI https://<name>.localhost`.
 - A neighbour's address goes into the service's own `.env` as its domain, not as `localhost:<port>`.
 - On the MacBook Air a name that no table knows, or whose port does not listen there, goes to the MacBook Pro. The `X-Served-By` response header names the machine that answered.
+
+## Sign in and tokens
+
+- A local service that signs users in or checks tokens uses the local authorization server at `https://auth.localhost`, never a production one, and has no mode that skips the check.
+- Before you run such a service, register a client, add a worktree's redirect URI or need a token for a local API, read `references/auth.md`.
