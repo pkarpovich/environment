@@ -49,7 +49,7 @@ The client `agent` stands in for every machine caller a server has in production
 ~/.local/share/authelia/token https://yotei.localhost/mcp yotei:read yotei:write
 ```
 
-The first argument is the resource: the audience the server checks, not the address you call. The rest are scopes. The script prints the access token alone, so use it in place: `curl -H "Authorization: Bearer $(~/.local/share/authelia/token <resource> <scope>)" ...`. A refusal prints the OAuth error code: `invalid_target` means the resource is not in the `audience` list of `agent`, `invalid_scope` means the scope is not in its `scopes` list. To let `agent` call a new server, add that server's audience and scopes to those two lists.
+The first argument is the resource: the address of the server you are going to call, which is also the audience that server checks. The rest are scopes. The script prints the access token alone, so use it in place: `curl -H "Authorization: Bearer $(~/.local/share/authelia/token <resource> <scope>)" ...`. A refusal prints the OAuth error code: `invalid_target` means the resource is not in the `audience` list of `agent`, `invalid_scope` means the scope is not in its `scopes` list. To let `agent` call a new server, add that server's audience and scopes to those two lists.
 
 ## A client for a service
 
@@ -71,16 +71,22 @@ A service that signs users in, or that asks for tokens itself, gets its own clie
    MCP_AUTH_ISSUER=https://auth.localhost
    MCP_AUTH_JWKS_URL=https://auth.localhost/jwks.json
    MCP_AUTH_AUDIENCE=https://yotei.localhost/mcp
+   MCP_AUTH_METADATA_URL=https://yotei.localhost/.well-known/oauth-protected-resource/mcp
    OAUTH_CLIENT_ID=yotei
    OAUTH_KEY_FILE=/Users/<user>/.local/share/authelia/keys/yotei.pem
    OAUTH_KEY_ID=yotei-local
    ```
 
-The audience is a name, not an address. It stays the same in every worktree of the service, so one entry in the client's `audience` list is enough.
+The audience is the address clients call the server at, here `https://yotei.localhost/mcp`. The server publishes it as `resource` in its metadata, and a client must drop metadata whose `resource` differs from the address it called (RFC 9728 section 3.3). So a copy of the service on another domain has another audience.
 
 ## A worktree
 
-Authelia matches a redirect URI exactly, with no patterns. A service in a linked worktree runs on `https://<worktree folder>.<domain>.localhost`, so its redirect URI is not registered. When the worktree needs a real sign in, add its URI as one more line under `redirect_uris` of the client, validate and restart. Remove the line when you remove the worktree. A worktree that only needs tokens for its API needs no change: `agent` works as it is.
+A service in a linked worktree runs on `https://<worktree folder>.<domain>.localhost`. That is another address, so the worktree's `.env` names it in the audience, the metadata URL and the public URL, and Authelia must know it. Authelia matches an audience and a redirect URI exactly, with no patterns.
+
+- To call the worktree's API with a token: add its audience, `https://<worktree folder>.<domain>.localhost/mcp`, under `audience` of `agent`.
+- To sign in to the worktree in a browser: add the same audience under `audience` of the service's client, and its redirect URI under `redirect_uris`.
+
+Validate and restart after the edit. Remove the lines when you remove the worktree.
 
 ## Facts that cost time once
 
