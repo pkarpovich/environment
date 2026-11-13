@@ -57,6 +57,9 @@ cask("claude")
 brew("umputun/apps/ralphex", trusted: true)
 # foster runs dev servers in persistent PTY sessions the agents attach to
 brew("pkarpovich/apps/foster", trusted: true)
+# ferry keeps the ssh link to the work laptop; its launchd service is the dialer
+# and must come back on the new binary, hence the restart on change
+brew("pkarpovich/apps/ferry", trusted: true, restart_service: :changed)
 brew("umputun/apps/fya", trusted: true)
 brew("agent-browser")
 # moshi-hook bridges the coding agents to the Moshi daemon

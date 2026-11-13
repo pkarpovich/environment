@@ -21,6 +21,8 @@ brew("sk")
 brew("umputun/apps/revdiff", trusted: true)
 brew("umputun/apps/ralphex", trusted: true)
 brew("pkarpovich/apps/foster", trusted: true)
+# ferry's far side; no service here, `ferry peer` run by sshd starts the daemon
+brew("pkarpovich/apps/ferry", trusted: true)
 
 ### network, and the tools for when it misbehaves
 
