@@ -1,6 +1,6 @@
 ---
 name: local-env
-description: Pavel's local dev environment on the Mac - which *.localhost domain and port a service uses behind the local Caddy, how to start, check or stop a dev server (foster, the project's Zed tasks, mise tasks, ft/fa), where worktrees live, how a project pins its languages and tools in mise, how a local service signs users in and gets tokens from the local authorization server, and how to add a local domain or a Zed task. Use for "start the dev server", "run the app locally", "which port does X use", "is X running", "open X locally", "add a local domain", "add a Zed task", "create a worktree", "install node/go/python for this project", "which version of X", "sign in locally", "a token for a local service", and before editing .zed/tasks.json, mise.toml or the Caddyfile.
+description: Pavel's local dev environment on the Mac - which *.localhost domain and port a service uses behind the local Caddy, how to start, check or stop a dev server (foster, the project's Zed tasks, mise tasks, ft/fa), where worktrees live, how a project pins its languages and tools in mise, how a local service signs users in and gets tokens from the local authorization server, where a local service gets its database and object storage, and how to add a local domain or a Zed task. Use for "start the dev server", "run the app locally", "which port does X use", "is X running", "open X locally", "add a local domain", "add a Zed task", "create a worktree", "install node/go/python for this project", "which version of X", "sign in locally", "a token for a local service", "a local database", "a local S3 bucket", and before editing .zed/tasks.json, mise.toml or the Caddyfile.
 ---
 
 # Local dev environment
@@ -70,6 +70,17 @@ run = "pnpm exec astro dev"
 - A name in neither table answers 404 `no route for <name>`. To check a name: `foster ls`, `cat` of both tables, `curl -sI https://<name>.localhost`.
 - A neighbour's address goes into the service's own `.env` as its domain, not as `localhost:<port>`.
 - On the MacBook Air a name that no table knows, or whose port does not listen there, goes to the MacBook Pro. The `X-Served-By` response header names the machine that answered.
+
+## Databases and storage
+
+- A dependency the service owns, such as its Postgres, runs from the service's production compose definition plus an override file that holds only the local difference, for example a published port. Never write a second description of it. The override has its own name and is passed with `-f`: a file named `compose.override.yml` is loaded by every plain `docker compose` in that directory.
+
+  ```sh
+  docker compose -p <repo> -f compose.yml -f services/<service>/local.compose.yml up -d --wait <service>-postgres
+  ```
+
+- Shared infrastructure runs once for the whole Mac, outside every repository: the authorization server and the object storage at `https://s3.localhost`. Before a service stores objects locally, read `references/s3.md`.
+- A local service never reads a production database or bucket. Real data comes as a copy, made by a script of the service.
 
 ## Sign in and tokens
 
