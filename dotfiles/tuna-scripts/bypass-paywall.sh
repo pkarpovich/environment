@@ -1,11 +1,11 @@
 #!/bin/bash
 # @tuna.name Bypass Paywall
-# @tuna.subtitle Reopen the current Dia tab through the best paywall bypass for that site
+# @tuna.subtitle Reopen the current Helium tab through the best paywall bypass for that site
 # @tuna.mode inline
 
-# Reads the URL of Dia's active tab, picks the paywall-bypass service that
+# Reads the URL of Helium's active tab, picks the paywall-bypass service that
 # actually works for that site (routing below), and opens the cleaned URL back
-# in Dia. Modeled on the Raycast "remove-paywall" extension, whose whole trick is
+# in Helium. Modeled on the Raycast "remove-paywall" extension, whose whole trick is
 # just building "{service}/{original_url}" - a third-party proxy renders the page.
 #
 # Service routing reflects what is alive and effective as of mid-2026:
@@ -18,14 +18,14 @@
 #   - smry.ai        - soft/metered paywalls + a solid default (covers Substack).
 # 12ft.io and 1ft.io are intentionally absent: both dead/unreliable in 2026.
 #
-# Reading the tab URL uses AppleScript (Dia = chromium engine -> active tab). The
-# first run from tuna triggers a one-time "Tuna wants to control Dia" prompt.
+# Reading the tab URL uses AppleScript (Helium = chromium engine -> active tab). The
+# first run from tuna triggers a one-time "Tuna wants to control Helium" prompt.
 
 set -euo pipefail
 
 # --- config ---
-BROWSER_ID="company.thebrowser.dia"
-BROWSER_APP="Dia"
+BROWSER_ID="net.imput.helium"
+BROWSER_APP="Helium"
 
 MEDIUM_DOMAINS="medium.com towardsdatascience.com betterprogramming.pub levelup.gitconnected.com uxdesign.cc"
 HARD_DOMAINS="nytimes.com wsj.com bloomberg.com ft.com economist.com washingtonpost.com theatlantic.com newyorker.com wired.com businessinsider.com"
@@ -43,13 +43,13 @@ host_matches() {
   return 1
 }
 
-# --- read the active Dia tab ---
+# --- read the active Helium tab ---
 URL=$(osascript -e "tell application \"$BROWSER_APP\" to get URL of active tab of front window" 2>/dev/null || true)
 
 case "$URL" in
   http://*|https://*) ;;
   *)
-    notify "Could not read a web URL from Dia's active tab."
+    notify "Could not read a web URL from Helium's active tab."
     exit 1
     ;;
 esac

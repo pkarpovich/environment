@@ -93,6 +93,8 @@ yashiki rule-add --close-button none ignore
 
 yashiki rule-add --app-id com.ardia.browser tags (tag 1)
 yashiki rule-add --app-id com.ardia.browser output "$LAPTOP"
+yashiki rule-add --app-id net.imput.helium tags (tag 1)
+yashiki rule-add --app-id net.imput.helium output "$LAPTOP"
 
 yashiki rule-add --app-id dev.zed.Zed tags (dltag 1)
 yashiki rule-add --app-id dev.zed.Zed output "$DELL_LANDSCAPE"

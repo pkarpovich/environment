@@ -3,16 +3,16 @@
 # @tuna.subtitle Start a new Google Meet and copy its link
 # @tuna.mode inline
 
-# Opens an instant meeting (meet.google.com/new) in Dia - the browser where you
+# Opens an instant meeting (meet.google.com/new) in Helium - the browser where you
 # are signed in to Google - waits for the redirect to resolve to the room URL,
 # copies that link to the clipboard, and shows it in a notification.
 #
-# Reading the URL back uses AppleScript (Dia exposes active tab -> URL). When run
-# from tuna the first time, macOS asks "Tuna wants to control Dia" (Automation) -
+# Reading the URL back uses AppleScript (Helium exposes active tab -> URL). When run
+# from tuna the first time, macOS asks "Tuna wants to control Helium" (Automation) -
 # allow it once. tuna can request this (it has an AppleEvents usage string).
 
-BROWSER_ID="company.thebrowser.dia"
-BROWSER_APP="Dia"
+BROWSER_ID="net.imput.helium"
+BROWSER_APP="Helium"
 
 open -b "$BROWSER_ID" "https://meet.google.com/new"
 
@@ -29,5 +29,5 @@ if [ -n "$URL" ]; then
   printf '%s' "$URL" | pbcopy
   osascript -e "display notification \"$URL\" with title \"Google Meet - link copied\""
 else
-  osascript -e 'display notification "Opened a new Meet, but could not read the link (signed in to Google in Dia?)" with title "New Google Meet"'
+  osascript -e 'display notification "Opened a new Meet, but could not read the link (signed in to Google in Helium?)" with title "New Google Meet"'
 fi

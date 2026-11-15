@@ -69,6 +69,7 @@ goreleaser
 gping
 HandyPalette
 hazel
+helium-browser
 ical-buddy
 iina
 imagemagick
