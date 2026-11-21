@@ -73,8 +73,10 @@ Library
 .config/fish/functions/fish_greeting.fish
 .config/fish/functions/gm.fish
 .config/fish/functions/gmi.fish
+.config/fish/functions/oauth-token.fish
 .config/fish/functions/proxy.fish
 .config/fish/functions/stable-to-master.fish
+.config/fish/functions/stream.fish
 .config/fish/functions/sync-to-gitea.fish
 .config/fish/functions/wins.fish
 .config/fish/functions/wt.fish

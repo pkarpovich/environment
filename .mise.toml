@@ -24,6 +24,11 @@ description = "Apply duti settings"
 run = "duti defaults.duti"
 dir = "duti"
 
+[tasks.test_oauth_token]
+description = "Run the oauth-token tests"
+run = "python3 -m unittest -v test_oauth_token"
+dir = "scripts"
+
 [tasks.setup_env]
 description = "Setup environment"
 alias = "init"
