@@ -11,15 +11,15 @@ description: >
   or update a runner, trigger an immediate sync, debug why a ticket was not
   picked up or why a PR got the fallback description, or answer questions about
   how the farm works. Also trigger on any mention of the `<!-- ralphex-farm -->`
-  metadata block, repository declarations in stash, the farm's `/api/sync`,
-  `/api/repos` or `/api/repos/resync` endpoints, the finalize prompt the farm
+  metadata block, repository declarations in stash, the farm's `/external/sync`,
+  `/external/repos` or `/external/repos/resync` endpoints, the finalize prompt the farm
   ships, or Claude plugin provisioning in the farm.
 allowed-tools:
   - Bash(git add:*)
   - Bash(git commit:*)
   - Bash(git push:*)
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
 # ralphex-farm
@@ -51,6 +51,22 @@ SQLite run history and per-run logs under `FARM_RUNS_DIR` for the dashboard.
 
 Dashboard: `https://ralphex-farm.pkarpovich.space/`, one run at `#/run/<run_id>`.
 
+## Calling the farm
+
+Every call but `GET /health` needs an access token. The command line door is
+`/external`, and the token comes from `oauth-token`, through a pipe so that it
+is in no argument and no output:
+
+```bash
+oauth-token token --header farm | curl -fsS -H @- https://ralphex-farm.pkarpovich.space/external/repos
+```
+
+- `/api` is the dashboard's door and opens for a browser session only. A token
+  there is `401`.
+- The token carries `farm:read`, `farm:sync` and `farm:cancel`.
+- `oauth-token` exits 3 when the sign in is missing or ended. Ask the user to
+  run `oauth-token login farm`, and do not look for another way in.
+
 ## The metadata block
 
 The farm matches this with a strict regex and requires `repo`, `plan` and
@@ -72,7 +88,7 @@ mode: review
 Rules:
 - `<!--` and `-->` markers each on their own line.
 - `repo` matches a slug declared in stash and advertised by a connected runner.
-  `GET /api/repos` lists what is actually served right now.
+  `GET /external/repos` lists what is actually served right now.
 - `plan` is repo-relative and the file must exist **on the repo's default
   branch** (the runner does `git fetch && reset --hard origin/<default>` first).
 - `branch` is the feature branch and the single source of truth for the name: it
@@ -88,7 +104,7 @@ Rules:
 ### 1. Confirm the repo is served
 
 ```bash
-curl -s https://ralphex-farm.pkarpovich.space/api/repos
+oauth-token token --header farm | curl -fsS -H @- https://ralphex-farm.pkarpovich.space/external/repos
 # -> [{"slug":"turtle-hub","default_branch":"main"}, ...]
 ```
 
@@ -144,11 +160,11 @@ Read the saved description back from the `save_issue` result. The line after
 ### 4. Pick it up now instead of waiting
 
 ```bash
-curl -s -X POST https://ralphex-farm.pkarpovich.space/api/sync   # -> {"status":"triggered"}
+oauth-token token --header farm | curl -fsS -H @- -X POST https://ralphex-farm.pkarpovich.space/external/sync   # -> {"status":"triggered"}
 ```
 
 Confirm a runner claimed it. Within about 30s `in_flight_count` in `GET /health`
-turns 1, and `GET /api/runs?limit=1` shows a run with the ticket's
+turns 1, and `GET /external/runs?limit=1` shows a run with the ticket's
 `issue_identifier` and `branch`.
 
 If nothing appears, **do not guess**. Read the farm log in Loki through the
@@ -173,7 +189,7 @@ cost one session half an hour and three refusals.
 curl -X PUT -d '{"clone_url":"git@github.com:<owner>/<repo>.git"}' \
   https://stash.pkarpovich.space/kv/ralphex-farm/repos/<slug>
 
-curl -X POST https://ralphex-farm.pkarpovich.space/api/repos/resync
+oauth-token token --header farm | curl -fsS -H @- -X POST https://ralphex-farm.pkarpovich.space/external/repos/resync
 ```
 
 - `<slug>` must match `^[a-z0-9_-]+$`. It is simultaneously the directory name
@@ -318,9 +334,10 @@ Every one of these has actually happened, and none surfaces as an obvious error.
 | Repository declarations | stash, `ralphex-farm/repos/<slug>` |
 | Run history + logs | `FARM_RUNS_DIR` on the farm host (SQLite + per-run `output.log`) |
 | Health | `GET /health` - poller staleness, error window, connected runners |
-| Repos served | `GET /api/repos` |
-| Force a Linear poll | `POST /api/sync` |
-| Force a declaration re-read | `POST /api/repos/resync` |
+| Repos served | `GET /external/repos` |
+| Force a Linear poll | `POST /external/sync` |
+| Force a declaration re-read | `POST /external/repos/resync` |
+| Cancel a run | `POST /external/runs/<run_id>/kill` |
 | Farm logs | Loki via the Grafana MCP, `{service_name="ralphex-farm"}` - no ssh needed |
 | Runner logs | Loki, `{service_name="ralphex-runner"}`, or `docker logs ralphex-runner` on the Mac |
 
