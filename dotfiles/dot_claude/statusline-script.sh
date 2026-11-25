@@ -137,9 +137,10 @@ if [ -n "$weekly_pct" ] && [ -n "$weekly_reset" ]; then
     sep=" ${WHITE}|${RESET} "
 fi
 
-# Monthly usage credits, for an account without plan windows (no rate_limits in the
-# payload): the same source /usage reads, cached and refreshed in the background so
-# the line never waits for the network. The pace counts working days, Mon-Fri.
+# Usage credits, for an account without plan windows (no rate_limits in the payload):
+# the same source /usage reads, cached and refreshed in the background so the line
+# never waits for the network. A running promo pool (promo_credits, its own period
+# bounds) replaces the monthly extra_usage pool. The pace counts working days, Mon-Fri.
 CREDITS_CACHE="${XDG_STATE_HOME:-$HOME/.local/state}/claude/usage-credits.json"
 CREDITS_TTL=300
 has_rate_limits=$(echo "$input" | jq -r '.rate_limits != null')
@@ -160,7 +161,19 @@ refresh_credits() {
             -H "anthropic-beta: oauth-2025-04-20" \
             -H "User-Agent: claude-code/$cc_version" \
             https://api.anthropic.com/api/oauth/usage \
-        | jq -ce '.extra_usage | select(.is_enabled == true) | {used: .used_credits, limit: .monthly_limit}' \
+        | jq -ce '
+            def ts: sub("\\+00:00$"; "Z") | fromdateiso8601;
+            ([.promo_credits // [] | .[] | select(.offer_ends_at != null and (.offer_ends_at | ts) > now)] | first) as $p
+            | if $p then
+                {label: "fr", used: $p.used_dollars, limit: $p.limit_dollars,
+                 start: ([$p.periods[] | select((.ends_at | ts) > now)] | first.starts_at // $p.offer_starts_at | ts),
+                 end: ($p.resets_at | ts)}
+              else
+                .extra_usage | select(.is_enabled == true)
+                | (now | gmtime) as $t
+                | {label: "mo", used: (.used_credits / 100), limit: (.monthly_limit / 100),
+                   start: ([$t[0], $t[1], 1, 0, 0, 0, 0, 0] | mktime), end: ([$t[0], $t[1] + 1, 1, 0, 0, 0, 0, 0] | mktime)}
+              end' \
         > "$CREDITS_CACHE.$$" 2>/dev/null && mv -f "$CREDITS_CACHE.$$" "$CREDITS_CACHE"
     rm -f "$CREDITS_CACHE.$$"
 }
@@ -169,17 +182,15 @@ if [ "$has_rate_limits" = "false" ] && [ -n "$cc_version" ]; then
     cache_age=$(( $(date +%s) - $(stat -c %Y "$CREDITS_CACHE" 2>/dev/null || stat -f %m "$CREDITS_CACHE" 2>/dev/null || echo 0) ))
     [ "$cache_age" -ge "$CREDITS_TTL" ] && refresh_credits >/dev/null 2>&1 &
     if [ -s "$CREDITS_CACHE" ]; then
-        read -r used_c limit_c <<< "$(jq -r '"\(.used) \(.limit)"' "$CREDITS_CACHE" 2>/dev/null)"
+        read -r label_c used_c limit_c start_c end_c <<< "$(jq -r '"\(.label) \(.used) \(.limit) \(.start) \(.end)"' "$CREDITS_CACHE" 2>/dev/null)"
     fi
     if [ -n "${limit_c:-}" ] && [ "$limit_c" != "null" ] && [ "${limit_c%.*}" -gt 0 ]; then
         used_pct=$(( ${used_c%.*} * 100 / ${limit_c%.*} ))
-        read -r wd_done wd_total <<< "$(jq -nr '
-            (now | gmtime) as $t | $t[0] as $y | $t[1] as $m | $t[2] as $d
-            | ([ $y, $m + 1, 1, 0, 0, 0, 0, 0 ] | mktime) - 86400 | gmtime[2] as $dim
-            | [range(1; $dim + 1) | select(([ $y, $m, ., 0, 0, 0, 0, 0 ] | mktime | strftime("%u") | tonumber) <= 5)]
-            | "\([.[] | select(. <= $d)] | length) \(length)"')"
+        read -r wd_done wd_total <<< "$(jq -nr --argjson s "$start_c" --argjson e "$end_c" '
+            [range($s; $e; 86400) | select((gmtime | strftime("%u") | tonumber) <= 5)]
+            | "\([.[] | select(. < now)] | length) \(length)"')"
         wd_left=$(( wd_total - wd_done ))
-        ideal_pct=$(( wd_done * 100 / wd_total ))
+        ideal_pct=$(( wd_done * 100 / (wd_total > 0 ? wd_total : 1) ))
 
         if [ "$used_pct" -gt 80 ]; then
             MO_COLOR="$FX_RED"
@@ -193,8 +204,8 @@ if [ "$has_rate_limits" = "false" ] && [ -n "$cc_version" ]; then
             MO_COLOR="$FX_GREEN"
         fi
 
-        printf "${sep}${GRAY}mo${RESET} ${MO_COLOR}\$%d${RESET}${GRAY}/\$%d${RESET} ${GRAY}·${RESET} ${MO_COLOR}%d%%${RESET} ${GRAY}·${RESET} ${FX_BLUE}%dwd${RESET}" \
-            "$(( ${used_c%.*} / 100 ))" "$(( ${limit_c%.*} / 100 ))" "$used_pct" "$wd_left"
+        printf "${sep}${GRAY}%s${RESET} ${MO_COLOR}\$%d${RESET}${GRAY}/\$%d${RESET} ${GRAY}·${RESET} ${MO_COLOR}%d%%${RESET} ${GRAY}·${RESET} ${FX_BLUE}%dwd${RESET}" \
+            "$label_c" "${used_c%.*}" "${limit_c%.*}" "$used_pct" "$wd_left"
         pace_badge $(( used_pct - ideal_pct ))
         sep=" ${WHITE}|${RESET} "
     fi
