@@ -14,6 +14,5 @@ function ccl --description "resume the Claude conversation recorded for the curr
         return
     end
 
-    set -lx CLAUDE_CODE_NO_FLICKER 1
     claude --enable-auto-mode --resume $conv
 end

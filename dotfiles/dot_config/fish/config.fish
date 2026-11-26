@@ -29,8 +29,8 @@ alias dig 'doggo'
 alias htop 'glances'
 alias lg 'lazygit'
 alias qq 'exit'
-alias cc 'CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode'
-alias ccr 'CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume'
+alias cc 'claude --enable-auto-mode'
+alias ccr 'claude --enable-auto-mode --resume'
 
 bind \eOH beginning-of-line
 bind \eOF end-of-line

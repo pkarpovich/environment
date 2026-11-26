@@ -8,7 +8,6 @@ function claude --description "agterm-aware Claude launcher: tags a fresh run wi
         set -l sid (string lower $argv[2])
         set -l files ~/.claude/projects/*/$sid.jsonl
         if test (count $files) -gt 0
-            set -lx CLAUDE_CODE_NO_FLICKER 1
             command claude --resume $sid $argv[3..]
             return
         end

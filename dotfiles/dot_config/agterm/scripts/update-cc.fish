@@ -99,7 +99,7 @@ for row in ($AGTERMCTL tree --json | $JQ -r '
                 set skipped (math $skipped + 1)
                 continue
             end
-            set -a args --command "CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume $conv"
+            set -a args --command "claude --enable-auto-mode --resume $conv"
         end
         if $AGTERMCTL session restart $args >/dev/null 2>&1
             set done (math $done + 1)

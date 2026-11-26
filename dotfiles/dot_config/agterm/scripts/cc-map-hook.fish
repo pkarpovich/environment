@@ -56,6 +56,6 @@ and mv -f $tmp $entry
 # which uses the absolute binary path (bypassing the fish wrapper's
 # --session-id flip) and re-runs --fork-session verbatim, minting a new
 # conversation on every launch
-set -l cmd "CLAUDE_CODE_NO_FLICKER=1 claude --enable-auto-mode --resume $conv"
+set -l cmd "claude --enable-auto-mode --resume $conv"
 /opt/homebrew/bin/agtermctl session restore "$cmd" --target $AGTERM_SESSION_ID >/dev/null 2>&1
 exit 0
