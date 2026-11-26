@@ -36,6 +36,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "{{ if $darwin }}opus{{ else }}claude-fable-5-2[1m]{{ end }}",
   "hooks": {
 {{- if $darwin }}
     "Notification": [
@@ -405,7 +406,8 @@
     "swift-lsp@claude-plugins-official": true,
     "thinking-tools@umputun-cc-thingz": true,
     "brainstorm@umputun-cc-thingz": true,
-    "release-tools@umputun-cc-thingz": true
+    "release-tools@umputun-cc-thingz": true,
+    "clangd-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "axiom-marketplace": {
@@ -436,9 +438,13 @@
     },
     "claude-opus-5-5": {
       "effortLevel": "high"
+    },
+    "claude-fable-5-2": {
+      "effortLevel": "high"
     }
   },
   "advisorModel": "fable",
+  "awaySummaryEnabled": false,
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
@@ -449,6 +455,5 @@
   "switchModelsOnFlag": false,
   "terminalProgressBarEnabled": false,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "awaySummaryEnabled": false
+  "skipAutoPermissionPrompt": true
 }
